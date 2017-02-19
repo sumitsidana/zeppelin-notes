@@ -1,0 +1,107 @@
+{
+  "paragraphs": [
+    {
+      "text": "val parquetFileClick \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypsodata/click/fr/2016/*/*/*.parquet\")\nval parquetFileOffer \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypsodata/offerView/fr/2016/*/*/*.parquet\")\nval parquetFilePage \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypsodata/pageView/fr/2016/*/*/*.parquet\")\nval parquetFileSale \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypsodata/sale/fr/2016/*/*/*.parquet\")\nval parquetFileSearch \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypsodata/search/fr/2016/*/*/*.parquet\")\n",
+      "dateUpdated": "Apr 5, 2016 1:25:10 AM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1459812310662_20415765",
+      "id": "20160405-012510_982656238",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "parquetFileClick: org.apache.spark.sql.DataFrame \u003d [userId: string, ip: string, userAgent: struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e, geolocation: struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, offerViewId: string, clickId: string, earning: decimal(38,18)]\nparquetFileOffer: org.apache.spark.sql.DataFrame \u003d [eventType: string, userId: string, ip: string, userAgent: struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e, geolocation: struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, adType: string, offerRank: int, searchId: string, offerViewId: string, contentPageType: string, adPlacement: string, adViewability: string, adSize: string]\nparquetFilePage: org.apache.spark.sql.DataFrame \u003d [userId: string, ip: string, userAgent: struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e, geolocation: struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, url: string, pageTitle: string, pageTags: array\u003cstring\u003e, pageCategory: array\u003cstring\u003e]\nparquetFileSale: org.apache.spark.sql.DataFrame \u003d [eventType: string, userId: string, ip: string, userAgent: struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e, geolocation: struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, orderValue: decimal(38,18), merchant: string, clickId: string, basketContent: array\u003cstring\u003e, earning: decimal(38,18)]\nparquetFileSearch: org.apache.spark.sql.DataFrame \u003d [userId: string, ip: string, userAgent: struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e, geolocation: string, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, queryString: string, filters: map\u003cstring,string\u003e, source: string, searchId: string, isPrompt: boolean, acquisitionCost: decimal(38,18), bidPrice: decimal(38,18)]\n+-----------+\n|   category|\n+-----------+\n|   [108301]|\n|   [128601]|\n|[100008013]|\n|[100008013]|\n|   [152401]|\n|   [141901]|\n|   [108301]|\n|   [132701]|\n|   [137001]|\n|[100392423]|\n|   [137001]|\n|[100508723]|\n|   [123501]|\n|   [123401]|\n|   [173101]|\n|[100450323]|\n|   [137701]|\n|[100392923]|\n|   [137001]|\n|   [143401]|\n+-----------+\nonly showing top 20 rows\n\n"
+      },
+      "dateCreated": "Apr 5, 2016 1:25:10 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "parquetFileClick.select(\"category\").show\nparquetFileOffer.select(\"category\").show\nparquetFileClick.select(\"offerTitle\").show\nparquetFileClick.select(\"keywords\").show",
+      "dateUpdated": "Apr 5, 2016 1:25:10 AM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1459812310663_20031016",
+      "id": "20160405-012510_1354146636",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "+-----------+\n|   category|\n+-----------+\n|   [108301]|\n|   [128601]|\n|[100008013]|\n|[100008013]|\n|   [152401]|\n|   [141901]|\n|   [108301]|\n|   [132701]|\n|   [137001]|\n|[100392423]|\n|   [137001]|\n|[100508723]|\n|   [123501]|\n|   [123401]|\n|   [173101]|\n|[100450323]|\n|   [137701]|\n|[100392923]|\n|   [137001]|\n|   [143401]|\n+-----------+\nonly showing top 20 rows\n\n+-----------+\n|   category|\n+-----------+\n|[100532023]|\n|[100532023]|\n|   [108801]|\n|   [132701]|\n|   [108801]|\n|[100091913]|\n|[100091913]|\n|[100091913]|\n|[100091913]|\n|[100091913]|\n|[100091913]|\n|[100532023]|\n|[100091913]|\n|[100091913]|\n|[100091913]|\n|[100532023]|\n|   [132701]|\n|[100091913]|\n|[100091913]|\n|[100091913]|\n+-----------+\nonly showing top 20 rows\n\n+--------------------+\n|          offerTitle|\n+--------------------+\n|                null|\n|Erotique - Défis ...|\n|     HUMAX FR 1000HD|\n|     HUMAX FR 1000HD|\n|Promaster Mr 350 ...|\n|housse fauteuil e...|\n|Desigual - Femme ...|\n|Scitec Nutrition ...|\n|R baby Taie d\u0026#39...|\n|Nettoyeur Haute P...|\n|Befara LIT SURELE...|\n|Royal Brevi - Par...|\n|Gopro Caméra Spor...|\n|    meliconi DRP-400|\n|SecuriteGoodDeal ...|\n|BEBE2LUXE Pousset...|\n|Hespéride TABLE E...|\n|Ecozone Gel Anti-...|\n|Lit gigogne avec ...|\n|Bosch GKS 10,8 V-...|\n+--------------------+\nonly showing top 20 rows\n\n+--------------------+\n|            keywords|\n+--------------------+\n|                  []|\n|                  []|\n|                  []|\n|[decodeur optex ort]|\n|                  []|\n|                  []|\n|                  []|\n|                  []|\n|                  []|\n|                  []|\n|                  []|\n|                  []|\n|                  []|\n|                  []|\n|                  []|\n|                  []|\n|                  []|\n|                  []|\n|                  []|\n|                  []|\n+--------------------+\nonly showing top 20 rows\n\n"
+      },
+      "dateCreated": "Apr 5, 2016 1:25:10 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "dateUpdated": "Apr 5, 2016 1:25:10 AM",
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1459812310663_20031016",
+      "id": "20160405-012510_110820346",
+      "dateCreated": "Apr 5, 2016 1:25:10 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "makeNoteOfDataFields",
+  "id": "2BFDVXQQG",
+  "angularObjects": {
+    "2BGHSKCA7": [],
+    "2BFMBPKAB": [],
+    "2BHKKP27G": [],
+    "2BJHJDBK6": [],
+    "2BJAQG5W4": [],
+    "2BJGSXM37": [],
+    "2BFXEV5XZ": [],
+    "2BG77RV7M": [],
+    "2BF969NNB": [],
+    "2BG8QQJNC": [],
+    "2BGVG5JP4": [],
+    "2BJ5FCP57": [],
+    "2BFEDXCTE": [],
+    "2BJ8AEWCT": [],
+    "2BH9AVVKH": [],
+    "2BJ7KKX85": [],
+    "2BHKAE8WK": [],
+    "2BJ6HN5AY": []
+  },
+  "config": {},
+  "info": {}
+}

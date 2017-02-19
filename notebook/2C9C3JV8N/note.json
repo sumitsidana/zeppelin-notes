@@ -1,0 +1,196 @@
+{
+  "paragraphs": [
+    {
+      "text": "val parquetFileClick \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypso_purch_data/click/*/*/*/*/*.parquet\")\nval distinctWeeks \u003d parquetFileClick.select(weekofyear(parquetFileClick(\"utcDate\"))).distinct\nz.show(distinctWeeks)",
+      "dateUpdated": "Feb 6, 2017 1:11:43 AM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1486339241989_1763484930",
+      "id": "20170206-010041_1205225222",
+      "dateCreated": "Feb 6, 2017 1:00:41 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val parquetFileOffer \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypso_purch_data/offerview/*/*/*/*/*.parquet\")\nval distinctWeeks \u003d parquetFileOffer.select(weekofyear(parquetFileOffer(\"utcDate\"))).distinct\nz.show(distinctWeeks)",
+      "dateUpdated": "Feb 6, 2017 1:11:43 AM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1486339241990_1764639177",
+      "id": "20170206-010041_1154547650",
+      "dateCreated": "Feb 6, 2017 1:00:41 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val parquetFileClick \u003d sqlContext.read.parquet(\"$Home/calypso_purch_data/click/*/*/*/*/*.parquet\")\nval groupByDate \u003d parquetFileClick.groupBy(to_date(parquetFileClick(\"utcDate\"))).count.sort(desc(\"count\"))\ngroupByDate.rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/purch/dat.dateCount\")",
+      "dateUpdated": "Feb 6, 2017 1:11:25 AM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1486339241990_1764639177",
+      "id": "20170206-010041_1967602905",
+      "dateCreated": "Feb 6, 2017 1:00:41 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val groupByWeek \u003d parquetFileOffer.groupBy(weekofyear(parquetFileOffer(\"utcDate\"))).count\nz.show(groupByWeek)",
+      "dateUpdated": "Feb 6, 2017 1:00:41 AM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1486339241990_1764639177",
+      "id": "20170206-010041_401344182",
+      "dateCreated": "Feb 6, 2017 1:00:41 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val groupByWeek \u003d parquetFileClick.groupBy(weekofyear(parquetFileClick(\"utcDate\"))).count\nz.show(groupByWeek)",
+      "dateUpdated": "Feb 6, 2017 1:00:41 AM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1486339241991_1764254428",
+      "id": "20170206-010041_145531647",
+      "dateCreated": "Feb 6, 2017 1:00:41 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val parquetFileClick \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypso_purch_data/click/*/*/*/*/*.parquet\")\nval groupedClicks \u003d parquetFileClick.groupBy($\"userInfo\".getItem(\"userId\")).count.sort(desc(\"count\"))\nz.show(groupedClicks)",
+      "dateUpdated": "Feb 6, 2017 1:24:34 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1486340616997_-900166764",
+      "id": "20170206-012336_2134764094",
+      "dateCreated": "Feb 6, 2017 1:23:36 AM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "purchBaselines: bugNote",
+  "id": "2C9C3JV8N",
+  "angularObjects": {
+    "2BGHSKCA7": [],
+    "2BFMBPKAB": [],
+    "2BHKKP27G": [],
+    "2BJHJDBK6": [],
+    "2BJAQG5W4": [],
+    "2BJGSXM37": [],
+    "2BFXEV5XZ": [],
+    "2BG77RV7M": [],
+    "2BF969NNB": [],
+    "2BG8QQJNC": [],
+    "2BGVG5JP4": [],
+    "2BJ5FCP57": [],
+    "2BFEDXCTE": [],
+    "2BJ8AEWCT": [],
+    "2BH9AVVKH": [],
+    "2BJ7KKX85": [],
+    "2BHKAE8WK": [],
+    "2BJ6HN5AY": []
+  },
+  "config": {
+    "looknfeel": "default"
+  },
+  "info": {}
+}

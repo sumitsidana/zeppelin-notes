@@ -1,0 +1,110 @@
+{
+  "paragraphs": [
+    {
+      "text": "val test \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/data/sidana/kelkooDataSubset/dat.fr.nondistinct\")",
+      "authenticationInfo": {},
+      "dateUpdated": "Feb 2, 2017 2:54:43 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1486041519834_-2038046532",
+      "id": "20170202-141839_2115718643",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "test: org.apache.spark.sql.DataFrame \u003d [userid: string, offerid: string, rating: int, utcdate: bigint]\n"
+      },
+      "dateCreated": "Feb 2, 2017 2:18:39 PM",
+      "dateStarted": "Feb 2, 2017 2:54:43 PM",
+      "dateFinished": "Feb 2, 2017 3:01:36 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val totalUsers \u003d test.select(\"userId\").distinct.count\nval positiveUsers \u003d test.filter($\"rating\"\u003d\u003d\u003d\"2\").select(\"userId\").distinct.count",
+      "authenticationInfo": {},
+      "dateUpdated": "Feb 2, 2017 3:01:56 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1486041743126_734174918",
+      "id": "20170202-142223_1739279313",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "totalUsers: Long \u003d 1566241\npositiveUsers: Long \u003d 1423672\n"
+      },
+      "dateCreated": "Feb 2, 2017 2:22:23 PM",
+      "dateStarted": "Feb 2, 2017 3:01:56 PM",
+      "dateFinished": "Feb 2, 2017 3:12:03 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1486041823134_1723687793",
+      "id": "20170202-142343_15240784",
+      "dateCreated": "Feb 2, 2017 2:23:43 PM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "newModel: nUsersKelkooFrance",
+  "id": "2C937FEK8",
+  "angularObjects": {
+    "2BGHSKCA7": [],
+    "2BFMBPKAB": [],
+    "2BHKKP27G": [],
+    "2BJHJDBK6": [],
+    "2BJAQG5W4": [],
+    "2BJGSXM37": [],
+    "2BFXEV5XZ": [],
+    "2BG77RV7M": [],
+    "2BF969NNB": [],
+    "2BG8QQJNC": [],
+    "2BGVG5JP4": [],
+    "2BJ5FCP57": [],
+    "2BFEDXCTE": [],
+    "2BJ8AEWCT": [],
+    "2BH9AVVKH": [],
+    "2BJ7KKX85": [],
+    "2BHKAE8WK": [],
+    "2BJ6HN5AY": []
+  },
+  "config": {},
+  "info": {}
+}

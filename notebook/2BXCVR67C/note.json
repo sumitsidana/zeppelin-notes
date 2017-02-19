@@ -1,0 +1,110 @@
+{
+  "paragraphs": [
+    {
+      "text": "//compute popularity on the train set\nval csvFileClick \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/home/ama/sidana/recsysBaselines/data/output/clicksTrainPartial\") \n\nval groupedByUsersandOffers \u003d csvFileClick.select(csvFileClick(\"userId\"),csvFileClick(\"offerId\")).distinct\nval groupedByOffers \u003d groupedByUsersandOffers.groupBy(\"offerId\").count.sort(desc(\"count\"))\nval topItems \u003d groupedByOffers.select(\"offerId\").rdd.map(r \u003d\u003e r(0)).take(30)\n//groupedByOffers.rdd.coalesce(1, false).saveAsTextFile(\"/tmp/sidana/popularOfferCountsTrain.csv\")\nimport java.nio.file.{ Files, Paths }\nimport scala.collection.mutable.ListBuffer\nimport java.io.FileWriter\nvar items \u003d new ListBuffer[String]()\nval fw \u003d new FileWriter(\"/home/ama/sidana/recsysBaselines/data/output/popularity/mostpopularitems.txt\", true)\nfor( a \u003c- 1 to 30){\nval firstval \u003d topItems(a-1)\nitems +\u003d firstval.toString.toString\nfw.write(firstval.toString.toString+\" \" )\n//items +\u003d \",\"\n}\n fw.close()",
+      "authenticationInfo": {},
+      "dateUpdated": "Oct 20, 2016 10:21:30 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1476360878593_1779439221",
+      "id": "20161013-141438_2026584938",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "csvFileClick: org.apache.spark.sql.DataFrame \u003d [userId: string, offerId: string]\ngroupedByUsersandOffers: org.apache.spark.sql.DataFrame \u003d [userId: string, offerId: string]\ngroupedByOffers: org.apache.spark.sql.DataFrame \u003d [offerId: string, count: bigint]\ntopItems: Array[Any] \u003d Array(eb8c819b95b51fe605254470b00e7ce4, bb1fa63129b229d35138cb4689667709, 1f9e355358aa7cb04abaa4f48722fe78, 8077e01b53706514895e8c77503f9f54, 65c84b271860a1f50e09796904e5a55c, 0f2fcf95319f5c1e5745371351f521e5, 54073457233b5daf6d09c23786cb78cb, 810e269c0a079854e8e33a5388cbc271, 0d239182c0bcd05b3f99c9e6438e2bc1, b0a07d9bc505a480ad0558618eafd96a, ce811e1c31591e0b697881f738d22c09, f2ba8ad25a691c13b07e5ee0632dc737, a65dd670c23f0f212a11a93ada96a690, bdafd0a93bedc4616d122f8f5bf6671c, 78abf556b995bf8087d2e851d2aa9118, 8d2e7f4c7678a3287547a3dafe65cf55, eb0389774fca117ee06c5c02a6ba76af, 39ca99a2010017585794f67594bdca95, 918a282a40e34d4d951a44b01eb92097, 7bad0b351362e61d1802e6df764412e9, 7068af6ea9f14b368ed99a54e122a6c5, 9d0f73cccfb5bffd304bf2b030021441, ebb77a97cfdfd01c8b2f...import java.nio.file.{Files, Paths}\nimport scala.collection.mutable.ListBuffer\nimport java.io.FileWriter\nitems: scala.collection.mutable.ListBuffer[String] \u003d ListBuffer()\nfw: java.io.FileWriter \u003d java.io.FileWriter@4d102bdc\n"
+      },
+      "dateCreated": "Oct 13, 2016 2:14:38 PM",
+      "dateStarted": "Oct 20, 2016 1:30:13 AM",
+      "dateFinished": "Oct 20, 2016 1:30:59 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "    import java.nio.file.{ Files, Paths }\n    import scala.collection.mutable.ListBuffer\n    import java.io.FileWriter\n    \n    \n    val countryCodes \u003d Array(\"at\",\"be\",\"br\",\"ch\",\"cz\",\"de\",\"dk\",\"es\",\"fi\",\"ie\",\"nb\",\"nl\",\"no\",\"pl\",\"pt\",\"ru\",\"se\",\"uk\",\"it\",\"fr\")\n    val fwTime \u003d new FileWriter(\"/data/sidana/recsysBaselines/experiments/popcountryfiles/input/computepopularitems.txt\", true)\n    for (code \u003c- countryCodes){\n        val t1 \u003d System.currentTimeMillis\n        val csvFileClick \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \"\\t\")\n    .load(\"/data/sidana/recsysBaselines/experiments/tabseparatedinput/default/train_\"+code+\".csv\") \n    \n    val clickTemp \u003d csvFileClick.filter(csvFileClick(\"rating\") \u003d\u003d\u003d\"1\")\n\nval groupedByUsersandOffers \u003d clickTemp.select(clickTemp(\"userid\"),clickTemp(\"offerid\")).distinct\nval groupedByOffers \u003d groupedByUsersandOffers.groupBy(\"offerid\").count.sort(desc(\"count\"))\nval topItems \u003d groupedByOffers.select(\"offerid\").rdd.map(r \u003d\u003e r(0)).take(100)\n//groupedByOffers.rdd.coalesce(1, false).saveAsTextFile(\"/tmp/sidana/popularOfferCountsTrain.csv\")\nimport java.nio.file.{ Files, Paths }\nimport scala.collection.mutable.ListBuffer\nimport java.io.FileWriter\nvar items \u003d new ListBuffer[String]()\nval fw \u003d new FileWriter(\"/data/sidana/recsysBaselines/experiments/popcountryfiles/input/mostpopularitems_\"+code+\".txt\", true)\nfor( a \u003c- 1 to 100){\nval firstval \u003d topItems(a-1)\nitems +\u003d firstval.toString.toString\nfw.write(firstval.toString.toString+\" \")\n//items +\u003d \",\"\n}\n    val t2 \u003d System.currentTimeMillis\n    println((t2 - t1) + \" msecs\")\n    fwTime.write(code+\",\"+(t2 - t1) + \" msecs\")\n fw.close()\n}\nfwTime.close()",
+      "authenticationInfo": {},
+      "dateUpdated": "Dec 15, 2016 12:36:13 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1477570224398_790805120",
+      "id": "20161027-141024_991475333",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "import java.nio.file.{Files, Paths}\nimport scala.collection.mutable.ListBuffer\nimport java.io.FileWriter\ncountryCodes: Array[String] \u003d Array(at, be, br, ch, cz, de, dk, es, fi, ie, nb, nl, no, pl, pt, ru, se, uk, it, fr)\nfwTime: java.io.FileWriter \u003d java.io.FileWriter@5403820f\n36716 msecs\n20997 msecs\n32460 msecs\n21716 msecs\n22933 msecs\n38177 msecs\n25052 msecs\n24526 msecs\n39763 msecs\n35285 msecs\n21015 msecs\n20122 msecs\n31603 msecs\n26799 msecs\n21559 msecs\n36912 msecs\n26363 msecs\n20599 msecs\n40502 msecs\n87013 msecs\n"
+      },
+      "dateCreated": "Oct 27, 2016 2:10:24 PM",
+      "dateStarted": "Dec 15, 2016 12:36:13 AM",
+      "dateFinished": "Dec 15, 2016 12:47:06 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1479916711103_-118596599",
+      "id": "20161123-165831_1575700571",
+      "dateCreated": "Nov 23, 2016 4:58:31 PM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "kelkooBaselines: Popularity",
+  "id": "2BXCVR67C",
+  "angularObjects": {
+    "2BGHSKCA7": [],
+    "2BFMBPKAB": [],
+    "2BHKKP27G": [],
+    "2BJHJDBK6": [],
+    "2BJAQG5W4": [],
+    "2BJGSXM37": [],
+    "2BFXEV5XZ": [],
+    "2BG77RV7M": [],
+    "2BF969NNB": [],
+    "2BG8QQJNC": [],
+    "2BGVG5JP4": [],
+    "2BJ5FCP57": [],
+    "2BFEDXCTE": [],
+    "2BJ8AEWCT": [],
+    "2BH9AVVKH": [],
+    "2BJ7KKX85": [],
+    "2BHKAE8WK": [],
+    "2BJ6HN5AY": []
+  },
+  "config": {},
+  "info": {}
+}

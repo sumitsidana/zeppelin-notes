@@ -1,0 +1,245 @@
+{
+  "paragraphs": [
+    {
+      "text": "import java.io.FileWriter\nval countryCodes \u003d Array(\"at\",\"be\",\"br\",\"ch\",\"cz\",\"de\",\"dk\",\"fi\",\"ie\",\"nb\",\"nl\",\"no\",\"pl\",\"pt\",\"ru\",\"se\",\"uk\",\"it\",\"fr\")\n\n\n\t\t\t\t\tfor (code \u003c- countryCodes){\n\t\t\t\t\t    val t1 \u003d System.currentTimeMillis\n\t\t\t\t\t    \tval inputfile \u003d sqlContext.read\n\t\t\t\t\t\t\t.format(\"com.databricks.spark.csv\") \n\t\t\t\t\t\t\t.option(\"header\", \"true\") // Use first line of all files as header\n\t\t\t\t\t\t\t.option(\"inferSchema\", \"true\") // Automatically infer data types\n\t\t\t\t\t\t\t.option(\"delimiter\", \",\")\n\t\t\t\t\t\t\t.load(\"/data/sidana/recsysBaselines/december/tsplitfiles/train_\"+code+\".csv\")\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\tval interactions  \u003d  inputfile.filter(!($\"useridclicks\" \u003d\u003d\u003d \"null\"))\n\t\t\t\t\t\t\tval groupbyUser \u003d interactions.groupBy(\"useridclicks\").count.sort(desc(\"count\"))\n\t\t\t\t\t\t\tval groupbyOffer \u003d interactions.groupBy(\"offeridclicks\").count.sort(desc(\"count\"))\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\tgroupbyUser.rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/recsysBaselines/december/stats/userClicks_\"+code+\".train\")\n\t\t\t\t\t\t\tgroupbyOffer.rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/recsysBaselines/december/stats/offerClicks_\"+code+\".train\")\n\t\t\t\t\t\t\t\n\t\t\t\t\t}",
+      "authenticationInfo": {},
+      "dateUpdated": "Feb 14, 2017 10:31:50 PM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1487107747796_-1902014447",
+      "id": "20170214-222907_1830468694",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "import java.io.FileWriter\ncountryCodes: Array[String] \u003d Array(at, be, br, ch, cz, de, dk, fi, ie, nb, nl, no, pl, pt, ru, se, uk, it, fr)\n"
+      },
+      "dateCreated": "Feb 14, 2017 10:29:07 PM",
+      "dateStarted": "Feb 14, 2017 10:31:50 PM",
+      "dateFinished": "Feb 14, 2017 10:40:15 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "import java.io.FileWriter\n//(\"at\",\"be\",\"br\",\"ch\",\"cz\",\"de\",\"dk\",\"fi\",\"ie\",\nval countryCodes \u003d Array(\"nb\",\"nl\",\"no\",\"pl\",\"pt\",\"ru\",\"se\",\"uk\",\"it\",\"fr\")\n\nfor (code \u003c- countryCodes){\n    \t\t\t\t\t    val inputfile \u003d sqlContext.read\n\t\t\t\t\t\t\t.format(\"com.databricks.spark.csv\") \n\t\t\t\t\t\t\t.option(\"header\", \"true\") // Use first line of all files as header\n\t\t\t\t\t\t\t.option(\"inferSchema\", \"true\") // Automatically infer data types\n\t\t\t\t\t\t\t.option(\"delimiter\", \",\")\n\t\t\t\t\t\t\t.load(\"/data/sidana/recsysBaselines/december/tsplitfiles/train_\"+code+\".csv\").withColumn(\"utcdate\",unix_timestamp($\"utcdate\",\"yyyy-MM-dd HH:mm:ss\").cast(\"timestamp\")).withColumnRenamed(\"cast(unixtimestamp(utcdate,yyyy-MM-dd HH:mm:ss) as timestamp)\",\"utcdate\")\n\t\t\t\t\t\t\t\n    \t\t\t\t\t    val groupbyUser \u003d sqlContext.read\n\t\t\t\t\t\t\t.format(\"com.databricks.spark.csv\") \n\t\t\t\t\t\t\t.option(\"header\", \"true\") // Use first line of all files as header\n\t\t\t\t\t\t\t.option(\"inferSchema\", \"true\") // Automatically infer data types\n\t\t\t\t\t\t\t.option(\"delimiter\", \",\")\n\t\t\t\t\t\t\t.load(\"/data/sidana/recsysBaselines/december/stats/userClicks_\"+code+\".train\")\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\tval inputusercount \u003d inputfile.join(groupbyUser,inputfile(\"useridoffers\")\u003c\u003d\u003egroupbyUser(\"userid\"),\"left_outer\")\n\t\t\t\t\t\t\tval ordered \u003d inputusercount.orderBy(\"utcdate\")\n\t\t\t\t\t\t\tordered.rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/recsysBaselines/december/inputffm/ffminput_\"+code+\".csv\")\n}",
+      "authenticationInfo": {},
+      "dateUpdated": "Feb 15, 2017 9:44:21 AM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1487107747797_-1902399196",
+      "id": "20170214-222907_1984096783",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "import java.io.FileWriter\ncountryCodes: Array[String] \u003d Array(nb, nl, no, pl, pt, ru, se, uk, it, fr)\n"
+      },
+      "dateCreated": "Feb 14, 2017 10:29:07 PM",
+      "dateStarted": "Feb 15, 2017 12:37:11 AM",
+      "dateFinished": "Feb 15, 2017 12:42:11 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "import java.io.FileWriter\n//\"at\",\"be\",\"br\",\"ch\",\"cz\",\"de\",\"dk\",\"es\",\"ie\",\nval countryCodes \u003d Array(\"fi\",\"nb\",\"nl\",\"no\",\"pl\",\"pt\",\"ru\",\"se\",\"uk\",\"it\",\"fr\")\nval fw \u003d new FileWriter(\"/data/sidana/recsysBaselines/experiments/inputffm/createffmfeatures.txt\", true)\nfor (code \u003c- countryCodes){\n    \t\t\t\t\t    \t\t\t\t\t\t\tval inputfile \u003d sqlContext.read\n\t\t\t\t\t\t\t.format(\"com.databricks.spark.csv\") \n\t\t\t\t\t\t\t.option(\"header\", \"true\") // Use first line of all files as header\n\t\t\t\t\t\t\t.option(\"inferSchema\", \"true\") // Automatically infer data types\n\t\t\t\t\t\t\t.option(\"delimiter\", \",\")\n\t\t\t\t\t\t\t.load(\"/data/sidana/recsysBaselines/december/inputffm/train/userclicks/ffminput_\"+code+\".csv\").withColumn(\"utcdate\",unix_timestamp($\"utcdate\",\"yyyy-MM-dd HH:mm:ss\").cast(\"timestamp\")).withColumnRenamed(\"cast(unixtimestamp(utcdate,yyyy-MM-dd HH:mm:ss) as timestamp)\",\"utcdate\")\n\t\t\t\t\t\t\t\n    \t\t\t\t\t    \t\t\t\t\t\t\tval groupbyOffer \u003d sqlContext.read\n\t\t\t\t\t\t\t.format(\"com.databricks.spark.csv\") \n\t\t\t\t\t\t\t.option(\"header\", \"true\") // Use first line of all files as header\n\t\t\t\t\t\t\t.option(\"inferSchema\", \"true\") // Automatically infer data types\n\t\t\t\t\t\t\t.option(\"delimiter\", \",\")\n\t\t\t\t\t\t\t.load(\"/data/sidana/recsysBaselines/december/stats/offerClicks_\"+code+\".train\")\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\tval inputuseroffercount \u003d inputfile.join(groupbyOffer,inputfile(\"offeridoffers\")\u003c\u003d\u003egroupbyOffer(\"offerid\"),\"left_outer\")\n\t\t\t\t\t\t\tval ordered \u003d inputuseroffercount.orderBy(\"utcdate\")\n\t\t\t\t\t\t\tordered.rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/recsysBaselines/december/inputffm/train/userofferclicks/temp/ffminput_\"+code+\".csv\")\n}",
+      "authenticationInfo": {},
+      "dateUpdated": "Feb 15, 2017 1:36:51 AM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1487107747797_-1902399196",
+      "id": "20170214-222907_588561265",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "import java.io.FileWriter\ncountryCodes: Array[String] \u003d Array(fi, nb, nl, no, pl, pt, ru, se, uk, it, fr)\nfw: java.io.FileWriter \u003d java.io.FileWriter@56856efe\n"
+      },
+      "dateCreated": "Feb 14, 2017 10:29:07 PM",
+      "dateStarted": "Feb 15, 2017 1:36:52 AM",
+      "dateFinished": "Feb 15, 2017 1:42:33 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "import java.io.FileWriter\nval countryCodes \u003d Array(\"at\",\"be\",\"br\",\"ch\",\"cz\",\"de\",\"dk\",\"fi\",\"ie\",\"nb\",\"nl\",\"no\",\"pl\",\"pt\",\"ru\",\"se\",\"uk\",\"it\",\"fr\")\n\n\n\t\t\t\t\tfor (code \u003c- countryCodes){\n\t\t\t\t\t    val t1 \u003d System.currentTimeMillis\n\t\t\t\t\t    \t\t\t\t\t\t\tval inputfile \u003d sqlContext.read\n\t\t\t\t\t\t\t.format(\"com.databricks.spark.csv\") \n\t\t\t\t\t\t\t.option(\"header\", \"true\") // Use first line of all files as header\n\t\t\t\t\t\t\t.option(\"inferSchema\", \"true\") // Automatically infer data types\n\t\t\t\t\t\t\t.option(\"delimiter\", \",\")\n\t\t\t\t\t\t\t.load(\"/data/sidana/recsysBaselines/december/tsplitfiles/test_\"+code+\".csv\")\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\tval interactions  \u003d  inputfile.filter(!($\"useridclicks\" \u003d\u003d\u003d \"null\"))\n\t\t\t\t\t\t\tval groupbyUser \u003d interactions.groupBy(\"useridclicks\").count.sort(desc(\"count\"))\n\t\t\t\t\t\t\tval groupbyOffer \u003d interactions.groupBy(\"offeridclicks\").count.sort(desc(\"count\"))\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\tgroupbyUser.rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/recsysBaselines/december/stats/userClicks_\"+code+\".test\")\n\t\t\t\t\t\t\tgroupbyOffer.rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/recsysBaselines/december/stats/offerClicks_\"+code+\".test\")\n\t\t\t\t\t}",
+      "dateUpdated": "Feb 14, 2017 10:33:23 PM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1487107747797_-1902399196",
+      "id": "20170214-222907_639502773",
+      "dateCreated": "Feb 14, 2017 10:29:07 PM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "import java.io.FileWriter\n//\"at\",\"be\",\"br\",\"ch\",\"cz\",\"de\",\"dk\",\"es\",\"ie\"\nval countryCodes \u003d Array(\"fi\",\"nb\",\"nl\",\"no\",\"pl\",\"pt\",\"ru\",\"se\",\"uk\",\"it\",\"fr\")\nfor (code \u003c- countryCodes){\n    \t\t\t\t\t    \t\t\t\t\t\t\tval inputfile \u003d sqlContext.read\n\t\t\t\t\t\t\t.format(\"com.databricks.spark.csv\") \n\t\t\t\t\t\t\t.option(\"header\", \"true\") // Use first line of all files as header\n\t\t\t\t\t\t\t.option(\"inferSchema\", \"true\") // Automatically infer data types\n\t\t\t\t\t\t\t.option(\"delimiter\", \",\")\n\t\t\t\t\t\t\t.load(\"/data/sidana/recsysBaselines/december/tsplitfiles/test_\"+code+\".csv\").withColumn(\"utcdate\",unix_timestamp($\"utcdate\",\"yyyy-MM-dd HH:mm:ss\").cast(\"timestamp\")).withColumnRenamed(\"cast(unixtimestamp(utcdate,yyyy-MM-dd HH:mm:ss) as timestamp)\",\"utcdate\")\n\t\t\t\t\t\t\t\n    \t\t\t\t\t    \t\t\t\t\t\t\tval groupbyUser \u003d sqlContext.read\n\t\t\t\t\t\t\t.format(\"com.databricks.spark.csv\") \n\t\t\t\t\t\t\t.option(\"header\", \"true\") // Use first line of all files as header\n\t\t\t\t\t\t\t.option(\"inferSchema\", \"true\") // Automatically infer data types\n\t\t\t\t\t\t\t.option(\"delimiter\", \",\")\n\t\t\t\t\t\t\t.load(\"/data/sidana/recsysBaselines/december/stats/userClicks_\"+code+\".test\")\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\tval inputusercount \u003d inputfile.join(groupbyUser,inputfile(\"useridoffers\")\u003c\u003d\u003egroupbyUser(\"userid\"),\"left_outer\")\n\t\t\t\t\t\t\tval ordered \u003d inputusercount.orderBy(\"utcdate\")\n\t\t\t\t\t\t\tordered.rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/recsysBaselines/december/inputffm/test/userclicks/ffminput_\"+code+\".csv\")\n}",
+      "authenticationInfo": {},
+      "dateUpdated": "Feb 15, 2017 2:15:56 AM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1487107747797_-1902399196",
+      "id": "20170214-222907_2114936223",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "import java.io.FileWriter\ncountryCodes: Array[String] \u003d Array(fi, nb, nl, no, pl, pt, ru, se, uk, it, fr)\n"
+      },
+      "dateCreated": "Feb 14, 2017 10:29:07 PM",
+      "dateStarted": "Feb 15, 2017 2:15:56 AM",
+      "dateFinished": "Feb 15, 2017 2:20:19 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "import java.io.FileWriter\nval countryCodes \u003d Array(\"at\",\"be\",\"br\",\"ch\",\"cz\",\"de\",\"dk\",\"fi\",\"nb\",\"nl\",\"no\",\"pl\",\"pt\",\"ru\",\"se\",\"uk\",\"it\",\"fr\")\nfor (code \u003c- countryCodes){\n    \t\t\t\t\t    val inputfile \u003d sqlContext.read\n\t\t\t\t\t\t\t.format(\"com.databricks.spark.csv\") \n\t\t\t\t\t\t\t.option(\"header\", \"true\") // Use first line of all files as header\n\t\t\t\t\t\t\t.option(\"inferSchema\", \"true\") // Automatically infer data types\n\t\t\t\t\t\t\t.option(\"delimiter\", \",\")\n\t\t\t\t\t\t\t.load(\"/data/sidana/recsysBaselines/december/inputffm/test/userclicks/ffminput_\"+code+\".csv\").withColumn(\"utcdate\",unix_timestamp($\"utcdate\",\"yyyy-MM-dd HH:mm:ss\").cast(\"timestamp\")).withColumnRenamed(\"cast(unixtimestamp(utcdate,yyyy-MM-dd HH:mm:ss) as timestamp)\",\"utcdate\")\n\t\t\t\t\t\t\t\n    \t\t\t\t\t    val groupbyOffer \u003d sqlContext.read\n\t\t\t\t\t\t\t.format(\"com.databricks.spark.csv\") \n\t\t\t\t\t\t\t.option(\"header\", \"true\") // Use first line of all files as header\n\t\t\t\t\t\t\t.option(\"inferSchema\", \"true\") // Automatically infer data types\n\t\t\t\t\t\t\t.option(\"delimiter\", \",\")\n\t\t\t\t\t\t\t.load(\"/data/sidana/recsysBaselines/december/stats/offerClicks_\"+code+\".test\")\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\tval inputuseroffercount \u003d inputfile.join(groupbyOffer,inputfile(\"offeridoffers\")\u003c\u003d\u003egroupbyOffer(\"offerid\"),\"left_outer\")\n\t\t\t\t\t\t\tval ordered \u003d inputuseroffercount.orderBy(\"utcdate\")\n\t\t\t\t\t\t\tordered.rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/recsysBaselines/december/inputffm/test/userofferclicks/ffminput_\"+code+\".csv\")\n}",
+      "authenticationInfo": {},
+      "dateUpdated": "Feb 15, 2017 2:32:03 AM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1487107747797_-1902399196",
+      "id": "20170214-222907_583774817",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "import java.io.FileWriter\ncountryCodes: Array[String] \u003d Array(at, be, br, ch, cz, de, dk, fi, nb, nl, no, pl, pt, ru, se, uk, it, fr)\n"
+      },
+      "dateCreated": "Feb 14, 2017 10:29:07 PM",
+      "dateStarted": "Feb 15, 2017 2:32:03 AM",
+      "dateFinished": "Feb 15, 2017 2:41:49 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1487122323683_-503372661",
+      "id": "20170215-023203_2020701752",
+      "dateCreated": "Feb 15, 2017 2:32:03 AM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "kelkooBaselines: createFFMFeaturesDecClone",
+  "id": "2C8B74WGM",
+  "angularObjects": {
+    "2BGHSKCA7": [],
+    "2BFMBPKAB": [],
+    "2BHKKP27G": [],
+    "2BJHJDBK6": [],
+    "2BJAQG5W4": [],
+    "2BJGSXM37": [],
+    "2BFXEV5XZ": [],
+    "2BG77RV7M": [],
+    "2BF969NNB": [],
+    "2BG8QQJNC": [],
+    "2BGVG5JP4": [],
+    "2BJ5FCP57": [],
+    "2BFEDXCTE": [],
+    "2BJ8AEWCT": [],
+    "2BH9AVVKH": [],
+    "2BJ7KKX85": [],
+    "2BHKAE8WK": [],
+    "2BJ6HN5AY": []
+  },
+  "config": {
+    "looknfeel": "default"
+  },
+  "info": {}
+}

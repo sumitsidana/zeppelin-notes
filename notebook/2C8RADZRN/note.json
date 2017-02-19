@@ -1,0 +1,133 @@
+{
+  "paragraphs": [
+    {
+      "text": "val test \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/data/sidana/nnmf_ranking/netflix/netflix_data/dat.nf.sample.withheaders\")\n    \nval numusers \u003d test.select(\"userid\").distinct.count\nval numitems \u003d test.select(\"movieid\").distinct.count\n\ntest.agg(max(\"movieid\")).show\ntest.agg(max(\"userId\")).show\ntest.count\n\n",
+      "authenticationInfo": {},
+      "dateUpdated": "Jan 21, 2017 2:27:07 AM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1484444369666_670531823",
+      "id": "20170115-023929_275879442",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "test: org.apache.spark.sql.DataFrame \u003d [userid: int, movieid: int, rating: int, timestamp: bigint]\nnumusers: Long \u003d 94450\nnumitems: Long \u003d 3560\n+------------+\n|max(movieid)|\n+------------+\n|       17759|\n+------------+\n\n+-----------+\n|max(userId)|\n+-----------+\n|    2649421|\n+-----------+\n\nres35: Long \u003d 4201479\n"
+      },
+      "dateCreated": "Jan 15, 2017 2:39:29 AM",
+      "dateStarted": "Jan 21, 2017 2:27:07 AM",
+      "dateFinished": "Jan 21, 2017 2:27:41 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "\nval test \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/data/sidana/nnmf_ranking/netflix/netflix_data/dat.nf.sample.headers\")\nval groubByUsersRatings \u003d test.select(\"userid\",\"rating\").distinct\nval groubByUsers \u003d groubByUsersRatings.groupBy(\"userId\").count.sort(asc(\"count\"))\nval badUsers \u003d groubByUsers.filter($\"count\"\u003d\u003d\u003d\"1\")\nbadUsers.count\n//badUsers.select(\"userId\").rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/nnmf_ranking/netflix/netflix_data/dat.singleratingusers\")\n",
+      "authenticationInfo": {},
+      "dateUpdated": "Jan 21, 2017 3:06:49 AM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [
+            {
+              "name": "userId",
+              "index": 0.0,
+              "aggr": "sum"
+            }
+          ],
+          "values": [
+            {
+              "name": "count",
+              "index": 1.0,
+              "aggr": "sum"
+            }
+          ],
+          "groups": [],
+          "scatter": {
+            "xAxis": {
+              "name": "userId",
+              "index": 0.0,
+              "aggr": "sum"
+            },
+            "yAxis": {
+              "name": "count",
+              "index": 1.0,
+              "aggr": "sum"
+            }
+          }
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1484444369671_668608079",
+      "id": "20170115-023929_1010083074",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "test: org.apache.spark.sql.DataFrame \u003d [userid: int, movieid: int, rating: int, timestamp: bigint]\ngroubByUsersRatings: org.apache.spark.sql.DataFrame \u003d [userid: int, rating: int]\ngroubByUsers: org.apache.spark.sql.DataFrame \u003d [userId: int, count: bigint]\nbadUsers: org.apache.spark.sql.DataFrame \u003d [userId: int, count: bigint]\nres53: Long \u003d 0\n"
+      },
+      "dateCreated": "Jan 15, 2017 2:39:29 AM",
+      "dateStarted": "Jan 21, 2017 3:06:49 AM",
+      "dateFinished": "Jan 21, 2017 3:07:22 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1484564413101_-185560327",
+      "id": "20170116-120013_1113430250",
+      "dateCreated": "Jan 16, 2017 12:00:13 PM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "nnmf_ranking: nusersitems_netflix",
+  "id": "2C8RADZRN",
+  "angularObjects": {
+    "2BGHSKCA7": [],
+    "2BFMBPKAB": [],
+    "2BHKKP27G": [],
+    "2BJHJDBK6": [],
+    "2BJAQG5W4": [],
+    "2BJGSXM37": [],
+    "2BFXEV5XZ": [],
+    "2BG77RV7M": [],
+    "2BF969NNB": [],
+    "2BG8QQJNC": [],
+    "2BGVG5JP4": [],
+    "2BJ5FCP57": [],
+    "2BFEDXCTE": [],
+    "2BJ8AEWCT": [],
+    "2BH9AVVKH": [],
+    "2BJ7KKX85": [],
+    "2BHKAE8WK": [],
+    "2BJ6HN5AY": []
+  },
+  "config": {},
+  "info": {}
+}

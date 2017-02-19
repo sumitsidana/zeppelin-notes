@@ -1,0 +1,90 @@
+{
+  "paragraphs": [
+    {
+      "text": "val parquetFileOffer \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypso_kk_june_data/offerView/*/2016/*/*/*.parquet\")\nval offerId \u003d parquetFileOffer.select(substring_index(parquetFileOffer(\"offerViewId\"),\"-\",1))\nval uniqueOfferId \u003d offerId.select(\"substring_index(offerViewId,-,1)\").distinct\nuniqueOfferId.count",
+      "authenticationInfo": {},
+      "dateUpdated": "Dec 6, 2016 10:30:54 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1481016573541_-1605915338",
+      "id": "20161206-102933_840995223",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "parquetFileOffer: org.apache.spark.sql.DataFrame \u003d [eventType: string, userId: string, ip: string, userAgent: struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e, geolocation: struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, adType: string, offerRank: int, searchId: string, offerViewId: string, contentPageType: string, adPlacement: string, adViewability: string, adSize: string]\nofferId: org.apache.spark.sql.DataFrame \u003d [substring_index(offerViewId,-,1): string]\nuniqueOfferId: org.apache.spark.sql.DataFrame \u003d [substring_index(offerViewId,-,1): string]\nres0: Long \u003d 56667919\n"
+      },
+      "dateCreated": "Dec 6, 2016 10:29:33 AM",
+      "dateStarted": "Dec 6, 2016 10:30:54 AM",
+      "dateFinished": "Dec 6, 2016 11:57:31 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "    ",
+      "dateUpdated": "Dec 6, 2016 11:33:33 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1481016654612_805580210",
+      "id": "20161206-103054_1780992928",
+      "dateCreated": "Dec 6, 2016 10:30:54 AM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "uniqueOfferId",
+  "id": "2C692UREX",
+  "angularObjects": {
+    "2BGHSKCA7": [],
+    "2BFMBPKAB": [],
+    "2BHKKP27G": [],
+    "2BJHJDBK6": [],
+    "2BJAQG5W4": [],
+    "2BJGSXM37": [],
+    "2BFXEV5XZ": [],
+    "2BG77RV7M": [],
+    "2BF969NNB": [],
+    "2BG8QQJNC": [],
+    "2BGVG5JP4": [],
+    "2BJ5FCP57": [],
+    "2BFEDXCTE": [],
+    "2BJ8AEWCT": [],
+    "2BH9AVVKH": [],
+    "2BJ7KKX85": [],
+    "2BHKAE8WK": [],
+    "2BJ6HN5AY": []
+  },
+  "config": {},
+  "info": {}
+}

@@ -1,0 +1,443 @@
+{
+  "paragraphs": [
+    {
+      "text": "        import org.apache.spark.mllib.recommendation.ALS\n        import org.apache.spark.mllib.recommendation.MatrixFactorizationModel\n        import org.apache.spark.mllib.recommendation.Rating\n        import org.apache.spark.ml.feature.StringIndexer\n        import org.apache.spark.sql.Row\n        \nval time1 \u003d java.lang.System.currentTimeMillis()\nval df \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \"\\t\")\n    .load(\"/home/ama/sidana/recommendersystemchallenge/data/data/interactions.csv\")\n    \n        val validInteractions \u003d df.filter(df(\"interaction_type\") \u003d\u003d\u003d 1||df(\"interaction_type\")\u003d\u003d\u003d2||df(\"interaction_type\")\u003d\u003d\u003d3)\n        val clickedoffers \u003d validInteractions.select(\"user_id\", \"item_id\", \"interaction_type\")\n        //val clickedValidOffers \u003d clickedoffers.filter(!($\"offerViewId\".isNull))\n       // val indexerUserId \u003d new StringIndexer().setInputCol(\"user_id\").setOutputCol(\"user\")\n       // val indexerOfferId \u003d new StringIndexer().setInputCol(\"item_id\").setOutputCol(\"item\") \n        //val clickedOffersIndexedUsers \u003d indexerUserId.fit(clickedoffers).transform(clickedoffers)\n        //val clickedOffersIndexedOffers \u003d indexerOfferId.fit(clickedOffersIndexedUsers).transform(clickedOffersIndexedUsers)\n        //val groupedOffers \u003d clickedOffersIndexedOffers.groupBy(\"user\",\"item\").count\n        val groupedOffers \u003d clickedoffers.groupBy(\"user_id\",\"item_id\").count\n         //val ratings \u003d groupedOffers.map{\n    //case Row(user, item, count) \u003d\u003e Rating(user.asInstanceOf[Double].intValue, item.asInstanceOf[Double].intValue, count.asInstanceOf[Long].doubleValue)\n//}\nval ratings \u003d groupedOffers.map{\n    case Row(user_id, item_id, count) \u003d\u003e Rating(user_id.asInstanceOf[Int].intValue, item_id.asInstanceOf[Int].intValue, count.asInstanceOf[Long].doubleValue)\n}\nval rank \u003d 10\nval numIterations \u003d 10\nval model \u003d ALS.train(ratings, rank, numIterations, 0.01)\nval time2 \u003d java.lang.System.currentTimeMillis()\nval time \u003d time2 - time1\nprint(time)",
+      "dateUpdated": "Apr 5, 2016 1:23:24 AM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1459812204822_-454085254",
+      "id": "20160405-012324_741230099",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "import org.apache.spark.mllib.recommendation.ALS\nimport org.apache.spark.mllib.recommendation.MatrixFactorizationModel\nimport org.apache.spark.mllib.recommendation.Rating\nimport org.apache.spark.ml.feature.StringIndexer\nimport org.apache.spark.sql.Row\ntime1: Long \u003d 1459188842399\ndf: org.apache.spark.sql.DataFrame \u003d [user_id: int, item_id: int, interaction_type: int, created_at: int]\nvalidInteractions: org.apache.spark.sql.DataFrame \u003d [user_id: int, item_id: int, interaction_type: int, created_at: int]\nclickedoffers: org.apache.spark.sql.DataFrame \u003d [user_id: int, item_id: int, interaction_type: int]\ngroupedOffers: org.apache.spark.sql.DataFrame \u003d [user_id: int, item_id: int, count: bigint]\nratings: org.apache.spark.rdd.RDD[org.apache.spark.mllib.recommendation.Rating] \u003d MapPartitionsRDD[17] at map at \u003cconsole\u003e:37\nrank: Int \u003d 10\nnumIterations: Int \u003d 10\nmodel: org.apache.spark.mllib.recommendation.MatrixFactorizationModel \u003d org.apache.spark.mllib.recommendation.MatrixFactorizationModel@760c626d\ntime2: Long \u003d 1459188911126\ntime: Long \u003d 68727\n68727"
+      },
+      "dateCreated": "Apr 5, 2016 1:23:24 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val approach2_mf_als \u003d model.recommendProductsForUsers(30)",
+      "dateUpdated": "Apr 5, 2016 1:23:24 AM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1459812204822_-454085254",
+      "id": "20160405-012324_301637646",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "approach2_mf_als: org.apache.spark.rdd.RDD[(Int, Array[org.apache.spark.mllib.recommendation.Rating])] \u003d MapPartitionsRDD[874] at map at MatrixFactorizationModel.scala:218\n"
+      },
+      "dateCreated": "Apr 5, 2016 1:23:24 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val target_users \u003d sqlContext.read.format(\"com.databricks.spark.csv\").option(\"header\", \"true\").load(\"/home/ama/sidana/recommendersystemchallenge/data/target_users.csv\")\n//val validTestUsersOffers \u003d target_users.join(clickedOffersIndexedOffers,target_users(\"user_id\")\u003d\u003d\u003dclickedOffersIndexedOffers(\"user_id\")).drop(clickedOffersIndexedOffers(\"user_id\"))\n",
+      "dateUpdated": "Apr 5, 2016 1:23:24 AM",
+      "config": {
+        "enabled": true,
+        "tableHide": false,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1459812204823_-454470003",
+      "id": "20160405-012324_1562509402",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "target_users: org.apache.spark.sql.DataFrame \u003d [user_id: string]\n"
+      },
+      "dateCreated": "Apr 5, 2016 1:23:24 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val actualusers \u003d target_users.collect()\nactualusers(149999).getString(0)\n//val clicks \u003d clickedofferstemp.filter(!($\"offerViewId\".isNull))\nval nullUsers \u003d target_users.filter($\"user_id\".isNull)\nnullUsers.count",
+      "dateUpdated": "Apr 5, 2016 1:23:24 AM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1459812204824_-456393747",
+      "id": "20160405-012324_1665483898",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "actualusers: Array[org.apache.spark.sql.Row] \u003d Array([9], [69], [118], [131], [136], [174], [178], [185], [193], [235], [239], [242], [246], [258], [285], [302], [316], [324], [343], [350], [390], [404], [409], [487], [493], [514], [517], [527], [548], [587], [645], [667], [669], [689], [693], [704], [719], [758], [774], [858], [865], [884], [893], [902], [912], [920], [927], [946], [948], [1001], [1015], [1021], [1025], [1064], [1078], [1088], [1104], [1112], [1122], [1138], [1144], [1181], [1183], [1196], [1233], [1252], [1272], [1275], [1286], [1339], [1358], [1372], [1403], [1405], [1453], [1459], [1473], [1475], [1492], [1493], [1509], [1521], [1570], [1599], [1621], [1648], [1686], [1703], [1706], [1722], [1776], [1786], [1797], [1804], [1824], [1841], [1858], [1861], [1865], [186...res53: String \u003d 2984867\nnullUsers: org.apache.spark.sql.DataFrame \u003d [user_id: string]\nres55: Long \u003d 0\n"
+      },
+      "dateCreated": "Apr 5, 2016 1:23:24 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "//model.recommendProducts(118,30)\nmodel.userFeatures.collect()(500)\nval keys \u003d model.userFeatures.keys.collect()\nkeys.exists(_ \u003d\u003d 300)",
+      "dateUpdated": "Apr 5, 2016 1:23:24 AM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1459812204824_-456393747",
+      "id": "20160405-012324_1486018688",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "res146: (Int, Array[Double]) \u003d (194400,Array(0.7250443696975708, 0.9506514668464661, 0.10296893119812012, -0.188176691532135, -0.4689667820930481, -0.3404574394226074, -8.217510185204446E-4, 0.36796119809150696, 0.06672805547714233, -0.3058418929576874))\nkeys: Array[Int] \u003d Array(200, 600, 700, 800, 900, 1300, 1900, 2300, 2400, 3100, 3400, 3600, 3700, 3900, 4000, 4400, 4500, 5300, 5400, 5500, 5900, 6100, 6400, 7100, 7500, 7600, 7800, 8000, 8100, 8200, 9300, 9700, 10000, 10600, 10800, 11100, 11300, 12400, 13200, 13300, 13500, 13900, 14000, 14300, 14400, 14500, 15000, 15100, 15300, 15600, 16100, 16200, 16500, 17700, 18100, 18200, 18400, 18700, 19100, 21500, 21700, 21800, 22000, 23200, 23600, 24000, 24100, 24300, 25000, 25100, 25300, 25600, 26300, 26900, 27000, 27400, 27500, 27700, 28400, 29700, 30100, 30600, 30700, 31500, 31900, 33000, 33100, 33200, 33400, 33900, 34200, 34500, 34700, 35100, 36200, 36600, 37000, 37300, 37500, 38300, 38400, 38900, 39200, 39600, 40000, 40100, 40200, 40300, 40400, 40500, 40800, 40900, 41200, 41400, 41500, 4230...res147: Boolean \u003d false\n"
+      },
+      "dateCreated": "Apr 5, 2016 1:23:24 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "import java.nio.file.{ Files, Paths }\nimport scala.collection.mutable.ListBuffer\n//import java.io.FileWriter\nimport java.io.PrintWriter\nimport util.control.Breaks._\n//val fw \u003d new java.io.FileWriter(\"/home/ama/sidana/recommendersystemchallenge/output/als.txt\", true)\nval pw \u003d new PrintWriter(\"/home/ama/sidana/recommendersystemchallenge/output/als.txt\");\nval total \u003d target_users.count - 1\nval actualusers \u003d target_users.collect()\nval keys \u003d model.userFeatures.keys.collect()\nfor(user \u003c- 0 to total.toInt){\n    val user_id \u003d actualusers(user).getString(0)\n    pw.print(user_id+\"\\t\")\n    breakable{\n        if(!(keys.exists(_ \u003d\u003d user_id.toInt))){\n            pw.println()\n            break\n        }\n    else{\n    val topKRecs \u003d model.recommendProducts(user_id.toInt,30)\n//    val ratingArray \u003d topKRecs.collect()\n     topKRecs.map(rating \u003d\u003e (rating.product)).foreach(a\u003d\u003epw.print(a+\",\"))\n    pw.println()\n   }\n    }\n    //print(topKRecs(0))\n  //  fw.close()\n}\n//fw.close()\npw.close()",
+      "dateUpdated": "Apr 5, 2016 1:23:24 AM",
+      "config": {
+        "enabled": true,
+        "title": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1459812204825_-456778496",
+      "id": "20160405-012324_281274606",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "import java.nio.file.{Files, Paths}\nimport scala.collection.mutable.ListBuffer\nimport java.io.PrintWriter\nimport util.control.Breaks._\npw: java.io.PrintWriter \u003d java.io.PrintWriter@1c40cb66\ntotal: Long \u003d 149999\nactualusers: Array[org.apache.spark.sql.Row] \u003d Array([9], [69], [118], [131], [136], [174], [178], [185], [193], [235], [239], [242], [246], [258], [285], [302], [316], [324], [343], [350], [390], [404], [409], [487], [493], [514], [517], [527], [548], [587], [645], [667], [669], [689], [693], [704], [719], [758], [774], [858], [865], [884], [893], [902], [912], [920], [927], [946], [948], [1001], [1015], [1021], [1025], [1064], [1078], [1088], [1104], [1112], [1122], [1138], [1144], [1181], [1183], [1196], [1233], [1252], [1272], [1275], [1286], [1339], [1358], [1372], [1403], [1405], [1453], [1459], [1473], [1475], [1492], [1493], [1509], [1521], [1570], [1599], [1621], [1648], [1686], [1703], [1706], [1722], [1776], [1786], [1797], [1804], [1824], [1841], [1858], [1861], [1865], [186...keys: Array[Int] \u003d Array(200, 600, 700, 800, 900, 1300, 1900, 2300, 2400, 3100, 3400, 3600, 3700, 3900, 4000, 4400, 4500, 5300, 5400, 5500, 5900, 6100, 6400, 7100, 7500, 7600, 7800, 8000, 8100, 8200, 9300, 9700, 10000, 10600, 10800, 11100, 11300, 12400, 13200, 13300, 13500, 13900, 14000, 14300, 14400, 14500, 15000, 15100, 15300, 15600, 16100, 16200, 16500, 17700, 18100, 18200, 18400, 18700, 19100, 21500, 21700, 21800, 22000, 23200, 23600, 24000, 24100, 24300, 25000, 25100, 25300, 25600, 26300, 26900, 27000, 27400, 27500, 27700, 28400, 29700, 30100, 30600, 30700, 31500, 31900, 33000, 33100, 33200, 33400, 33900, 34200, 34500, 34700, 35100, 36200, 36600, 37000, 37300, 37500, 38300, 38400, 38900, 39200, 39600, 40000, 40100, 40200, 40300, 40400, 40500, 40800, 40900, 41200, 41400, 41500, 4230..."
+      },
+      "dateCreated": "Apr 5, 2016 1:23:24 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "import java.nio.file.{ Files, Paths }\nimport scala.collection.mutable.ListBuffer\nimport java.io.FileWriter\nval fw \u003d new FileWriter(\"/home/ama/sidana/recommendersystemchallenge/output/als.txt\", true)\nval total \u003d target_users.count\nfor(user \u003c- 1 to total.toInt){\n    val actualuser \u003d indexerUserId.\n    //val topKRecs \u003d model.recommendProducts(user,30)\n    //topKRecs.map(rating \u003d\u003e (rating.product)).foreach(println)\n    //fw.write(user+\"\\t\")\n    //rating.collect()(1).foreach(a \u003d\u003e fw.write(a+\",\"))\n}\n//var items \u003d new ListBuffer[String]()\n\n//for( a \u003c- 1 to 30){\n//val firstval \u003d topItems(a-1)\n//items +\u003d firstval.toString.toString\n//fw.write(firstval.toString.toString+\",\" )\n//items +\u003d \",\"\n}\n fw.close()",
+      "dateUpdated": "Apr 5, 2016 1:23:24 AM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1459812204825_-456778496",
+      "id": "20160405-012324_770795995",
+      "result": {
+        "code": "ERROR",
+        "type": "TEXT",
+        "msg": "import java.nio.file.{Files, Paths}\nimport scala.collection.mutable.ListBuffer\nimport java.io.FileWriter\nfw: java.io.FileWriter \u003d java.io.FileWriter@39aa6b99\ntotal: Long \u003d 150000\n\u003cconsole\u003e:118: error: value filter is not a member of org.apache.spark.ml.feature.StringIndexer\n                  val actualuser \u003d indexerUserId.filter(\"user\"\u003d\u003duser)\n                                                 ^\n"
+      },
+      "dateCreated": "Apr 5, 2016 1:23:24 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "target_users.show\ntarget_users.select(\"user_id\").show",
+      "dateUpdated": "Apr 5, 2016 1:23:24 AM",
+      "config": {
+        "enabled": true,
+        "tableHide": false,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1459812204826_-455624250",
+      "id": "20160405-012324_1146929261",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "+-------+\n|user_id|\n+-------+\n|      9|\n|     69|\n|    118|\n|    131|\n|    136|\n|    174|\n|    178|\n|    185|\n|    193|\n|    235|\n|    239|\n|    242|\n|    246|\n|    258|\n|    285|\n|    302|\n|    316|\n|    324|\n|    343|\n|    350|\n+-------+\nonly showing top 20 rows\n\n+-------+\n|user_id|\n+-------+\n|      9|\n|     69|\n|    118|\n|    131|\n|    136|\n|    174|\n|    178|\n|    185|\n|    193|\n|    235|\n|    239|\n|    242|\n|    246|\n|    258|\n|    285|\n|    302|\n|    316|\n|    324|\n|    343|\n|    350|\n+-------+\nonly showing top 20 rows\n\n"
+      },
+      "dateCreated": "Apr 5, 2016 1:23:24 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val lst \u003d target_users.select(\"user_id\")\n",
+      "dateUpdated": "Apr 5, 2016 1:23:24 AM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1459812204826_-455624250",
+      "id": "20160405-012324_626874155",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "lst: org.apache.spark.sql.DataFrame \u003d [user_id: string]\n"
+      },
+      "dateCreated": "Apr 5, 2016 1:23:24 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "lst.show",
+      "dateUpdated": "Apr 5, 2016 1:23:24 AM",
+      "config": {
+        "enabled": true,
+        "tableHide": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1459812204827_-456008998",
+      "id": "20160405-012324_319150903",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "+-------+\n|user_id|\n+-------+\n|      9|\n|     69|\n|    118|\n|    131|\n|    136|\n|    174|\n|    178|\n|    185|\n|    193|\n|    235|\n|    239|\n|    242|\n|    246|\n|    258|\n|    285|\n|    302|\n|    316|\n|    324|\n|    343|\n|    350|\n+-------+\nonly showing top 20 rows\n\n"
+      },
+      "dateCreated": "Apr 5, 2016 1:23:24 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "approach2_mf_als.filter(x\u003d\u003e x.in lst)",
+      "dateUpdated": "Apr 5, 2016 1:23:24 AM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1459812204827_-456008998",
+      "id": "20160405-012324_1702560162",
+      "result": {
+        "code": "ERROR",
+        "type": "TEXT",
+        "msg": "\u003cconsole\u003e:59: error: value in is not a member of (Int, Array[org.apache.spark.mllib.recommendation.Rating])\n              approach2_mf_als.filter(x\u003d\u003e x.in lst)\n                                            ^\n"
+      },
+      "dateCreated": "Apr 5, 2016 1:23:24 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "import java.nio.file.{ Files, Paths }\nimport scala.collection.mutable.ListBuffer\nimport java.io.FileWriter\nvar items \u003d new ListBuffer[String]()\nval fw \u003d new FileWriter(\"/home/ama/sidana/recommendersystemchallenge/output/mf_als.txt\", true)\nfw.write(approach2_mf_als)\n//for( a \u003c- 1 to 30){\n//val firstval \u003d topItems(a-1)\n//items +\u003d firstval.toString.toString\n//fw.write(firstval.toString.toString+\",\" )\n//items +\u003d \",\"\n//}\n fw.close()",
+      "dateUpdated": "Apr 5, 2016 1:23:24 AM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1459812204828_-457932743",
+      "id": "20160405-012324_1856530106",
+      "result": {
+        "code": "ERROR",
+        "type": "TEXT",
+        "msg": "import java.nio.file.{Files, Paths}\nimport scala.collection.mutable.ListBuffer\nimport java.io.FileWriter\nitems: scala.collection.mutable.ListBuffer[String] \u003d ListBuffer()\nfw: java.io.FileWriter \u003d java.io.FileWriter@30de4721\n\u003cconsole\u003e:68: error: overloaded method value write with alternatives:\n  (x$1: Int)Unit \u003cand\u003e\n  (x$1: String)Unit \u003cand\u003e\n  (x$1: Array[Char])Unit\n cannot be applied to (org.apache.spark.rdd.RDD[(Int, Array[org.apache.spark.mllib.recommendation.Rating])])\n              fw.write(approach2_mf_als)\n                 ^\n"
+      },
+      "dateCreated": "Apr 5, 2016 1:23:24 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "dateUpdated": "Apr 5, 2016 1:23:24 AM",
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1459812204828_-457932743",
+      "id": "20160405-012324_1911584279",
+      "dateCreated": "Apr 5, 2016 1:23:24 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "recsys_challenge: mllibALS",
+  "id": "2BH5JAZDG",
+  "angularObjects": {
+    "2BGHSKCA7": [],
+    "2BFMBPKAB": [],
+    "2BHKKP27G": [],
+    "2BJHJDBK6": [],
+    "2BJAQG5W4": [],
+    "2BJGSXM37": [],
+    "2BFXEV5XZ": [],
+    "2BG77RV7M": [],
+    "2BF969NNB": [],
+    "2BG8QQJNC": [],
+    "2BGVG5JP4": [],
+    "2BJ5FCP57": [],
+    "2BFEDXCTE": [],
+    "2BJ8AEWCT": [],
+    "2BH9AVVKH": [],
+    "2BJ7KKX85": [],
+    "2BHKAE8WK": [],
+    "2BJ6HN5AY": []
+  },
+  "config": {
+    "looknfeel": "default"
+  },
+  "info": {}
+}

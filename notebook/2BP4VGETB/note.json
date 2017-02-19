@@ -1,0 +1,613 @@
+{
+  "paragraphs": [
+    {
+      "text": "val parquetFileClick \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypso_data_may_june/calypso_data_may_june/click/nb/2016/*/*/*.parquet\")\nval uniqueUsers \u003d parquetFileClick.groupBy(\"userId\").count.sort(desc(\"count\"))\nval uniqueOffers \u003d parquetFileClick.groupBy(\"offerViewId\").count\nval observedNumberOfRatings \u003d parquetFileClick.groupBy(\"userId\",\"offerViewId\").count\nval uniqueOfferCategories \u003d parquetFileClick.groupBy(\"category\").count.sort(desc(\"count\"))\nparquetFileClick.count\nuniqueUsers.\nuniqueOffers.count\nobservedNumberOfRatings.count\nuniqueOfferCategories.count\n",
+      "authenticationInfo": {},
+      "dateUpdated": "Jul 4, 2016 12:33:07 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1466717624731_-754864140",
+      "id": "20160623-233344_2115282451",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "parquetFileClick: org.apache.spark.sql.DataFrame \u003d [userId: string, ip: string, userAgent: struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e, geolocation: struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, offerViewId: string, clickId: string, earning: decimal(38,18)]\nuniqueUsers: org.apache.spark.sql.DataFrame \u003d [userId: string, count: bigint]\nuniqueOffers: org.apache.spark.sql.DataFrame \u003d [offerViewId: string, count: bigint]\nobservedNumberOfRatings: org.apache.spark.sql.DataFrame \u003d [userId: string, offerViewId: string, count: bigint]\nuniqueOfferCategories: org.apache.spark.sql.DataFrame \u003d [category: array\u003cstring\u003e, count: bigint]\nres7: Long \u003d 165668\nres8: Long \u003d 101814\nres9: Long \u003d 132252\nres10: Long \u003d 153215\nres11: Long \u003d 146\n"
+      },
+      "dateCreated": "Jun 23, 2016 11:33:44 PM",
+      "dateStarted": "Jun 28, 2016 1:00:10 PM",
+      "dateFinished": "Jun 28, 2016 1:00:17 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "import java.nio.file.{ Files, Paths }\nimport scala.collection.mutable.ListBuffer\nimport java.io.FileWriter\nval fw \u003d new FileWriter(\"/home/ama/sidana/kelkoo_may_june_stats/offerViewStats_4.txt\", true)\n//val countryCodes \u003d Array(\"at\",\"be\",\"br\",\"ch\",\"cz\",\"de\",\"dk\",\"es\",\"fi\",\"ie\",\"nb\",\"nl\",\"no\",\"pl\",\"pt\",\"ru\",\"se\",\"uk\")\nval countryCodes \u003d Array(\"it\")\n//,\"no\",\"pl\",\"pt\",\"ru\",\"se\",\"uk\"\nfor (code \u003c- countryCodes){\nval parquetFileClick \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypso_data_may_june/calypso_data_may_june/offerView/\"+code+\"/2016/*/*/*.parquet\")\nval uniqueUsers \u003d parquetFileClick.select(\"userId\").distinct.count\nval uniqueOffers \u003d parquetFileClick.select(\"offerViewId\").distinct.count\nval observedNumberOfRatings \u003d parquetFileClick.select(\"userId\",\"offerViewId\").distinct.count\nval uniqueOfferCategories \u003d parquetFileClick.select(\"category\").distinct.count\nval numOffersShown \u003d parquetFileClick.count\nfw.write(code+\",\"+ numOffersShown +\",\"+uniqueUsers+\",\"+uniqueOffers+\",\"+observedNumberOfRatings+\",\"+uniqueOfferCategories+\"\\n\")\n}\nfw.close()",
+      "authenticationInfo": {},
+      "dateUpdated": "Jun 29, 2016 10:21:10 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1467146637246_-1032672732",
+      "id": "20160628-224357_908429036",
+      "result": "org.apache.thrift.transport.TTransportException",
+      "dateCreated": "Jun 28, 2016 10:43:57 PM",
+      "dateStarted": "Jun 29, 2016 10:21:10 PM",
+      "dateFinished": "Jun 29, 2016 10:21:53 PM",
+      "status": "FINISHED",
+      "errorMessage": "org.apache.thrift.transport.TTransportException\n\tat org.apache.thrift.transport.TIOStreamTransport.read(TIOStreamTransport.java:132)\n\tat org.apache.thrift.transport.TTransport.readAll(TTransport.java:86)\n\tat org.apache.thrift.protocol.TBinaryProtocol.readAll(TBinaryProtocol.java:429)\n\tat org.apache.thrift.protocol.TBinaryProtocol.readI32(TBinaryProtocol.java:318)\n\tat org.apache.thrift.protocol.TBinaryProtocol.readMessageBegin(TBinaryProtocol.java:219)\n\tat org.apache.thrift.TServiceClient.receiveBase(TServiceClient.java:69)\n\tat org.apache.zeppelin.interpreter.thrift.RemoteInterpreterService$Client.recv_interpret(RemoteInterpreterService.java:232)\n\tat org.apache.zeppelin.interpreter.thrift.RemoteInterpreterService$Client.interpret(RemoteInterpreterService.java:216)\n\tat org.apache.zeppelin.interpreter.remote.RemoteInterpreter.interpret(RemoteInterpreter.java:240)\n\tat org.apache.zeppelin.interpreter.LazyOpenInterpreter.interpret(LazyOpenInterpreter.java:93)\n\tat org.apache.zeppelin.notebook.Paragraph.jobRun(Paragraph.java:242)\n\tat org.apache.zeppelin.scheduler.Job.run(Job.java:171)\n\tat org.apache.zeppelin.scheduler.RemoteScheduler$JobRunner.run(RemoteScheduler.java:328)\n\tat java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:471)\n\tat java.util.concurrent.FutureTask.run(FutureTask.java:262)\n\tat java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:178)\n\tat java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:292)\n\tat java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)\n\tat java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:615)\n\tat java.lang.Thread.run(Thread.java:745)\n",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val parquetFileOffers \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypso_data_may_june/calypso_data_may_june/offerView/fr/2016/*/*/*.parquet\")\nval uniqueOffers \u003d parquetFileOffers.select(\"offerViewId\").distinct.count",
+      "authenticationInfo": {},
+      "dateUpdated": "Jun 29, 2016 10:36:17 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 191.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1467201769950_29710411",
+      "id": "20160629-140249_1797916767",
+      "result": {
+        "code": "ERROR",
+        "type": "TEXT",
+        "msg": "parquetFileOffers: org.apache.spark.sql.DataFrame \u003d [eventType: string, userId: string, ip: string, userAgent: struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e, geolocation: struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, adType: string, offerRank: int, searchId: string, offerViewId: string, contentPageType: string, adPlacement: string, adViewability: string, adSize: string]\norg.apache.spark.SparkException: Job aborted due to stage failure: Task 327 in stage 2.1 failed 4 times, most recent failure: Lost task 327.3 in stage 2.1 (TID 2280, tiger.imag.fr): ExecutorLostFailure (executor 7 exited caused by one of the running tasks) Reason: Remote RPC client disassociated. Likely due to containers exceeding thresholds, or network issues. Check driver logs for WARN messages.\nDriver stacktrace:\n\tat org.apache.spark.scheduler.DAGScheduler.org$apache$spark$scheduler$DAGScheduler$$failJobAndIndependentStages(DAGScheduler.scala:1431)\n\tat org.apache.spark.scheduler.DAGScheduler$$anonfun$abortStage$1.apply(DAGScheduler.scala:1419)\n\tat org.apache.spark.scheduler.DAGScheduler$$anonfun$abortStage$1.apply(DAGScheduler.scala:1418)\n\tat scala.collection.mutable.ResizableArray$class.foreach(ResizableArray.scala:59)\n\tat scala.collection.mutable.ArrayBuffer.foreach(ArrayBuffer.scala:47)\n\tat org.apache.spark.scheduler.DAGScheduler.abortStage(DAGScheduler.scala:1418)\n\tat org.apache.spark.scheduler.DAGScheduler$$anonfun$handleTaskSetFailed$1.apply(DAGScheduler.scala:799)\n\tat org.apache.spark.scheduler.DAGScheduler$$anonfun$handleTaskSetFailed$1.apply(DAGScheduler.scala:799)\n\tat scala.Option.foreach(Option.scala:236)\n\tat org.apache.spark.scheduler.DAGScheduler.handleTaskSetFailed(DAGScheduler.scala:799)\n\tat org.apache.spark.scheduler.DAGSchedulerEventProcessLoop.doOnReceive(DAGScheduler.scala:1640)\n\tat org.apache.spark.scheduler.DAGSchedulerEventProcessLoop.onReceive(DAGScheduler.scala:1599)\n\tat org.apache.spark.scheduler.DAGSchedulerEventProcessLoop.onReceive(DAGScheduler.scala:1588)\n\tat org.apache.spark.util.EventLoop$$anon$1.run(EventLoop.scala:48)\n\tat org.apache.spark.scheduler.DAGScheduler.runJob(DAGScheduler.scala:620)\n\tat org.apache.spark.SparkContext.runJob(SparkContext.scala:1832)\n\tat org.apache.spark.SparkContext.runJob(SparkContext.scala:1845)\n\tat org.apache.spark.SparkContext.runJob(SparkContext.scala:1858)\n\tat org.apache.spark.SparkContext.runJob(SparkContext.scala:1929)\n\tat org.apache.spark.rdd.RDD$$anonfun$collect$1.apply(RDD.scala:927)\n\tat org.apache.spark.rdd.RDDOperationScope$.withScope(RDDOperationScope.scala:150)\n\tat org.apache.spark.rdd.RDDOperationScope$.withScope(RDDOperationScope.scala:111)\n\tat org.apache.spark.rdd.RDD.withScope(RDD.scala:316)\n\tat org.apache.spark.rdd.RDD.collect(RDD.scala:926)\n\tat org.apache.spark.sql.execution.SparkPlan.executeCollect(SparkPlan.scala:166)\n\tat org.apache.spark.sql.execution.SparkPlan.executeCollectPublic(SparkPlan.scala:174)\n\tat org.apache.spark.sql.DataFrame$$anonfun$org$apache$spark$sql$DataFrame$$execute$1$1.apply(DataFrame.scala:1499)\n\tat org.apache.spark.sql.DataFrame$$anonfun$org$apache$spark$sql$DataFrame$$execute$1$1.apply(DataFrame.scala:1499)\n\tat org.apache.spark.sql.execution.SQLExecution$.withNewExecutionId(SQLExecution.scala:56)\n\tat org.apache.spark.sql.DataFrame.withNewExecutionId(DataFrame.scala:2086)\n\tat org.apache.spark.sql.DataFrame.org$apache$spark$sql$DataFrame$$execute$1(DataFrame.scala:1498)\n\tat org.apache.spark.sql.DataFrame.org$apache$spark$sql$DataFrame$$collect(DataFrame.scala:1505)\n\tat org.apache.spark.sql.DataFrame$$anonfun$count$1.apply(DataFrame.scala:1515)\n\tat org.apache.spark.sql.DataFrame$$anonfun$count$1.apply(DataFrame.scala:1514)\n\tat org.apache.spark.sql.DataFrame.withCallback(DataFrame.scala:2099)\n\tat org.apache.spark.sql.DataFrame.count(DataFrame.scala:1514)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:29)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:34)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:36)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:38)\n\tat $iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:40)\n\tat $iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:42)\n\tat $iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:44)\n\tat $iwC.\u003cinit\u003e(\u003cconsole\u003e:46)\n\tat \u003cinit\u003e(\u003cconsole\u003e:48)\n\tat .\u003cinit\u003e(\u003cconsole\u003e:52)\n\tat .\u003cclinit\u003e(\u003cconsole\u003e)\n\tat .\u003cinit\u003e(\u003cconsole\u003e:7)\n\tat .\u003cclinit\u003e(\u003cconsole\u003e)\n\tat $print(\u003cconsole\u003e)\n\tat sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)\n\tat sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)\n\tat sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\n\tat java.lang.reflect.Method.invoke(Method.java:606)\n\tat org.apache.spark.repl.SparkIMain$ReadEvalPrint.call(SparkIMain.scala:1065)\n\tat org.apache.spark.repl.SparkIMain$Request.loadAndRun(SparkIMain.scala:1346)\n\tat org.apache.spark.repl.SparkIMain.loadAndRunReq$1(SparkIMain.scala:840)\n\tat org.apache.spark.repl.SparkIMain.interpret(SparkIMain.scala:871)\n\tat org.apache.spark.repl.SparkIMain.interpret(SparkIMain.scala:819)\n\tat org.apache.zeppelin.spark.SparkInterpreter.interpretInput(SparkInterpreter.java:812)\n\tat org.apache.zeppelin.spark.SparkInterpreter.interpret(SparkInterpreter.java:755)\n\tat org.apache.zeppelin.spark.SparkInterpreter.interpret(SparkInterpreter.java:748)\n\tat org.apache.zeppelin.interpreter.ClassloaderInterpreter.interpret(ClassloaderInterpreter.java:57)\n\tat org.apache.zeppelin.interpreter.LazyOpenInterpreter.interpret(LazyOpenInterpreter.java:93)\n\tat org.apache.zeppelin.interpreter.remote.RemoteInterpreterServer$InterpretJob.jobRun(RemoteInterpreterServer.java:331)\n\tat org.apache.zeppelin.scheduler.Job.run(Job.java:171)\n\tat org.apache.zeppelin.scheduler.FIFOScheduler$1.run(FIFOScheduler.java:139)\n\tat java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:471)\n\tat java.util.concurrent.FutureTask.run(FutureTask.java:262)\n\tat java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:178)\n\tat java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:292)\n\tat java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)\n\tat java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:615)\n\tat java.lang.Thread.run(Thread.java:745)\n\n"
+      },
+      "dateCreated": "Jun 29, 2016 2:02:49 PM",
+      "dateStarted": "Jun 29, 2016 10:36:18 PM",
+      "dateFinished": "Jun 29, 2016 10:42:02 PM",
+      "status": "ERROR",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val parquetFileOffer \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypso_data_may_june/calypso_data_may_june/offerView/*/2016/*/*/*.parquet\")\nval uniqueOffers \u003d parquetFileOffer.groupBy($\"siteDomain\".getItem(\"countryCode\")).count\nuniqueOffers.rdd.coalesce(1, true).saveAsTextFile(\"/tmp/sidana/numOffersByCountry.csv\")",
+      "authenticationInfo": {},
+      "dateUpdated": "Jun 28, 2016 9:23:01 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1467122056253_1173312176",
+      "id": "20160628-155416_942382598",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "parquetFileOffer: org.apache.spark.sql.DataFrame \u003d [eventType: string, userId: string, ip: string, userAgent: struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e, geolocation: struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, adType: string, offerRank: int, searchId: string, offerViewId: string, contentPageType: string, adPlacement: string, adViewability: string, adSize: string]\nuniqueOffers: org.apache.spark.sql.DataFrame \u003d [siteDomain[countryCode]: string, count: bigint]\n"
+      },
+      "dateCreated": "Jun 28, 2016 3:54:16 PM",
+      "dateStarted": "Jun 28, 2016 9:23:01 PM",
+      "dateFinished": "Jun 28, 2016 9:25:06 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val parquetFileOffers \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypso_data_may_june/calypso_data_may_june/offerView/*/2016/*/*/\")\nval groupedOffers \u003d parquetFileOffers.groupBy(\"userId\").count.sort(desc(\"count\"))\ngroupedOffers.count",
+      "authenticationInfo": {},
+      "dateUpdated": "Jun 28, 2016 1:09:58 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1467111970998_87439477",
+      "id": "20160628-130610_486271581",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "parquetFileOffers: org.apache.spark.sql.DataFrame \u003d [eventType: string, userId: string, ip: string, userAgent: struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e, geolocation: struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, adType: string, offerRank: int, searchId: string, offerViewId: string, contentPageType: string, adPlacement: string, adViewability: string, adSize: string]\ngroupedOffers: org.apache.spark.sql.DataFrame \u003d [userId: string, count: bigint]\nres13: Long \u003d 227534100\n"
+      },
+      "dateCreated": "Jun 28, 2016 1:06:10 PM",
+      "dateStarted": "Jun 28, 2016 1:09:58 PM",
+      "dateFinished": "Jun 28, 2016 1:20:03 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val parquetFileClick \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypso_data_may_june/calypso_data_may_june/click/*/2016/*/*/*.parquet\")\nval usersbyCountry \u003d parquetFileClick.groupBy($\"siteDomain\".getItem(\"countryCode\")).count.sort(desc(\"count\"))\nusersbyCountry.rdd.coalesce(1, true).saveAsTextFile(\"/tmp/sidana/numClicksByCountryCode.csv\")",
+      "authenticationInfo": {},
+      "dateUpdated": "Jun 27, 2016 6:04:43 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1467017086620_-972830435",
+      "id": "20160627-104446_1436580724",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "parquetFileClick: org.apache.spark.sql.DataFrame \u003d [userId: string, ip: string, userAgent: struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e, geolocation: struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, offerViewId: string, clickId: string, earning: decimal(38,18)]\nusersbyCountry: org.apache.spark.sql.DataFrame \u003d [siteDomain[countryCode]: string, count: bigint]\n"
+      },
+      "dateCreated": "Jun 27, 2016 10:44:46 AM",
+      "dateStarted": "Jun 27, 2016 6:04:43 PM",
+      "dateFinished": "Jun 27, 2016 6:04:54 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val parquetFileClick \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypso_data_may_june/calypso_data_may_june/click/*/2016/*/*/*.parquet\")\nval clicksbyCountry \u003d parquetFileClick.groupBy($\"siteDomain\".getItem(\"countryCode\"),parquetFileClick(\"userId\")).count\nval usersbyCountry \u003d clicksbyCountry.groupBy(clicksbyCountry(\"siteDomain[countryCode]\")).count\nusersbyCountry.rdd.coalesce(1, true).saveAsTextFile(\"/tmp/sidana/numUsersByCountryCode.csv\")",
+      "authenticationInfo": {},
+      "dateUpdated": "Jun 27, 2016 10:32:56 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1467059189626_1590858911",
+      "id": "20160627-222629_282132524",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "parquetFileClick: org.apache.spark.sql.DataFrame \u003d [userId: string, ip: string, userAgent: struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e, geolocation: struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, offerViewId: string, clickId: string, earning: decimal(38,18)]\nclicksbyCountry: org.apache.spark.sql.DataFrame \u003d [siteDomain[countryCode]: string, userId: string, count: bigint]\nusersbyCountry: org.apache.spark.sql.DataFrame \u003d [siteDomain[countryCode]: string, count: bigint]\n"
+      },
+      "dateCreated": "Jun 27, 2016 10:26:29 PM",
+      "dateStarted": "Jun 27, 2016 10:32:56 PM",
+      "dateFinished": "Jun 27, 2016 10:33:08 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "z.show(clicksbyCountry)",
+      "authenticationInfo": {},
+      "dateUpdated": "Jun 27, 2016 11:06:46 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [
+            {
+              "name": "siteDomain[countryCode]",
+              "index": 0.0,
+              "aggr": "sum"
+            }
+          ],
+          "values": [
+            {
+              "name": "userId",
+              "index": 1.0,
+              "aggr": "sum"
+            }
+          ],
+          "groups": [],
+          "scatter": {
+            "xAxis": {
+              "name": "siteDomain[countryCode]",
+              "index": 0.0,
+              "aggr": "sum"
+            },
+            "yAxis": {
+              "name": "userId",
+              "index": 1.0,
+              "aggr": "sum"
+            }
+          }
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala",
+        "tableHide": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1467059762832_-1692947760",
+      "id": "20160627-223602_793500832",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TABLE",
+        "msg": "siteDomain[countryCode]\tuserId\tcount\nat\ta4c6256-15480247c98-74cb68\t4\nat\ta4c628c-15481511b00-263d2\t2\nat\ta4c628c-15453ae093e-14276\t12\nat\ta4c628c-1547e6ca973-1df34\t2\nat\ta4c6257-154818fd12e-27428\t3\nat\ta4c6257-15480aef11c-240e2\t1\nat\ta4c628c-15481db4a85-28547\t1\nat\ta4c62e8-1547fb5ec9e-f533\t1\nat\ta4c62a6-1515389b077-3f4db\t2\nat\ta4c62e8-1549b50c35c-2c80b\t1\nat\ta4c62a6-1549c30e02b-7bddb\t1\nat\ta4c62a6-1548503b357-300cf\t4\nat\ta4c628c-1549bd7e725-7a1ad\t1\nat\ta4c62e8-1549952dca7-29c4a\t1\nat\ta4c628c-1549a433fba-73501\t1\nat\ta4c628c-154b380b7e7-c7450\t1\nat\ta4c628c-154b5f12ae3-d20fd\t3\nat\ta4c628c-154b3b22b2c-c80fd\t1\nat\ta4c62a6-15222027bd6-1347af\t2\nat\ta4c62a6-1547088d8bf-40851\t2\nat\ta4c628c-151ff036a38-3abd3\t1\nat\ta4c62e8-154b47ad1b8-48569\t1\nat\ta4c6257-154b64c4f00-d3927\t1\nat\ta4c628c-154cddb4167-1c4ae\t2\nat\ta4c628c-1523535e8d9-156b9\t2\nat\ta4c6350-154cd2e78f6-2916a\t2\nat\ta4c6257-154cede84d1-12064c\t1\nat\ta4c628c-154cfc9e404-24bc2\t1\nat\ta4c6350-154cef552ac-424e9\t1\nat\ta4c62a6-154dec8ce55-4328\t11\nat\ta4c628c-154ea327e30-29381\t1\nat\ta4c6350-154e973c367-1acd84\t1\nat\ta4c62e4-154e97721cf-1aea56\t1\nat\ta4c6257-154e623771b-1c20a\t1\nat\ta4c6350-154e888ee60-13f64c\t1\nat\ta4c628c-1550211daa3-644c\t1\nat\ta4c6291-154201d81d6-16b9dd\t1\nat\ta4c6257-15502e19a80-a40f\t3\nat\ta4c6257-15500dcdd21-21df\t1\nat\ta4c62a6-155010f8b90-2943\t1\nat\ta4c62e4-1550139c453-22723\t1\nat\ta4c62e8-1550269cd53-101f2\t3\nat\ta4c628c-150af14e0f7-7886b\t3\nat\ta4c62e4-1550238b493-85800\t1\nat\ta4c6256-150800efff5-db1c0a\t1\nat\ta4c6257-154e2d1c1da-11601\t10\nat\ta4c628c-15503cc0c4d-ddf8\t1\nat\ta4c62e4-1551bc10324-42095b\t1\nat\ta4c6257-1551a220a3b-64fad\t1\nat\ta4c62e4-1550d7f2670-6e272\t2\nat\ta4c628c-15486a04343-3635e\t5\nat\ta4c6350-1551b0730de-3dd556\t2\nat\ta4c6257-1551c60f636-700fc\t1\nat\ta4c62a6-1551d5b29c6-72b21\t1\nat\ta4c62a6-1551a92a48d-670bc\t1\nat\ta4c6257-1551b5459f9-6b9fe\t2\nat\ta4c62a6-15536b05821-d1ca8\t3\nat\ta4c6257-155358d716c-cdbeb\t5\nat\ta4c62e4-15512fee90e-203df8\t2\nat\ta4c628c-15536144d97-cfa08\t2\nat\ta4c62e4-15535bd96d2-2cacb\t1\nat\ta4c628c-15535e0762d-ced60\t1\nat\ta4c62a6-15536fb4235-d2fb3\t1\nat\ta4c62e4-15536088528-4a0a6\t1\nat\ta4c62a6-1552a382518-a09aa\t2\nat\ta4c6255-15081831920-e0473c\t1\nat\ta4c628c-1554f790b57-128eb8\t3\nat\ta4c6257-1552c55c93d-aad4c\t3\nat\ta4c62e8-1554f1a8b84-6ff1e\t1\nat\ta4c62a6-1554f8ba093-6eea\t1\nat\ta4c62e8-1555030bdee-71c90\t1\nat\ta4c628c-1554e91a2c0-123b69\t1\nat\ta4c62a6-1554ddf6fbb-11fe3d\t3\nat\ta4c6350-15524b51a9d-6a4f88\t3\nat\ta4c6350-15549489537-574682\t1\nat\ta4c62e8-155500ed736-71963\t1\nat\ta4c62a6-15550835c91-bd11\t1\nat\ta4c628c-1554e5bf2e1-122b70\t1\nat\ta4c62e4-1554df51d12-6cfedc\t1\nat\ta4c62e8-155500d3635-71932\t1\nat\ta4c62a6-1554d4ad266-11de55\t1\nat\ta4c62e8-15568383757-16fbf\t1\nat\ta4c62a6-15568bd1e22-356ea\t1\nat\ta4c62e4-15510b47e41-11cbd9\t1\nat\ta4c6257-154f5c77aa1-4ab46\t12\nat\ta4c62a6-1556827478c-32eeb\t1\nat\ta4c628c-15568cd8585-35c1e\t1\nat\ta4c628c-1556954edab-381fb\t1\nat\ta4c62a6-15568c9db97-35ca4\t1\nat\ta4c6257-1556a1d5db0-3bafd\t1\nat\ta4c6257-15569d434f3-3a52e\t1\nat\ta4c62e4-155133f81e6-213ab4\t1\nat\ta4c6257-1556816d89d-32961\t1\nat\ta4c62a6-15202c27ac2-b127e\t2\nat\ta4c62a6-1556a55d074-3cc89\t1\nat\ta4c6350-15536704edf-72d70\t1\nat\ta4c628c-15567aaa32d-308df\t2\nbe\ta4c6257-154829ab224-2b79b\t3\nbe\ta4c62a6-1513e9eed74-11b578\t4\nbe\ta4c62a6-1547e719094-1df73\t1\nbe\ta4c6257-154827c35b0-2b017\t2\nbe\ta4c62e8-15405105805-19274\t2\nbe\ta4c6257-1547ea71c6a-1e689\t1\nbe\ta4c62a6-1547fc5e132-208fa\t1\nbe\ta4c6257-154813efa22-260ce\t1\nbe\ta4c628c-15480d8bc76-247e7\t3\nbe\ta4c62a6-15480292ed5-2216c\t1\nbe\ta4c628c-154814dd7a1-26319\t1\nbe\ta4c62e8-1549c338746-2dcfe\t1\nbe\ta4c62a6-152fa79361c-3004e1\t310\nbe\ta4c6257-15497615b44-6bb9a\t2\nbe\ta4c6257-1549a905daf-74d0b\t1\nbe\ta4c6257-15498a1f42e-6e498\t1\nbe\ta4c628c-153ff0cdb64-76afa\t4\nbe\ta4c6257-1549c8b7c7e-7e4b2\t1\nbe\ta4c628c-15499b99bca-7141d\t2\nbe\ta4c6257-1549b0b2255-76d0d\t1\nbe\ta4c6257-1549b02a2ab-76a4a\t1\nbe\ta4c6257-15498a23c61-6e49e\t1\nbe\ta4c6257-1549a8fcb06-74ccf\t1\nbe\ta4c62a6-1549b30edb2-77785\t7\nbe\ta4c62e8-1549b3aa8e4-2c667\t1\nbe\ta4c62a6-154997fa455-703d1\t1\nbe\ta4c62a6-15499f6a276-725d3\t1\nbe\ta4c62e8-1549c0cc7ef-2d957\t1\nbe\ta4c628c-14f32cc404a-72db1\t1\nbe\ta4c6257-152a116aec5-18df8b\t4\nbe\ta4c62a6-154a64c052a-9db7a\t8\nbe\ta4c62a6-154b3e5fa42-c8e90\t1\nbe\ta4c6257-151a69a22e4-be9d1\t9\nbe\ta4c62a6-154a8868eb4-a302a\t4\nbe\ta4c62a6-154b37f5a9a-c757c\t1\nbe\ta4c62e4-154cf2bb866-45829\t3\nbe\ta4c628c-154341d49eb-6bc8f\t1\nbe\ta4c628c-154bee84af7-ef6b4\t13\nbe\ta4c628c-154cee045c7-20458\t2\nbe\ta4c62a6-154cfcfb3fc-124f42\t1\nbe\ta4c6350-154ce62379d-39c5e\t1\nbe\ta4c62a6-154cd085423-1194ad\t1\nbe\ta4c62a6-154bee210d1-ef691\t3\nbe\ta4c62e4-154c4f47d78-ea434e\t1\nbe\ta4c628c-154cd052f6e-191bc\t1\nbe\ta4c6257-154d02f75d1-12658e\t1\nbe\ta4c628c-15490e1226a-54d77\t2\nbe\ta4c62a6-154aae48dfa-aeb16\t2\nbe\ta4c622b-154cea529e5-482113\t1\nbe\ta4c62a6-154cd5be9d0-11aa36\t1\nbe\ta4c6257-1507bf99dc9-ee180\t2\nbe\ta4c62e8-154cdb8bdea-6339a\t1\nbe\ta4c62a6-154cd4f53a3-11a746\t1\nbe\ta4c6257-154ce42aae0-11e08b\t1\nbe\ta4c6291-154d3c07427-9e2147\t2\nbe\ta4c628c-154d1e8213b-296fd\t1\nbe\ta4c6257-154d40c1dea-13238a\t2\nbe\ta4c62e4-154d4073d7b-774ff\t1\nbe\ta4c6257-154aae24245-ae565\t6\nbe\ta4c62e4-154d258e907-61c9d\t2\nbe\ta4c6257-154d44120f6-1331e2\t1\nbe\ta4c628c-154b03ed872-bf63e\t2\nbe\ta4c62e4-154d56ccc13-8a56a\t1\nbe\ta4c6257-154ca6d9f5f-113aca\t3\nbe\ta4c62a6-154d25dd2c0-12b6a9\t1\nbe\ta4c628c-154d2a75edc-2c85f\t1\nbe\ta4c6257-154d33436ce-12ef27\t1\nbe\ta4c62a6-154d2fe46a4-12e146\t1\nbe\ta4c62a6-154d307a839-12e3bc\t3\nbe\ta4c62a6-154d1e7f89e-1299b3\t1\nbe\ta4c628c-154d3880706-3045e\t1\nbe\ta4c62a6-154d401f8d8-1320b6\t1\nbe\ta4c622b-154d2e171e2-780f8b\t1\nbe\ta4c62e8-154d3a39976-58dd\t1\nbe\ta4c62a6-155344bd73e-c7b53\t1\nbe\ta4c6257-154687247be-27c50\t13\nbe\ta4c62a6-153b2975e81-1ca59\t1\nbe\ta4c6257-15532ebf87f-c2841\t1\nbe\ta4c6257-1553501a591-cb29b\t1\nbe\ta4c62e8-15533ff88cd-4fe7e\t1\nbe\ta4c628c-155343992f9-c7a79\t1\nbe\ta4c628c-15532ec612f-c2720\t5\nbe\ta4c6257-155339aa22f-c4cf2\t1\nbe\ta4c6255-1552d7e1405-d37da\t3\nbe\ta4c628c-15413dc833e-c9e8\t5\nbe\ta4c62e4-155268e4ee2-888b1\t1\nbe\ta4c62a6-155368f06ee-d12fb\t1\nbe\ta4c628c-155354af6a2-cc73f\t1\nbe\ta4c6257-15535b83628-ce6c9\t1\nbe\ta4c6291-154ab5019f5-206da0\t7\nbr\ta4c92d-1554ab4c3e3-13af5\t1\nbr\ta4c92d-155477092b0-13266\t2\nbr\ta4c6291-154a77b7261-162bf7\t6\nbr\ta4c637-1554bd784fa-146960\t1\nbr\ta4c622b-1537773935a-17fa98\t3\nbr\ta4c6291-1554a0604fd-373936\t1\nbr\ta4c92c-1554bb1d558-4797\t3\nbr\ta4c6291-1554af57893-398cf4\t1\nbr\ta4c92d-1554aabb99a-13aa0\t1\nbr\ta4c92c-15547305713-35ce\t4\nbr\ta4c6255-1554a4cc0ef-378163\t1\nbr\ta4c92c-1554a2e258a-3c37\t12\nbr\ta4c6256-154c4215016-700414\t1\nbr\ta4c6291-154408a30ca-7acf2\t1\nbr\ta4c92d-154e2f2bdf1-19cd7\t4\nbr\ta4c92c-1554a379b4a-3c87\t1\nbr\ta4c6255-1552788719a-377f0\t1\nbr\ta4c92d-1554acbb572-13b92\t1\nbr\ta4c92c-151832b572c-54f9\t33\nbr\ta4c92c-154e63f68b9-1abe3\t4\nbr\ta4c637-1554af51891-13aa78\t3\nbr\ta4c92d-1554bb34e51-1422b\t1\nbr\ta4c92d-1553043900e-d70f\t2\nbr\ta4c92d-154e2630390-19a76\t3\nbr\ta4c92d-153a6a7cfc4-18e77\t1\nbr\ta4c92c-155475e99ef-368a\t3\nbr\ta4c92c-153ebf9b1ef-1b7d\t5\nbr\ta4c92c-151c9fe60ca-393b0\t1\nbr\ta4c92c-1554751fbf4-365c\t1\nbr\ta4c92c-15549e1ac01-3a7e\t1\nbr\ta4c6256-1553ba2ad00-2221d1\t1\nbr\ta4c6255-1554ba69cb1-3b1c3f\t1\nbr\ta4c6255-15403530f45-2b8bf3\t1\nbr\ta4c92c-1554b6e0795-45ba\t1\nbr\ta4c6255-1554a5a95b0-37a239\t3\nbr\ta4c637-1554a828f90-134b95\t1\nbr\ta4c92d-155409a7bb2-118a5\t3\nbr\ta4c92d-1554aac76f0-13aa5\t1\nbr\ta4c6255-155215b43d0-730b5f\t1\nbr\ta4c6255-1554adcc7e2-38ef10\t1\nbr\ta4c92d-1553d8c18f0-10ecc\t4\nbr\ta4c6255-1554bb2a013-3b3300\t2\nbr\ta4c6256-1554b19dbd8-39ccb5\t2\nbr\ta4c92c-154de89314e-189c5\t2\nbr\ta4c6255-1554b8530c0-3ad06a\t1\nbr\ta4c92c-1554ba8bb45-4772\t1\nbr\ta4c6256-1554a9222bf-386d91\t1\nbr\ta4c6255-154cbe3543c-89bf4b\t1\nbr\ta4c6291-1554aab2eec-38d4c5\t2\nbr\ta4c92d-1554b07ba4a-13d6f\t1\nbr\ta4c6291-155193a898b-681ba7\t2\nbr\ta4c6291-152420a8fcf-66153\t2\nbr\ta4c6291-1554ae595d3-396660\t2\nbr\ta4c92c-154bad0affb-fe6b\t2\nbr\ta4c6255-1554c1f90e8-3ba7ef\t2\nbr\ta4c92c-1554a0c3f4a-3b78\t1\nbr\ta4c6291-15492cba73a-a42824\t11\nbr\ta4c6291-1554bc7688a-3bb68b\t1\nbr\ta4c92c-1554b318539-43e5\t1\nbr\ta4c92d-1542f8fa2a3-5747\t5\nbr\ta4c92c-154fa6bb805-1f9a0\t8\nbr\ta4c92c-1554b9d0bc9-4717\t1\nbr\ta4c92d-15522d15bf0-a262\t3\nbr\ta4c92c-1554b0f36bb-42bc\t1\nbr\ta4c92d-1554bec198f-14301\t1\nbr\ta4c6256-15509fc3915-53e1b1\t6\nbr\ta4c92d-154c33e8e0d-11ae5\t2\nbr\ta4c6255-153898e19cf-d7462\t1\nbr\ta4c6291-15537aa83e4-1d2e5e\t1\nbr\ta4c92d-1554a0a9d15-13693\t2\nbr\ta4c92c-1554b348b07-4400\t1\nbr\ta4c622a-1554a6c3e7c-1940b07\t1\nbr\ta4c637-15547262d5e-11a47e\t1\nbr\ta4c92c-154e05596a7-19395\t7\nbr\ta4c92d-15549c1b91d-1353f\t1\nbr\ta4c92d-1532a5b0d22-5e2c6\t2\nbr\ta4c622b-1554b5ef1e7-19f0014\t1\nbr\ta4c6291-1554731b747-337b42\t1\nbr\ta4c92c-1554b3ed219-444b\t1\nbr\ta4c6255-15549e92a3f-369892\t1\nbr\ta4c6255-1554a0f4942-36f1aa\t1\nbr\ta4c6291-154547a2dc0-13be8b\t1\nbr\ta4c6255-15517a28a86-6540d7\t2\nbr\ta4c6291-1554b300eeb-3a2fc6\t1\nbr\ta4c6255-15549c617dc-36520e\t1\nbr\ta4c92d-1554b1bc2f6-13df9\t1\nbr\ta4c637-154541a3057-611f7\t1\nbr\ta4c92d-1554a097839-1368b\t1\nbr\ta4c6256-153aedd352a-1cebd1\t1\nbr\ta4c637-1551226ec9e-1f8dd2\t2\nbr\ta4c92d-1554992ad0b-134b0\t1\nbr\ta4c92c-154c91f67c1-132a4\t4\nbr\ta4c92d-15495de7587-70b3\t5\nbr\ta4c637-1552c9d1812-48727\t1\nbr\ta4c92c-1554b2cc478-43c5\t1\nbr\ta4c637-155183f977a-221f49\t1\nbr\ta4c92c-1554ab4639c-3ffa\t1\nbr\ta4c92c-153e19b6fa2-7b3\t7\nbr\ta4c637-1546526bba8-11adc9\t1\nbr\ta4c92d-1554aa5816e-13a6a\t1\nbr\ta4c6291-15549f4249c-370b45\t1\nbr\ta4c6291-1554a0ded40-374cbc\t1\nbr\ta4c6255-1554b3e7d26-39fdc8\t1\nbr\ta4c92d-1526146ac43-125f2\t1\nbr\ta4c92c-1554b356d36-4409\t1\nbr\ta4c92d-1554abbcc8b-13b2f\t1\nch\ta4c628c-1548c56a598-4730b\t1\nch\ta4c6257-1548c4e07a5-47204\t2\nch\ta4c6256-1548b8c41ee-8fc3c6\t2\nch\ta4c6291-1548cbff8df-94ca6f\t1\nch\ta4c628c-1548a5f2aca-3fd2c\t1\nch\ta4c6257-154a15e44fa-8d7a5\t1\nch\ta4c6291-154a1617cc1-749f9\t1\nch\ta4c62a6-15496f50918-69d3e\t3\nch\ta4c628c-153210d8d13-2e8d0\t2\nch\ta4c628c-1549eea7e94-834d3\t1\nch\ta4c6257-154abd91169-b25fb\t2\nch\ta4c62a6-154ab6d5dcb-b0dc7\t1\nch\ta4c6257-154a9cbe57c-a95ac\t1\nch\ta4c62a6-154abab4eab-b1e41\t1\nch\ta4c62a6-154abae8e96-b1f12\t1\nch\ta4c6257-154aa76e777-acb8a\t1\nch\ta4c6291-15357e8c498-6b13d8\t2\nch\ta4c6256-154b6020b43-41f791\t2\nch\ta4c62e8-154b2c4fc3f-465e2\t1\nch\ta4c628c-154b46e3d21-cafa1\t1\nch\ta4c6257-154b3fc9400-c929f\t1\nch\ta4c62a6-154b88043dd-d8bea\t1\nch\ta4c6257-154bb31ef0f-e566e\t1\nch\ta4c6291-1547a84406d-68722c\t1\nch\ta4c6256-1521de5cc77-cd3255\t4\nch\ta4c6256-15241858bc1-40e02\t1\nch\ta4c62a6-154b854fd31-d7db7\t1\nch\ta4c62a6-154c07c3e28-f54ab\t2\nch\ta4c628c-1543fa06f93-16d20\t1\nch\ta4c62a6-154be956604-eeac6\t1\nch\ta4c62a6-152f0b5b022-2dd62b\t1\nch\ta4c6255-154bdf711c1-5a9ad7\t6\nch\ta4c62a6-154c43deec3-ff6cb\t1\nch\ta4c628c-1549a4e6bff-73723\t4\nch\ta4c6255-154bdfae25c-5aa924\t1\nch\ta4c62a6-154c5630115-1043cd\t2\nch\ta4c62e8-1545904469e-28f7\t1\nch\ta4c628c-154ca4edea3-12a90\t1\nch\ta4c628c-154caa4efcf-1465f\t1\nch\ta4c62a6-154c9220d77-10e09d\t1\nch\ta4c6257-154cb46d245-1168db\t2\nch\ta4c62a6-154c751e25e-108089\t2\nch\ta4c628c-154cfa762f2-241e6\t1\nch\ta4c6255-154de14534f-1a7a2\t1\nch\ta4c6257-154dd52a938-14ff43\t1\nch\ta4c6257-154e1a7658e-c900\t4\nch\ta4c62e8-154e43cbfc6-7ce8\t2\nch\ta4c6257-154e4410726-1799a\t1\nch\ta4c628c-154e340eb93-132cc\t1\nch\ta4c628c-154e320a464-12b58\t1\nch\ta4c6257-154e40c3e52-1696c\t1\nch\ta4c6350-154eda6b48e-2bfeca\t2\nch\ta4c628c-154ecd6fc3e-2f916\t1\nch\ta4c62a6-15501a8352a-4ff9\t1\nch\ta4c62a6-1550373d9ff-c5ec\t5\nch\ta4c62e8-15500ce7863-e1ec\t1\nch\ta4c6256-15501d6de8a-44fc80\t1\nch\ta4c6256-1533d240f8f-45b0b8\t1\nch\ta4c628c-155017e073c-4598\t1\nch\ta4c62e4-155034aecd5-10f532\t1\nch\ta4c62a6-155010f22ef-2930\t1\nch\ta4c6257-1554d85a883-11f0a7\t1\nch\ta4c628c-155508ab3bb-12e6da\t2\nch\ta4c62a6-1554463762f-fec93\t2\nch\ta4c6257-1554f7e769a-129080\t1\nch\ta4c6257-15499bb21fa-714db\t3\ncz\ta4c6255-154c0b17ee0-66b957\t1\ncz\ta4c628c-154c065c424-f4ecd\t1\ncz\ta4c628c-154bdc1448f-eb9e2\t1\nde\ta4c628c-154b54ab81b-cec49\t1\nde\ta4c628c-154b48f9efd-cb91b\t1\nde\ta4c62a6-152598462b9-62831\t21\nde\ta4c62e8-14a7118d1ab-1101a\t3\nde\ta4c6257-1542e5af2e5-58141\t1\nde\ta4c6257-154b206c8ef-c4674\t1\nde\ta4c6257-154a6078088-9c33d\t3\nde\ta4c628c-154b55ecfe9-cf1e2\t1\nde\ta4c628c-154b4747bc1-cb0ea\t1\nde\ta4c6257-154b5d160a3-d14c6\t4\nde\ta4c6257-154b54de2ce-cec9d\t5\nde\ta4c62a6-15487637ec9-38aed\t2\nde\ta4c6257-154b5914415-cff8d\t1\nde\ta4c6257-154b4012586-c93c8\t1\nde\ta4c628c-153bca93473-3b21f\t19\nde\ta4c62e8-154b5920276-49fc2\t1\nde\ta4c6257-154b5b6a639-d0af5\t2\nde\ta4c628c-154b37168ee-c7026\t1\nde\ta4c628c-1522a8ec822-ed49b\t14\nde\ta4c628c-154b222f7b9-c48ec\t1\nde\ta4c62a6-154b28358ba-c5099\t1\nde\ta4c6257-153a9645b46-148e\t11\nde\ta4c628c-152922f6daf-148b5c\t15\nde\ta4c62a6-154b44ab613-ca620\t1\nde\ta4c628c-154b43ee541-ca1a2\t1\nde\ta4c6257-154b3d053cf-c87b8\t4\nde\ta4c62a6-154b36c520f-c6f32\t1\nde\ta4c62a6-14f653a3cae-f357f\t4\nde\ta4c6257-154b4c0eb46-cc59d\t2\nde\ta4c62e8-154b466e968-483f4\t1\nde\ta4c6257-14c1f19f63a-386d6\t9\nde\ta4c6257-154b4376722-c9ff5\t1\nde\ta4c62e8-154b3c01f61-47626\t1\nde\ta4c62e8-154b34052dc-46bb6\t2\nde\ta4c6257-15390198733-1d7e99\t8\nde\ta4c62e8-154b69415ae-4b7da\t1\nde\ta4c62a6-154b395b485-c7b4e\t2\nde\ta4c62e8-151da6bb7b9-15b1f\t7\nde\ta4c62a6-154b64cb2b4-d39e1\t1\nde\ta4c62e8-154b2d780fc-46681\t1\nde\ta4c6257-154b3fef13a-c931a\t1\nde\ta4c6257-14bdc37e8bc-3afff\t48\nde\ta4c6257-154b34a220c-c66a3\t2\nde\ta4c628c-1530ed5088f-344b34\t12\nde\ta4c6257-154b54ca4c5-cec5c\t1\nde\ta4c62e8-15486032782-15d41\t7\nde\ta4c6257-154b043218e-bf5bf\t9\nde\ta4c628c-154b352b8d3-c68a6\t1\nde\ta4c6257-14dd2ccf49f-6dd64\t19\nde\ta4c6257-154b2deaaa0-c55b5\t1\nde\ta4c6257-154b514f3b8-cd8f4\t5\nde\ta4c6257-154b5debf90-d19ad\t1\nde\ta4c628c-154b635f565-d33af\t2\nde\ta4c62a6-154b2e23642-c57a9\t1\nde\ta4c628c-1544f008ae9-47b3\t10\nde\ta4c62e8-150e92bbe43-196c0\t4\nde\ta4c6257-1548667532b-3556d\t10\nde\ta4c6257-15385e8aebf-1b635b\t7\nde\ta4c6257-1517dd0c4e6-b4f8\t2\nde\ta4c6257-154b66ea3c0-d4062\t1\nde\ta4c62e8-1544228bf65-34117\t8\nde\ta4c62e8-1521c082469-64589\t2\nde\ta4c62a6-154b38e11b1-c7981\t1\nde\ta4c628c-154b5d3ff51-d166d\t1\nde\ta4c628c-154af89300d-bc593\t21\nde\ta4c62a6-154110a35f8-4e7b\t8\nde\ta4c628c-15495f46609-65100\t9\nde\ta4c628c-154b6648ae4-d3eaf\t7\nde\ta4c62e8-154b3b8fa7a-475a0\t1\nde\ta4c62e8-154b4847dd2-48693\t1\nde\ta4c6257-153c8784c1b-68d10\t2\nde\ta4c6257-154b280be2b-c4e6e\t1\nde\ta4c62a6-14c8b2d308d-32544\t5\nde\ta4c62a6-154b378c26e-c7395\t1\nde\ta4c8212-15495912df9-349\t4\nde\ta4c62a6-152f4cb6d52-2eb518\t15\nde\ta4c6291-1519f3b2471-7467c4\t1\nde\ta4c62e8-154b49eb057-488c6\t1\nde\ta4c62a6-15457065dc8-1d857\t2\nde\ta4c6257-154b4f1755f-cd06a\t1\nde\ta4c62e8-154307e0fa4-216df\t28\nde\ta4c6291-1522ba276ed-e823c6\t1\nde\ta4c628c-15429698964-464ce\t43\nde\ta4c628c-154b68822be-d46f6\t1\nde\ta4c62a6-154b4bf503b-cc6da\t1\nde\ta4c62a6-15370c348d1-16bbfa\t5\nde\ta4c6257-154b32d12a5-c5e9d\t1\nde\ta4c62a6-154b1d157fb-c43cb\t1\nde\ta4c6257-1543f4dcdc5-15d00\t30\nde\ta4c6257-154b5ce972d-d13be\t1\nde\ta4c628c-154b31e97e0-c5d49\t1\nde\ta4c6257-15467bcd0a6-24d34\t1\nde\ta4c62a6-154b49ec86f-cbe46\t1\nde\ta4c6257-154b5db0a5f-d1866\t1\nde\ta4c62a6-154a4afc96e-963f6\t3\nde\ta4c6257-154b61163c0-d2a38\t1\nde\ta4c6257-154b2cbf885-c53f5\t1\nde\ta4c628c-154b6a011c0-d4ad8\t1\nde\ta4c62a6-154b295d382-c51cb\t1\nde\ta4c62e8-15423bf65b4-11cbf\t2\nde\ta4c628c-154052d7a0e-8f7ec\t9\nde\ta4c62e8-154ac057ba6-40552\t5\nde\ta4c62e8-154a6494af8-3912c\t8\nde\ta4c628c-154b60102fb-d25e0\t14\nde\ta4c6257-154b395d533-c79b5\t1\nde\ta4c62a6-1548f7b58b5-4eeb2\t8\nde\ta4c62e8-1549660e1b9-26e3e\t4\nde\ta4c6257-154b394995a-c7967\t1\nde\ta4c6257-154b538b8bf-ce6b2\t2\nde\ta4c6257-154b48bd374-cb7db\t9\nde\ta4c62a6-154b50884d9-cd770\t1\nde\ta4c6257-154b3dbace5-c8a34\t1\nde\ta4c628c-152099d2ef3-68ef6\t2\nde\ta4c62a6-1524f68190d-39575\t1\nde\ta4c6257-154b68db961-d47fc\t2\nde\ta4c628c-14e2a984809-da717\t24\nde\ta4c628c-154b3b714d1-c8202\t1\nde\ta4c628c-15496e65004-69630\t3\nde\ta4c628c-154597883b4-27572\t27\nde\ta4c628c-14be0a885ef-6c98\t38\nde\ta4c628c-154b500f96c-cd4d3\t1\nde\ta4c6257-154b4e19a94-cccce\t1\nde\ta4c6257-154b51b0df0-cda59\t1\nde\ta4c6257-154b6388317-d342a\t1\nde\ta4c6257-1544180cb6f-1af62\t1\nde\ta4c62a6-154b1ce4104-c4387\t1\nde\ta4c6257-154b62baabe-d30b0\t2\nde\ta4c637-1526a0cc201-1fe633\t1\nde\ta4c62e8-154b37e055c-470db\t1\nde\ta4c628c-154b5844aa5-cfc4a\t2\nde\ta4c628c-154b316da10-c5c60\t1\nde\ta4c6257-153d0a04623-8dc0\t4\nde\ta4c628c-154b3ee116c-c8f20\t1\nde\ta4c6257-154b40d473f-c9668\t1\nde\ta4c628c-1526075b99b-7ddee\t20\nde\ta4c628c-1548a20193b-3ed9f\t2\nde\ta4c628c-154b44c1f27-ca572\t1\nde\ta4c62a6-154b2f3a646-c5955\t2\nde\ta4c62a6-154b1be20c8-c41fd\t1\nde\ta4c628c-154b1bc52c1-c40ad\t1\nde\ta4c6257-154b22988bf-c4925\t1\nde\ta4c6257-14f457427bc-a5e6d\t14\nde\ta4c62a6-154b4a2c407-cbf2c\t1\nde\ta4c6257-154b3e1c044-c8c28\t1\nde\ta4c62fd-146e78e1403-6d8\t3\nde\ta4c6257-154b541deda-ce992\t1\nde\ta4c62a6-154b3f10dfe-c912c\t1\nde\ta4c6257-154b51b797f-cda78\t1\nde\ta4c628c-154b50d0cef-cd7b6\t1\nde\ta4c628c-1535cbed95d-123b12\t13\nde\ta4c62e8-154b61e644a-4af0a\t1\nde\ta4c6257-154b2e5095e-c5634\t1\nde\ta4c62e8-154b38ab0f6-471dc\t1\nde\ta4c628c-154b58d0aeb-cfed2\t1\nde\ta4c6257-154a4a204fc-95e19\t13\nde\ta4c6257-154b6d70efd-d52a4\t1\nde\ta4c628c-15380c5b478-1a40eb\t1\nde\ta4c628c-153fb7c1f01-6aec9\t1\nde\ta4c628c-154b59f3a40-d0436\t1\nde\ta4c6257-15488545e67-3bdcd\t14\nde\ta4c6257-154b34b7528-c66e5\t1\nde\ta4c628c-154b34263ab-c656d\t1\nde\ta4c62e8-154b2363bb5-46299\t1\nde\ta4c628c-154b6967e2c-d495a\t2\nde\ta4c628c-154b4babf88-cc3d1\t1\nde\ta4c6257-14a4919b7b3-447b8\t25\nde\ta4c62a6-154b3ecce6d-c9035\t5\nde\ta4c628c-15341192f55-aad92\t13\nde\ta4c628c-154b5df4684-d1ac9\t1\nde\ta4c62a6-154b25842b5-c4dae\t1\nde\ta4c62a6-154b5635ed7-cf4a0\t2\nde\ta4c62a6-154b492b2da-cbb80\t1\nde\ta4c628c-154a0a3d660-8a339\t2\nde\ta4c6257-154b30b808d-c5a88\t1\nde\ta4c6257-153189ce3e8-13a0f\t22\nde\ta4c628c-154ad4c412c-b542f\t10\nde\ta4c62a6-154b2957ffc-c51bf\t1\nde\ta4c62a6-154b5f86105-d23c4\t1\nde\ta4c62a6-153412b3af5-ab737\t1\nde\ta4c62a6-154b4ba286d-cc50a\t1\nde\ta4c628c-1533e2c73eb-a0c7e\t2\nde\ta4c62a6-154b5273237-cdfb5\t2\nde\ta4c628c-153b36bef5f-1f67e\t2\nde\ta4c6257-154b467ea28-cae2d\t1\nde\ta4c628c-154ae6d8c8c-b8083\t15\nde\ta4c628c-154b4f458ce-cd1aa\t1\nde\ta4c628c-154b4914cff-cb979\t1\nde\ta4c628c-154b59c84f7-d0362\t1\nde\ta4c62a6-154b5f86b44-d23c8\t1\nde\ta4c62e8-154b2dfdbcf-466ca\t2\nde\ta4c6257-154b4c24491-cc5e5\t1\nde\ta4c62a6-1544ad4a8ad-3b58f\t1\nde\ta4c6257-154b5904fb2-cff43\t1\nde\ta4c62a6-154b5a606c9-d06b7\t1\nde\ta4c628c-154b4f84395-cd2c8\t1\nde\ta4c62e8-154b1c22f64-45f99\t1\nde\ta4c62a6-154b3aaf350-c80d3\t1\nde\ta4c628c-154b3739802-c70d7\t1\nde\ta4c628c-154b47d4d20-cb2af\t1\nde\ta4c62a6-150a218db4f-47868\t7\nde\ta4c6257-1521d163f99-120e29\t1\nde\ta4c6257-154b4a2168e-cbd04\t1\nde\ta4c62a6-154602f08a4-d0e1\t13\nde\ta4c62a6-154b3c87879-c8711\t1\nde\ta4c62e8-154b5ee4880-4aa57\t1\nde\ta4c6257-154b42e6b35-c9e0d\t1\nde\ta4c6257-154b2448aac-c4ad7\t1\nde\ta4c62a6-154b2b86651-c5432\t1\nde\ta4c62a6-154b45a5697-cac3d\t1\nde\ta4c62a6-15379cfdd6c-18b234\t1\nde\ta4c62a6-154b239f5c4-c4bea\t2\nde\ta4c62e8-154b3ba5108-475b9\t1\nde\ta4c628c-154b4360545-c9ff0\t1\nde\ta4c628c-154b36841c0-c6d4c\t2\nde\ta4c62a6-154b324e5e7-c5ed7\t1\nde\ta4c628c-154b37cb434-c7342\t2\nde\ta4c62e8-14d2443de37-578b\t20\nde\ta4c628c-154b67f5629-d4596\t1\nde\ta4c628c-1527d64424b-edb05\t28\nde\ta4c628c-154b510815e-cd87b\t1\nde\ta4c628c-154b49ce26f-cbc19\t1\nde\ta4c62a6-154b50da277-cd8d8\t1\nde\ta4c628c-154b5e4384e-d1c90\t1\nde\ta4c62a6-1534bce41e7-da9f7\t2\nde\ta4c62a6-154b466ba34-caf2c\t1\nde\ta4c62a6-154b3a1d62f-c7e14\t1\nde\ta4c628c-154b38be636-c7761\t1\nde\ta4c6257-15451af8253-bcfb\t41\nde\ta4c62a6-154b69d2c25-d4a4c\t1\nde\ta4c6256-15517dd998c-65eb67\t2\nde\ta4c62a6-155159ed2fc-5431d\t1\nde\ta4c62a6-1551754b072-5b801\t2\nde\ta4c62e8-15515bd6200-2a00a\t1\nde\ta4c628c-1551595ab36-54788\t5\nde\ta4c628c-155170db40b-5ae9f\t1\nde\ta4c62e4-154c52044f0-eb7984\t4\nde\ta4c6257-15517ad4ffa-5d570\t1\nde\ta4c62a6-154ca3e16cb-112a26\t75\nde\ta4c62e4-1551772cd48-30e2d2\t3\nde\ta4c622b-15517c5a894-c501df\t2\nde\ta4c6350-155131990b4-20b66f\t5\nde\ta4c6257-15516eec94a-5a625\t2\nde\ta4c62e4-155182c5175-3569b9\t1\nde\ta4c62e4-1551111d1f2-13b89d\t4\nde\ta4c6257-155152a384c-524d3\t1\nde\ta4c62a6-15516793638-58028\t1\nde\ta4c62a6-1535c293d81-1206d2\t11\nde\ta4c62a6-14a724f55bc-373bb\t6\nde\ta4c62a6-15514a7e210-501a8\t4\nde\ta4c62a6-1550af6b7ef-288de\t14\nde\ta4c62e8-155153c1886-2921a\t1\nde\ta4c62e8-154e38ab857-6d0f\t49\nde\ta4c6257-15516b469d4-598dc\t3\nde\ta4c62a6-15516b649de-59032\t1\nde\ta4c628c-15515e8afc3-55c7d\t1\nde\ta4c62e8-15518ae480f-2debf\t1\nde\ta4c62e4-1550c02cc24-3a2f3b\t31\nde\ta4c628c-155151144f5-51ba4\t1\nde\ta4c628c-15515345b5e-5257a\t1\nde\ta4c628c-15515c89370-554a5\t1\nde\ta4c628c-155188e9216-60884\t10\nde\ta4c62e4-1551730b10b-2f5953\t2\nde\ta4c628c-155172bfb3a-5b672\t1\nde\ta4c6350-155106939eb-10424c\t5\nde\ta4c6350-15514e72e55-239e60\t2\nde\ta4c628c-1551749bee8-5bd95\t1\nde\ta4c628c-15515c4deaa-55383\t1\nde\ta4c628c-155150f2bb7-51add\t1\nde\ta4c6257-1551555fa6b-53440\t1\nde\ta4c6257-1551453117e-4fd95\t1\nde\ta4c622a-15516d6d7a1-bab39e\t1\nde\ta4c62e8-15515d6f641-2a24b\t1\nde\ta4c62a6-15517a8b05d-5caeb\t2\nde\ta4c8212-154dda68d4e-69\t10\nde\ta4c62a6-155158f24c4-53f7d\t1\nde\ta4c628c-155153f1374-52869\t1\nde\ta4c62a6-153b6ea274e-29115\t16\nde\ta4c62a6-1551649b871-57189\t1\nde\ta4c6257-1522ce945af-165c60\t20\nde\ta4c62a6-155144b0049-4f347\t3\nde\ta4c6257-154fa649a5d-593f5\t6\nde\ta4c6257-15517a2e6ad-5d2b1\t1\nde\ta4c6257-15511b81acf-460b8\t9\nde\ta4c6257-15518413aab-5f88c\t1\nde\ta4c62e4-1551775a4cc-30f3ba\t1\nde\ta4c6257-155171dcd94-5b3f8\t3\nde\ta4c6350-154ecbcdd12-266121\t14\nde\ta4c628c-1551825b1d9-5f175\t1\nde\ta4c628c-1518616bc93-2991a\t1\nde\ta4c62a6-15515b8b8ce-549a7\t2\nde\ta4c62e8-15515ad4123-29e92\t1\nde\ta4c628c-1551485b40e-50327\t1\nde\ta4c62a6-155150bc2d0-51360\t1\nde\ta4c62a6-15242421f61-9211\t65\nde\ta4c6257-15516cfbcd8-59fc9\t1\nde\ta4c628c-155176ff4c9-5c613\t2\nde\ta4c6350-1550cd0bb65-1db53\t2\nde\ta4c62a6-15515410422-52219\t1\nde\ta4c62a6-1551705b4f4-5a39a\t1\nde\ta4c62e4-1551521913a-2460cb\t1\nde\ta4c62e4-155168f0688-2b783e\t4\nde\ta4c6350-1551538cf80-24bb2c\t1\nde\ta4c6257-152adf81ffa-1c7958\t33\nde\ta4c6257-155034af116-c077\t18\nde\ta4c6257-154b9868c99-dd853\t10\nde\ta4c62e4-15515bed871-2735b2\t1\nde\ta4c6350-1551239b7f8-1b0257\t8\nde\ta4c62e8-155154036fb-2927a\t1\nde\ta4c62e4-1551775540f-30f1e0\t1\nde\ta4c62e8-15517e59cfc-2d02c\t1\nde\ta4c628c-1551557a0e5-5327b\t1\nde\ta4c6257-1536a8ce181-1532f1\t24\nde\ta4c62e8-155156a291f-297ef\t1\nde\ta4c6257-15515ff1435-56511\t1\nde\ta4c6350-1550d242327-444ad\t1\nde\ta4c62a6-1550228bedc-67e6\t12\nde\ta4c628c-154d036217d-265c4\t17\nde\ta4c6257-15516dedb03-5a318\t1\nde\ta4c62e4-15500b570ae-826c2e\t2\nde\ta4c6257-154201c6bd1-274ca\t8\nde\ta4c62e4-15515f5f275-283eed\t1\nde\ta4c6350-1551599f36a-267bbf\t1\nde\ta4c628c-154fb8a2c0d-5b3b7\t9\nde\ta4c62a6-1550c6ee975-2feb7\t16\nde\ta4c62a6-1551843ffbd-5ef6b\t1\nde\ta4c628c-15461339a76-fd23\t21\nde\ta4c628c-155162155e4-56b3c\t2\nde\ta4c628c-15511d27ec8-46401\t7\nde\ta4c6257-154bd36f180-e9b4d\t10\nde\ta4c62a6-155161ab0e4-56320\t1\nde\ta4c6350-15518009600-346bdb\t1\nde\ta4c6350-154f7f4170c-59be90\t2\nde\ta4c6257-15516bd8ca1-59ab8\t1\nde\ta4c6257-154d29a2933-12c8be\t7\nde\ta4c62e8-14f042736e8-23279\t11\nde\ta4c62a6-155160c183c-55f9f\t1\nde\ta4c62a6-155184cf533-5f347\t1\nde\ta4c6257-1551792ff91-5cee4\t1\nde\ta4c62a6-155156cf481-533a6\t1\nde\ta4c62e8-155184abab5-2d811\t1\nde\ta4c6257-15513a52020-4de17\t1\nde\ta4c628c-155158057ad-5411b\t1\nde\ta4c628c-15516558e70-57bab\t1\nde\ta4c62a6-15515470653-523f7\t1\nde\ta4c62a6-15510a90f41-40f8f\t14\nde\ta4c62a6-15515779f40-53740\t1\nde\ta4c628c-15515fdcc0d-562eb\t9\nde\ta4c62e4-1551701a2d8-2e2a2f\t1\nde\ta4c62e8-15516059baf-2a68e\t2\nde\ta4c6256-14d7364578b-64bb48\t27\nde\ta4c62e4-155124fe8f7-1b9b21\t2\nde\ta4c62e8-1551580bd84-29a99\t3\nde\ta4c62a6-155176f232b-5bd48\t1\nde\ta4c6257-155008a4f88-c98\t13\nde\ta4c6257-15515830a38-544d7\t2\nde\ta4c628c-1551558e3e9-5330f\t1\nde\ta4c62a6-15516b955e5-590d6\t1\nde\ta4c6257-154f23d37e6-413d2\t26\nde\ta4c62a6-15514debe82-50b13\t1\nde\ta4c62e8-154b927a38a-4df00\t3\nde\ta4c6257-15517da4e0d-5e0b7\t1\nde\ta4c628c-14c0ff3c458-5fad\t3\nde\ta4c62e4-15517abff53-323ff3\t1\nde\ta4c62a6-155154ceac4-52733\t1\nde\ta4c628c-15517402fcc-5bb45\t1\nde\ta4c6257-155164c41ec-57adc\t1\nde\ta4c62a6-155166da0f2-57ce8\t1\nde\ta4c62a6-15513c650a5-4da16\t1\nde\ta4c628c-15515921528-546b0\t10\nde\ta4c62e4-1551556e42e-253c4b\t1\nde\ta4c62e8-1551665d0d9-2b076\t1\nde\ta4c6350-155162776be-293e8b\t1\nde\ta4c628c-15517b4ffc9-5d6ba\t2\nde\ta4c6350-1550832bde1-2ac0cc\t5\nde\ta4c628c-1551536f9fa-52620\t1\nde\ta4c62e4-155031c0899-f5648\t1\nde\ta4c62a6-154f22b0ed5-40e4d\t5\nde\ta4c628c-15515e05d70-55a04\t1\nde\ta4c62e4-15515e04d0c-27d476\t1\nde\ta4c62e8-15516c88253-2b909\t1\nde\ta4c62a6-15514c060d6-50562\t1\nde\ta4c622a-155161dd018-b2fa02\t1\nde\ta4c62a6-154ee012b7c-33d68\t16\nde\ta4c6257-15515692730-53b88\t1\nde\ta4c628c-15517c4bab0-5da97\t1\nde\ta4c62e8-15518aa2afc-2de7e\t1\nde\ta4c628c-155145f7edb-4fc7b\t1\nde\ta4c62a6-15518084b81-5e21c\t1\nde\ta4c628c-15513c31937-4dfa1\t2\nde\ta4c6257-155168d07e0-58d2c\t1\nde\ta4c62e4-155175a2780-3056ad\t2\nde\ta4c62a6-15515a0837f-54370\t1\nde\ta4c628c-1548af23ce9-41d74\t2\nde\ta4c6257-1540f732dd3-15b96\t20\nde\ta4c62a6-15514fac637-5100a\t1\nde\ta4c6257-14e249e80b0-c114a\t17\nde\ta4c628c-155155ce1a7-53493\t1\nde\ta4c6257-155162d1abe-57225\t1\nde\ta4c6257-15514e1f38f-51502\t1\nde\ta4c6257-154e3ef5364-16099\t13\nde\ta4c628c-15517876d4f-5cb50\t1\nde\ta4c62a6-1548c4b9268-46dfc\t31\nde\ta4c628c-14a5dc56959-1381b\t12\nde\ta4c62e4-15515664a98-25832f\t1\nde\ta4c62e8-155152185c5-28fce\t1\nde\ta4c6257-15515655fca-53a22\t1\nde\ta4c62a6-15514aaea33-50215\t1\nde\ta4c62a6-15515f3973e-558ef\t1\nde\ta4c62e8-155129fa1ae-26361\t2\nde\ta4c6257-154cabca608-115074\t21\nde\ta4c622b-15514d203bb-a4870e\t1\nde\ta4c6257-154f724e06a-4f043\t16\nde\ta4c628c-15515664e2b-537db\t1\nde\ta4c62a6-1533ef47883-a4dfe\t10\nde\ta4c628c-155105c29de-3fcb9\t5\nde\ta4c62e4-15515113c6b-242354\t2\nde\ta4c628c-15517463c98-5bcba\t1\nde\ta4c62e4-155158cea44-263b46\t1\nde\ta4c62a6-155145767b1-4f513\t2\nde\ta4c6257-154fd4940fc-61db3\t4\nde\ta4c62a6-1551548364a-524ad\t1\nde\ta4c628c-1551406f353-4eb90\t1\nde\ta4c628c-15515678ddf-53854\t1\nde\ta4c628c-15516128f5b-567fc\t1\nde\ta4c622b-15516e3f4b8-baee2e\t1\nde\ta4c628c-155158e1f9a-54591\t1\nde\ta4c628c-154ed79af77-31bcf\t4\nde\ta4c62a6-15515ef1895-557be\t1\nde\ta4c6257-1550198ce29-513e\t14\nde\ta4c62a6-15517dee40b-5d88a\t1\nde\ta4c62e8-15515b07ec6-29ee0\t1\nde\ta4c628c-154f0a9b578-3ba6c\t9\nde\ta4c6257-155145e201e-4ff51\t1\nde\ta4c6257-1551686e955-58c17\t3\nde\ta4c6257-15515edcd69-56021\t1\nde\ta4c628c-15516813b43-58979\t1\nde\ta4c62e8-154bddac78d-534d4\t4\nde\ta4c628c-1551668b5b3-58301\t1\nde\ta4c6350-1551d124285-4a2d07\t1\nde\ta4c62a6-1551951e4d5-61cca\t3\nde\ta4c62e8-1551926c88e-2e41f\t1\nde\ta4c628c-1551b5a82b9-6b9d5\t6\nde\ta4c628c-154fc7c23c5-5e96f\t3\nde\ta4c628c-1551d9748cd-74047\t1\nde\ta4c62a6-1551d349ff4-72413\t4\nde\ta4c6350-1551b6044de-3fc0c6\t1\nde\ta4c6257-154be02217e-ecc3b\t7\nde\ta4c6350-1551b5f4c8e-3fbb60\t2\nde\ta4c62a6-15518c86c20-609b6\t1\nde\ta4c6257-1551b208f4c-6a925\t1\nde\ta4c628c-1551d9b45d9-74128\t2\nde\ta4c6257-152886ce690-11eda9\t45\nde\ta4c62a6-1551a72a9dc-6630e\t1\nde\ta4c8212-154ddb38471-3f5\t22\nde\ta4c62a6-1551bfb7a34-6de83\t1\nde\ta4c62e4-1551a82ce57-3b1c65\t1\nde\ta4c6257-15519d174ac-63bae\t5\nde\ta4c628c-1551da80b7b-743d3\t16\nde\ta4c62e8-1551c0cb0c2-3282c\t1\nde\ta4c62e4-1551c076aef-43b420\t1\nde\ta4c62a6-1550779c90d-1d01c\t14\nde\ta4c6350-15516de9694-2d50ee\t1\nde\ta4c6257-1551d044ca6-725c3\t1\nde\ta4c62e8-153861a24bf-41c95\t35\nde\ta4c62a6-153f1714e61-46eee\t6\nde\ta4c628c-15518b7983d-60f5a\t1\nde\ta4c62a6-1551b85fce5-6bfc0\t1\nde\ta4c62a6-15519291420-61698\t1\nde\ta4c6257-1551972cd23-62bdf\t1\nde\ta4c62a6-15518b7f3f0-6074f\t2\nde\ta4c62a6-1550aaa5d4c-2768b\t2\nde\ta4c62e4-1551ca3fd53-477215\t1\nde\ta4c6257-15518f12aa4-6188d\t1\nde\ta4c6257-15518fc26d3-619dd\t1\nde\ta4c628c-1551aa00699-67dbf\t1\nde\ta4c628c-152a3173ede-198457\t3\nde\ta4c62a6-1551c3ee1a2-6eecf\t1\nde\ta4c62a6-1551d75358a-7315f\t1\nde\ta4c6350-1550c9f30fb-5fcb\t1\nde\ta4c628c-1551d7c4975-73b04\t2\nde\ta4c62e8-1551ade9725-30aec\t2\nde\ta4c6257-1551da9309e-7488f\t1\nde\ta4c628c-15519e60f79-63ef9\t1\nde\ta4c62e4-155032bf8d7-fe1b8\t13\nde\ta4c628c-1551d55c273-73211\t1\nde\ta4c62a6-1551d264d63-72119\t1\nde\ta4c6257-1551d60a9e0-7382c\t3\nde\ta4c628c-1551a0dfc04-648c0\t1\nde\ta4c62e8-15518ca6169-2e01e\t29\nde\ta4c6350-1551d1a30e4-4a5ee6\t2\nde\ta4c622a-145fb5497ba-2cdc9b0\t3\nde\ta4c6350-1551b74c875-40393a\t7\nde\ta4c72e-14dab8b4564-37166\t2\nde\ta4c628c-1551b96e9b0-6cc39\t1\nde\ta4c62e4-1551d6ca6f4-4c4563\t1\nde\ta4c62e4-15511c9959d-180275\t1\nde\ta4c62e8-1551b77fc6c-31ab0\t1\nde\ta4c6257-1519409ae9c-6c565\t2\nde\ta4c622b-154cc169366-2c1595\t10\nde\ta4c62e8-154e55a7df0-8fc5\t9\nde\ta4c62e4-1551b4b8efc-3f4d00\t2\nde\ta4c62e8-15519277f70-2e428\t1\nde\ta4c628c-1551cdc933f-71888\t1\nde\ta4c6257-14d19082cd4-3c235\t1\nde\ta4c62e8-1551c05f491-327c2\t1\nde\ta4c628c-154e8c0cbdb-2410a\t8\nde\ta4c6257-1551c473413-6fb94\t1\nde\ta4c6350-1551b7d2d2f-406b61\t1\nde\ta4c628c-1551db10120-74550\t2\nde\ta4c628c-1551a232d6b-64e17\t1\nde\ta4c62e8-1551d83d1e4-34487\t1\nde\ta4c628c-14cb76ed91e-ef78\t10\nde\ta4c6257-154f7d48dd7-51a23\t6\nde\ta4c62a6-1551d33424e-723dd\t2\nde\ta4c62e4-1551d61598c-4c0dea\t1\nde\ta4c628c-15511de7466-46866\t7\nde\ta4c6257-15518b6b46c-6106d\t3\nde\ta4c62e4-1551a6f3726-3abccf\t1\nde\ta4c6257-1551d9e121b-7462e\t1\nde\ta4c6350-15512598594-1bda0f\t1\nde\ta4c62e4-1551cbe5fbf-481232\t2\nde\ta4c628c-1551b0a6a47-69f4e\t1\nde\ta4c628c-1551a24df39-64e83\t1\nde\ta4c628c-1551ae7df12-6946d\t1\nde\ta4c628c-1551b191dd2-6a456\t1\nde\ta4c6257-1551b21800e-6a971\t1\nde\ta4c6350-1551d4bb96f-4b925e\t1\nde\ta4c628c-14a43d54258-2aaea\t26\nde\ta4c6257-1551d7d5fed-73fad\t1\nde\ta4c62e4-1551c05dd0c-43a9f3\t1\nde\ta4c628c-1551bf456c8-6e509\t2\nde\ta4c628c-1551c6576bb-6fe98\t1\nde\ta4c6257-1551c373fba-6f78f\t1\nde\ta4c628c-1551ab19838-683a1\t1\nde\ta4c62e4-1551593d106-265d2b\t14\nde\ta4c6350-1551c429e98-451fd8\t1\nde\ta4c6257-1551b53d47d-6b9bf\t1\nde\ta4c628c-1551ae9afaa-6951b\t1\nde\ta4c62e8-1551cc45dc4-335e1\t3\nde\ta4c6350-1551cca583e-485b25\t2\nde\ta4c62a6-1551a1810e6-643ca\t1\nde\ta4c628c-1551b0d6660-6a011\t1\nde\ta4c6257-1551d956820-74465\t1\nde\ta4c62a6-153d762f493-23ebc\t2\nde\ta4c628c-154f488225e-4878d\t5\nde\ta4c6257-1551afe7063-69e31\t1\nde\ta4c628c-1551d28f263-72962\t1\nde\ta4c6257-1551a958852-67b83\t1\nde\ta4c6350-1550909cf07-3058be\t1\nde\ta4c62e8-1550bceaa91-1c9cd\t8\nde\ta4c62a6-14feff38359-45059\t12\nde\ta4c62e8-1551b123388-31044\t1\nde\ta4c628c-1551a967bbe-67a8a\t1\nde\ta4c6257-1546b286325-2dc25\t3\nde\ta4c6257-15518bd90e2-61193\t1\nde\ta4c6350-1551cd9deb5-48bd5a\t2\nde\ta4c6350-1551b25af6e-3e75ba\t3\nde\ta4c62e4-1551c20d33b-445030\t1\nde\ta4c62e8-1551daedffe-34739\t1\nde\ta4c6257-1551bdb2742-6e0ac\t1\nde\ta4c6350-1551bd93efb-4292a5\t1\nde\ta4c62e4-154bfd9c3c2-d20db1\t2\nde\ta4c6257-1551b2451e0-6aa5b\t1\nde\ta4c6350-154c8d7837e-f9be0a\t1\nde\ta4c62e8-1551c0db585-32841\t1\nde\ta4c628c-154ede75080-33683\t3\nde\ta4c62e8-1551c851218-331d8\t1\nde\ta4c628c-1551a966f02-67a85\t1\nde\ta4c62e4-154f37322f0-4729f0\t1\nde\ta4c62e4-1551c766435-4668b9\t1\nde\ta4c62a6-1550e498da0-37df3\t4\nde\ta4c6350-1551714046d-2e9b3a\t1\nde\ta4c62e4-15517a49724-320e98\t2\nde\ta4c628c-1551dacf8b6-744b4\t1\nde\ta4c6257-154ee35b70d-34efe\t13\nde\ta4c62e8-1533929dd74-2e8ed\t5\nde\ta4c6256-14b65359a4a-2923aa\t1\nde\ta4c62e4-1551d6de7d6-4c4bac\t2\nde\ta4c62a6-1551c0d3a30-6e1ba\t1\nde\ta4c62e4-154e841c9aa-1225fa\t4\nde\ta4c62a6-1551a448a9e-6519d\t1\nde\ta4c628c-154400507f7-18270\t1\nde\ta4c62a6-15130329931-e680e\t5\nde\ta4c6257-1551a833fc7-6745e\t1\nde\ta4c62e4-1550d3b8cb4-4e892\t11\nde\ta4c62a6-1551dca9982-740e1\t1\nde\ta4c628c-1551b322512-6ab78\t1\nde\ta4c62a6-1551cfc3cd1-7183c\t1\nde\ta4c628c-155191a0ffb-61c2d\t1\nde\ta4c6257-1551b282dbf-6ab56\t1\nde\ta4c62e4-154fec12022-7d7086\t1\nde\ta4c628c-1551c0fec76-6ea49\t1\nde\ta4c62a6-1551a4e7c63-65560\t1\nde\ta4c628c-1551aea4041-69552\t1\nde\ta4c62a6-15461cf8780-11c9d\t2\nde\ta4c62a6-154cfcf351a-124f15\t30\nde\ta4c62a6-1551b600cf2-6b3b3\t1\nde\ta4c628c-1551b7655e9-6c16b\t10\nde\ta4c628c-1551a0912e4-64782\t1\nde\ta4c62a6-1551d122299-71cd1\t1\nde\ta4c62e8-1551cc75729-33618\t1\nde\ta4c62a6-154a9c9ed24-a99d7\t17\nde\ta4c628c-1551b313ed8-6ab2b\t1\nde\ta4c62e4-1551d25939e-4aad4b\t1\nde\ta4c6257-1551c0f4625-6ecf2\t1\nde\ta4c6255-1544de12f6e-2e840\t1\nde\ta4c628c-1551c023906-6e7d8\t1\nde\ta4c6257-15533a6d7c8-c4fcf\t1\nde\ta4c62e4-155347031a4-496031\t1\nde\ta4c628c-15533ef5fd4-c6294\t1\nde\ta4c62a6-1553657b645-d0543\t1\nde\ta4c6350-1553632b5f0-5b1ee\t1\nde\ta4c6257-14d0abd053f-109b2\t3\nde\ta4c62a6-15535ae7c2a-cddb0\t1\nde\ta4c6257-15536a7d6f7-d1f4d\t1\nde\ta4c628c-1552c2746cd-a9bab\t9\nde\ta4c62e4-155354a9464-11b4\t1\nde\ta4c6350-1553689dd75-7d44f\t1\nde\ta4c62a6-15533d25c8f-c55c8\t1\nde\ta4c6257-15535753d50-cd47e\t1\nde\ta4c62a6-15535db5bfa-ce840\t1\nde\ta4c6350-1550cc49c94-17d73\t1\nde\ta4c6257-155360fcb29-cfae5\t1\nde\ta4c628c-1553432c82f-c77ee\t2\nde\ta4c62a6-155358f5cae-cd5bf\t1\nde\ta4c62a6-15535dbf28a-ce854\t2\nde\ta4c62e4-1553644faa1-62064\t1\nde\ta4c62a6-1552f6bfcce-b5c03\t3\nde\ta4c6257-154bf6ba2cb-f13b0\t16\nde\ta4c6350-154e8462fcb-124078\t3\nde\ta4c62a6-1550d0e8974-328f8\t6\nde\ta4c6350-1553748f2b6-c60fd\t2\nde\ta4c6257-15535586614-ccd09\t1\nde\ta4c6257-155329c652a-c1c81\t4\nde\ta4c62a6-15534f36c5f-ca961\t1\nde\ta4c6350-1551a42f630-39ef69\t5\nde\ta4c6257-155340b98df-c6d9a\t1\nde\ta4c62a6-15533b4ba76-c4d3b\t1\n\n\u003cfont color\u003dred\u003eResults are limited by 1000.\u003c/font\u003e"
+      },
+      "dateCreated": "Jun 27, 2016 10:36:02 PM",
+      "dateStarted": "Jun 27, 2016 10:36:21 PM",
+      "dateFinished": "Jun 27, 2016 10:36:28 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val parquetFileClick \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypso_data_may_june/calypso_data_may_june/click/be/2016/*/*/*.parquet\")\nval groupedUsers \u003d parquetFileClick.groupBy(\"userId\").count.sort(desc(\"count\"))\ngroupedUsers.rdd.coalesce(1, true).saveAsTextFile(\"/tmp/sidana/belgium_users.csv\")",
+      "authenticationInfo": {},
+      "dateUpdated": "Jun 27, 2016 11:06:59 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala",
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1466717874406_-1970890660",
+      "id": "20160623-233754_448983249",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "parquetFileClick: org.apache.spark.sql.DataFrame \u003d [userId: string, ip: string, userAgent: struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e, geolocation: struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, offerViewId: string, clickId: string, earning: decimal(38,18)]\ngroupedUsers: org.apache.spark.sql.DataFrame \u003d [userId: string, count: bigint]\n"
+      },
+      "dateCreated": "Jun 23, 2016 11:37:54 PM",
+      "dateStarted": "Jun 27, 2016 10:41:55 AM",
+      "dateFinished": "Jun 27, 2016 10:42:40 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "\nval groupedUsers \u003d parquetFileClick.groupBy(\"userId\").count.sort(desc(\"count\"))\nz.show(groupedUsers)",
+      "authenticationInfo": {},
+      "dateUpdated": "Jun 27, 2016 11:06:51 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [
+            {
+              "name": "userId",
+              "index": 0.0,
+              "aggr": "sum"
+            }
+          ],
+          "values": [
+            {
+              "name": "count",
+              "index": 1.0,
+              "aggr": "sum"
+            }
+          ],
+          "groups": [],
+          "scatter": {
+            "xAxis": {
+              "name": "userId",
+              "index": 0.0,
+              "aggr": "sum"
+            },
+            "yAxis": {
+              "name": "count",
+              "index": 1.0,
+              "aggr": "sum"
+            }
+          }
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala",
+        "tableHide": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1467015348882_1432648397",
+      "id": "20160627-101548_2484621",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TABLE",
+        "msg": "userId\tcount\na4c6257-15418b88485-c678\t515\na4c628c-1549dfa6063-80a41\t227\na4c62a6-14bea34fb43-10388\t175\na4c628c-1541a719e41-13268\t175\na4c62a6-154a174b532-8e16c\t172\na4c628c-154cd2e057d-19c16\t165\na4c62a6-151c49ea6a5-12cd52\t164\na4c628c-1550acbc417-28135\t145\na4c6257-1536fb5beca-166697\t128\na4c628c-154f656a9c2-4bef5\t118\na4c628c-14efa488e64-85b9e\t116\na4c628c-1553b11bf4c-e049c\t110\na4c628c-1527d6c619d-edcfa\t109\na4c62a6-154829eda92-2b5a5\t108\na4c62a6-1520f92945b-ebe8b\t106\na4c6257-152bb80726e-2055d3\t105\na4c62a6-1522bd35de0-15e957\t105\na4c6257-154aa85fc30-acfea\t104\na4c6257-154c96a3429-10f0fd\t102\na4c6257-1550dbd0c1c-364ee\t102\na4c62a6-15485591711-31544\t101\na4c6257-154f4206541-477e2\t100\na4c628c-153c2239007-4eaec\t98\na4c62a6-154a93d34b3-a6867\t98\na4c6257-14cf36c4839-29529\t97\na4c62a6-15502ac3b27-8ffe\t96\na4c628c-15519176392-61bb6\t95\na4c62a6-154c8221ba4-10a771\t95\na4c628c-153ef88435a-3e3ce\t94\na4c628c-153dd221120-3ba8c\t93\na4c628c-154bb418a94-e598b\t93\na4c628c-153f07ce1d8-4269e\t92\na4c628c-15250bb893c-40c16\t92\na4c7250-1488838566b-d5\t90\na4c6257-15418d5dd58-d578\t89\na4c62a6-1551c39cbe0-6ed77\t86\na4c628c-15313797c11-2535\t85\na4c628c-155081a479a-1fa3f\t85\na4c62a6-153ec1d8015-326c7\t84\na4c62a6-154a9c22314-a96b4\t83\na4c628c-1540a2e7515-1991\t82\na4c6256-153af951f9c-1f29a0\t81\na4c6257-151b47686cc-f4969\t80\na4c62e8-15540768cea-5f20b\t78\na4c628c-15444791f0f-2667a\t76\na4c6257-15490b23bc3-542d5\t76\na4c62e4-1550d653d74-61ecf\t73\na4c628c-1549a493e95-73622\t73\na4c6350-1550d47263b-539fc\t73\na4c62a6-1553a9c7032-de676\t72\na4c62a6-154ae5ab033-b7de3\t72\na4c6350-154e9a34e30-1c544c\t71\na4c62a6-15486a51b7f-36133\t69\na4c62a6-1548aad8dc7-40bfe\t69\na4c628c-154d0fed114-28099\t69\na4c62a6-150d6db5a2f-40880\t68\na4c62a6-154e0ac3a52-a58a\t68\na4c628c-155174cc57a-5be2c\t68\na4c62a6-152145830e9-fdcd7\t68\na4c6291-14f4a5e2b29-257abf\t67\na4c62e4-155106bffea-104c20\t67\na4c6257-154069b70e0-968b1\t67\na4c62a6-154b5941633-d01a0\t66\na4c62e8-154a518ac4a-3736a\t66\na4c62a6-1535b117f2d-11b4f0\t66\na4c6257-153f1b567be-4827c\t65\na4c628c-150fb9abf19-2b02b\t65\na4c628c-15524b55c1d-8cefe\t64\na4c6257-1545dd2cf97-7180\t64\na4c62a6-1544a0e4664-39a41\t64\na4c6291-1552c362826-ae8c3\t64\na4c6257-154ceb7b5c5-11fd31\t64\na4c62a6-15517d0877f-5d511\t63\na4c62a6-15337764124-813de\t63\na4c62a6-15304352fc9-323db1\t63\na4c628c-154dfb61ed1-885b\t62\na4c62e8-1551b8136ff-31b99\t62\na4c6257-1553cecfc73-e655d\t62\na4c628c-1551481aea1-5027f\t61\na4c62a6-1543a79e9ac-6cdd\t61\na4c628c-155057effd4-13b33\t61\na4c628c-1535547fbb5-104a5d\t60\na4c62e8-15517097e92-2bec8\t60\na4c6257-154ce7e8bb6-11ef45\t59\na4c6257-14e865039c4-59ef5\t59\na4c62a6-14a5c464758-d806\t59\na4c628c-15495837632-638ef\t59\na4c7249-14d9b3bfa2c-1bee\t59\na4c62a6-154ec5b968d-2df3f\t58\na4c62e4-154e31215db-51a3a\t58\na4c6257-15499cfdac6-71b29\t57\na4c6257-153a2166fbb-20f33f\t57\na4c62a6-152a84ee5db-1af1d6\t57\na4c628c-15336842f89-7ce85\t56\na4c62a6-15469d7a54c-2b4d0\t56\na4c62e8-152e43e880b-7e4c1\t56\na4c62e8-15487ea5e18-181be\t55\na4c62e4-15539ea804c-128343\t55\na4c628c-154a3bb4093-92a93\t55\na4c62e8-15518871b4e-2dc92\t55\na4c628c-1545b017e9c-2a24b\t54\na4c62a6-152606fd76e-7dc0b\t54\na4c628c-151675f70c1-95be8\t54\na4c6255-15527597cff-2edce\t54\na4c62a6-1549e3d625b-8128c\t53\na4c62e8-154b481df5a-48605\t53\na4c6257-154ecbd6f0a-2f980\t53\na4c62a6-15355b65813-1069e1\t53\na4c6257-15431e91ac3-63fd7\t53\na4c6257-151e62c4f04-57d6c\t53\na4c62a6-154fc4d3647-5e29c\t53\na4c62a6-14eee5ccfdd-5c386\t53\na4c6257-154f629fb79-4b849\t52\na4c62e8-15512b7f687-265ac\t52\na4c628c-152fa7c2b74-2ffacd\t51\na4c6257-154a10b9555-8bee8\t51\na4c62a6-154addecb8d-b6250\t51\na4c62a6-1549a254868-7307b\t50\na4c62a6-14f5fa27726-e1c99\t50\na4c6256-153a409886c-209f9\t50\na4c62a6-154ae94c64e-b8c35\t50\na4c62a6-155209349ae-7cab9\t50\na4c6257-1549a9361da-74e24\t50\na4c628c-154ab96500d-b1541\t49\na4c628c-1550b4be994-2aa81\t49\na4c628c-153a1b0bd28-20e742\t49\na4c6291-150d2e06471-1a4401f\t49\na4c628c-1554123381d-f690e\t49\na4c628c-1552465bbd9-8ba1d\t49\na4c628c-1538a58e9d2-1c3623\t49\na4c6257-152321b93ee-9bce\t49\na4c6257-154a92d1191-a5df3\t49\na4c62a6-15434e7df55-6f3d9\t49\na4c62e8-155102e6082-22887\t48\na4c628c-15456e0e1b1-1d1cc\t48\na4c6257-154c7b1b567-108cc8\t48\na4c62a6-14e74bbb249-1caa3\t48\na4c628c-154af66c6fe-bbdcf\t48\na4c6257-1547e0056d5-1d362\t48\na4c6255-153751c990f-9eb396\t48\na4c6257-1523baf92b5-1ca4\t48\na4c628c-14d04d3231a-1ce52\t47\na4c62e8-154a80a59e8-3a8a4\t47\na4c6257-154325a31f0-64fa5\t47\na4c62e8-15480e8833a-10d53\t47\na4c62e8-154aa2571f5-3dbba\t47\na4c628c-1527374df75-c3cd0\t47\na4c6257-151bf0f2243-11af78\t47\na4c628c-15172427622-c112e\t47\na4c62a6-15517a68dfe-5ca5a\t47\na4c6256-1501a796994-160328\t47\na4c6257-1547976cee9-cfeb\t47\na4c628c-154a150c356-8d4ce\t47\na4c62a6-1551627675e-5670d\t46\na4c62a6-14febfa4cc7-39020\t46\na4c622a-14d26ac9d84-60f3c8b\t46\na4c62e4-15521063f0b-59ff73\t46\na4c628c-14d9ab847ac-1e1f5\t46\na4c628c-1545edbef72-afa3\t46\na4c6257-14c120a5eb3-950d\t46\na4c6291-1552755c3c7-2e2e0\t46\na4c628c-1547b87af26-12aac\t46\na4c6257-14ec998656f-12e3ee\t46\na4c6257-15525388702-8fc1c\t45\na4c6256-152d4e84333-937981\t45\na4c62a6-153c6c5cf5b-5f8e0\t45\na4c628c-155082ffea6-2007d\t45\na4c62e8-155124a2f07-25bb6\t44\na4c6257-15365fa21f2-143dae\t44\na4c628c-154e987576e-26f94\t44\na4c6257-154b3b61fb4-c819f\t44\na4c628c-14cc1e959ab-e940\t44\na4c6257-154fd8bf9b4-62d6e\t44\na4c62e8-152bc100fda-4803e\t44\na4c6257-1549201aa87-59dac\t44\na4c6257-154c666eef1-107253\t43\na4c62e8-1544e6182f8-601\t43\na4c628c-153ea2e6669-29061\t43\na4c622a-1521d684e0b-3786b59\t43\na4c62a6-1537080d4ac-16a3c7\t43\na4c62a6-15269893f47-9db9e\t43\na4c62e8-1551540a746-29284\t43\na4c62e8-152b2023705-387de\t43\na4c6257-153719b6aa3-170c4a\t43\na4c62a6-155020abaa0-60ea\t42\na4c6256-152d1811de4-8d5305\t42\na4c62a6-152fd8a3498-30980a\t42\na4c6257-1548117ee7f-2582e\t42\na4c628c-1549f7ef935-856dc\t42\na4c722a-148e0131558-15b12cc\t42\na4c6257-1550b3a0b82-2a8fc\t42\na4c628c-154714f2356-43c96\t42\na4c6257-152cd6bdba6-2512ad\t42\na4c6257-151d36499c8-1b35d\t42\na4c62a6-154764e46ac-1fb9\t41\na4c6257-1544bd8cfaa-3cf02\t41\na4c62a6-15524c70f9c-8cdd2\t41\na4c6257-15515ff4552-56521\t41\na4c628c-15536a3cac9-d1cf5\t41\na4c62a6-14d61d0c2c8-b4755\t41\na4c62a6-1534b99cd5c-d9891\t41\na4c62a6-154addbe135-b61c6\t41\na4c628c-14e891c97f8-67d01\t41\na4c62a6-154a8babe65-a38d4\t41\na4c628c-150ba0ffeff-9f9a1\t41\na4c6257-1535f9d57cd-12d9c2\t41\na4c628c-15524cf42ff-8d8f2\t41\na4c6255-1552cb29269-c48b5\t41\na4c62a6-1541123d0fe-562a\t40\na4c6257-14f8848ee74-14bb38\t40\na4c628c-154d3cf5f50-31481\t40\na4c62e8-154ae5a30df-41e2b\t40\na4c6257-1515e0cd46b-6736d\t40\na4c6257-15533254574-c32cd\t40\na4c62a6-1550d5d1de1-33efc\t40\na4c6257-151b97c261c-106a0c\t40\na4c628c-154c379b841-fc3e5\t40\na4c6257-154c8f65e33-10d58e\t39\na4c62a6-1552afa2537-a3edc\t39\na4c62a6-154627a32d4-13ed2\t39\na4c6257-155091743f0-23c30\t39\na4c628c-14f414179fb-97602\t39\na4c62a6-1546f87b2cc-3e211\t39\na4c628c-150e8a22158-8ac29\t39\na4c628c-154fe22b069-64d53\t39\na4c6257-154bd84c43d-ea6b0\t39\na4c6257-1539643c2b0-1ee449\t39\na4c628c-154a9f44aa4-aa239\t39\na4c6257-152f04a9cf9-2dbaa5\t39\na4c62a6-1544233fe47-1d164\t39\na4c628c-154b92001e8-dbc5b\t39\na4c62a6-154f0cdf4bb-3bda1\t38\na4c62a6-154ba354656-e08fa\t38\na4c628c-154a40b5a4d-93d0c\t38\na4c628c-1548f7be095-4ef99\t38\na4c6255-14dc3c64c8b-2182d0\t38\na4c628c-154be7af6fd-ee5dc\t38\na4c62fc-1474f3cce97-3a0\t38\na4c62e8-153c318d365-1bac7\t38\na4c628c-15499ec5e92-721a4\t38\na4c62a6-155112fe364-43299\t38\na4c6257-1542b6812cd-4f998\t38\na4c62a6-1554dbd207c-11f5ea\t38\na4c628c-1500bfac6c5-60761\t38\na4c6257-154329e9ae7-662e4\t38\na4c6257-15502632b23-7c6b\t38\na4c62e8-151be332119-72341\t38\na4c628c-154eebbf264-36fd3\t38\na4c62a6-15439ec5ce4-4479\t38\na4c62a6-15499e716e1-7225a\t38\na4c6257-154b89ace44-d9368\t37\na4c62e8-15480308796-ffb4\t37\na4c6257-154720256a9-46c7b\t37\na4c628c-154b8d08c57-da52b\t37\na4c6257-154b0c8e345-c1594\t37\na4c6257-15520a8f67d-7dd78\t37\na4c62a6-154a5c48e0e-9b33b\t37\na4c62e4-1550da01dcc-7dbeb\t37\na4c628c-1535b0f67f8-11b267\t37\na4c628c-15365d9ee74-143065\t37\na4c62a6-1551d1601a1-71da0\t37\na4c62a6-14e25914546-c3418\t37\na4c6257-153b46db717-22f42\t37\na4c628c-15511373ffc-439bc\t37\na4c628c-15508530e5e-20a2d\t37\na4c62a6-15507f51759-1eca5\t37\na4c62a6-154f1b7c24e-3f570\t37\na4c62a6-1528a1aebb5-128273\t37\na4c62e8-1501a6df427-2f44\t37\na4c628c-14f92b436ee-16f03b\t36\na4c6257-153e9201d73-26f21\t36\na4c637-1552708eec8-11aa7\t36\na4c6257-1508f3ca838-1743e\t36\na4c62a6-1539bd7d26c-1fdfa5\t36\na4c6257-1549a29c9d1-72fa7\t36\na4c628c-1536b12dc6e-1554b2\t36\na4c62a6-154ef8e4545-39e00\t36\na4c62e4-1551089df4a-10ef3c\t36\na4c62a6-1550d646fbc-34350\t36\na4c628c-14a3e5a39d0-10d08\t36\na4c6350-154dcdbdade-1e5d\t36\na4c62e8-1549aa335aa-2b971\t36\na4c6257-1551b075db1-6a0e9\t35\na4c628c-1550c3535e2-2f0c2\t35\na4c6257-154aa467e05-abcf3\t35\na4c628c-15470d0179f-41e35\t35\na4c62e8-155023c5aa4-fdbe\t35\na4c628c-1554505b2e6-101d63\t35\na4c62a6-1528a28861e-12878f\t35\na4c62a6-154529720e5-f474\t35\na4c6255-1552c6a464d-b7320\t35\na4c628c-154d4d72dfb-35220\t35\na4c62a6-1536cb39670-15d3ea\t35\na4c62a6-151e67e6e5b-5805f\t35\na4c62a6-154f4bec29f-49069\t35\na4c62a6-154eca83877-2efe5\t35\na4c6291-154a1c28cc0-8e317\t35\na4c6257-152c7308b37-235da4\t35\na4c6257-1544e6deb5e-1a0b\t35\na4c6257-152dc5fea2e-28ed2f\t35\na4c62a6-14b7a4b3c7e-9564\t35\na4c6255-1524adf65f0-1831e2\t35\na4c62a6-154a6dbf72b-a0130\t35\na4c622b-1547dff2f33-1295be\t35\na4c62a6-15507743f6a-1cee5\t34\na4c6257-1541af84cfc-15b7c\t34\na4c62e4-1550cc775d4-19292\t34\na4c622b-153c163f02d-e2c7f7\t34\na4c6257-1549ce7a3a6-7f483\t34\na4c62a6-154bb2147c8-e5171\t34\na4c6257-1548a2b7d77-3efb3\t34\na4c62a6-154fc48cdac-5e1a8\t34\na4c628c-1535c636ff7-121739\t34\na4c628c-154a0bfd543-8aa8b\t34\na4c6257-15351072dad-f360c\t34\na4c6257-154c52fc1da-10352d\t34\na4c6257-1551270c0d3-490b9\t34\na4c6257-14ac1246cd8-177766\t34\na4c62a6-1524480cfc9-f903\t34\na4c6257-1549c4c1a07-7c3a0\t34\na4c62e8-1546e1fcf7e-18d8c\t34\na4c62a6-154a13362a2-8cdb9\t34\na4c622a-154bace040e-299fe2f\t34\na4c6257-15507e5c5cd-1f081\t34\na4c637-15526e3fa29-f937\t33\na4c6257-1512a5f7df8-ce2ba\t33\na4c62a6-151d18bf716-17bd3\t33\na4c628c-153f274704e-4beac\t33\na4c6291-154b45e4909-3a9083\t33\na4c6257-15496f3b4f9-69c1b\t33\na4c6257-154c3f96fe9-fe737\t33\na4c6257-153f9dc8f6b-63b65\t33\na4c62a6-154d792429d-13b4b8\t33\na4c6291-153a0dd34ff-4a2cc1\t33\na4c62e8-15507f3c58c-17d9c\t33\na4c6257-154ab59c502-b046a\t33\na4c628c-154fd7d9469-625fa\t33\na4c6257-15333a7bbf5-73a1e\t33\na4c628c-154deaa4fd3-3b49\t33\na4c62e8-154e31745fb-63eb\t33\na4c6257-15365d436f6-1433f9\t33\na4c62e8-14f59bed700-6bf40\t33\na4c62a6-154aaf7df08-af1c3\t33\na4c62a6-15438208070-78106\t33\na4c62e8-14f9337770e-a2630\t33\na4c628c-1513e0d57cf-11986a\t33\na4c6257-1541a0e3980-11d91\t33\na4c6257-153b331733d-1ea09\t33\na4c628c-153267f1f70-4135f\t33\na4c62e8-154aa10ea91-3d981\t33\na4c6257-154ed83b5dc-322d7\t33\na4c6350-1550ca6fd1e-9aa1\t33\na4c628c-151b080d763-e2e70\t33\na4c6257-154cf71ff38-1230c0\t32\na4c62a6-155076474c2-1cae5\t32\na4c62a6-154b9a5bd58-de16a\t32\na4c628c-1551c88b1e0-70685\t32\na4c62a6-1523f97fecd-fb06\t32\na4c6257-151f1d72500-7a09e\t32\na4c6256-15517b91bd0-659c75\t32\na4c62e8-155089719c5-18c75\t32\na4c628c-154fcce352d-5fba9\t32\na4c6257-15138509c1e-103754\t32\na4c628c-1553d898a3a-e7bfd\t32\na4c628c-1512ae929ed-d178e\t32\na4c6257-154ec9daa60-2f2c6\t32\na4c628c-1551725d10f-5b4f1\t32\na4c6257-1529c86debe-179ff4\t32\na4c628c-152dc6daf8a-28e400\t32\na4c628c-1527e4d4447-f189b\t32\na4c6257-154a06fa831-8955d\t32\na4c6257-15226857141-147b92\t32\na4c62a6-154ae86fd03-b8913\t32\na4c628c-15526bedaaa-951eb\t32\na4c62a6-15383d77a74-1ac859\t32\na4c6257-154c9ff4edc-111814\t32\na4c6257-154ba3177df-e0765\t32\na4c628c-152a70fdc28-1a8a28\t32\na4c628c-152b2445a89-1db203\t32\na4c62a6-15521597066-80379\t32\na4c622a-14cd1626cd6-39513ed\t32\na4c62a6-150395f55bf-7b5c3\t32\na4c628c-15493b4c7b4-5d3ae\t32\na4c6257-1551fa33020-794d5\t32\na4c62e8-15523d0c31a-3b8c3\t32\na4c6257-152b0e330b8-1d41dc\t31\na4c628c-154aaf9391b-aee4b\t31\na4c62e8-154e2311a7c-4fbb\t31\na4c6291-155269b916e-d785\t31\na4c6257-15456d08798-1cece\t31\na4c62a6-1549afd2cec-76a6b\t31\na4c6257-1535fea47cc-12ecf5\t31\na4c6291-155276ed850-33307\t31\na4c628c-1539ea24eef-204fbf\t31\na4c62e8-15496947387-27307\t31\na4c62a6-15428b374ac-4341c\t31\na4c6257-1535b1cbc7a-11bc13\t31\na4c628c-154534e8af9-1272d\t31\na4c628c-155267b9c62-9408e\t30\na4c6255-1543a7b7b7c-1b68bb\t30\na4c6257-154c4fff9c1-102758\t30\na4c628c-153be727903-433e2\t30\na4c6257-15507e772b1-1f0e8\t30\na4c6257-1549ee5f57e-83338\t30\na4c62e4-154fbfb3aae-698568\t30\na4c62e4-1553025c261-36a4f7\t30\na4c6256-151632137c7-17476\t30\na4c62e8-154a4eb3254-36f3f\t30\na4c628c-1547ca60dde-176a5\t30\na4c62a6-1549e52db35-814a6\t30\na4c622b-1550bd3fd7a-41f41e\t30\na4c628c-154cd31d409-19dc3\t30\na4c6257-154628e8556-1452d\t30\na4c628c-154e8b5db38-23dd4\t30\na4c62a6-154af1b8ed2-baae3\t30\na4c62e8-152734d7051-42770\t30\na4c62e4-15508001292-278d05\t30\na4c628c-1553c34d3f3-e46cd\t30\na4c62e8-1549e896e0c-2fc7b\t30\na4c62a6-155437ec4c5-fb024\t30\na4c628c-155252a015a-8f43f\t30\na4c62e4-155103c2b3b-f51db\t30\na4c628c-14e5373f895-cde7\t30\na4c62a6-154802cbe8a-2223c\t30\na4c628c-1538f3cca98-1d3cee\t30\na4c62a6-1553c9a65f5-e5602\t30\na4c6255-1552949f969-4cf20\t30\na4c628c-1544521a22d-28913\t30\na4c6256-1552c0a8bd1-a7b44\t30\na4c62a6-1551bea321e-6d91a\t30\na4c62a6-1537c8d35a3-1968af\t30\na4c6257-15507d11b48-1ebc9\t30\na4c6257-154c73faa81-107f8d\t30\na4c6257-15431b784ac-63b46\t30\na4c628c-15481c5a63b-27fd6\t29\na4c628c-15497425155-6b271\t29\na4c6350-1550cb485c9-ffea\t29\na4c62a6-1548597f978-32272\t29\na4c628c-154b5be295e-d0dce\t29\na4c6257-153370289f2-7f7d3\t29\na4c62a6-1500b88559c-5f18b\t29\na4c628c-154eef48bc4-37caa\t29\na4c622a-1526b319d31-1af37ff\t29\na4c628c-15491614af8-56f3a\t29\na4c628c-15462004360-12600\t29\na4c628c-15366468f0d-144e52\t29\na4c6257-154b5328b2b-ce441\t29\na4c6257-153b72041be-2991b\t29\na4c62a6-1546bbefe06-305b0\t29\na4c62a6-153a2c187d5-2113b9\t29\na4c62e8-1547cb89e0d-c6e7\t29\na4c6257-14c50559d9a-4d79b\t29\na4c62e4-15542864b3f-376e49\t29\na4c628c-15360902b3f-130f52\t29\na4c6257-154aeba9641-b8f94\t29\na4c62a6-15468746d0c-279c2\t29\na4c622b-143f93e1159-340722b\t29\na4c6257-1542e203be1-57218\t29\na4c628c-15383adf93d-1abdcc\t29\na4c622b-155448bd20c-152f426\t29\na4c62e4-154fe01ec44-78a406\t29\na4c62a6-1506fbc9c4d-bd9f7\t29\na4c62a6-154fca8faca-5f816\t29\na4c62e4-15518b0b121-372d2e\t29\na4c6257-1549034af4c-51fb6\t29\na4c62e8-155370cc1f4-5434e\t29\na4c62a6-15473effc86-4e2f6\t29\na4c637-152eaa21a0a-414f32\t29\na4c628c-151f34f3c65-164a2\t29\na4c628c-1548003ff08-219f5\t29\na4c62a6-154fcd21ef2-600ce\t29\na4c628c-15320f39d63-2e668\t29\na4c62a6-154efa0760d-3a041\t29\na4c628c-154bdfec3e4-eca7c\t29\na4c6350-1553678f245-7630e\t29\na4c628c-1550a0395cb-25ac9\t29\na4c628c-1502e0c1820-4c648\t28\na4c62a6-154034a62d7-883df\t28\na4c6279-1482bfb7941-2b8\t28\na4c62e8-1549ad590ed-2bdfe\t28\na4c622b-150a0bce795-66477a\t28\na4c62a6-1548a037899-3e211\t28\na4c6350-154eb19aa92-1fe0dc\t28\na4c6257-15450d20ffc-8e33\t28\na4c6257-152ff6756f7-312f1b\t28\na4c62a6-15466dff358-21208\t28\na4c6257-15476284347-19bf\t28\na4c62a6-152f64235a7-2f2e34\t28\na4c62a6-154f8f4f3ec-552c7\t28\na4c628c-15376ef79c0-183dac\t28\na4c6257-15394aca29d-1e7295\t28\na4c6257-15428e4ab09-447d2\t28\na4c6257-154f67e7fdd-4ccd2\t28\na4c6257-1541e6153ee-1ffd8\t28\na4c6257-153634b6cac-13cf6f\t28\na4c628c-151e412945b-4ece6\t28\na4c6257-154e9882042-27535\t28\na4c62e8-155178033dd-2c7f2\t28\na4c62a6-152ff813809-312e58\t28\na4c628c-154b50ef425-cd817\t28\na4c628c-1549eb0680a-8242f\t28\na4c6257-155195b1246-627c4\t28\na4c628c-153e5eb496b-17ea2\t27\na4c628c-1552f7f298b-b66e3\t27\na4c628c-1547afeb990-10b5c\t27\na4c62a6-1548593b609-32193\t27\na4c62e8-15476887a56-5779\t27\na4c62a6-151d16fc12a-17868\t27\na4c628c-151fae5501f-2bf60\t27\na4c628c-154a928b884-a5cc7\t27\na4c6257-154b8c2aa4d-d9fb6\t27\na4c628c-15495c33856-643a1\t27\na4c62a6-15480e1c04b-24930\t27\na4c6255-1545981c032-1ec829\t27\na4c622b-15470880ae6-12fc8ee\t27\na4c62e8-152e18b3628-7b97c\t27\na4c6257-1544f2987c9-5602\t27\na4c6257-153422ed2af-b0b1b\t27\na4c6257-154a9e2c8c1-a9c44\t27\na4c628c-1554d984765-11f31c\t27\na4c628c-154f8c155ca-54562\t27\na4c628c-1533b827e39-91e88\t27\na4c6257-155081ba4ca-1fe02\t27\na4c62e8-151c5c12503-1a52\t27\na4c628c-154a4e443de-96e9a\t27\na4c628c-15444daf738-27cf8\t27\na4c62a6-152226d8ea1-136ec5\t27\na4c6257-155607865c2-1c509\t27\na4c62e8-1555f040c0f-d61e\t27\na4c62e4-155108d8dc7-11042f\t27\na4c62a6-154b51e8164-cdc75\t27\na4c628c-1536c35ac54-15aee5\t27\na4c6257-15314486887-5efb\t27\na4c62e8-154bf751f30-550c0\t27\na4c628c-152b81e5a25-1f67b6\t27\na4c62a6-153adaf2ffa-dfe9\t27\na4c62a6-1522056eaef-12c19e\t27\na4c628c-154fe1cc9f3-64bf4\t27\na4c628c-15508602b7b-20de1\t27\na4c628c-154a50eb787-9796d\t27\na4c6257-152c384acb4-2280e0\t27\na4c62a6-153a1e34021-20ee51\t27\na4c628c-1524ec854ae-363f5\t26\na4c62a6-154d7e95eb1-13d2ec\t26\na4c6350-1550c1483dd-3c1dba\t26\na4c628c-15491ee7f31-59736\t26\na4c6350-154f5e2a038-4f0a7c\t26\na4c6257-14a29390380-1d52\t26\na4c62a6-154a8b79a09-a3830\t26\na4c62a6-154c43d90d8-ff6af\t26\na4c6257-15543eacafa-fd40e\t26\na4c628c-154ca8492a6-13d75\t26\na4c6257-1553053b2c8-b9fdc\t26\na4c62a6-155152d2418-51c86\t26\na4c6350-155025fbac3-aea88\t26\na4c6257-154a07d85bd-8988f\t26\na4c628c-154fe18a6c0-64ab7\t26\na4c62e8-1539e6a31a3-5ba9c\t26\na4c6257-15539b75943-db2d5\t26\na4c62e8-15480132a6e-fd65\t26\na4c628c-151a77f616e-c1e86\t26\na4c6350-1551040de3d-f7027\t26\na4c6257-1545d0e138e-4331\t26\na4c62e4-154f529a68b-4e080c\t26\na4c628c-1552044632c-7be64\t26\na4c628c-154b00fb45e-bea78\t26\na4c6257-154c3862321-fc6d9\t26\na4c8212-14f70a41de7-14456\t26\na4c62a6-151e33f0dd1-4aba9\t26\na4c628c-154bb3b8619-e581d\t26\na4c6257-1547d3d5029-1a315\t26\na4c6257-1513e492a2f-11a0c2\t26\na4c6257-15445dc85d0-2a6a8\t26\na4c628c-155026006c7-779e\t26\na4c62a6-15439eee9d7-45aa\t26\na4c62a6-154aa1b7f4b-ab41e\t26\na4c6257-153cb0d1366-72445\t26\na4c62e8-154ca2eceb6-60030\t26\na4c628c-15526ffe532-96219\t26\na4c62a6-1546cd5b026-34f5c\t26\na4c62a6-153f6686b72-5847c\t26\na4c628c-15206bb6b74-57c12\t26\na4c62a6-154a1b4e56f-8f1ff\t26\na4c6350-155107ad188-10a115\t26\na4c62a6-153b7599730-2a623\t26\na4c62a6-154aaa785fe-add26\t26\na4c62e8-154ec47ab5b-f547\t26\na4c628c-154b5fa5a8d-d2406\t26\na4c62e8-154ee8cad79-12360\t26\na4c62a6-154ee901721-36436\t26\na4c6255-15525e8e4be-7a0a50\t26\na4c628c-154b51f1e27-cdbb9\t26\na4c637-1522cb0abee-4ea249\t26\na4c6257-1525a41efa2-65afb\t26\na4c62a6-1528db0c6f5-136b69\t26\na4c628c-154b55602b6-ceee3\t26\na4c6257-15535df7011-cef37\t26\na4c6257-154ab72e0bb-b0aae\t25\na4c6257-154aec2d319-b9170\t25\na4c628c-155210cc24c-7f4f7\t25\na4c62a6-1536c92ac26-15caea\t25\na4c6257-14e40dfffab-123c5c\t25\na4c628c-1551114c767-43161\t25\na4c62a6-15526ddf87b-952cc\t25\na4c6257-155167cfac9-589dd\t25\na4c628c-1551807abb1-5ea3f\t25\na4c6257-154a3e97106-93579\t25\na4c628c-153eb594d59-2e60b\t25\na4c6257-15399c3522d-1f71ed\t25\na4c6257-154e979ed66-27167\t25\na4c628c-155127ebcd2-49145\t25\na4c6350-1550d0acc8a-38f34\t25\na4c62a6-154a47ae31d-95952\t25\na4c628c-1532cb25741-57df8\t25\na4c62a6-151bf38723b-11947b\t25\na4c6257-1554a37012e-114846\t25\na4c628c-154bf4ea90f-f0d20\t25\na4c6257-153c20d69a6-4e762\t25\na4c6257-154c5976222-1051fa\t25\na4c628c-1548f99a230-4f6e5\t25\na4c6257-154fc46f733-5e187\t25\na4c62a6-153e13e4b55-2e10\t25\na4c628c-1514db01d83-2784f\t25\na4c628c-1552af457ef-a43ad\t25\na4c6257-15535ddef4c-ceefe\t25\na4c6257-1551b144ea7-6a53c\t25\na4c628c-15477330505-5b05\t25\na4c62a6-1551a9d7e7b-67464\t25\na4c6257-154ef019a43-3827e\t25\na4c62a6-1545da6d2ce-6591\t25\na4c628c-152ad43d20e-1c37a9\t25\na4c6257-154a5eae55f-9ba65\t25\na4c6257-154cd703397-11b103\t25\na4c62a6-152862dc992-116921\t25\na4c628c-151238e439d-b7f33\t25\na4c6257-15543b7aba0-fc604\t25\na4c628c-154c01bbf97-f3ccb\t25\na4c6257-155205caddf-7c783\t25\na4c7249-14e4af10f90-d88d\t25\na4c62a6-1547db1e34b-1c245\t25\na4c628c-152d4f7397f-26dfcf\t24\na4c62a6-1499fbd3cd0-65e81\t24\na4c6350-1550051a8dc-801d58\t24\na4c62a6-154a37189a5-923a4\t24\na4c62a6-154cda28b75-11bab2\t24\na4c6257-14f11cf732a-16365\t24\na4c628c-154f4878d51-4877d\t24\na4c62e4-1550d3af6b1-4e456\t24\na4c628c-15327901f96-4511c\t24\na4c6257-155102b0b90-3ecd4\t24\na4c628c-15311a2d83e-34e377\t24\na4c6350-155259a9e45-335a8\t24\na4c6257-1542675c11f-3e774\t24\na4c6257-154872f5b0e-3812d\t24\na4c8258-151247cad49-6e88\t24\na4c6257-153841ebdc5-1ae04c\t24\na4c628c-155584fee0d-148a91\t24\na4c6350-15502e82640-f085f\t24\na4c62a6-153f6c8e1c1-59dcf\t24\na4c628c-1538a19c2ff-1c265b\t24\na4c6257-154a9a2bfdc-a86ab\t24\na4c6257-154fdd6b22a-63dc3\t24\na4c6257-14ea2671585-bace6\t24\na4c6257-15539658073-da8e3\t24\na4c628c-154a9282daf-a5c8b\t24\na4c62e4-1550d1ff59e-427a6\t24\na4c62e4-154e9bbf5d1-1cfd8b\t24\na4c62e8-151d943e97c-143f0\t24\na4c628c-1552ec3b85a-b2eae\t24\na4c628c-1528cc41f22-132910\t24\na4c628c-1549638c21f-662f6\t24\na4c62a6-154ba859286-e1fca\t24\na4c628c-1552660a802-9390d\t24\na4c6257-14e3a68ec98-10b89a\t24\na4c6257-1555398ee35-138ecc\t24\na4c62a6-1546cd867c2-35035\t24\na4c62a6-1553fadc255-f0be0\t24\na4c62a6-1549b3771db-77959\t24\na4c62e8-1542352ab3a-112f3\t24\na4c62a6-153e7ea087a-22b6b\t24\na4c62e4-1550c7131c2-3d4c7f\t24\na4c62a6-154fbe11c7d-5ca58\t24\na4c62a6-153976406d1-1eff9d\t24\na4c628c-154d2c2d0ee-2cf6d\t24\na4c6257-149c94f0c0b-aecee\t24\na4c62e8-154964eff68-26c56\t24\na4c6257-15508bd05ee-22766\t24\na4c628c-154cd52de2b-1a5f5\t24\na4c62a6-15379bb2e18-18adbe\t24\na4c62a6-1548f6dc0f1-4eb1c\t24\na4c628c-14f784593ad-11abdc\t24\na4c62a6-15178c78408-e3ac3\t24\na4c62a6-154b337c42d-c6191\t24\na4c62a6-154d20f1d2e-12a106\t24\na4c6257-154f6c65c14-4da29\t24\na4c6257-152a7a9f98c-1abd69\t24\na4c6350-1550fcdcb67-d675d\t23\na4c628c-15496cc6a28-68ea5\t23\na4c6256-14fe29899a3-928da0\t23\na4c637-14ee0accee1-23b0e\t23\na4c622a-154cffe72e1-57af10\t23\na4c628c-1553692e4d2-d18a6\t23\na4c6257-14cd1c2e1b2-2e91f\t23\na4c62a6-15480b22b70-23e8c\t23\na4c62a6-153f514caf8-52c50\t23\na4c628c-15467dba415-25180\t23\na4c628c-15499a947cd-70ed6\t23\na4c62a6-1547dccd6ae-1c867\t23\na4c628c-154b590b055-cffb3\t23\na4c62e4-154fb7133bd-66271e\t23\na4c628c-15520dbee0a-7e64a\t23\na4c6257-1542f9efc47-5d6c3\t23\na4c6257-154a7d977ef-a1982\t23\na4c6350-15510380e7d-f446d\t23\na4c62a6-1554b95514c-119903\t23\na4c628c-1512ec4a1ed-de68d\t23\na4c6257-154aaa7376f-ad79f\t23\na4c6257-153eb4a8821-2e056\t23\na4c622a-14ede2ab228-17e9b47\t23\na4c62a6-1549b92e212-79129\t23\na4c6257-154957090a3-63437\t23\na4c6257-15110cc62b4-6ec5e\t23\na4c62e4-155404ec335-2e6e8a\t23\na4c6257-153504e5984-efca2\t23\na4c62a6-154c92c699b-10e385\t23\na4c628c-14dfe871231-54bb9\t23\na4c628c-1541dd3a1e0-1ce2b\t23\na4c62e8-154c88c85ad-5dd9a\t23\na4c6257-1531d1384ec-21254\t23\na4c62e4-1550c342acb-3b9407\t23\na4c6257-15304fcbe9f-328a38\t23\na4c6257-15242701a61-9f1f\t23\na4c62e4-1550fcf68be-d6840\t23\na4c6350-1554450178e-3e2a32\t23\na4c628c-15399c390d8-1f6c10\t23\na4c628c-154677ae946-2382d\t23\na4c62a6-154a5c22a28-9b273\t23\na4c628c-154c48914a2-1b5\t23\na4c62a6-154f04acbbc-3b124\t23\na4c6291-1552bd2a8c9-9f03e\t23\na4c62e8-15304f3f5a5-a7a9a\t23\na4c6350-1553fafdde0-2aacbd\t23\na4c62a6-154bfca3835-f2a72\t23\na4c62e8-15505eab297-14d26\t23\na4c62e8-153c31a6d86-1bae8\t23\na4c628c-1523c696cab-5ca1\t23\na4c62e8-154ef4cecfc-133cb\t23\na4c6350-1550ccbed7e-1b6d9\t23\na4c62a6-14fc0f59c4c-1fefd\t23\na4c62e4-1552237f3d5-633322\t23\na4c62a6-1555583147a-1eaf1\t23\na4c628c-1550843e494-205f9\t23\na4c62a6-1542d4f1fc1-52fa2\t23\na4c6350-1550e0863f8-a2784\t23\na4c62e8-155141b6def-27f5e\t23\na4c628c-154c5a07f1d-4df5\t23\na4c6257-14d970f6988-14d4f\t23\na4c6257-14fc5fd656a-3200b\t23\na4c628c-154fce60455-60206\t23\na4c628c-1550d221b5a-330a3\t23\na4c622b-144c0d11036-248e4f\t23\na4c628c-150624d6edc-8e4ce\t23\na4c6257-154cfd61b35-125216\t23\na4c62a6-154772bd92f-5641\t23\na4c628c-1535bfe4dd9-11f74e\t22\na4c6257-1542e4bd99b-57d74\t22\na4c628c-154b9dfc898-df24f\t22\na4c6257-154a4bcdbc1-9637d\t22\na4c6257-154815e030c-268e0\t22\na4c628c-1543035b6db-5fed0\t22\na4c6257-1526f34eeb8-b2853\t22\na4c62e8-1546b1cb479-140ea\t22\na4c628c-151c40ef503-12a3be\t22\na4c6257-154df3003fa-643b\t22\na4c62a6-1546d54fd1c-37cfb\t22\na4c628c-155410fac4d-f6566\t22\na4c62a6-1547abac842-f8ba\t22\na4c628c-152d5d4f4db-271b52\t22\na4c628c-154cf21a5b8-219f8\t22\na4c628c-1549f8af05c-85927\t22\na4c62e8-15340e41a5e-38e2c\t22\na4c6350-1550e18c57e-a6055\t22\na4c62a6-15529ed8d8e-9f3b7\t22\na4c62a6-15505c70af1-14efd\t22\na4c6257-15456cb4824-1cd50\t22\na4c628c-154385291b8-78c91\t22\na4c62a6-154d4ad91c4-13499f\t22\na4c62a6-1553f1a4830-edf5d\t22\na4c622a-1547b881cea-198ff79\t22\na4c628c-1550043a793-697cf\t22\na4c6257-14fefcb2890-441f3\t22\na4c6257-154af3706e5-bae63\t22\na4c62a6-14930c7b59e-b15de\t22\na4c628c-152d9bfd5fa-2800ad\t22\na4c628c-1551a5e8135-66257\t22\na4c6257-1537bb5d6f1-192dc3\t22\na4c628c-154b53d0e1d-ce866\t22\na4c62a6-15461f9d99a-1242c\t22\na4c628c-1544755399d-2d53a\t22\na4c62e4-1550b7f3c20-36bcc5\t22\na4c628c-154c624ec4a-67d6\t22\na4c628c-15465b7e727-1c68a\t22\na4c6257-154fd1364ae-6107a\t22\na4c62a6-152be30f1df-213859\t22\na4c6257-154f4ac7a4b-49012\t22\na4c628c-152d623b607-273276\t22\na4c62a6-15294c4c871-156343\t22\na4c62e8-154cd040324-62537\t22\na4c6350-1554876f386-5312e7\t22\na4c62e4-1550bd32b47-38e8fe\t22\na4c62a6-1541e509834-1f92e\t22\na4c628c-15552ad4628-134ded\t22\na4c6350-1550cb048ce-e072\t22\na4c628c-1552216b21d-841e1\t22\na4c628c-14e9c9aae9f-a8ffa\t22\na4c628c-153e381b38a-1024c\t22\na4c6350-1550df84c33-9e58e\t22\na4c6257-1549a362817-7326e\t22\na4c6257-153b964a174-32219\t22\na4c6257-1554fa47b89-129ce8\t22\na4c6257-15507c25d94-1e82c\t22\na4c628c-155084bd0ad-20809\t22\na4c6257-14d677c7b9c-c893c\t22\na4c62a6-152138e24d7-fb334\t22\na4c628c-1515c992741-6087e\t22\na4c62a6-154c3b82543-fd406\t22\na4c62a6-14d497e091b-6f05e\t22\na4c62a6-154be575a6b-edea1\t22\na4c62a6-154f6d5c707-4dbda\t22\na4c6257-152515a1f7c-449ac\t22\na4c8212-15501f7be7d-757\t22\na4c62e8-15428d82b49-17cb0\t22\na4c62e4-15512a26e23-1de472\t22\na4c6257-14bab9c14dc-5e0fb\t22\na4c8258-15501e4ebf0-171\t22\na4c62e8-15495fb22a2-2645d\t22\na4c6350-155069a42d6-1eba67\t22\na4c6257-152fba16a97-3062e2\t22\na4c62a6-151401bdf2c-1238b0\t22\na4c62e8-1548f9e61c6-1f0cd\t22\na4c6350-15521f41e53-60e662\t22\na4c62e4-15512b02ea3-1e4aac\t22\na4c6257-153935e9a03-1e100c\t22\na4c6291-1540edb7e74-45919d\t22\na4c628c-1534fe5b550-eda07\t22\na4c6257-154718f9528-45198\t22\na4c62e8-154f286e80e-51f\t21\na4c62a6-154ec2bcc1b-2d407\t21\na4c628c-153e04f103b-46c25\t21\na4c6257-154bc04a1a5-e7f38\t21\na4c62e8-1550847aae5-18540\t21\na4c628c-154bc1556e7-e811f\t21\na4c628c-154b3d470fa-c88e7\t21\na4c62a6-1552e2cb357-b0551\t21\na4c62a6-153fc0b77db-6da8d\t21\na4c6257-153f6277f5f-57006\t21\na4c6257-154a7a5f9c0-a1647\t21\na4c62e8-1514ad604ee-11805\t21\na4c62a6-1548f747434-4ed02\t21\na4c62a6-1547aa1f1f5-f2d0\t21\na4c6257-154cf7d1347-1233a5\t21\na4c62a6-14cf48f911a-2ac89\t21\na4c628c-1503430f1c3-66ab5\t21\na4c62e4-15514ed5428-23b061\t21\na4c628c-154daa7bc91-4937e\t21\na4c6256-15304715d46-f4d8f9\t21\na4c6257-154c36eb353-fc1ce\t21\na4c62e8-154b89fff91-4d15f\t21\na4c62a6-15543728a10-fad21\t21\na4c62a6-153f744eea1-5c319\t21\na4c62a6-154b111b7a6-c282a\t21\na4c628c-153c1a3bffa-4cb7f\t21\na4c6291-14f4cd599fe-2e82f6\t21\na4c62a6-15471f1e859-45fe9\t21\na4c628c-14b492a5ef4-528bc\t21\na4c62a6-155085fb52d-20a2f\t21\na4c628c-14ea6930448-c6dba\t21\na4c62a6-15503037800-a6bc\t21\na4c6257-1547b97528a-12e25\t21\na4c62a6-152ca98bcbc-241b8b\t21\na4c628c-15374a121ca-1791f0\t21\na4c6257-154abe09e27-b27aa\t21\na4c628c-154e708ff1c-1e22a\t21\na4c62a6-153641bbcd5-13d66c\t21\na4c62a6-1547de545f8-1cdc2\t21\na4c6257-1536618a8ff-1446bd\t21\na4c628c-154d7c4072d-3c7b4\t21\na4c6257-150622c2b57-8df80\t21\na4c62a6-15514db3df2-50a3c\t21\na4c62a6-152ff3be32d-311749\t21\na4c62a6-15449799ce4-372c5\t21\na4c628c-1550b9d8470-2c23a\t21\na4c6257-14919df730d-45fca\t21\na4c6257-1546fd2b237-3ed7a\t21\na4c628c-154f885f9a9-53a75\t21\na4c6257-1551c4d07ed-6fcb4\t21\na4c6257-1542eb31ac7-597af\t21\na4c62e8-154042850b0-17ab2\t21\na4c628c-155083690b7-20250\t21\na4c6257-1551068ec45-404dc\t21\na4c6257-152ff6bf88f-3130ad\t21\na4c62a6-15285fb2d38-11605b\t21\na4c6257-1549e74aad4-81667\t21\na4c622b-14a4f58277f-1154153\t21\na4c6255-1523134f1f7-f2db95\t21\na4c62a6-155341086c4-c68f6\t21\na4c628c-154a927489f-a5c2d\t21\na4c628c-153e15dbe30-39c0\t21\na4c62a6-154c4733f66-1002be\t21\na4c62e8-1550818ab8c-180c9\t21\na4c62e8-15344bf3d38-3f02e\t21\na4c628c-153c2284883-4ec31\t21\na4c62a6-155344f2043-c7c3a\t21\na4c62a6-154d3afda7d-131003\t21\na4c622a-1552b6656ed-3c5418\t21\na4c6257-15115db90ef-840a7\t21\na4c628c-154afe50bdf-bde90\t21\na4c62e4-155543f0359-704d8e\t21\na4c62a6-15451f8661b-cc16\t21\na4c6257-15503163a68-b1c2\t21\na4c6257-1552c971d0a-abf76\t21\na4c62a6-154b955d52e-dcb0b\t21\na4c6257-15485c8697b-32f56\t21\na4c62a6-154a881a4bf-a2f4b\t21\na4c628c-154382ac727-78384\t21\na4c628c-15496f8abb9-69c29\t21\na4c628c-151d82a0212-26a9a\t21\na4c62a6-154c09596fc-f59cc\t21\na4c628c-15449462851-362e3\t21\na4c622a-1556804cb67-e55fab\t21\na4c622a-154cf8cabf0-529ea1\t21\na4c628c-154474957cd-2d0ea\t21\na4c62a6-1551bbba3bc-6cde3\t21\na4c628c-1552120cd44-7fbc1\t21\na4c622b-1515f3f4e11-21d2b3c\t20\na4c628c-155365b7fd0-d0a71\t20\na4c628c-154ae4f839c-b7870\t20\na4c628c-154a7321c68-a0ac2\t20\na4c622b-1553aafb255-e826d2\t20\na4c6257-153ddb1ad57-3e9b8\t20\na4c62e8-15172442d94-5f99\t20\na4c62a6-154ae7d30a2-b866d\t20\na4c628c-154b5c623b9-d10b0\t20\na4c62a6-1544e1e1147-45421\t20\na4c62e8-154300dfbcf-20ddd\t20\na4c628c-15511e27dfe-46a1e\t20\na4c62e8-1548aaf5bb3-1a2d7\t20\na4c628c-154b5cb377a-d129e\t20\na4c62a6-15545046ee2-1018dc\t20\na4c6257-154e70f1a22-1e790\t20\na4c6257-15490b9dd9c-545c9\t20\na4c6257-154a4cd8474-96725\t20\na4c628c-15499929469-707fb\t20\na4c628c-1555b5a4005-c143\t20\na4c62e4-155109638f9-1132df\t20\na4c628c-154f3fc681b-46cd6\t20\na4c628c-1536b47c6ae-156629\t20\na4c628c-154ee3832e1-34bc0\t20\na4c628c-154726a0a6c-488a8\t20\na4c628c-15426245651-3cfa8\t20\na4c6291-14ec693f92d-dd843\t20\na4c62a6-1550248ee26-6fe7\t20\na4c6350-1550ca68e6e-9764\t20\na4c62a6-154c4bd6d82-101647\t20\na4c6257-1553ee46aff-ed776\t20\na4c6350-15516ea5040-2d97b4\t20\na4c62a6-154a38dd31a-92754\t20\na4c62a6-15197306ec7-7913c\t20\na4c62a6-154f1592672-3dc97\t20\na4c62e4-154c4ede542-ea137b\t20\na4c628c-15282a4da2e-103c24\t20\na4c6257-154cb09b8e9-115f3c\t20\na4c628c-1550c4e3f26-2f999\t20\na4c62a6-154af865742-bc7ac\t20\na4c62a6-1541f6b87fd-240d7\t20\na4c622a-154b937d0aa-288cf5e\t20\na4c628c-1552f1548e9-b491b\t20\na4c62a6-15460de8469-e7c9\t20\na4c6257-1550ac4c2a8-282e1\t20\na4c6257-154aa6d1ad7-ac748\t20\na4c62e4-15548f7d38e-5557f4\t20\na4c6257-154aefb2b84-b9e07\t20\na4c628c-1550d7b71e9-34ed5\t20\na4c628c-150a482ef1f-4ea6d\t20\na4c6257-15529fd3975-a033c\t20\na4c62a6-15433285fcf-680d7\t20\na4c62a6-15042c90ed8-18ac1\t20\na4c62a6-151543e01cf-432bb\t20\na4c6257-154248d1203-361ee\t20\na4c62e8-151538c6f71-1c01e\t20\na4c6257-15452184430-d929\t20\na4c62a6-1551e4aefda-751f7\t20\na4c62a6-15460b71c13-df52\t20\na4c6257-15511c8e77a-46506\t20\na4c6257-152cf9bd420-2580fb\t20\na4c62a6-1550dda03e4-363e8\t20\na4c62e8-14df68bc10c-1379f\t20\na4c6257-154c4d9f4b5-101e2c\t20\na4c628c-154b9d61926-def95\t20\na4c6257-154ae3007b0-b6e2d\t20\n\n\u003cfont color\u003dred\u003eResults are limited by 1000.\u003c/font\u003e"
+      },
+      "dateCreated": "Jun 27, 2016 10:15:48 AM",
+      "dateStarted": "Jun 27, 2016 10:16:40 AM",
+      "dateFinished": "Jun 27, 2016 10:16:41 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val parquetFileClick \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypso_data_may_june/calypso_data_may_june/click/*/2016/*/*/\")\nval parquetFileOffers \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypso_data_may_june/calypso_data_may_june/offerView/*/2016/*/*/\")\nval groupedOffers \u003d parquetFileOffers.groupBy(\"userId\").count.sort(desc(\"count\"))\nval groupedClicks \u003d parquetFileClick.groupBy(\"userId\").count.sort(desc(\"count\"))\ngroupedOffers.select(avg($\"count\")).show\ngroupedClicks.select(avg($\"count\")).show",
+      "authenticationInfo": {},
+      "dateUpdated": "Jun 27, 2016 11:08:31 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1466781467820_-1831555774",
+      "id": "20160624-171747_1468767678",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "parquetFileClick: org.apache.spark.sql.DataFrame \u003d [userId: string, ip: string, userAgent: struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e, geolocation: struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, offerViewId: string, clickId: string, earning: decimal(38,18)]\nparquetFileOffers: org.apache.spark.sql.DataFrame \u003d [eventType: string, userId: string, ip: string, userAgent: struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e, geolocation: struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, adType: string, offerRank: int, searchId: string, offerViewId: string, contentPageType: string, adPlacement: string, adViewability: string, adSize: string]\ngroupedOffers: org.apache.spark.sql.DataFrame \u003d [userId: string, count: bigint]\ngroupedClicks: org.apache.spark.sql.DataFrame \u003d [userId: string, count: bigint]\n+-----------------+\n|       avg(count)|\n+-----------------+\n|22.86804413931802|\n+-----------------+\n\n+------------------+\n|        avg(count)|\n+------------------+\n|1.7012774830215476|\n+------------------+\n\n"
+      },
+      "dateCreated": "Jun 24, 2016 5:17:47 PM",
+      "dateStarted": "Jun 27, 2016 11:08:31 PM",
+      "dateFinished": "Jun 27, 2016 11:20:42 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "parquetFileClick.count\nparquetFileOffers.count",
+      "authenticationInfo": {},
+      "dateUpdated": "Jun 27, 2016 11:25:07 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1467061711265_-1621813018",
+      "id": "20160627-230831_1041252848",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "res25: Long \u003d 26546807\nres26: Long \u003d 5203259842\n"
+      },
+      "dateCreated": "Jun 27, 2016 11:08:31 PM",
+      "dateStarted": "Jun 27, 2016 11:25:07 PM",
+      "dateFinished": "Jun 27, 2016 11:25:17 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val parquetFileClick \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypso_data_may_june/calypso_data_may_june/click/*/2016/*/*/\")\nval groupedClicks \u003d parquetFileClick.groupBy(\"userId\").count.sort(desc(\"count\"))\nval numberPersonsClicks \u003d groupedClicks.groupBy(\"count\").count\nnumberPersonsClicks.rdd.coalesce(1, true).saveAsTextFile(\"/tmp/sidana/personsPerClick.csv\")",
+      "authenticationInfo": {},
+      "dateUpdated": "Jun 28, 2016 12:49:37 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1467062707609_130160497",
+      "id": "20160627-232507_433263715",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "parquetFileClick: org.apache.spark.sql.DataFrame \u003d [userId: string, ip: string, userAgent: struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e, geolocation: struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, offerViewId: string, clickId: string, earning: decimal(38,18)]\ngroupedClicks: org.apache.spark.sql.DataFrame \u003d [userId: string, count: bigint]\nnumberPersonsClicks: org.apache.spark.sql.DataFrame \u003d [count: bigint, count: bigint]\n"
+      },
+      "dateCreated": "Jun 27, 2016 11:25:07 PM",
+      "dateStarted": "Jun 28, 2016 12:49:38 PM",
+      "dateFinished": "Jun 28, 2016 12:49:53 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "z.show(numberPersonsClicks)",
+      "authenticationInfo": {},
+      "dateUpdated": "Jun 28, 2016 12:52:13 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "multiBarChart",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [
+            {
+              "name": "count",
+              "index": 0.0,
+              "aggr": "sum"
+            }
+          ],
+          "values": [
+            {
+              "name": "count",
+              "index": 1.0,
+              "aggr": "sum"
+            }
+          ],
+          "groups": [],
+          "scatter": {
+            "xAxis": {
+              "name": "count",
+              "index": 0.0,
+              "aggr": "sum"
+            },
+            "yAxis": {
+              "name": "count",
+              "index": 1.0,
+              "aggr": "sum"
+            }
+          }
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1467106248761_-563321913",
+      "id": "20160628-113048_1801458056",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TABLE",
+        "msg": "count\tcount\n2867\t1\n1840\t1\n1526\t1\n1295\t1\n1265\t1\n1259\t1\n1138\t1\n1072\t1\n682\t1\n648\t1\n581\t1\n560\t1\n555\t1\n553\t1\n515\t1\n434\t1\n420\t1\n402\t1\n392\t1\n388\t1\n385\t1\n377\t1\n361\t1\n351\t1\n348\t1\n341\t1\n340\t1\n335\t1\n329\t1\n321\t1\n313\t1\n312\t1\n304\t1\n302\t1\n301\t2\n299\t1\n298\t3\n296\t1\n294\t1\n293\t1\n282\t1\n281\t1\n277\t1\n271\t1\n270\t2\n269\t1\n266\t1\n265\t1\n264\t1\n257\t1\n256\t1\n253\t1\n249\t1\n248\t2\n247\t1\n246\t2\n239\t1\n238\t1\n235\t2\n234\t2\n231\t2\n229\t1\n228\t1\n227\t1\n225\t1\n223\t2\n222\t4\n221\t1\n220\t1\n218\t1\n216\t1\n215\t1\n214\t1\n213\t2\n211\t3\n209\t1\n208\t2\n207\t2\n206\t1\n205\t2\n204\t1\n202\t1\n200\t2\n199\t2\n197\t2\n194\t1\n193\t1\n192\t1\n191\t2\n189\t2\n188\t2\n187\t1\n186\t2\n185\t3\n182\t2\n181\t2\n180\t2\n179\t1\n177\t4\n176\t2\n175\t6\n174\t1\n173\t2\n172\t4\n171\t2\n170\t3\n169\t2\n168\t4\n167\t3\n166\t6\n165\t2\n164\t3\n163\t1\n162\t2\n161\t3\n160\t1\n159\t4\n158\t4\n157\t5\n156\t1\n155\t3\n154\t4\n152\t1\n151\t1\n150\t1\n149\t3\n148\t5\n147\t4\n146\t1\n145\t2\n144\t2\n143\t2\n142\t5\n141\t10\n140\t4\n139\t3\n138\t4\n137\t5\n136\t4\n135\t8\n134\t3\n133\t6\n132\t1\n131\t9\n130\t5\n129\t3\n128\t5\n127\t5\n126\t8\n125\t6\n124\t5\n123\t4\n122\t9\n121\t7\n120\t4\n119\t5\n118\t8\n117\t6\n116\t10\n115\t12\n114\t12\n113\t12\n112\t5\n111\t12\n110\t14\n109\t13\n108\t7\n107\t16\n106\t17\n105\t11\n104\t15\n103\t18\n102\t18\n101\t19\n100\t21\n99\t16\n98\t28\n97\t15\n96\t16\n95\t25\n94\t21\n93\t20\n92\t30\n91\t19\n90\t31\n89\t27\n88\t28\n87\t28\n86\t37\n85\t29\n84\t21\n83\t31\n82\t38\n81\t29\n80\t36\n79\t34\n78\t46\n77\t45\n76\t55\n75\t43\n74\t43\n73\t58\n72\t55\n71\t49\n70\t62\n69\t77\n68\t74\n67\t73\n66\t76\n65\t75\n64\t90\n63\t94\n62\t100\n61\t104\n60\t103\n59\t127\n58\t122\n57\t129\n56\t146\n55\t151\n54\t154\n53\t191\n52\t172\n51\t180\n50\t227\n49\t217\n48\t237\n47\t257\n46\t237\n45\t325\n44\t306\n43\t371\n42\t397\n41\t455\n40\t438\n39\t488\n38\t567\n37\t560\n36\t628\n35\t714\n34\t748\n33\t887\n32\t988\n31\t1003\n30\t1241\n29\t1336\n28\t1506\n27\t1727\n26\t1986\n25\t2213\n24\t2533\n23\t2814\n22\t3334\n21\t3946\n20\t4555\n19\t5279\n18\t6064\n17\t7411\n16\t8869\n15\t10701\n14\t13206\n13\t16164\n12\t20767\n11\t26106\n10\t34417\n9\t46362\n8\t63646\n7\t92715\n6\t141007\n5\t228053\n4\t402398\n3\t805292\n2\t2071450\n1\t11563045\n"
+      },
+      "dateCreated": "Jun 28, 2016 11:30:48 AM",
+      "dateStarted": "Jun 28, 2016 12:51:44 PM",
+      "dateFinished": "Jun 28, 2016 12:51:58 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val parquetFileOffers \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypso_data_may_june/calypso_data_may_june/offerView/*/2016/*/*/\")\n",
+      "dateUpdated": "Jun 28, 2016 9:00:23 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1467106291816_505003189",
+      "id": "20160628-113131_1904502244",
+      "dateCreated": "Jun 28, 2016 11:31:31 AM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "kelkooDataStatsMayJune",
+  "id": "2BP4VGETB",
+  "angularObjects": {
+    "2BGHSKCA7": [],
+    "2BFMBPKAB": [],
+    "2BHKKP27G": [],
+    "2BJHJDBK6": [],
+    "2BJAQG5W4": [],
+    "2BJGSXM37": [],
+    "2BFXEV5XZ": [],
+    "2BG77RV7M": [],
+    "2BF969NNB": [],
+    "2BG8QQJNC": [],
+    "2BGVG5JP4": [],
+    "2BJ5FCP57": [],
+    "2BFEDXCTE": [],
+    "2BJ8AEWCT": [],
+    "2BH9AVVKH": [],
+    "2BJ7KKX85": [],
+    "2BHKAE8WK": [],
+    "2BJ6HN5AY": []
+  },
+  "config": {},
+  "info": {}
+}

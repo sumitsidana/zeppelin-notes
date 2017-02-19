@@ -1,0 +1,145 @@
+{
+  "paragraphs": [
+    {
+      "text": "val parquetFileClick \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypso_kk_june_data/click/*/2016/*/*/*.parquet\")\n",
+      "authenticationInfo": {},
+      "dateUpdated": "Dec 5, 2016 11:26:50 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1480976276308_1416922510",
+      "id": "20161205-231756_1082010529",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "parquetFileClick: org.apache.spark.sql.DataFrame \u003d [userId: string, ip: string, userAgent: struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e, geolocation: struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, offerViewId: string, clickId: string, earning: decimal(38,18)]\n"
+      },
+      "dateCreated": "Dec 5, 2016 11:17:56 PM",
+      "dateStarted": "Dec 5, 2016 11:26:50 PM",
+      "dateFinished": "Dec 5, 2016 11:26:51 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val keywords \u003d parquetFileClick.select(parquetFileClick(\"keywords\")(0))\nkeywords.show\nkeywords.count\nkeywords.filter(!($\"keywords[0]\".isNull)).count\nkeywords.filter(($\"keywords[0]\".isNull)).count",
+      "authenticationInfo": {},
+      "dateUpdated": "Dec 5, 2016 11:34:29 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1480976697954_3785772",
+      "id": "20161205-232457_2063213886",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "keywords: org.apache.spark.sql.DataFrame \u003d [keywords[0]: string]\n+-----------+\n|keywords[0]|\n+-----------+\n|       null|\n|       null|\n|       null|\n|       null|\n|       null|\n|       null|\n|       null|\n|       null|\n|       null|\n|       null|\n|       null|\n|       null|\n|       null|\n|       null|\n|       null|\n|       null|\n|       null|\n|       null|\n|       null|\n|       null|\n+-----------+\nonly showing top 20 rows\n\nres52: Long \u003d 16107227\nres53: Long \u003d 1682506\nres54: Long \u003d 14424721\n"
+      },
+      "dateCreated": "Dec 5, 2016 11:24:57 PM",
+      "dateStarted": "Dec 5, 2016 11:34:29 PM",
+      "dateFinished": "Dec 5, 2016 11:34:33 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val keywords \u003d parquetFileClick.selectExpr(\"explode(keywords) as e\")\nkeywords.show",
+      "authenticationInfo": {},
+      "dateUpdated": "Dec 5, 2016 11:28:16 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1480976744809_2070733485",
+      "id": "20161205-232544_1198669738",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "keywords: org.apache.spark.sql.DataFrame \u003d [e: string]\n+-----------------+\n|                e|\n+-----------------+\n|esstisch sheesham|\n|esstisch sheesham|\n|        ledersofa|\n|        ledersofa|\n|        ledersofa|\n|          pergola|\n|          pergola|\n|         holbrook|\n|         holbrook|\n|         holbrook|\n|               at|\n|       candy 1472|\n|       candy 1472|\n|     balance soft|\n|     balance soft|\n|       s6 edge 32|\n|      daunendecke|\n|      daunendecke|\n|      daunendecke|\n|      daunendecke|\n+-----------------+\nonly showing top 20 rows\n\n"
+      },
+      "dateCreated": "Dec 5, 2016 11:25:44 PM",
+      "dateStarted": "Dec 5, 2016 11:28:16 PM",
+      "dateFinished": "Dec 5, 2016 11:28:17 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1480976896641_-643686974",
+      "id": "20161205-232816_2121284504",
+      "dateCreated": "Dec 5, 2016 11:28:16 PM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "analyzeKeywordsinClicks",
+  "id": "2C5YR548P",
+  "angularObjects": {
+    "2BGHSKCA7": [],
+    "2BFMBPKAB": [],
+    "2BHKKP27G": [],
+    "2BJHJDBK6": [],
+    "2BJAQG5W4": [],
+    "2BJGSXM37": [],
+    "2BFXEV5XZ": [],
+    "2BG77RV7M": [],
+    "2BF969NNB": [],
+    "2BG8QQJNC": [],
+    "2BGVG5JP4": [],
+    "2BJ5FCP57": [],
+    "2BFEDXCTE": [],
+    "2BJ8AEWCT": [],
+    "2BH9AVVKH": [],
+    "2BJ7KKX85": [],
+    "2BHKAE8WK": [],
+    "2BJ6HN5AY": []
+  },
+  "config": {
+    "looknfeel": "default"
+  },
+  "info": {}
+}

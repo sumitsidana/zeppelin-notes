@@ -1,0 +1,114 @@
+{
+  "paragraphs": [
+    {
+      "text": "        import org.apache.spark.mllib.recommendation.ALS\n        import org.apache.spark.mllib.recommendation.MatrixFactorizationModel\n        import org.apache.spark.mllib.recommendation.Rating\n        import org.apache.spark.ml.feature.StringIndexer\n        import org.apache.spark.sql.Row\n        \n        \n        val time1 \u003d java.lang.System.currentTimeMillis()\n        \n        //val sqlContext \u003d new org.apache.spark.sql.SQLContext(sc)\n        val df \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \"\\t\")\n    .load(\"file:/home/ama/sidana/recommendersystemchallenge/data/data/interactions.csv\")\n        val validInteractions \u003d df.filter(df(\"interaction_type\") \u003d\u003d\u003d 1||df(\"interaction_type\")\u003d\u003d\u003d2||df(\"interaction_type\")\u003d\u003d\u003d3)\n        val clickedoffers \u003d validInteractions.select(\"user_id\", \"item_id\", \"interaction_type\")\n        val groupedOffers \u003d clickedoffers.groupBy(\"user_id\",\"item_id\").count\n        val ratings \u003d groupedOffers.map{\n    case Row(user_id, item_id, count) \u003d\u003e Rating(user_id.asInstanceOf[Int].intValue, item_id.asInstanceOf[Int].intValue, count.asInstanceOf[Long].doubleValue)\n}\n\n        \n        val dfItem \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \"\\t\")\n    .load(\"/home/ama/sidana/recommendersystemchallenge/data/data/items.csv\")\n    val validItems \u003d dfItem.filter(dfItem(\"active_during_test\")\u003d\u003d\u003d1).select(\"id\")\n    validItems.count\n    \n    \n        val rank \u003d 100\n        val numIterations \u003d 100\n        val model \u003d ALS.train(ratings, rank, numIterations, 0.01)\n        val time2 \u003d java.lang.System.currentTimeMillis()\n        val time \u003d time2 - time1\n        print(time)\n        \n  val target_users \u003d sqlContext.read.format(\"com.databricks.spark.csv\").option(\"header\", \"true\").load(\"/home/ama/sidana/recommendersystemchallenge/data/target_users.csv\")\nimport java.nio.file.{ Files, Paths }\nimport scala.collection.mutable.ListBuffer\nimport java.io.PrintWriter\nimport util.control.Breaks._\n\nval pw \u003d new PrintWriter(\"/home/ama/sidana/recommendersystemchallenge/output/als_v3.txt\");\nval total \u003d target_users.count - 1\nval actualusers \u003d target_users.collect()\nval keys \u003d model.userFeatures.keys.collect()\nfor(user \u003c- 0 to total.toInt){\n    val user_id \u003d actualusers(user).getString(0)\n    pw.print(user_id+\"\\t\")\n    breakable{\n        if(!(keys.exists(_ \u003d\u003d user_id.toInt))){\n            pw.print(\"2778525,1244196,1729618,657183,2791339,1386412,536047,1053542,278589,79531,1928254,2446769,1984327,1583705,784737,830073,1162250,343377,1140869,2106311,2002097,1092821,1443706,823512,1588611,1576126,1056667,2796479,1754395,460717\")\n            pw.println()\n            break\n        }\n    else{\n    val topKRecs \u003d model.recommendProducts(user_id.toInt,150)\n     topKRecs.map(rating \u003d\u003e (rating.product)).foreach(a\u003d\u003epw.print(a+\",\"))\n    pw.println()\n   }\n    }\n}\npw.close()  \n    \n    \n\n",
+      "dateUpdated": "Apr 29, 2016 1:08:54 AM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1461402461080_-1266318481",
+      "id": "20160423-110741_1325946720",
+      "dateCreated": "Apr 23, 2016 11:07:41 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "//val validitemsRDD \u003d validItems.collect()\nval target_users \u003d sqlContext.read.format(\"com.databricks.spark.csv\").option(\"header\", \"true\").load(\"/home/ama/sidana/recommendersystemchallenge/data/target_users.csv\")\nimport java.nio.file.{ Files, Paths }\nimport scala.collection.mutable.ListBuffer\nimport java.io.PrintWriter\nimport util.control.Breaks._\n\nval pw \u003d new PrintWriter(\"/home/ama/sidana/recommendersystemchallenge/output/als_v2.txt\");\nval total \u003d target_users.count - 1\nval actualusers \u003d target_users.collect()\nval keys \u003d model.userFeatures.keys.collect()\nfor(user \u003c- 0 to total.toInt){\n    val user_id \u003d actualusers(user).getString(0)\n    pw.print(user_id+\"\\t\")\n    breakable{\n        if(!(keys.exists(_ \u003d\u003d user_id.toInt))){\n            pw.print(\"1053452,2268722,1007923,2778525,1244196,1729618,657183,581327,2791339,1386412,2663343,1805804,1078303,536047,1053542,2432923,278589,79531,1928254,2446769,1984327,1583705,1133414,2242152,1742926,1201171,2532610,784737,1233470,830073\")\n            pw.println()\n            break\n        }\n    else{\n    val topKRecs \u003d model.recommendProducts(user_id.toInt,100)\n     topKRecs.map(rating \u003d\u003e (rating.product)).foreach(a\u003d\u003eif(validitems.filter(validitems(\"id\") \u003d\u003d\u003d a.toInt).count\u003e0){pw.print(a+\",\")})\n    pw.println()\n   }\n    }\n}\npw.close()",
+      "dateUpdated": "Apr 23, 2016 11:07:41 AM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1461402461081_-1266703230",
+      "id": "20160423-110741_748718121",
+      "dateCreated": "Apr 23, 2016 11:07:41 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "\n",
+      "dateUpdated": "Apr 23, 2016 11:07:41 AM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1461402461082_-1265548983",
+      "id": "20160423-110741_1598771874",
+      "dateCreated": "Apr 23, 2016 11:07:41 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "recsys_challenge: mllib_als_bigger",
+  "id": "2BGB7XSER",
+  "angularObjects": {
+    "2BGHSKCA7": [],
+    "2BFMBPKAB": [],
+    "2BHKKP27G": [],
+    "2BJHJDBK6": [],
+    "2BJAQG5W4": [],
+    "2BJGSXM37": [],
+    "2BFXEV5XZ": [],
+    "2BG77RV7M": [],
+    "2BF969NNB": [],
+    "2BG8QQJNC": [],
+    "2BGVG5JP4": [],
+    "2BJ5FCP57": [],
+    "2BFEDXCTE": [],
+    "2BJ8AEWCT": [],
+    "2BH9AVVKH": [],
+    "2BJ7KKX85": [],
+    "2BHKAE8WK": [],
+    "2BJ6HN5AY": []
+  },
+  "config": {
+    "looknfeel": "default"
+  },
+  "info": {}
+}

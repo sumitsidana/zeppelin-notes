@@ -1,0 +1,110 @@
+{
+  "paragraphs": [
+    {
+      "text": " import org.apache.spark.SparkContext\nimport org.apache.hadoop.fs.{FileUtil, Path, FileSystem} \n  def remove(sc: SparkContext, path: Path) : Boolean \u003d {\n    val hdfs \u003d FileSystem.get(sc.hadoopConfiguration)\n    if (hdfs.exists(path)) {\n      if (hdfs.isDirectory(path)) {\n        val it \u003d hdfs.listFiles(path, true)\n        while (it.hasNext) remove(sc, it.next().getPath)\n      }\n      hdfs.delete(path, true)\n    } else false\n  }",
+      "authenticationInfo": {},
+      "dateUpdated": "Apr 20, 2016 4:43:37 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1461162789551_-1707520109",
+      "id": "20160420-163309_785593801",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "import org.apache.spark.SparkContext\nimport org.apache.hadoop.fs.{FileUtil, Path, FileSystem}\nremove: (sc: org.apache.spark.SparkContext, path: org.apache.hadoop.fs.Path)Boolean\n"
+      },
+      "dateCreated": "Apr 20, 2016 4:33:09 PM",
+      "dateStarted": "Apr 20, 2016 4:43:37 PM",
+      "dateFinished": "Apr 20, 2016 4:43:37 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "remove(sc,new Path(\"/data/joined_20160110.csv\"))",
+      "authenticationInfo": {},
+      "dateUpdated": "Apr 20, 2016 4:44:14 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1461162918635_810828363",
+      "id": "20160420-163518_2075758513",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "res3: Boolean \u003d false\n"
+      },
+      "dateCreated": "Apr 20, 2016 4:35:18 PM",
+      "dateStarted": "Apr 20, 2016 4:44:14 PM",
+      "dateFinished": "Apr 20, 2016 4:44:15 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1461163270958_572791388",
+      "id": "20160420-164110_946254170",
+      "dateCreated": "Apr 20, 2016 4:41:10 PM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "deleteFiles",
+  "id": "2BGUU1PTK",
+  "angularObjects": {
+    "2BGHSKCA7": [],
+    "2BFMBPKAB": [],
+    "2BHKKP27G": [],
+    "2BJHJDBK6": [],
+    "2BJAQG5W4": [],
+    "2BJGSXM37": [],
+    "2BFXEV5XZ": [],
+    "2BG77RV7M": [],
+    "2BF969NNB": [],
+    "2BG8QQJNC": [],
+    "2BGVG5JP4": [],
+    "2BJ5FCP57": [],
+    "2BFEDXCTE": [],
+    "2BJ8AEWCT": [],
+    "2BH9AVVKH": [],
+    "2BJ7KKX85": [],
+    "2BHKAE8WK": [],
+    "2BJ6HN5AY": []
+  },
+  "config": {},
+  "info": {}
+}

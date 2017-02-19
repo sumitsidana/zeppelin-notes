@@ -1,0 +1,162 @@
+{
+  "paragraphs": [
+    {
+      "text": "//val test \u003d sqlContext.read\n//    .format(\"com.databricks.spark.csv\")\n//    .option(\"header\", \"true\") // Use first line of all files as header\n//    .option(\"inferSchema\", \"true\") // Automatically infer data types\n//    .option(\"delimiter\", \",\")\n//    .load(\"/data/sidana/nnmf_ranking/recsyschallenge2016/dat.recsyschallenge.withtimestamp.withheaders\")\n//val numusers \u003d test.select(\"userId\").distinct.count\n//val numitems \u003d test.select(\"itemId\").distinct.count\nval numInteractions \u003d test.count\n    ",
+      "authenticationInfo": {},
+      "dateUpdated": "Jan 23, 2017 11:30:04 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1484436565206_1193046095",
+      "id": "20170115-002925_292215046",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "numInteractions: Long \u003d 16362222\n"
+      },
+      "dateCreated": "Jan 15, 2017 12:29:25 AM",
+      "dateStarted": "Jan 23, 2017 11:30:04 AM",
+      "dateFinished": "Jan 23, 2017 11:30:22 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "test.agg(max(\"userId\")).show\ntest.agg(max(\"itemId\")).show",
+      "authenticationInfo": {},
+      "dateUpdated": "Jan 23, 2017 5:13:42 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1484436610087_-1258711814",
+      "id": "20170115-003010_1630523381",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "+-----------+\n|max(userId)|\n+-----------+\n|    2984867|\n+-----------+\n\n+-----------+\n|max(itemId)|\n+-----------+\n|    2846366|\n+-----------+\n\n"
+      },
+      "dateCreated": "Jan 15, 2017 12:30:10 AM",
+      "dateStarted": "Jan 23, 2017 5:13:42 AM",
+      "dateFinished": "Jan 23, 2017 5:14:40 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val test \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/data/sidana/nnmf_ranking/rschallenge2016/dat.recsyschallengeinput\")\n\nval totalUsers \u003d test.select(\"userid\").distinct.count  \nval groubByUsersRatings \u003d test.select(\"userid\",\"clicked\").distinct\nval groubByUsers \u003d groubByUsersRatings.groupBy(\"userid\").count.sort(asc(\"count\"))\n//z.show(groubByUsers) \nval badUsers \u003d groubByUsers.filter($\"count\"\u003d\u003d\u003d\"1\")\nbadUsers.count\nbadUsers.select(\"userid\").rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/nnmf_ranking/rschallenge2016/dat.singleratingusers\")",
+      "authenticationInfo": {},
+      "dateUpdated": "Jan 18, 2017 12:33:14 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1484436911933_1497288885",
+      "id": "20170115-003511_589345772",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "test: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, clicked: int]\ngroubByUsersRatings: org.apache.spark.sql.DataFrame \u003d [userid: int, clicked: int]\ngroubByUsers: org.apache.spark.sql.DataFrame \u003d [userid: int, count: bigint]\nbadUsers: org.apache.spark.sql.DataFrame \u003d [userid: int, count: bigint]\nres4: Long \u003d 55424\n"
+      },
+      "dateCreated": "Jan 15, 2017 12:35:11 AM",
+      "dateStarted": "Jan 18, 2017 10:42:52 AM",
+      "dateFinished": "Jan 18, 2017 10:44:13 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val test \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"\")\n\nval totalUsers \u003d test.select(\"userid\").distinct.count  \nval groubByUsersRatings \u003d test.select(\"userid\",\"clicked\").distinct\nval groubByUsers \u003d groubByUsersRatings.groupBy(\"userid\").count.sort(asc(\"count\"))\n//z.show(groubByUsers) \nval badUsers \u003d groubByUsers.filter($\"count\"\u003d\u003d\u003d\"1\")\nbadUsers.count",
+      "dateUpdated": "Feb 2, 2017 2:14:40 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1484528985158_-1546566248",
+      "id": "20170116-020945_357095138",
+      "dateCreated": "Jan 16, 2017 2:09:45 AM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "nnmf_ranking: nusersitemsrecsyschallenge",
+  "id": "2C81S2U8F",
+  "angularObjects": {
+    "2BGHSKCA7": [],
+    "2BFMBPKAB": [],
+    "2BHKKP27G": [],
+    "2BJHJDBK6": [],
+    "2BJAQG5W4": [],
+    "2BJGSXM37": [],
+    "2BFXEV5XZ": [],
+    "2BG77RV7M": [],
+    "2BF969NNB": [],
+    "2BG8QQJNC": [],
+    "2BGVG5JP4": [],
+    "2BJ5FCP57": [],
+    "2BFEDXCTE": [],
+    "2BJ8AEWCT": [],
+    "2BH9AVVKH": [],
+    "2BJ7KKX85": [],
+    "2BHKAE8WK": [],
+    "2BJ6HN5AY": []
+  },
+  "config": {
+    "looknfeel": "default"
+  },
+  "info": {}
+}

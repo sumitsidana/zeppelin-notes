@@ -1,0 +1,110 @@
+{
+  "paragraphs": [
+    {
+      "text": "val clicksTrain \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/home/ama/sidana/recsysBaselines/data/output/clicksTrainPartial\")\n    \nval numUsersTrain \u003d clicksTrain.select(\"userId\").distinct.count\nval numOffersTrain \u003d clicksTrain.select(\"offerId\").distinct.count\n\nval clicksTest \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/home/ama/sidana/recsysBaselines/data/output/clicksTestPartial\")\n    \nval numUsersTest \u003d clicksTest.select(\"userId\").distinct.count\nval numOffersTest \u003d clicksTest.select(\"offerId\").distinct.count\n\n",
+      "authenticationInfo": {},
+      "dateUpdated": "Oct 25, 2016 8:05:55 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1477413067267_2111022365",
+      "id": "20161025-183107_25108248",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "clicksTrain: org.apache.spark.sql.DataFrame \u003d [userId: string, offerId: string]\nnumUsersTrain: Long \u003d 7519475\nnumOffersTrain: Long \u003d 3966819\nclicksTest: org.apache.spark.sql.DataFrame \u003d [userId: string, offerId: string]\nnumUsersTest: Long \u003d 2042035\nnumOffersTest: Long \u003d 1352248\n"
+      },
+      "dateCreated": "Oct 25, 2016 6:31:07 PM",
+      "dateStarted": "Oct 25, 2016 8:05:55 PM",
+      "dateFinished": "Oct 25, 2016 8:07:01 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "import java.io.FileWriter\nval countryCodes \u003d Array(\"at\",\"be\",\"br\",\"ch\",\"cz\",\"de\",\"dk\",\"es\",\"fi\",\"ie\",\"nb\",\"nl\",\"no\",\"pl\",\"pt\",\"ru\",\"se\",\"uk\",\"it\",\"fr\")\n\n\n\t\t\t\t\tfor (code \u003c- countryCodes){\n\t\t\t\t\t    \t\t\t\t\t\t\tval inputfile_train \u003d sqlContext.read\n\t\t\t\t\t\t\t.format(\"com.databricks.spark.csv\") \n\t\t\t\t\t\t\t.option(\"header\", \"true\") // Use first line of all files as header\n\t\t\t\t\t\t\t.option(\"inferSchema\", \"true\") // Automatically infer data types\n\t\t\t\t\t\t\t.option(\"delimiter\", \",\")\n\t\t\t\t\t\t\t.load(\"/data/sidana/recsysBaselines/experiments/tsplitfiles/train_\"+code+\".csv\")\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\tval inputfile_test \u003d sqlContext.read\n\t\t\t\t\t\t\t.format(\"com.databricks.spark.csv\") \n\t\t\t\t\t\t\t.option(\"header\", \"true\") // Use first line of all files as header\n\t\t\t\t\t\t\t.option(\"inferSchema\", \"true\") // Automatically infer data types\n\t\t\t\t\t\t\t.option(\"delimiter\", \",\")\n\t\t\t\t\t\t\t.load(\"/data/sidana/recsysBaselines/experiments/tsplitfiles/test_\"+code+\".csv\")\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\tval groupbyUser_train \u003d inputfile_train.select(\"useridoffers\").distinct\n\t\t\t\t\t\t\tval groupbyOffer_train \u003d inputfile_train.select(\"offeridoffers\").distinct\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\tval groupbyUser_test \u003d inputfile_test.select(\"useridoffers\").distinct\n\t\t\t\t\t\t\tval groupbyOffer_test \u003d inputfile_test.select(\"offeridoffers\").distinct\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\tgroupbyUser_train.rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/recsysBaselines/experiments/stats/trainandtest/userClicks_\"+code+\".train\")\n\t\t\t\t\t\t\tgroupbyOffer_train.rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/recsysBaselines/experiments/stats/trainandtest/offerClicks_\"+code+\".train\")\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\tgroupbyUser_test.rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/recsysBaselines/experiments/stats/trainandtest/userClicks_\"+code+\".test\")\n\t\t\t\t\t\t\tgroupbyOffer_test.rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/recsysBaselines/experiments/stats/trainandtest/offerClicks_\"+code+\".test\")\n\t\t\t\t\t\t\t\n\t\t\t\t\t}",
+      "authenticationInfo": {},
+      "dateUpdated": "Jan 9, 2017 12:40:42 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1477418008036_357950369",
+      "id": "20161025-195328_950768946",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "import java.io.FileWriter\ncountryCodes: Array[String] \u003d Array(at, be, br, ch, cz, de, dk, es, fi, ie, nb, nl, no, pl, pt, ru, se, uk, it, fr)\n"
+      },
+      "dateCreated": "Oct 25, 2016 7:53:28 PM",
+      "dateStarted": "Jan 9, 2017 12:40:42 PM",
+      "dateFinished": "Jan 9, 2017 1:07:16 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1477418214227_-1072070993",
+      "id": "20161025-195654_1896245783",
+      "dateCreated": "Oct 25, 2016 7:56:54 PM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "kelkooBaselines: dataStats",
+  "id": "2C26PMNMF",
+  "angularObjects": {
+    "2BGHSKCA7": [],
+    "2BFMBPKAB": [],
+    "2BHKKP27G": [],
+    "2BJHJDBK6": [],
+    "2BJAQG5W4": [],
+    "2BJGSXM37": [],
+    "2BFXEV5XZ": [],
+    "2BG77RV7M": [],
+    "2BF969NNB": [],
+    "2BG8QQJNC": [],
+    "2BGVG5JP4": [],
+    "2BJ5FCP57": [],
+    "2BFEDXCTE": [],
+    "2BJ8AEWCT": [],
+    "2BH9AVVKH": [],
+    "2BJ7KKX85": [],
+    "2BHKAE8WK": [],
+    "2BJ6HN5AY": []
+  },
+  "config": {},
+  "info": {}
+}

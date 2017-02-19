@@ -1,0 +1,250 @@
+{
+  "paragraphs": [
+    {
+      "text": "val clicksTemp \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypso_kk_june_data/click/*/2016/*/*/\")\nval clicks \u003d clicksTemp.filter($\"userId\"\u003d\u003d\u003d\"a\").count",
+      "authenticationInfo": {},
+      "dateUpdated": "Nov 29, 2016 11:42:46 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1480414811085_-1059242036",
+      "id": "20161129-112011_560981661",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "clicksTemp: org.apache.spark.sql.DataFrame \u003d [userId: string, ip: string, userAgent: struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e, geolocation: struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, offerViewId: string, clickId: string, earning: decimal(38,18)]\nclicks: Long \u003d 0\n"
+      },
+      "dateCreated": "Nov 29, 2016 11:20:11 AM",
+      "dateStarted": "Nov 29, 2016 11:42:46 AM",
+      "dateFinished": "Nov 29, 2016 11:43:53 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val offersTemp \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypso_kk_june_data/offerView/*/2016/*/*/\")\nval clicks \u003d offersTemp.filter($\"userId\"\u003d\u003d\u003d\"a\").count",
+      "authenticationInfo": {},
+      "dateUpdated": "Nov 29, 2016 11:49:00 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1480415847359_1401316359",
+      "id": "20161129-113727_1744517351",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "offersTemp: org.apache.spark.sql.DataFrame \u003d [eventType: string, userId: string, ip: string, userAgent: struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e, geolocation: struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, adType: string, offerRank: int, searchId: string, offerViewId: string, contentPageType: string, adPlacement: string, adViewability: string, adSize: string]\nclicks: Long \u003d 0\n"
+      },
+      "dateCreated": "Nov 29, 2016 11:37:27 AM",
+      "dateStarted": "Nov 29, 2016 11:49:00 AM",
+      "dateFinished": "Nov 29, 2016 11:56:07 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val parquetFileClick \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypso_kk_june_data/click/*/2016/*/*/\")\nval clicks \u003d parquetFileClick.filter(!($\"offerViewId\".isNull))\nparquetFileClick.count\nclicks.count\n",
+      "authenticationInfo": {},
+      "dateUpdated": "Dec 2, 2016 5:00:14 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1480416369967_1937019289",
+      "id": "20161129-114609_1557163946",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "parquetFileClick: org.apache.spark.sql.DataFrame \u003d [userId: string, ip: string, userAgent: struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e, geolocation: struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, offerViewId: string, clickId: string, earning: decimal(38,18)]\nclicks: org.apache.spark.sql.DataFrame \u003d [userId: string, ip: string, userAgent: struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e, geolocation: struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, offerViewId: string, clickId: string, earning: decimal(38,18)]\nres1: Long \u003d 16107227\nres2: Long \u003d 15834916\n"
+      },
+      "dateCreated": "Nov 29, 2016 11:46:09 AM",
+      "dateStarted": "Dec 2, 2016 5:00:14 PM",
+      "dateFinished": "Dec 2, 2016 5:00:29 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val parquetFileClick \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypso_kk_june_data/click/*/2016/*/*/\")\nval distinctUserClickCount \u003d parquetFileClick.select(\"userId\").distinct.count",
+      "authenticationInfo": {},
+      "dateUpdated": "Dec 2, 2016 6:56:35 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1480694338206_422860638",
+      "id": "20161202-165858_532552458",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "parquetFileClick: org.apache.spark.sql.DataFrame \u003d [userId: string, ip: string, userAgent: struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e, geolocation: struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, offerViewId: string, clickId: string, earning: decimal(38,18)]\ndistinctUserClickCount: Long \u003d 9409086\n"
+      },
+      "dateCreated": "Dec 2, 2016 4:58:58 PM",
+      "dateStarted": "Dec 2, 2016 6:56:36 PM",
+      "dateFinished": "Dec 2, 2016 6:57:24 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val greaterthankusercount \u003d parquetFileClick.groupBy(\"userId\").count.filter($\"count\" \u003e 10).count",
+      "authenticationInfo": {},
+      "dateUpdated": "Dec 2, 2016 7:10:36 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1480701395974_406013167",
+      "id": "20161202-185635_979479873",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "greaterthankusercount: Long \u003d 97668\n"
+      },
+      "dateCreated": "Dec 2, 2016 6:56:35 PM",
+      "dateStarted": "Dec 2, 2016 7:10:37 PM",
+      "dateFinished": "Dec 2, 2016 7:11:14 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val parquetFileOffer \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypso_kk_june_data/offerView/*/2016/*/*/\")\nval distinctUserOfferCount \u003d parquetFileOffer.select(\"userId\").distinct.count\nval greaterthankusercount \u003d parquetFileOffer.groupBy(\"userId\").count.filter($\"count\" \u003e 10).count\nval greaterthank_kusercount \u003d parquetFileOffer.groupBy(\"userId\").count.filter($\"count\" \u003e 100).count",
+      "authenticationInfo": {},
+      "dateUpdated": "Dec 2, 2016 7:16:37 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1480701876550_1351211519",
+      "id": "20161202-190436_732095452",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "parquetFileOffer: org.apache.spark.sql.DataFrame \u003d [eventType: string, userId: string, ip: string, userAgent: struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e, geolocation: struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, adType: string, offerRank: int, searchId: string, offerViewId: string, contentPageType: string, adPlacement: string, adViewability: string, adSize: string]\ndistinctUserOfferCount: Long \u003d 123529420\ngreaterthankusercount: Long \u003d 66789965\ngreaterthank_kusercount: Long \u003d 2618454\n"
+      },
+      "dateCreated": "Dec 2, 2016 7:04:36 PM",
+      "dateStarted": "Dec 2, 2016 7:16:37 PM",
+      "dateFinished": "Dec 2, 2016 8:39:21 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1480702548679_-1869739351",
+      "id": "20161202-191548_3647197",
+      "dateCreated": "Dec 2, 2016 7:15:48 PM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "badUser?",
+  "id": "2C24JCZ46",
+  "angularObjects": {
+    "2BGHSKCA7": [],
+    "2BFMBPKAB": [],
+    "2BHKKP27G": [],
+    "2BJHJDBK6": [],
+    "2BJAQG5W4": [],
+    "2BJGSXM37": [],
+    "2BFXEV5XZ": [],
+    "2BG77RV7M": [],
+    "2BF969NNB": [],
+    "2BG8QQJNC": [],
+    "2BGVG5JP4": [],
+    "2BJ5FCP57": [],
+    "2BFEDXCTE": [],
+    "2BJ8AEWCT": [],
+    "2BH9AVVKH": [],
+    "2BJ7KKX85": [],
+    "2BHKAE8WK": [],
+    "2BJ6HN5AY": []
+  },
+  "config": {},
+  "info": {}
+}

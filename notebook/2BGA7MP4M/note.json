@@ -1,0 +1,868 @@
+{
+  "paragraphs": [
+    {
+      "text": "val parquetFileClick \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypso_data_may_june/calypso_data_may_june/click/fr/2016/*/*/*.parquet\")",
+      "authenticationInfo": {},
+      "dateUpdated": "Jun 23, 2016 11:31:49 PM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1459811919343_2095647352",
+      "id": "20160405-011839_600432741",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "parquetFileClick: org.apache.spark.sql.DataFrame \u003d [userId: string, ip: string, userAgent: struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e, geolocation: struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, offerViewId: string, clickId: string, earning: decimal(38,18)]\n"
+      },
+      "dateCreated": "Apr 5, 2016 1:18:39 AM",
+      "dateStarted": "Jun 23, 2016 11:31:49 PM",
+      "dateFinished": "Jun 23, 2016 11:31:55 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val clickedoffers \u003d parquetFileClick.select(\"userId\", \"offerViewId\", \"clickId\",\"category\",\"source\")",
+      "dateUpdated": "Apr 5, 2016 1:18:39 AM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1459811919344_2106035572",
+      "id": "20160405-011839_447420734",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "clickedoffers: org.apache.spark.sql.DataFrame \u003d [userId: string, offerViewId: string, clickId: string, category: array\u003cstring\u003e, source: string]\n"
+      },
+      "dateCreated": "Apr 5, 2016 1:18:39 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val clickedofferstemp \u003d clickedoffers.filter(!(clickedoffers(\"source\")\u003d\u003d\u003d\"96944322\"))",
+      "dateUpdated": "Apr 5, 2016 1:18:39 AM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1459811919344_2106035572",
+      "id": "20160405-011839_1460028191",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "clickedofferstemp: org.apache.spark.sql.DataFrame \u003d [userId: string, offerViewId: string, clickId: string, category: array\u003cstring\u003e, source: string]\n"
+      },
+      "dateCreated": "Apr 5, 2016 1:18:39 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val clickedValidOffers \u003d clickedofferstemp.filter(!($\"offerViewId\".isNull))",
+      "dateUpdated": "Apr 5, 2016 1:18:39 AM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1459811919345_2105650823",
+      "id": "20160405-011839_1545655515",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "clickedValidOffers: org.apache.spark.sql.DataFrame \u003d [userId: string, offerViewId: string, clickId: string, category: array\u003cstring\u003e, source: string]\n"
+      },
+      "dateCreated": "Apr 5, 2016 1:18:39 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "clickedoffers.count",
+      "dateUpdated": "Apr 5, 2016 1:18:39 AM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1459811919346_2106805070",
+      "id": "20160405-011839_1870046493",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "res254: Long \u003d 5293434\n"
+      },
+      "dateCreated": "Apr 5, 2016 1:18:39 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "clickedValidOffers.count",
+      "dateUpdated": "Apr 5, 2016 1:18:39 AM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1459811919346_2106805070",
+      "id": "20160405-011839_1448234006",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "res256: Long \u003d 3401052\n"
+      },
+      "dateCreated": "Apr 5, 2016 1:18:39 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val uniqueUsers \u003d clickedValidOffers.groupBy(\"userId\").count.sort(desc(\"count\"))\nval uniqueOffers \u003d clickedValidOffers.groupBy(\"offerViewId\").count\nval observedNumberOfRatings \u003d clickedValidOffers.groupBy(\"userId\",\"offerViewId\").count\nclickedValidOffers.count\nuniqueUsers.count\nuniqueOffers.count\nobservedNumberOfRatings.count",
+      "dateUpdated": "Apr 5, 2016 1:18:39 AM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1459811919347_2106420321",
+      "id": "20160405-011839_889283744",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "uniqueUsers: org.apache.spark.sql.DataFrame \u003d [userId: string, count: bigint]\nuniqueOffers: org.apache.spark.sql.DataFrame \u003d [offerViewId: string, count: bigint]\nobservedNumberOfRatings: org.apache.spark.sql.DataFrame \u003d [userId: string, offerViewId: string, count: bigint]\nres182: Long \u003d 3427396\nres183: Long \u003d 2343254\nres184: Long \u003d 3257471\nres185: Long \u003d 3297576\n"
+      },
+      "dateCreated": "Apr 5, 2016 1:18:39 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val uniqueUsers \u003d clickedValidOffers.groupBy(\"userId\").count.sort(desc(\"count\"))\nval uniqueOffers \u003d clickedValidOffers.groupBy(\"offerViewId\").count\nval observedNumberOfRatings \u003d clickedValidOffers.groupBy(\"userId\",\"offerViewId\").count\nclickedValidOffers.count\nuniqueUsers.count\nuniqueOffers.count\nobservedNumberOfRatings.count",
+      "dateUpdated": "Apr 5, 2016 1:18:39 AM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1459811919348_2104496576",
+      "id": "20160405-011839_1853185935",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "uniqueUsers: org.apache.spark.sql.DataFrame \u003d [userId: string, count: bigint]\nuniqueOffers: org.apache.spark.sql.DataFrame \u003d [offerViewId: string, count: bigint]\nobservedNumberOfRatings: org.apache.spark.sql.DataFrame \u003d [userId: string, offerViewId: string, count: bigint]\nres258: Long \u003d 3401052\nres259: Long \u003d 2343227\nres260: Long \u003d 3231127\nres261: Long \u003d 3271232\n"
+      },
+      "dateCreated": "Apr 5, 2016 1:18:39 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "z.show(uniqueUsers)",
+      "dateUpdated": "Apr 5, 2016 1:18:39 AM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [
+            {
+              "name": "userId",
+              "index": 0.0,
+              "aggr": "sum"
+            }
+          ],
+          "values": [
+            {
+              "name": "count",
+              "index": 1.0,
+              "aggr": "sum"
+            }
+          ],
+          "groups": [],
+          "scatter": {
+            "xAxis": {
+              "name": "userId",
+              "index": 0.0,
+              "aggr": "sum"
+            },
+            "yAxis": {
+              "name": "count",
+              "index": 1.0,
+              "aggr": "sum"
+            }
+          }
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1459811919348_2104496576",
+      "id": "20160405-011839_1540677104",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TABLE",
+        "msg": "userId\tcount\na4c6257-1536fe02821-167325\t257\na4c628c-15375b88643-17dd6a\t212\na4c62a6-15356d08a8c-10bc7b\t169\na4c6255-14eabeaeddd-9037e6\t141\na4c6256-152b7af2f0d-551401\t136\na4c6257-151f581fc71-88e87\t134\na4c6257-1529ab1e093-17310c\t116\na4c6257-15282de2d76-105108\t114\na4c62a6-152b7245c1b-1f0e05\t108\na4c62a6-1525a9a42fc-67565\t107\na4c628c-15353295b38-fedc0\t105\na4c62e8-14f37fd0126-5329e\t100\na4c6291-14d9f8dbe41-210de5\t99\na4c628c-15218b19721-a575a\t99\na4c6256-14f14080e88-2db78e\t93\na4c628c-15066d9c177-9e450\t92\na4c62a6-1514cb8cde9-242cc\t89\na4c6257-151981d17e7-807cc\t87\na4c6255-14ba30c67ea-437c6\t87\na4c6256-14c30d98179-1e422c\t87\na4c62a6-152f3d7e11b-2e76f5\t87\na4c628c-1521d04b8bd-b62f8\t83\na4c6257-14906461591-59404\t83\na4c6257-1528566b022-114660\t82\na4c628c-150b64398fe-93c99\t82\na4c62a6-14ee61fafd3-45312\t81\na4c622a-1510abc41fc-210236c\t81\na4c6291-14c5869a701-2dad70\t80\na4c637-14b8d3a08c0-10af4d\t78\na4c6257-15080fec60a-10132f\t78\na4c6256-150cc5f3dc7-18bc7e1\t77\na4c6215-148eed09a8a-537\t77\na4c6291-14bb74a9cb4-41838c\t75\na4c62a6-151ba0461ab-106ed6\t74\na4c62a6-15186282410-29b40\t74\na4c6256-15099a04430-117592f\t73\na4c7249-14f13f5c4ec-11e7a\t72\na4c62e8-1524c5ac98a-11812\t72\na4c62e8-14f512fce14-66b8c\t71\na4c622b-1523ff53260-2a2038\t71\na4c6291-151067fb960-1a37d4\t71\na4c6291-1518a83282a-4fbb20\t70\na4c6257-15277c08657-d65df\t70\na4c62a6-151c110eeb6-122136\t69\na4c6255-152df33c6b3-a88305\t68\na4c6257-14bd65fb223-221e1\t67\na4c6257-14f9d50774c-194c87\t67\na4c628c-152a134fd72-18e932\t67\na4c6291-152b9f963e7-59b21f\t66\na4c6255-14dcdebec6c-3954ec\t65\na4c637-14fd6825700-24a0dd\t64\na4c725f-14d852e1b30-8ee7\t63\na4c6257-14fd15aac7b-5e17d\t63\na4c6256-148f1dfa557-12a828\t63\na4c628c-153187a7b9b-12b55\t63\na4c628c-152746a5c50-c8ea9\t63\na4c6257-1516da27f89-af3e9\t62\na4c6291-152732cf88c-748234\t62\na4c6255-15126041a22-305b8\t62\na4c6256-152a392f511-2b48e9\t62\na4c62a6-15255991ed6-52451\t62\na4c62a6-150a0ec6032-44bca\t62\na4c62a6-151b2d344c9-edf49\t61\na4c6257-1535389b529-10090b\t61\na4c6257-1514f6ffd0e-31b9f\t61\na4c6257-14a9706022b-bf9be\t60\na4c6257-14eac8b0830-d56db\t60\na4c6257-151d8a0a808-28146\t60\na4c62a6-15366766978-145c54\t60\na4c6291-14eda6d641d-1aa388\t59\na4c6257-152e5fdba08-2b4362\t59\na4c62a6-150b4c9968c-8d76c\t58\na4c72e-14bd0813864-cce0\t58\na4c6291-151bb845b19-1ddaf4\t58\na4c628c-150e627b9ae-7caca\t57\na4c6256-15265a3f7fb-56d8ed\t57\na4c628c-14fbea295b8-1a251\t57\na4c628c-15182ce808e-1d4ca\t57\na4c6256-151c082b915-26c7bf\t56\na4c628c-1522be00826-f51fa\t56\na4c628c-152f67c64c3-2f3229\t56\na4c62e8-15187daf339-26da2\t56\na4c7248-14730370fed-1803\t56\na4c628c-153425cb742-b1565\t55\na4c6257-14f606baff4-e5577\t55\na4c62a6-1524c4fbe5c-2f5c1\t55\na4c622b-15263262d85-169b7fa\t55\na4c6291-14c4903dbc7-c9559\t55\na4c628c-1534c4ac4b8-ddb43\t55\na4c622b-152f5137f6b-17eda5f\t55\na4c6257-150a5fdac90-57ade\t55\na4c6257-15219d1f5e6-114116\t54\na4c628c-15319f7eca6-196c5\t54\na4c637-152ab6585a6-13a5c1\t54\na4c628c-152c1330ab3-21d65a\t54\na4c6257-152f103635d-2df5cb\t54\na4c62a6-14f7d50830e-129690\t54\na4c6256-14d8f3ae15c-9de130\t54\na4c62e8-152c7350072-57088\t54\na4c628c-15375c0bbb6-17dfe7\t54\na4c6257-152357d76ac-16ec0\t53\na4c62e8-152d0da5e85-646d1\t53\na4c6256-14bf5fbb113-3f61bd\t53\na4c6291-152950a7408-f4a33\t53\na4c62e8-14e0ab55bdb-2736c\t53\na4c62a6-152b247176f-1db365\t52\na4c6257-15366a7893d-146d80\t52\na4c62a6-15191027d8e-59cb2\t51\na4c6257-14fcb57cf01-4781e\t51\na4c6257-1520563a16f-bf00d\t51\na4c622a-152b35913c8-631e7\t51\na4c62a6-1530ea0fa59-3449d4\t50\na4c6257-1515eda91b2-7557c\t50\na4c62fa-14706f4733f-199e\t50\na4c62e8-152a6f80615-27ec1\t50\na4c62e8-151f2ced791-300fc\t50\na4c6257-14eac50ef8f-d460f\t49\na4c628c-152aa70af54-1b7cbf\t49\na4c62e8-15241cc7497-3e5d\t49\na4c6291-151459f185d-4b4e6\t49\na4c62e8-1530ad75f18-af37b\t48\na4c6291-14bd0a0c394-124a4b\t48\na4c628c-152a40722b4-19e258\t48\na4c628c-151ea20c636-65d78\t48\na4c62a6-152f7024ce0-2f55a4\t48\na4c6255-14adfcf4084-5fb5a\t48\na4c62cc-147f5f827f6-14b4\t48\na4c6257-152c73d667b-2361e2\t47\na4c6257-150852a94f3-1101b2\t47\na4c62a6-14fa8662ef0-2377\t47\na4c6257-15336a6fb29-7dee8\t47\na4c628c-152d60043f0-2727d2\t47\na4c622b-152cac4c9ab-bb9b3c\t47\na4c6256-1499f90e57f-7bc88a\t47\na4c628c-15301e36f32-31ab0b\t47\na4c622a-1512b9484cc-458ef4\t47\na4c628c-15304dc6a5f-326b72\t47\na4c6255-1527eb5100b-8e1230\t47\na4c6257-152bb1296e1-202aa8\t46\na4c62a6-1535d0e59d0-126071\t46\na4c628c-150a03349d3-3f6fd\t46\na4c628c-1520cded751-745df\t46\na4c62a6-150fc9c4c06-3045d\t46\na4c6257-14f6750c000-fb72f\t46\na4c6255-15011e5509c-bc73dd\t46\na4c6257-152bb32717b-20377f\t46\na4c62a6-15250350412-3db26\t46\na4c6257-152e40c33f3-2aabd7\t46\na4c62a6-152a5b9df20-1a28ae\t45\na4c62a6-152bb116988-20241f\t45\na4c6257-152922a5a08-148a1a\t45\na4c6257-14fcdbc3c45-53d32\t45\na4c6291-15251319c05-2982e2\t45\na4c62a6-152f3f2df48-2e7d77\t45\na4c6257-15248afcf59-20405\t45\na4c6291-1528a357313-ac1f84\t45\na4c6256-15120d67242-1b7078\t45\na4c722b-145b3d40b3e-c85705\t44\na4c6257-152ef5e6328-2d7835\t44\na4c628c-152b2bcf4ee-1ddb4e\t44\na4c62fb-14750b8358c-2127\t44\na4c6257-150d491c81f-3a8ca\t44\na4c622b-15202bdf840-293219e\t44\na4c6257-1527eead10a-f4e05\t44\na4c628c-151cf98afbb-11597\t44\na4c6257-15304159613-323b80\t44\na4c6256-14b46c3617a-242755\t43\na4c622b-1534cd01835-e4e655\t43\na4c8258-151ec205857-2768\t43\na4c6255-151d843f851-4b7e72\t43\na4c628c-1516481b49a-8dd89\t43\na4c6257-152cd0613e4-24f57c\t43\na4c62a6-152752e7a09-cd876\t43\na4c72a7-14836154ad2-c3c\t43\na4c62a6-1517c183450-ee615\t43\na4c62e8-1533102c94a-226a3\t42\na4c6256-14e6a1e9183-103604\t42\na4c6291-1524fd03660-23cb21\t42\na4c6291-14cf24e8892-16bac5\t42\na4c6257-1516204b2b3-7f309\t42\na4c6256-152a3256031-29c78d\t42\na4c6257-15343cf0c53-ba10a\t42\na4c6257-152dbdf4b75-28c661\t42\na4c6256-15288337279-a442a2\t42\na4c628c-152a18f9578-190403\t42\na4c6257-1522ffc0fd3-170651\t42\na4c6255-15221a9ef22-d23cdb\t42\na4c6257-14f78867554-11c1a1\t42\na4c6255-14e12f1f5ee-481832\t42\na4c6291-14be0890b17-13674\t41\na4c6257-153726f470d-174208\t41\na4c628c-152ea145090-2c2ad6\t41\na4c6291-1509a674cbc-11c89fb\t41\na4c6257-1532d9a2d25-5bc08\t41\na4c62a6-1525a9d9488-67652\t41\na4c6291-152d6443f8f-97e594\t41\na4c628c-152829a60a5-1037e1\t41\na4c62a6-152755c9f7c-ce837\t41\na4c622a-15283ada7c8-28eae16\t41\na4c6257-152b82c2198-1f72f7\t41\na4c6255-152e92ba8bf-bebfe3\t41\na4c62e8-152c80f85c6-588da\t41\na4c62a6-153293f598e-4db16\t41\na4c628c-15353f3faad-10122b\t41\na4c62a6-14dcab45881-565d3\t40\na4c628c-152fe63c9e8-30cb68\t40\na4c62a6-1514515fd09-605d\t40\na4c6257-152fe42010d-30d479\t40\na4c6257-151e507dd87-53cd6\t40\na4c622b-152db2d31ec-958e56\t40\na4c6257-1528d49b631-135075\t40\na4c6257-15252fa5836-48ff4\t40\na4c628c-1527f54c563-f6d53\t40\na4c6257-152bb9de11c-2060e3\t40\na4c622a-152f8904a90-19f8ecf\t40\na4c628c-152a2bbe9d0-1963c6\t40\na4c637-1525da7f253-16febc\t40\na4c62a6-1529d7efb64-17e8d6\t40\na4c6291-14e0c2ae061-371cf0\t40\na4c6256-1523ba8dac9-10baf2d\t40\na4c6256-150f266835b-ff999\t40\na4c6256-14e2ce21df1-dd658\t39\na4c622a-152d71f2d33-702f92\t39\na4c637-152d7645e72-33d7ef\t39\na4c62a6-152a78bc13a-1aaee4\t39\na4c622a-153297326e2-8b3010\t39\na4c62a6-1526b868b68-a6a0d\t39\na4c62a6-153423d3d87-b0e1e\t39\na4c72bc-146b544e36a-18e3\t39\na4c6255-15256b6c79d-36ed71\t39\na4c62a6-15255405803-50459\t39\na4c62e8-152da26308c-7099b\t39\na4c6257-15317bc838a-1030b\t39\na4c62e8-151aa34cd36-591cb\t39\na4c6257-1514f8eea33-325db\t38\na4c722a-142d3e5f786-f111b1\t38\na4c62e8-15312282971-b50a0\t38\na4c6256-14ceffffee7-11165a\t38\na4c6256-152d27fc3ca-90dee5\t38\na4c6256-14ae7b14192-95b5\t38\na4c6257-150badc2cef-a362e\t38\na4c6291-152e5b286c6-b953be\t38\na4c628c-1504dfb392d-42edc\t38\na4c6257-1504807297f-2c6f7\t38\na4c6257-15163d2c7cf-88a01\t38\na4c6255-152d3f959df-916518\t38\na4c628c-14b797b7340-4b31\t38\na4c62a6-1510bc72d11-4a92a\t38\na4c628c-153270edd74-42e86\t38\na4c6257-14f3f625277-90720\t38\na4c62a6-150619608e5-8ab28\t38\na4c62a6-14f9c7eaa85-19151c\t38\na4c6257-15324028138-3ad66\t38\na4c6257-152d1b1954d-26280d\t38\na4c6291-14cd28868d9-2a8fea\t38\na4c62a6-15227d1bdbf-14e7ed\t37\na4c628c-152ff441cd1-31117b\t37\na4c6257-150a5494efb-5304d\t37\na4c6291-1525436f2c4-2eb712\t37\na4c6257-152637c344a-877ba\t37\na4c6291-151c09476ce-2710b0\t37\na4c62a6-150aa7144a8-68541\t37\na4c628c-14e404474d9-120eff\t37\na4c72e-14dae1a28ec-3d5cb\t37\na4c628c-151f43109c0-1a31e\t37\na4c628c-151d50037d3-20562\t37\na4c62e8-15296cc1a05-f59b\t37\na4c628c-1515a7582c6-5cf3a\t37\na4c628c-14e63fb909c-19d2\t37\na4c62a6-15288b7b9cf-120088\t37\na4c7256-14debb8a764-11b6ab\t37\na4c628c-1532ed19d18-617ea\t37\na4c628c-15148416772-11847\t37\na4c628c-1526487933f-8bd6f\t37\na4c6257-1520198e84f-ab716\t37\na4c6257-1524fe822ab-3bddb\t37\na4c72e-14970162466-3b02\t37\na4c6255-150042fcea7-93f185\t37\na4c6256-152f5f0db1c-dc0120\t36\na4c628c-152c0fb4ec7-21c416\t36\na4c6291-15177a50d61-29015d\t36\na4c6256-14f468e2ad6-1c6bfe\t36\na4c628c-15307a0b73b-32fa33\t36\na4c6257-1536a62620f-15275e\t36\na4c6257-1529d7d0b5f-17ecac\t36\na4c62a6-15195e5a688-71828\t36\na4c628c-15265cc90b7-92432\t36\na4c6256-150e233d5b5-2d331a\t36\na4c62a6-15288614c0c-11e7ee\t36\na4c62a6-1532c6f72ea-56b99\t36\na4c628c-151d45cc98a-1e6f1\t36\na4c6257-15366743ba5-145f6c\t36\na4c62fd-1468be1cd37-2718\t36\na4c6256-1523600a134-fd9bf2\t36\na4c62a6-1508f78c1f8-1803a\t36\na4c6257-1527a395045-e2c63\t36\na4c6256-15260dc769a-4d91d9\t36\na4c6291-152c12ad2f2-69e84d\t36\na4c628c-151783dc6f5-dfafe\t36\na4c628c-14c88be5d44-2894e\t36\na4c62a6-152ff9312a8-3133d9\t36\na4c7249-14dabcec244-3853a\t36\na4c6257-150c21c371c-b7be5\t36\na4c62a6-14aaffb46bc-122123\t36\na4c62e8-152953956e9-d38b\t36\na4c6256-151dab26332-50cc98\t36\na4c62a6-1538016b134-1a1046\t36\na4c6255-14f36f98da4-26ebb5\t36\na4c628c-152b61870ca-1eab46\t35\na4c62e8-15341089a1c-39141\t35\na4c628c-15333857521-7271c\t35\na4c6256-150de589570-24412f\t35\na4c6255-1518fdd8c62-556ee8\t35\na4c6256-1536b28f504-8d2d52\t35\na4c6220-12fa6b178b4-2191\t35\na4c62a6-151eee6133c-72227\t35\na4c6291-150fc6d397e-3f867\t35\na4c6257-152512941ce-43799\t35\na4c62a6-1534bba4595-da332\t35\na4c628c-152f3d0ea52-2e6b2b\t35\na4c6256-151cdf7c280-3d5735\t35\na4c6257-152f3c7e7fa-2e79aa\t35\na4c6257-1525beac946-6e375\t35\na4c628c-152c7304b09-23545c\t35\na4c628c-15365a10a61-142135\t35\na4c628c-14dda5ab589-7871\t35\na4c628c-1523ad2dbbf-2aec6\t35\na4c628c-15159dd1a3b-5926d\t35\na4c62a6-151e82245b9-5bcb2\t35\na4c62a6-15158600baf-51c1b\t35\na4c6257-1511f61d802-a8ecd\t35\na4c6291-15273a88c1b-760c73\t35\na4c62a6-152e1c6f9c2-2a46bb\t35\na4c6255-152a8441f90-34f6da\t35\na4c628c-152e3a44d11-2a8893\t35\na4c6257-152cff56109-259bee\t35\na4c622a-152fbf84f36-1bdff28\t35\na4c622b-1527d107e0f-2523468\t35\na4c6291-14e4f78ba6d-18c471\t35\na4c62fa-146e706b4f8-c7b\t35\na4c6256-1489ea76f35-db359\t35\na4c628c-152bc327076-209486\t35\na4c637-1525ff6a634-18d17b\t35\na4c6257-15264c1201e-8cbbe\t35\na4c6257-1527aad7599-e58f9\t34\na4c6256-152b2c20a81-4b4da9\t34\na4c6257-15323d8ca08-3a220\t34\na4c62a6-15284edda95-112191\t34\na4c628c-14e32fcddb2-f62bb\t34\na4c628c-152e67160fd-2b5d22\t34\na4c6256-14dbfcec4a8-1aeb76\t34\na4c6291-15323d475ea-18abfa\t34\na4c62a6-15231867190-5e28\t34\na4c622b-15346fb6610-ae8fd6\t34\na4c6255-1531fddd07e-137d88\t34\na4c6257-152e5c54b7d-2b2f26\t34\na4c6256-1526582be74-566abd\t34\na4c6257-152d9fe10c6-281fef\t34\na4c62a6-152028b7203-afea2\t34\na4c62e8-14ff0f0cf84-1320\t34\na4c6257-1533c27eac0-95460\t34\na4c62a6-15277f0dce7-d7213\t34\na4c6257-151b673f707-fd4ce\t34\na4c628c-151939e53fc-688fe\t34\na4c6350-15279dc71ec-3bc97\t34\na4c62a6-152d4cbc30d-26d75c\t34\na4c62a6-151e212f6f2-469cd\t34\na4c628c-1526aff97d4-a4441\t34\na4c62e8-151e9a741e8-27406\t34\na4c637-1505b6dc875-2e4a44\t34\na4c62a6-15371db9243-171bf1\t34\na4c637-15283c86b51-33a477\t34\na4c6256-15251001b22-2878ea\t34\na4c62e8-152bcdf05fd-49881\t34\na4c62a6-15195ad2163-704ab\t34\na4c62a6-152b93b860d-1fb988\t34\na4c637-1520dde112f-394e2e\t34\na4c6291-1489426b8f3-31fee3\t34\na4c6255-152e75760da-bd5538\t34\na4c62a6-1521899efa5-10ef8c\t34\na4c62a6-15241350fd7-3ba0\t33\na4c62a6-1515dead09f-66665\t33\na4c6256-14fe95dc0b9-a06a12\t33\na4c6291-14ce83cf726-4d967\t33\na4c62a6-151cc60b6d5-8af0\t33\na4c6255-14ec4764a03-8600b\t33\na4c622b-152232c5e42-3abc516\t33\na4c62a6-14ef825f85e-7e5e5\t33\na4c8258-152142b824a-8a4e\t33\na4c6256-15294e92f82-f147b\t33\na4c6291-1519cbaa537-702f0c\t33\na4c62e8-1532c0d8109-1c96c\t33\na4c628c-151e2fbc117-49be4\t33\na4c62a6-15089c8c2c0-1d81\t33\na4c628c-152faf0a529-301c97\t33\na4c6257-15287bb33bf-11bfd3\t33\na4c7225-1472548648c-e06\t33\na4c6291-151f1a0d971-7fd6ff\t33\na4c6257-152c5a02c4a-22dda5\t33\na4c622b-152b7d8c4c1-2d85e5\t33\na4c628c-153580806d9-112323\t32\na4c628c-1530f296769-3462ec\t32\na4c6291-14bc0c553a0-6a2416\t32\na4c628c-1513b0de2c6-110e7d\t32\na4c6291-152df4e5149-aa166b\t32\na4c628c-1506b8fdcba-aea20\t32\na4c628c-14fa1bef820-1a2beb\t32\na4c62a6-1525fb57eac-7a486\t32\na4c6257-14a1ec7f428-16516\t32\na4c6291-1534721a205-536285\t32\na4c62e8-152b55f64a7-3cf2c\t32\na4c628c-1526d660bcb-aa2a9\t32\na4c62a6-14cf5623c2a-2e796\t32\na4c628c-152c07f3f07-21a083\t32\na4c62a6-15294375e04-153967\t32\na4c628c-152daa9e5dc-28499c\t32\na4c622b-151547d8202-1bad263\t32\na4c6256-152fac1e79d-e40467\t32\na4c622b-1537ef1b0b4-647c53\t32\na4c6257-152bcce0727-20d1ce\t32\na4c622a-1534888a821-bc5b30\t32\na4c62a6-152b8663a1c-1f7f2e\t32\na4c628c-152584147a0-5df90\t32\na4c628c-151ce9beecf-deff\t32\na4c6257-1531ffffe4a-2cfdc\t32\na4c62a6-151c0d4ae52-120e85\t31\na4c62a6-1520bd2e5b8-d83d6\t31\na4c622b-152450db1e5-5c3224\t31\na4c6257-1534cf0b9b9-e2400\t31\na4c622b-152cbd96d3c-310fa\t31\na4c62e8-15272c4d663-4186f\t31\na4c628b-1470d5369b9-324e\t31\na4c6291-14b5c192e16-88d15\t31\na4c62a6-152cc65415c-24b5af\t31\na4c62a6-1500de1a08c-63d62\t31\na4c6257-1522ad57ab8-158ffe\t31\na4c62a6-1537bf5dd39-193cc0\t31\na4c62a6-152b76cd785-1f29b9\t31\na4c7255-14abb44e55f-556376\t31\na4c62e8-152e5f87025-8110c\t31\na4c62a6-150c43040e9-c34dc\t31\na4c62a6-15291ba0f61-1461d0\t31\na4c6256-149fb54c5a0-1a152e\t31\na4c6255-14fcb485ace-4ab85b\t31\na4c6255-152bc418af0-5e3ac6\t31\na4c628c-15222b7e47c-ce96c\t31\na4c6256-15245d4d139-cc33e\t31\na4c6257-151a69bfdd0-bea87\t31\na4c7256-146c335c1bc-58f319\t31\na4c6256-14ef7a1e0d7-a28e1\t31\na4c6256-14d4450fdc2-3b80b3\t31\na4c62a6-152c666041f-231053\t31\na4c628c-1530a595195-33b536\t31\na4c62a6-15268747b64-9910a\t31\na4c6255-14ed3bb7313-b4bc1\t31\na4c72a6-148d479800e-a2\t31\na4c628c-1529318f954-14d963\t31\na4c6256-14fc5e65887-32860a\t31\na4c62a6-1513fe4b0ad-12211d\t31\na4c6256-1532cff0382-266655\t31\na4c62a6-152ea425407-2c409e\t31\na4c62a6-1526877c7f1-991ed\t30\na4c62e8-1530a9011e5-aebb7\t30\na4c622b-1525e0a37da-13cbbb3\t30\na4c62e8-1511c8716f5-35d5a\t30\na4c62a6-14e69422d63-139d2\t30\na4c62a6-152a8ddf80e-1b2beb\t30\na4c622b-14a1fe8cf22-183e264\t30\na4c62e8-152c977438f-59bee\t30\na4c6255-147a5fc6acc-16e2d6\t30\na4c637-151d0ef542a-16bdd2\t30\na4c628c-151b0327c19-e18cd\t30\na4c6256-152b56b1968-4f30e7\t30\na4c622a-152c2ad1815-76616c\t30\na4c62a6-151c4b069c7-12d2dc\t30\na4c62a6-15262ea3c63-8578c\t30\na4c6257-15228fb9409-154579\t30\na4c62a6-15298245e1e-166381\t30\na4c62a6-153473bf7d3-c75af\t30\na4c72bc-1483c35620e-12b7\t30\na4c628c-1515ed4bdeb-75382\t30\na4c62a6-15207dc99e4-c8736\t30\na4c6257-1526b7fc47c-a69ef\t30\na4c62e8-152f183a098-902ac\t30\na4c6256-14c837e5adc-2d512f\t30\na4c628c-14f64f6e3c7-f2021\t30\na4c6256-14d09622c97-1cdd66\t30\na4c6291-14c25a9972f-50da0f\t30\na4c6255-14b401c0052-fab4f\t30\na4c62e8-151c9d84b87-5c87\t30\na4c628c-1522db27275-ffd50\t30\na4c622b-15293693262-3127476\t30\na4c6291-150f3657b33-1477f0\t30\na4c6257-1531937455c-163c6\t30\na4c628c-15294422c94-154341\t30\na4c628c-14ebd49c141-10c9e8\t30\na4c637-151083a3df3-abcc9\t30\na4c62a6-152a93120be-1b46dd\t30\na4c628b-146ca5e918d-1de0\t30\na4c6257-1536f01e292-1632dd\t30\na4c6291-14f40be21f5-cfa67\t29\na4c628c-1520844483b-60f86\t29\na4c6256-14ad952b7ce-52f854\t29\na4c62a6-1529caacf2c-17a426\t29\na4c6291-14be42c39e7-cd95d\t29\na4c622a-152b0c22daa-566ae2\t29\na4c6291-15170df250b-1bf633\t29\na4c62a6-152a7a374ee-1ab64d\t29\na4c6255-14f837615e5-24bf65\t29\na4c628c-152a8b5d434-1b2104\t29\na4c6257-1536b607961-1574fa\t29\na4c6257-150c77eeb97-ce00f\t29\na4c6256-14edf2d998e-2817e\t29\na4c628c-14b40240ea4-31cac\t29\na4c628c-15365cfbd25-142d54\t29\na4c6291-151b0cea593-b3a80\t29\na4c628c-14cddd4a4c9-180aa\t29\na4c62a6-14a8c7dbdbf-93248\t29\na4c62a6-152fa9d0256-300f05\t29\na4c6257-1519d25cea0-98bcb\t29\na4c62a6-152c54cb4db-22bf78\t29\na4c62a6-14f3ff39519-922f6\t29\na4c6291-151a704b7c9-d6d17\t29\na4c6255-1501984f580-10acbb\t29\na4c6291-14ebec144f8-b8697a\t29\na4c622b-152b20d4b78-5ed688\t29\na4c628c-152e674ce21-2b5e56\t29\na4c6255-151723922f5-1e3569\t29\na4c7250-1479744c9c0-168f\t29\na4c7249-14f150cde46-136eb\t29\na4c62a6-1532760d311-44338\t29\na4c6257-152c05646f2-219ba6\t29\na4c6256-14d5d0eaeb2-31411b\t29\na4c62e8-1538a186258-45d18\t29\na4c62a6-1534412e6b6-bae19\t29\na4c628c-1516d728316-ae871\t29\na4c62a6-153475ceec2-c84ad\t29\na4c637-1508665946d-4fd7b0\t29\na4c6291-14fa9200e90-2f587\t29\na4c6255-14bfe73eb89-5ca7e3\t29\na4c6255-152e7a49fb2-bd9d7a\t29\na4c6291-14e30ac8580-129ed5\t29\na4c628c-15065083592-96a9f\t29\na4c6257-1528425fc7d-10cb29\t29\na4c6256-14d8cbecbc7-986af0\t29\na4c6257-14b4629d97a-48537\t29\na4c8257-151241fd24b-5588\t29\na4c62a6-151d99c9517-2ba96\t28\na4c6255-152845fe804-9c3946\t28\na4c628c-152d05d12fb-25b134\t28\na4c628c-1529c7038ac-179daf\t28\na4c6291-150f373b362-14abaa\t28\na4c6257-14eb67af0b0-f541d\t28\na4c62e8-15279458402-4b421\t28\na4c628c-14a98a555dc-c7f13\t28\na4c62a6-152a5ecadf1-1a31ac\t28\na4c62e8-151643acf53-35790\t28\na4c6256-152da89b55a-9f76b5\t28\na4c628c-1528ca70bb6-132222\t28\na4c6257-1535a6f1933-118dc1\t28\na4c62a6-1520c286ecb-d9e99\t28\na4c6291-1517344c3d4-212bed\t28\na4c637-1507f440825-49ba0e\t28\na4c6257-1530a7ac574-33d6ea\t28\na4c62e8-15264163a10-2f8e9\t28\na4c6257-14b7ec03718-17c21\t28\na4c6257-152eab7ac37-2c6681\t28\na4c6257-14d21036982-8119\t28\na4c6255-152ab38c156-3a52fe\t28\na4c628c-152aaa9942f-1b8330\t28\na4c8258-1501847d6c9-c56\t28\na4c62a6-151fcbcd27d-990e4\t28\na4c622b-15230ef81b9-497b7\t28\na4c6257-152f55cd7c7-2ee78c\t28\na4c6257-152a0d2bd5e-18ccb0\t28\na4c6256-1504da486a3-66d880\t28\na4c6257-1509e5b6104-3573f\t28\na4c628c-152c5ea023f-22e887\t28\na4c6256-14c69d4e969-6ab2a8\t28\na4c628c-15179515a24-e74e9\t28\na4c628c-14ea3e2e44c-bf4a7\t28\na4c6256-1502867b327-e7b7e\t28\na4c62e8-152db4674dc-72adc\t28\na4c72a6-147e8558ce8-692\t28\na4c622a-153038a744e-204ea00\t28\na4c6256-14b11fb5eca-14fa\t28\na4c6291-14cb8932781-68305c\t28\na4c6291-151ea968a12-72895b\t28\na4c628c-1506c40887a-b1fb8\t28\na4c62a6-150534a7d03-56f87\t28\na4c62a6-151b90b75b4-102bdb\t28\na4c8241-1518c8f372b-13f61\t28\na4c62e8-15297352f6c-101c0\t28\na4c62e8-14f83ff808e-919f8\t28\na4c6291-152c1d6f738-6c02c8\t28\na4c722a-148e6a1e235-18e4d2b\t28\na4c6257-14eba45976f-100624\t28\na4c628c-15159ecf371-598fd\t28\na4c628c-150d7e75733-45245\t28\na4c628c-15195b5825a-70631\t28\na4c6291-152c7d204cf-7a1dcd\t28\na4c637-14b07b50760-2298\t28\na4c628c-152eea9f99f-2d3c59\t28\na4c6255-14e1cfdf438-654dc8\t28\na4c628c-152ec3a8362-2ccc76\t28\na4c6257-15275d6e76f-d1442\t28\na4c62a6-152c63fed62-230386\t28\na4c628c-151829991f9-1bc0f\t28\na4c6255-14fc281130a-28447a\t28\na4c6257-1529e5e7ade-1839a9\t28\na4c6257-1527d20a80d-ecc55\t28\na4c6291-1501f74d0f6-250dab\t28\na4c62a6-152cfa1178e-257ede\t28\na4c6255-152a8ba56cf-36aba7\t28\na4c6256-150144f27c4-1f891\t27\na4c6255-14cf62d0c3c-1dc4a5\t27\na4c622a-151c01c6f50-5b0675\t27\na4c6291-1530d25cd77-10641b5\t27\na4c637-149d380fba3-96a17\t27\na4c62a6-15304326883-323cc9\t27\na4c628c-14eb54493f0-f146b\t27\na4c6291-153057d990a-f95067\t27\na4c6291-15287403dd3-a2b168\t27\na4c622a-153666e35f9-644612\t27\na4c72e-14f4be5c3a2-173ca\t27\na4c622b-15342750dae-86b196\t27\na4c628c-151ea0b7bff-65737\t27\na4c62a6-14a3e5a7b4c-10f04\t27\na4c6256-15154393e8a-1b08d3\t27\na4c628c-1531ea0efdf-271f1\t27\na4c637-14ba7c47731-6882\t27\na4c622a-15250de49ba-c79050\t27\na4c628c-14fa82fe041-13c7\t27\na4c6291-14c1f1873dc-37bb43\t27\na4c62e8-15269db67c5-3687f\t27\na4c6257-1534e598a4f-ea443\t27\na4c62a6-152cc726d44-24ba94\t27\na4c622b-15282452841-27f9a4c\t27\na4c628c-150d8512e23-472d6\t27\na4c62a6-14f226c45b0-44526\t27\na4c62a6-14f839e7af1-13db29\t27\na4c6257-1521ce63927-11fd62\t27\na4c6255-152fb34a2de-e46822\t27\na4c6257-152bc3edb69-209eb4\t27\na4c6291-14cc891ac7a-116eb4\t27\na4c62a6-1504ff5ceef-48aba\t27\na4c6257-15279af31f1-df549\t27\na4c6256-1514e141467-ed45b\t27\na4c628c-15132d03c99-f0a0e\t27\na4c628c-1527e35a8d5-f11f5\t27\na4c6291-1530b0f2844-1047543\t27\na4c6291-1531992fd4e-98e45\t27\na4c637-15242273491-23cf1\t27\na4c6257-151b0b317a3-e6757\t27\na4c62a6-14fe04ded80-fb29\t27\na4c6291-14efc80faf0-13fb84\t27\na4c628c-1520c1a505d-6fa20\t27\na4c6256-15245d15969-cb936\t27\na4c62a6-1528a788ddc-129dd7\t27\na4c6256-14f4a013b22-24516f\t27\na4c622b-152bcc1af8b-4f6b87\t27\na4c6255-14cae752fc9-45bf09\t27\na4c628c-152cb5dad8c-245660\t27\na4c6257-152aa2c4c66-1b7686\t27\na4c62a6-152bc838f8d-20b1c0\t27\na4c7254-14ab8e2a29c-4080b5\t27\na4c628c-1537a1cc477-18bf76\t27\na4c6291-14fb6f871c4-18c8bd\t27\na4c62e8-15157da4443-21738\t27\na4c6255-152a8a3d3e7-3651eb\t27\na4c62e8-153456289a3-3f79d\t27\na4c6257-1527b245382-e7d88\t27\na4c6291-15222ec1b93-d7fd0f\t27\na4c628c-1530b55506c-33fb7c\t27\na4c6257-153096b0947-338854\t27\na4c6257-151cac4b4dd-31b0\t27\na4c6257-15319debb8d-19484\t27\na4c628c-14fff438c5e-34316\t27\na4c7256-14df38ef41a-27050e\t27\na4c6291-14feee3ba7c-b1c4d9\t27\na4c62a6-151d47d95b6-1ed97\t27\na4c62a6-152f3f5fb48-2e7e66\t27\na4c62a6-150462c3ca0-24832\t27\na4c6256-14f0c2aa65f-1b02ff\t27\na4c8255-152551675d0-a9d0\t27\na4c628c-15149c8e229-18bbe\t27\na4c7248-1483bdd0df3-e40\t26\na4c62e8-14a44695d1d-11105\t26\na4c62e8-1535d2bd579-11f65\t26\na4c6291-14f31d9e4f8-19c15f\t26\na4c6256-15246efbd2e-106c66\t26\na4c6257-152855f0882-11449c\t26\na4c6255-152daecebb0-a00aea\t26\na4c6256-1529ebb6944-21230c\t26\na4c62a6-14999fad1e9-47d4d\t26\na4c6291-152f5c1fa14-dc8b2f\t26\na4c628c-152c6fcce5b-2343c1\t26\na4c6291-14f451f5fe1-1727fe\t26\na4c62a6-151ed74118e-6bea3\t26\na4c637-14ef48fc1ae-1b1d2\t26\na4c6255-152999438b5-16a7ec\t26\na4c62a6-1512d8a668d-da537\t26\na4c62a6-153628ccf18-13b035\t26\na4c6256-15144b74471-26346\t26\na4c6291-151e4e80604-64fe37\t26\na4c628c-14fa96a54c6-7c2c\t26\na4c6257-152ba3d7302-1ff1b5\t26\na4c6257-15287a47680-11b9e7\t26\na4c62a6-1527cbc1b03-eb05d\t26\na4c72bc-146a07dae5b-23a6\t26\na4c6255-152a60a7371-2ead3f\t26\na4c6257-15191640d6f-5e6b4\t26\na4c62e8-15154a3a002-1e2cb\t26\na4c62a6-14dd3fa771b-181c\t26\na4c62a6-14fd652751b-2333\t26\na4c622b-152831be68a-288ce5e\t26\na4c6257-152fc3a15ee-307c72\t26\na4c6257-152ab2ea8a7-1b9924\t26\na4c6257-1535061811b-f0194\t26\na4c628c-1529955497a-16e5af\t26\na4c6255-14c508460b2-c7761\t26\na4c6255-14d4291e50a-360982\t26\na4c6291-152b0eb4cc6-46cb18\t26\na4c62a6-1527591810c-cfc23\t26\na4c628c-152c1d1b0bc-22001f\t26\na4c6255-152e0a3b411-ad07ca\t26\na4c622a-153639dd5db-485bed\t26\na4c622a-1525e93ba86-1405cb1\t26\na4c6291-15185a9ffb5-462f8a\t26\na4c7256-14ab60d2f2c-2fca3f\t26\na4c8212-1527982c9d0-afe\t26\na4c6255-152d52b7fb8-939407\t26\na4c622b-1402e87188e-9bb045\t26\na4c62a6-150b2ec7855-85578\t26\na4c6256-152c1511006-69d4ca\t26\na4c6255-150779a9a59-c895ee\t26\na4c628c-14a442b2638-2d1c7\t26\na4c6291-151c3e29993-2c9a6b\t26\na4c628c-152df827f1f-298762\t26\na4c628c-152162129cc-972f9\t26\na4c6291-14fe688d5c6-9a8588\t26\na4c6291-1527c48a0bd-88f1b8\t26\na4c628c-1529cd6f7f4-17b8c3\t26\na4c62e8-15273b1f431-4323b\t26\na4c62a6-1531f21f0a2-2967a\t26\na4c6291-14df6da13e0-17533\t26\na4c628c-1534635557f-c1207\t26\na4c637-15105f60da1-848a6\t26\na4c628c-152e530bbd6-2af697\t26\na4c62a6-14e54199d77-f1cc\t26\na4c6256-14d7b3058ee-7222fd\t26\na4c62a6-1535dca1490-12913e\t26\na4c6256-15283d9bd01-9a9217\t26\na4c6257-152e5e7f2bf-2b3b8f\t26\na4c628c-152bd97ed4a-21116b\t26\na4c6257-1518598453a-2a16f\t26\na4c628c-15385ce2c6e-1b5131\t26\na4c628c-1528f7e964c-13fbda\t26\na4c6257-150fb109158-28e7d\t26\na4c6257-150441a6464-21065\t26\na4c628c-152e630e9a2-2b47ee\t26\na4c628c-15341319c81-ab42c\t26\na4c62e8-152e9469b94-84fd4\t26\na4c628c-15235bb94e1-17e09\t26\na4c62a6-152cc701383-24b9b9\t25\na4c6257-1500e4caffb-6578a\t25\na4c6257-152ee67db43-2d39e8\t25\na4c637-14d854977f2-2c2bad\t25\na4c62a6-14ccd79cf6f-221d1\t25\na4c628c-152c569d3de-22c552\t25\na4c62a6-152b6ccfb89-1ee959\t25\na4c62a6-1534bbf6493-da4f4\t25\na4c6257-152a79202d8-1ab5fd\t25\na4c6257-152f0d771d4-2de785\t25\na4c637-15220eb5529-4641b0\t25\na4c622b-152ab8ae3f2-2dd593\t25\na4c62a6-152cc5153e0-24ae98\t25\na4c8258-15212d77bfd-5f9a\t25\na4c62a6-152a483e88a-19fc9a\t25\na4c6291-14cc34442d5-4f6ab\t25\na4c6256-14fd65fd15d-6c4a4d\t25\na4c62a6-152f43e77e2-2e8fb6\t25\na4c6257-15318c7a6f2-144f6\t25\na4c7254-147a2ab26f5-476195\t25\na4c6256-15322d6ca22-16a627\t25\na4c6291-15180d65c21-3c5d00\t25\na4c628c-14a430e2abd-25f17\t25\na4c628c-14c4d336e75-45b6e\t25\na4c6255-1530d1d28ce-104246c\t25\na4c628c-153188ed022-1304d\t25\na4c637-152b0c31df4-176865\t25\na4c6257-152aad560dd-1b8a17\t25\na4c628c-14aff4cd6c1-3bbd6\t25\na4c6291-151a67eaa0f-bdf75\t25\na4c637-15221ee8ff2-471aee\t25\na4c62a6-14d77fa4c27-2879c\t25\na4c6256-15260332877-4b165c\t25\na4c6255-150a088b461-128db19\t25\na4c628c-151af99fd4f-def19\t25\na4c628c-152b28c8352-1dcaff\t25\na4c6257-15291fb992a-147c1f\t25\na4c62a6-14f79b13672-12061a\t25\na4c62a6-1526332ad1e-8646a\t25\na4c628c-152be0d2871-21301f\t25\na4c6256-147acb2de39-3a2378\t25\na4c6291-14be3865d76-a7f9d\t25\na4c6257-152f4bd438a-2eb772\t25\na4c6256-1520c60bb54-a5c867\t25\na4c637-1521762cfc9-3ff7a8\t25\na4c62e8-152a1d6f2be-203fb\t25\na4c62a6-152ad9e1891-1c53bd\t25\na4c6257-152a399d6c9-19b74b\t25\na4c628c-15292059fbb-147f2d\t25\na4c628c-15354cd9943-102d30\t25\na4c6255-153131fbaed-1101a26\t25\na4c6257-153613b880f-1348a5\t25\na4c628c-152b75ad24c-1f2308\t25\na4c6257-152adb8d525-1c6263\t25\na4c622b-14344205194-18cb2c6\t25\na4c62a6-1525ed3e6fc-767de\t25\na4c622a-152bb352e6a-4692ac\t25\na4c628c-152a163d4f0-18f6d5\t25\na4c628c-1532e2ccd72-5e390\t25\na4c628c-1508b5cb319-9878\t25\na4c62e8-1522251dfba-18c3\t25\na4c62e8-151d32ef274-ef1d\t25\na4c6256-1507868c873-c9c4be\t25\na4c6257-14d9a0725b9-1be47\t25\na4c6255-1502cdebd2f-180511\t25\na4c628c-1535c3ae8ff-120946\t25\na4c62a6-14db8adb11a-1cdeb\t25\na4c6256-14f36b93092-25f45b\t25\na4c6255-1527edeb194-8ea17a\t25\na4c8240-153997f89d4-2ed11\t25\na4c628c-152f5617da4-2ed76e\t25\na4c622b-152090fcb05-2cb29c0\t24\na4c622a-151edca076a-1e238e4\t24\na4c62a6-14ffe39a8d2-2fe65\t24\na4c628c-150fce6af75-31f7d\t24\na4c62e8-152a6599b33-26ef3\t24\na4c62a6-15061aef97d-8b303\t24\na4c62e8-14fd12ce6e7-1f489\t24\na4c628c-152d04e24d2-25ac75\t24\na4c6257-151c464d01b-12e64e\t24\na4c628c-14cd286ee4c-32765\t24\na4c6257-151d5cede26-22554\t24\na4c622b-1533a92d004-44bd94\t24\na4c62a6-150b2d7b8d9-8510d\t24\na4c6291-14d91fe35f0-55862\t24\na4c6257-1500642bb3c-4e4b5\t24\na4c6291-14a5a9722f2-2dcf66\t24\na4c628c-151487e227d-128dc\t24\na4c62a6-151c6b13791-1365c2\t24\na4c6256-152c7b61cc2-79168a\t24\na4c628c-150197587dd-44c9\t24\na4c62a6-14eeadf71f2-53380\t24\na4c7254-14de65d49fb-523fa\t24\na4c6256-15330f0b1f4-2c8864\t24\na4c6256-1512884c080-85c35\t24\na4c6291-15350055a58-5ebd84\t24\na4c6257-152ac5edf2b-1bf242\t24\na4c6257-153393c607f-8bba5\t24\na4c6291-14feb61f1a8-a8261e\t24\na4c62a6-1528ebeb885-13c003\t24\na4c628c-152176e0333-9e3bd\t24\na4c8257-150182b5686-250\t24\na4c62a6-14aaa1f896c-ffe62\t24\na4c6257-150e2b3125d-7183b\t24\na4c6257-1524eda4d4b-368ce\t24\na4c62a6-15084af8170-10e155\t24\na4c6257-15331cbb545-6a3fd\t24\na4c628c-153196e59e6-16ee8\t24\na4c628c-152f9faf8b5-2fd7ec\t24\na4c62e8-15319085da6-71a3\t24\na4c62a6-15148d5be15-141df\t24\na4c622b-1527af297e4-240bb8d\t24\na4c628c-1529571e49f-159ab0\t24\na4c6291-14fc88a29c8-432f6a\t24\na4c628c-153903a74d7-1d7f0a\t24\na4c622b-1526f9171b9-1d75af6\t24\na4c6256-14fe0f9394d-8ce6e1\t24\na4c7249-14d9f839131-e3e2\t24\na4c6256-1500af87372-10589e7\t24\na4c628c-1528ed164eb-13ca93\t24\na4c6256-152cbdfba92-80e1ec\t24\na4c6256-14a6edf5b83-57387c\t24\na4c6256-152c26a4b16-6d79c6\t24\na4c622a-13e7b3d3afc-17505af\t24\na4c6255-14a87157b40-5311e6\t24\na4c62a6-150f17e9c0c-acb68\t24\na4c62a6-15328f3edb5-4c2ae\t24\na4c6255-151278e9828-78cd9\t24\na4c6256-151efc360ea-7d45db\t24\na4c6291-14b54f96706-120362\t24\na4c628c-15282e14155-1050a1\t24\na4c62a6-152b276a078-1dc331\t24\na4c6257-15272c0c6bf-c01a5\t24\na4c628c-153644eb403-13da0b\t24\na4c6257-150a538ec22-52a40\t24\na4c62a6-153940a9c15-1e38a6\t24\na4c6257-15288834233-11f423\t24\na4c637-1500357b2b1-14b7e6\t24\na4c6257-1532c808ece-574a0\t24\na4c62a6-1523a60116a-28aa0\t24\na4c6256-14d141f713c-33c9d4\t24\na4c628c-14af9e3b9d5-22418\t24\na4c628c-153299cdd8d-4f9cb\t24\na4c7254-14d1f1eb336-1e2f4\t24\na4c628c-152f85b8d23-2f70ac\t24\na4c62e8-152a65a25d0-26efd\t24\na4c6257-1528568cb6b-1146e9\t24\na4c62a6-15226dafd75-148f7d\t24\na4c622a-15360a6c6ff-2b80e9\t24\na4c62e8-14f17d6e50e-3356c\t24\na4c62a6-1521bf77de0-11a8b3\t24\na4c62a6-150eb8c667d-943d7\t24\na4c628c-14cf0e66d7f-20a6c\t24\na4c6256-152a79456fe-32df66\t24\na4c6256-1509dc23661-12043cf\t24\na4c622a-152dc74d5f1-a2c147\t24\na4c628c-1528e7dba26-13b118\t24\na4c6255-14ecf2cfc3a-f8e7\t24\na4c72e-14da63c2167-246dc\t24\na4c7223-12a52b8699e-309f\t24\na4c628c-14e797527f4-2c963\t24\na4c62a6-152dc68c0bf-28e981\t24\na4c6291-1501a1bf4d0-13e0b6\t24\na4c62a6-152b83f692e-1f7358\t24\na4c6291-151d6cad9b2-4b36d7\t24\na4c6256-14fc8c18256-451126\t24\na4c6291-1536df92e46-931b6b\t24\na4c62fd-147f439a560-6be\t24\na4c62a6-150901100d5-23f1\t24\na4c62a6-152c474efc9-2293a2\t24\na4c6291-14ed4c6c794-e09a8\t24\na4c6257-152caf26334-24406f\t24\na4c62a6-15283b0c757-1099ee\t24\na4c62a6-152eb10b0e8-2c7d88\t24\na4c6255-1523551b05f-fafda3\t24\na4c6255-152b639a686-50b63e\t24\na4c637-1533232147d-facc6\t24\na4c628c-1523b779974-a7a\t24\na4c622b-152b8bad28c-3578e6\t24\na4c62e8-153765d8ca5-2ff99\t24\na4c6291-15075f92406-c65e78\t23\na4c62a6-1536144f936-1346de\t23\na4c6256-150bf95aaf2-16ef47d\t23\na4c6291-14cd72c8a49-36d534\t23\na4c823f-1518d5a4d3e-2e694\t23\na4c6256-1510229ea2c-11229c\t23\na4c6256-150a05d5386-1287099\t23\na4c7255-14abbb33214-5a0896\t23\na4c628c-152a1733a1c-18fbe0\t23\na4c6256-152bb328b67-5b1b23\t23\na4c62e8-152d5393fbf-6a423\t23\na4c6256-1534db1d0c0-5c3eb7\t23\na4c6257-152df1fdf26-297302\t23\na4c628c-1520578db99-54ed0\t23\na4c62a6-14e62c6e862-16a9\t23\na4c6291-14d3517a4ab-1be6c9\t23\na4c6291-150e1f26757-2dc15a\t23\na4c62a6-152701880aa-b7488\t23\na4c6256-15273c2a39a-75f759\t23\na4c6291-1535b7e5147-706508\t23\na4c6255-15154fb19d1-1e12af\t23\na4c62a6-153366fd232-7cbbe\t23\na4c637-14e93a08d6d-2151f9\t23\na4c622a-13edb98204d-24597bd\t23\na4c6257-152ab4b9644-1ba082\t23\na4c62a6-1532382fbea-3811a\t23\na4c628c-150d3b85c85-338fd\t23\na4c622b-1526f9084c6-1d75228\t23\na4c62a6-15278f0dc5a-dbcfc\t23\na4c6291-14c1db94ae5-2dc2e0\t23\na4c6256-14b40c03cda-1221bd\t23\na4c6256-152e6ce8318-bc956b\t23\na4c628c-150d6ee09f8-40d60\t23\na4c6291-1516936a126-e9962\t23\na4c6257-14ed9524e56-1f34b\t23\na4c6257-151e72fe923-590a7\t23\na4c6257-14f2ecf5438-66e08\t23\na4c6257-152d0305166-25ad53\t23\na4c62a6-152ad301de0-1c2f84\t23\na4c628c-152cd2342ea-24f4f2\t23\na4c62fc-146cc15cdde-2537\t23\na4c62a6-15324e106d0-3e0a5\t23\na4c6255-147d5f143ef-e0e535\t23\na4c6257-1528f467f66-13eca6\t23\na4c62a6-151a1fe6bdb-aa44a\t23\na4c6257-15126e7d14c-c3d57\t23\na4c6257-152d777ccaa-27a5aa\t23\na4c62a6-1521b29a62a-116ca0\t23\na4c637-151408d1b85-21866\t23\na4c62a6-15291a65143-145bc7\t23\na4c6256-150c4993e64-1792b61\t23\na4c628c-151622171fe-7fc0a\t23\na4c6255-152ad846a61-406e25\t23\na4c637-15107f21dfb-a787b\t23\na4c62e8-15197ae3d87-3f237\t23\na4c628c-14efa7ad849-86ab8\t23\n\n\u003cfont color\u003dred\u003eResults are limited by 1000.\u003c/font\u003e"
+      },
+      "dateCreated": "Apr 5, 2016 1:18:39 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val user \u003d clickedValidOffers.filter(clickedValidOffers(\"userId\") \u003d\u003d\u003d \"a4c62a6-15356d08a8c-10bc7b\")\nz.show(user.groupBy(\"source\").count)",
+      "dateUpdated": "Apr 5, 2016 1:18:39 AM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [
+            {
+              "name": "source",
+              "index": 0.0,
+              "aggr": "sum"
+            }
+          ],
+          "values": [
+            {
+              "name": "count",
+              "index": 1.0,
+              "aggr": "sum"
+            }
+          ],
+          "groups": [],
+          "scatter": {
+            "xAxis": {
+              "name": "source",
+              "index": 0.0,
+              "aggr": "sum"
+            }
+          }
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1459811919350_2105266074",
+      "id": "20160405-011839_1949755049",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TABLE",
+        "msg": "source\tcount\n96944280\t169\n"
+      },
+      "dateCreated": "Apr 5, 2016 1:18:39 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val uniqueOfferCategories \u003d clickedValidOffers.groupBy(\"category\").count.sort(desc(\"count\"))",
+      "dateUpdated": "Apr 5, 2016 1:18:39 AM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1459811919350_2105266074",
+      "id": "20160405-011839_1080138970",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "uniqueOfferCategories: org.apache.spark.sql.DataFrame \u003d [category: array\u003cstring\u003e, count: bigint]\n"
+      },
+      "dateCreated": "Apr 5, 2016 1:18:39 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "uniqueOfferCategories.count",
+      "dateUpdated": "Apr 5, 2016 1:18:39 AM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1459811919351_2104881325",
+      "id": "20160405-011839_1216400699",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "res141: Long \u003d 312\n"
+      },
+      "dateCreated": "Apr 5, 2016 1:18:39 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "z.show(uniqueOfferCategories)",
+      "dateUpdated": "Apr 5, 2016 1:18:39 AM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1459811919351_2104881325",
+      "id": "20160405-011839_2228653",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TABLE",
+        "msg": "category\tcount\nWrappedArray(137001)\t182132\nWrappedArray(5101)\t162721\nWrappedArray(100020213)\t147628\nWrappedArray(100091613)\t110993\nWrappedArray(173801)\t79918\nWrappedArray(137901)\t75015\nWrappedArray(113501)\t71069\nWrappedArray(138001)\t69363\nWrappedArray(108301)\t67035\nWrappedArray(100384023)\t61928\nWrappedArray(136901)\t55045\nWrappedArray(124901)\t52425\nWrappedArray(100484623)\t51037\nWrappedArray(152401)\t42378\nWrappedArray(100010113)\t40976\nWrappedArray(100332323)\t40565\nWrappedArray(142101)\t39571\nWrappedArray(137701)\t38787\nWrappedArray(108701)\t36153\nWrappedArray(143401)\t33662\nWrappedArray(108501)\t32941\nWrappedArray(100462723)\t31963\nWrappedArray(138301)\t31670\nWrappedArray(100311823)\t31101\nWrappedArray(109401)\t30056\nWrappedArray(100324923)\t29696\nWrappedArray(165101)\t28300\nWrappedArray(100389523)\t28294\nWrappedArray(132701)\t27904\nWrappedArray(108101)\t26789\nWrappedArray(111801)\t26691\nWrappedArray(128601)\t26034\nWrappedArray(100567813)\t25834\nWrappedArray(138201)\t25218\nWrappedArray(135901)\t25126\nWrappedArray(100008013)\t24952\nWrappedArray(149201)\t24740\nWrappedArray(123401)\t24044\nWrappedArray(168001)\t23192\nWrappedArray(112101)\t22795\nWrappedArray(125801)\t22642\nWrappedArray(6513)\t22132\nWrappedArray(143101)\t21790\nWrappedArray(150701)\t21481\nWrappedArray(100282123)\t21391\nWrappedArray(100232023)\t21190\nWrappedArray(146501)\t20687\nWrappedArray(100005613)\t19512\nWrappedArray(133001)\t19017\nWrappedArray(108801)\t18931\nWrappedArray(100291723)\t18629\nWrappedArray(141901)\t18550\nWrappedArray(100007613)\t18365\nWrappedArray(109301)\t18320\nWrappedArray(100302923)\t18234\nWrappedArray(100232223)\t18170\nWrappedArray(7113)\t18157\nWrappedArray(100101913)\t18083\nWrappedArray(100327723)\t18007\nWrappedArray(122301)\t17737\nWrappedArray(116501)\t17480\nWrappedArray(146601)\t17478\nWrappedArray(100392423)\t16470\nWrappedArray(120901)\t16120\nWrappedArray(147701)\t15808\nWrappedArray(145801)\t15716\nWrappedArray(100565013)\t15278\nWrappedArray(147101)\t15148\nWrappedArray(133101)\t15089\nWrappedArray(100441023)\t14971\nWrappedArray(7313)\t14360\nWrappedArray(100392523)\t13875\nWrappedArray(145001)\t13570\nWrappedArray(100532023)\t13399\nWrappedArray(146301)\t12657\nWrappedArray(132601)\t12448\nWrappedArray(100565213)\t12384\nWrappedArray(145101)\t11894\nWrappedArray(146401)\t11798\nWrappedArray(114901)\t11691\nWrappedArray(133501)\t11625\nWrappedArray(100450323)\t11537\nWrappedArray(100332823)\t11369\nWrappedArray(100334223)\t11178\nWrappedArray(138701)\t11044\nWrappedArray(146001)\t10389\nWrappedArray(140001)\t10371\nWrappedArray(128301)\t10045\nWrappedArray(100564713)\t9780\nWrappedArray(100376523)\t9104\nWrappedArray(164401)\t8979\nWrappedArray(100001)\t8938\nWrappedArray(140401)\t8893\nWrappedArray(141601)\t8763\nWrappedArray(100091913)\t8693\nWrappedArray(114401)\t8656\nWrappedArray(100566313)\t8538\nWrappedArray(123501)\t8392\nWrappedArray(100052213)\t8282\nWrappedArray(117001)\t8010\nWrappedArray(111601)\t7901\nWrappedArray(100283023)\t7751\nWrappedArray(130401)\t7584\nWrappedArray(100544023)\t7553\nWrappedArray(136801)\t7551\nWrappedArray(100567513)\t7376\nWrappedArray(100483023)\t7162\nWrappedArray(146201)\t7155\nWrappedArray(100299123)\t7058\nWrappedArray(100278823)\t7047\nWrappedArray(146701)\t6998\nWrappedArray(100317323)\t6960\nWrappedArray(100028913)\t6926\nWrappedArray(100020613)\t6825\nWrappedArray(171401)\t6611\nWrappedArray(126001)\t6550\nWrappedArray(137601)\t6497\nWrappedArray(100356623)\t6468\nWrappedArray(100358623)\t6368\nWrappedArray(112201)\t6341\nWrappedArray(126701)\t6273\nWrappedArray(134501)\t6192\nWrappedArray(100570713)\t6087\nWrappedArray(133901)\t6067\nWrappedArray(100450423)\t6050\nWrappedArray(100564913)\t5950\nWrappedArray(145401)\t5868\nWrappedArray(127201)\t5864\nWrappedArray(145701)\t5767\nWrappedArray(147801)\t5686\nWrappedArray(143501)\t5673\nWrappedArray(100568013)\t5558\nWrappedArray(133801)\t5513\nWrappedArray(100248223)\t5494\nWrappedArray(123201)\t5414\nWrappedArray(100233223)\t5414\nWrappedArray(100567613)\t5353\nWrappedArray(100332423)\t5328\nWrappedArray(111101)\t5284\nWrappedArray(136201)\t5212\nWrappedArray(145901)\t5075\nWrappedArray(100014413)\t5073\nWrappedArray(100544223)\t5000\nWrappedArray(127701)\t4876\nWrappedArray(100371523)\t4766\nWrappedArray(107401)\t4740\nWrappedArray(167401)\t4722\nWrappedArray(100028613)\t4558\nWrappedArray(100291823)\t4553\nWrappedArray(100123913)\t4523\nWrappedArray(147201)\t4318\nWrappedArray(113201)\t4315\nWrappedArray(100119813)\t4294\nWrappedArray(129801)\t4262\nWrappedArray(122701)\t4001\nWrappedArray(173101)\t3979\nWrappedArray(100353123)\t3931\nWrappedArray(100216323)\t3883\nWrappedArray(100052013)\t3880\nWrappedArray(113301)\t3749\nWrappedArray(100566213)\t3720\nWrappedArray(108901)\t3718\nWrappedArray(116901)\t3706\nWrappedArray(100066213)\t3678\nWrappedArray(100260023)\t3666\nWrappedArray(100138013)\t3651\nWrappedArray(174201)\t3642\nWrappedArray(170101)\t3616\nWrappedArray(100290623)\t3564\nWrappedArray(120801)\t3529\nWrappedArray(100440723)\t3393\nWrappedArray(110901)\t3374\nWrappedArray(100248123)\t3305\nWrappedArray(121601)\t3252\nWrappedArray(100508723)\t3203\nWrappedArray(100289123)\t3171\nWrappedArray(144801)\t3069\nWrappedArray(152501)\t2967\nWrappedArray(115001)\t2936\nWrappedArray(100340123)\t2903\nWrappedArray(100332223)\t2712\nWrappedArray(100282923)\t2698\nWrappedArray(100334923)\t2642\nWrappedArray(100299223)\t2575\nWrappedArray(100020413)\t2563\nWrappedArray(110401)\t2549\nWrappedArray(4513)\t2537\nWrappedArray(136101)\t2515\nWrappedArray(100158013)\t2472\nWrappedArray(100014513)\t2466\nWrappedArray(134201)\t2459\nWrappedArray(100282723)\t2429\nWrappedArray(100282623)\t2265\nWrappedArray(100099513)\t2250\nWrappedArray(122501)\t2228\nWrappedArray(115401)\t2196\nWrappedArray(100008213)\t2149\nWrappedArray(147901)\t2049\nWrappedArray(100450223)\t2002\nWrappedArray(110201)\t1965\nWrappedArray(100540023)\t1925\nWrappedArray(100066113)\t1897\nWrappedArray(110601)\t1895\nWrappedArray(100282023)\t1882\nWrappedArray(100364123)\t1790\nWrappedArray(100066613)\t1766\nWrappedArray(100298223)\t1761\nWrappedArray(100358023)\t1757\nWrappedArray(164901)\t1751\nWrappedArray(171601)\t1714\nWrappedArray(100233623)\t1684\nWrappedArray(126301)\t1665\nWrappedArray(100239623)\t1645\nWrappedArray(172201)\t1628\nWrappedArray(100293623)\t1614\nWrappedArray(168301)\t1604\nWrappedArray(100046513)\t1564\nWrappedArray(313)\t1505\nWrappedArray(148301)\t1477\nWrappedArray(100567413)\t1437\nWrappedArray(147001)\t1387\nWrappedArray(100066413)\t1318\nWrappedArray(170201)\t1312\nWrappedArray(100508823)\t1275\nWrappedArray(110801)\t1267\nWrappedArray(100363523)\t1223\nWrappedArray(100007713)\t1212\nWrappedArray(166501)\t1211\nWrappedArray(100303723)\t1188\nWrappedArray(100304323)\t1175\nWrappedArray(100085613)\t1168\nWrappedArray(100374123)\t1166\nWrappedArray(100314223)\t1165\nWrappedArray(100450923)\t1164\nWrappedArray(100451023)\t1102\nWrappedArray(100304123)\t1097\nWrappedArray(100012513)\t1015\nWrappedArray(100565113)\t988\nWrappedArray(167201)\t976\nWrappedArray(100048013)\t960\nWrappedArray(100146713)\t933\nWrappedArray(100012613)\t925\nWrappedArray(100393223)\t921\nWrappedArray(111301)\t919\nWrappedArray(111501)\t916\nWrappedArray(100007513)\t914\nWrappedArray(172301)\t909\nWrappedArray(115901)\t895\nWrappedArray(100248323)\t891\nWrappedArray(100005813)\t887\nWrappedArray(100066813)\t885\nWrappedArray(146901)\t884\nWrappedArray(100342023)\t834\nWrappedArray(121301)\t818\nWrappedArray(100003613)\t810\nWrappedArray(100513123)\t807\nWrappedArray(100014113)\t759\nWrappedArray(100450623)\t715\nWrappedArray(100340223)\t708\nWrappedArray(100006813)\t695\nWrappedArray(100451123)\t678\nWrappedArray(100450523)\t659\nWrappedArray(100444023)\t657\nWrappedArray(100450723)\t640\nWrappedArray(112901)\t612\nWrappedArray(164101)\t582\nWrappedArray(100332523)\t556\nWrappedArray(128801)\t541\nWrappedArray(100101713)\t525\nWrappedArray(165201)\t517\nWrappedArray(100340423)\t514\nWrappedArray(100238623)\t508\nWrappedArray(100239423)\t507\nWrappedArray(116301)\t504\nWrappedArray(100066713)\t504\nWrappedArray(100451223)\t489\nWrappedArray(100239723)\t484\nWrappedArray(100294523)\t447\nWrappedArray(148101)\t432\nWrappedArray(100239223)\t423\nWrappedArray(100340323)\t412\nWrappedArray(125601)\t392\nWrappedArray(100392923)\t386\nWrappedArray(100292823)\t377\nWrappedArray(100316723)\t373\nWrappedArray(100450823)\t353\nWrappedArray(166101)\t352\nWrappedArray(100278923)\t328\nWrappedArray(100093313)\t321\nWrappedArray(164001)\t315\nWrappedArray(164201)\t301\nWrappedArray(115701)\t287\nWrappedArray(100043113)\t286\nWrappedArray(100356223)\t263\nWrappedArray(100137713)\t182\nWrappedArray(100232523)\t143\nWrappedArray(100014713)\t127\nWrappedArray(100233923)\t123\nWrappedArray(100233323)\t100\nWrappedArray(116401)\t95\nWrappedArray(128901)\t93\nWrappedArray(100485423)\t86\nWrappedArray(165701)\t80\nWrappedArray(100226823)\t79\nWrappedArray(100233023)\t71\nWrappedArray(100340723)\t69\nWrappedArray(100201)\t68\nWrappedArray(134601)\t68\nWrappedArray(163801)\t62\nWrappedArray(166401)\t48\nWrappedArray(100052113)\t15\nWrappedArray(100086213)\t10\n"
+      },
+      "dateCreated": "Apr 5, 2016 1:18:39 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val parquetFileSearch \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypso_data_feb_march/calypso_data_feb_march/search/fr/2016/*/*/*.parquet\")\nval parquetFileOffers \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypso_data_feb_march/calypso_data_feb_march/offerView/fr/2016/*/*/*.parquet\")",
+      "dateUpdated": "Apr 5, 2016 1:18:39 AM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1459811919352_2102957581",
+      "id": "20160405-011839_949748972",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "parquetFileSearch: org.apache.spark.sql.DataFrame \u003d [userId: string, ip: string, userAgent: struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e, geolocation: string, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, queryString: string, filters: map\u003cstring,string\u003e, source: string, searchId: string, isPrompt: boolean, acquisitionCost: decimal(38,18), bidPrice: decimal(38,18)]\nparquetFileOffers: org.apache.spark.sql.DataFrame \u003d [eventType: string, userId: string, ip: string, userAgent: struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e, geolocation: struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, adType: string, offerRank: int, searchId: string, offerViewId: string, contentPageType: string, adPlacement: string, adViewability: string, adSize: string]\n"
+      },
+      "dateCreated": "Apr 5, 2016 1:18:39 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val searchedOffers \u003d parquetFileSearch.select(\"searchId\",\"queryString\")",
+      "dateUpdated": "Apr 5, 2016 1:18:39 AM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1459811919353_2102572832",
+      "id": "20160405-011839_185024253",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "searchedOffers: org.apache.spark.sql.DataFrame \u003d [searchId: string, queryString: string]\n"
+      },
+      "dateCreated": "Apr 5, 2016 1:18:39 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val shownOffers \u003d parquetFileOffers.select(\"searchId\",\"offerTitle\")",
+      "dateUpdated": "Apr 5, 2016 1:18:39 AM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1459811919353_2102572832",
+      "id": "20160405-011839_146299315",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "shownOffers: org.apache.spark.sql.DataFrame \u003d [searchId: string, offerTitle: string]\n"
+      },
+      "dateCreated": "Apr 5, 2016 1:18:39 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val joinBetweenSearchOffer \u003d searchedOffers.join(shownOffers,searchedOffers(\"searchId\") \u003c\u003d\u003e shownOffers(\"searchId\"))",
+      "dateUpdated": "Apr 5, 2016 1:18:39 AM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1459811919354_2103727078",
+      "id": "20160405-011839_2131295037",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "joinBetweenSearchOffer: org.apache.spark.sql.DataFrame \u003d [searchId: string, queryString: string, searchId: string, offerTitle: string]\n"
+      },
+      "dateCreated": "Apr 5, 2016 1:18:39 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "z.show(joinBetweenSearchOffer)",
+      "dateUpdated": "Apr 5, 2016 1:18:39 AM",
+      "config": {
+        "enabled": true,
+        "tableHide": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1459811919355_2103342330",
+      "id": "20160405-011839_648454899",
+      "result": {
+        "code": "ERROR",
+        "type": "TEXT",
+        "msg": "org.apache.zeppelin.interpreter.InterpreterException: java.lang.reflect.InvocationTargetException\n\tat org.apache.zeppelin.spark.ZeppelinContext.showDF(ZeppelinContext.java:203)\n\tat org.apache.zeppelin.spark.ZeppelinContext.show(ZeppelinContext.java:176)\n\tat org.apache.zeppelin.spark.ZeppelinContext.show(ZeppelinContext.java:147)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:34)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:39)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:41)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:43)\n\tat $iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:45)\n\tat $iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:47)\n\tat $iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:49)\n\tat $iwC.\u003cinit\u003e(\u003cconsole\u003e:51)\n\tat \u003cinit\u003e(\u003cconsole\u003e:53)\n\tat .\u003cinit\u003e(\u003cconsole\u003e:57)\n\tat .\u003cclinit\u003e(\u003cconsole\u003e)\n\tat .\u003cinit\u003e(\u003cconsole\u003e:7)\n\tat .\u003cclinit\u003e(\u003cconsole\u003e)\n\tat $print(\u003cconsole\u003e)\n\tat sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)\n\tat sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)\n\tat sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\n\tat java.lang.reflect.Method.invoke(Method.java:606)\n\tat org.apache.spark.repl.SparkIMain$ReadEvalPrint.call(SparkIMain.scala:1065)\n\tat org.apache.spark.repl.SparkIMain$Request.loadAndRun(SparkIMain.scala:1340)\n\tat org.apache.spark.repl.SparkIMain.loadAndRunReq$1(SparkIMain.scala:840)\n\tat org.apache.spark.repl.SparkIMain.interpret(SparkIMain.scala:871)\n\tat org.apache.spark.repl.SparkIMain.interpret(SparkIMain.scala:819)\n\tat org.apache.zeppelin.spark.SparkInterpreter.interpretInput(SparkInterpreter.java:791)\n\tat org.apache.zeppelin.spark.SparkInterpreter.interpret(SparkInterpreter.java:755)\n\tat org.apache.zeppelin.spark.SparkInterpreter.interpret(SparkInterpreter.java:748)\n\tat org.apache.zeppelin.interpreter.ClassloaderInterpreter.interpret(ClassloaderInterpreter.java:57)\n\tat org.apache.zeppelin.interpreter.LazyOpenInterpreter.interpret(LazyOpenInterpreter.java:93)\n\tat org.apache.zeppelin.interpreter.remote.RemoteInterpreterServer$InterpretJob.jobRun(RemoteInterpreterServer.java:331)\n\tat org.apache.zeppelin.scheduler.Job.run(Job.java:171)\n\tat org.apache.zeppelin.scheduler.FIFOScheduler$1.run(FIFOScheduler.java:139)\n\tat java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:471)\n\tat java.util.concurrent.FutureTask.run(FutureTask.java:262)\n\tat java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:178)\n\tat java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:292)\n\tat java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)\n\tat java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:615)\n\tat java.lang.Thread.run(Thread.java:745)\nCaused by: java.lang.reflect.InvocationTargetException\n\tat sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)\n\tat sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)\n\tat sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\n\tat java.lang.reflect.Method.invoke(Method.java:606)\n\tat org.apache.zeppelin.spark.ZeppelinContext.showDF(ZeppelinContext.java:199)\n\t... 40 more\nCaused by: org.apache.spark.SparkException: Job 5 cancelled part of cancelled job group zeppelin-20160324-184555_822933517\n\tat org.apache.spark.scheduler.DAGScheduler.org$apache$spark$scheduler$DAGScheduler$$failJobAndIndependentStages(DAGScheduler.scala:1283)\n\tat org.apache.spark.scheduler.DAGScheduler.handleJobCancellation(DAGScheduler.scala:1229)\n\tat org.apache.spark.scheduler.DAGScheduler$$anonfun$handleJobGroupCancelled$1.apply$mcVI$sp(DAGScheduler.scala:681)\n\tat org.apache.spark.scheduler.DAGScheduler$$anonfun$handleJobGroupCancelled$1.apply(DAGScheduler.scala:681)\n\tat org.apache.spark.scheduler.DAGScheduler$$anonfun$handleJobGroupCancelled$1.apply(DAGScheduler.scala:681)\n\tat scala.collection.mutable.HashSet.foreach(HashSet.scala:79)\n\tat org.apache.spark.scheduler.DAGScheduler.handleJobGroupCancelled(DAGScheduler.scala:681)\n\tat org.apache.spark.scheduler.DAGSchedulerEventProcessLoop.doOnReceive(DAGScheduler.scala:1475)\n\tat org.apache.spark.scheduler.DAGSchedulerEventProcessLoop.onReceive(DAGScheduler.scala:1458)\n\tat org.apache.spark.scheduler.DAGSchedulerEventProcessLoop.onReceive(DAGScheduler.scala:1447)\n\tat org.apache.spark.util.EventLoop$$anon$1.run(EventLoop.scala:48)\n\tat org.apache.spark.scheduler.DAGScheduler.runJob(DAGScheduler.scala:567)\n\tat org.apache.spark.SparkContext.runJob(SparkContext.scala:1822)\n\tat org.apache.spark.SparkContext.runJob(SparkContext.scala:1835)\n\tat org.apache.spark.SparkContext.runJob(SparkContext.scala:1848)\n\tat org.apache.spark.sql.execution.SparkPlan.executeTake(SparkPlan.scala:215)\n\tat org.apache.spark.sql.execution.Limit.executeCollect(basicOperators.scala:207)\n\tat org.apache.spark.sql.DataFrame$$anonfun$collect$1.apply(DataFrame.scala:1385)\n\tat org.apache.spark.sql.DataFrame$$anonfun$collect$1.apply(DataFrame.scala:1385)\n\tat org.apache.spark.sql.execution.SQLExecution$.withNewExecutionId(SQLExecution.scala:56)\n\tat org.apache.spark.sql.DataFrame.withNewExecutionId(DataFrame.scala:1903)\n\tat org.apache.spark.sql.DataFrame.collect(DataFrame.scala:1384)\n\tat org.apache.spark.sql.DataFrame.head(DataFrame.scala:1314)\n\tat org.apache.spark.sql.DataFrame.take(DataFrame.scala:1377)\n\t... 45 more\n\n"
+      },
+      "dateCreated": "Apr 5, 2016 1:18:39 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "uniqueUsers.select(avg($\"count\")).show()",
+      "dateUpdated": "Apr 5, 2016 1:18:39 AM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1459811919355_2103342330",
+      "id": "20160405-011839_101978968",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "+------------------+\n|        avg(count)|\n+------------------+\n|1.4626651656201164|\n+------------------+\n\n"
+      },
+      "dateCreated": "Apr 5, 2016 1:18:39 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val clickedTitles \u003d parquetFileClick.select(\"userId\", \"offerTitle\")",
+      "dateUpdated": "Apr 5, 2016 1:18:39 AM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1459811919356_2101418585",
+      "id": "20160405-011839_268564870",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "clickedTitles: org.apache.spark.sql.DataFrame \u003d [userId: string, offerTitle: string]\n"
+      },
+      "dateCreated": "Apr 5, 2016 1:18:39 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val groupedTitles \u003d clickedTitles.groupBy(\"userId\",\"offerTitle\").count.sort(desc(\"count\"))\nz.show(groupedTitles)",
+      "dateUpdated": "Apr 5, 2016 1:18:39 AM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [
+            {
+              "name": "userId",
+              "index": 0.0,
+              "aggr": "sum"
+            }
+          ],
+          "values": [
+            {
+              "name": "offerTitle",
+              "index": 1.0,
+              "aggr": "sum"
+            }
+          ],
+          "groups": [],
+          "scatter": {
+            "xAxis": {
+              "name": "userId",
+              "index": 0.0,
+              "aggr": "sum"
+            },
+            "yAxis": {
+              "name": "offerTitle",
+              "index": 1.0,
+              "aggr": "sum"
+            }
+          }
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1459811919356_2101418585",
+      "id": "20160405-011839_1906627743",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TABLE",
+        "msg": "userId\tofferTitle\tcount\na4c621e-13f42709354-4c447\tnull\t2305\na4c622b-14c57443b3e-2d5e39\tnull\t386\na4c62e8-1525542aabd-1c4db\tnull\t177\na4c6256-14f14080e88-2db78e\tnull\t147\na4c628c-1521d04b8bd-b62f8\tnull\t145\na4c6291-15310108527-10e3dd9\tnull\t138\na4c628c-15314290a56-5222\tnull\t126\na4c62a6-1532c6f72ea-56b99\tnull\t123\na4c637-14f35905742-b4b57\tnull\t121\na4c6255-152e0f55405-ae3fa1\tnull\t121\na4c6257-14a9706022b-bf9be\tnull\t120\na4c6257-1530a7ac574-33d6ea\tnull\t115\na4c6291-151067fb960-1a37d4\tnull\t114\na4c6257-15215c4e931-ffd8d\tzooplus Lot zooplus Selection 24 x 400 g pour chien - Adult Sensitive poulet, riz\t110\na4c6257-14906461591-59404\tnull\t108\na4c62a6-15356d08a8c-10bc7b\tMini Camera Espion HD Telecommande\t103\na4c6291-14bb74a9cb4-41838c\tnull\t103\na4c6257-150d491c81f-3a8ca\tnull\t103\na4c6255-14c2921b2d9-5a1b3\tnull\t102\na4c725f-14d852e1b30-8ee7\tnull\t102\na4c62a6-1525a9a42fc-67565\tnull\t100\na4c6256-14f3189b226-18bcf0\tnull\t99\na4c62e8-1524c5ac98a-11812\tnull\t99\na4c62a6-15255405803-50459\tnull\t99\na4c62a6-1529d7efb64-17e8d6\tnull\t98\na4c6291-1515944cfeb-259540\tnull\t98\na4c6256-151dab26332-50cc98\tnull\t96\na4c6257-1528261bc6f-1025c6\tnull\t95\na4c6256-1499f90e57f-7bc88a\tnull\t95\na4c72a6-146d2adcad1-c63\tnull\t93\na4c6257-152c73d667b-2361e2\tnull\t92\na4c6257-153643ccb0f-13dded\tnull\t92\na4c6256-152a392f511-2b48e9\tnull\t92\na4c6257-1527a395045-e2c63\tnull\t91\na4c6256-150cc5f3dc7-18bc7e1\tnull\t90\na4c6257-15215c4e931-ffd8d\tSARENZA Bottines et boots SARENZA( Femme )\t90\na4c6255-14c55083df6-1c8d30\tnull\t89\na4c6256-148f1dfa557-12a828\tnull\t89\na4c6257-1523d0c244b-91ac\tAsustek ASUS Transformer Book T200TA CP003H - 11.6\u0026quot; Atom Z3775 1.46 GHz 2 Go RAM 32 Go SSD\t88\na4c62a6-1521ce8d9c1-11f850\tAsustek ASUS Transformer Book T200TA CP003H - 11.6\u0026quot; Atom Z3775 1.46 GHz 2 Go RAM 32 Go SSD\t88\na4c62e8-150eaa678ba-1a896\tnull\t87\na4c6255-14ba30c67ea-437c6\tRONT Peinture anti rouille en bombe\t87\na4c6256-14c30d98179-1e422c\tnull\t84\na4c6291-150a356c146-130efb3\tnull\t83\na4c6256-152fa9ced28-e3a47c\tnull\t81\na4c72e-14bd0813864-cce0\tnull\t80\na4c6291-14c5869a701-2dad70\tnull\t80\na4c628c-152a40722b4-19e258\tnull\t80\na4c6291-14bd0a0c394-124a4b\tnull\t79\na4c6256-15265a3f7fb-56d8ed\tnull\t78\na4c6257-150a5fdac90-57ade\tnull\t78\na4c628c-1522be00826-f51fa\tnull\t77\na4c622b-150811e1055-1f82e87\tnull\t77\na4c62a6-151c110eeb6-122136\tnull\t77\na4c62a6-153295af17d-4e3c9\tnull\t76\na4c72a7-14836154ad2-c3c\tnull\t76\na4c6257-15219d1f5e6-114116\tnull\t76\na4c62a6-150f07b2d1b-a80cf\tDallage 61x61 Morvan Pedra 20 mm - Rocersa - Carrelage 1er choix\t76\na4c6257-152357d76ac-16ec0\tnull\t75\na4c6256-151cdf7c280-3d5735\tnull\t75\na4c637-14bb769d423-15ca69\tnull\t74\na4c628c-1528ee2a631-13cfac\tnull\t74\na4c6257-1526b7fc47c-a69ef\tnull\t74\na4c622b-1523ff53260-2a2038\tnull\t74\na4c62a6-15284fa8141-112604\tnull\t73\na4c6255-14969e181d5-220848\tnull\t73\na4c6257-14eac50ef8f-d460f\tnull\t73\na4c6257-1511f61d802-a8ecd\tnull\t73\na4c6256-14fe95dc0b9-a06a12\tnull\t72\na4c6255-150042fcea7-93f185\tnull\t71\na4c6257-14eb67af0b0-f541d\tnull\t71\na4c62fd-1468be1cd37-2718\tnull\t71\na4c6255-1531e2b506a-102ade\tnull\t71\na4c6257-14fd15aac7b-5e17d\tnull\t70\na4c6257-150badc2cef-a362e\tnull\t70\na4c6257-15220ddeac9-12efd3\tnull\t70\na4c7256-14debb8a764-11b6ab\tnull\t69\na4c628c-150e627b9ae-7caca\tnull\t69\na4c637-1520cc8803d-380ddb\tnull\t69\na4c637-14e18112736-40db1c\tnull\t68\na4c6255-151e98c65a1-6dfb8d\tnull\t68\na4c62a6-1524c4fbe5c-2f5c1\tnull\t66\na4c628c-15159f86134-59d88\tAsustek ASUS Transformer Book T200TA CP003H - 11.6\u0026quot; Atom Z3775 1.46 GHz 2 Go RAM 32 Go SSD\t65\na4c62a6-15291e60437-146eff\tnull\t65\na4c62a6-1532ca577e2-579ca\tnull\t65\na4c637-151083a3df3-abcc9\tnull\t65\na4c637-15254e17440-1032fc\tnull\t65\na4c62a6-14ffa671239-22d7f\tnull\t64\na4c6257-15343cf0c53-ba10a\tnull\t64\na4c6291-14be42c39e7-cd95d\tnull\t64\na4c62a6-152f3d7e11b-2e76f5\tnull\t64\na4c62a6-1517c183450-ee615\tnull\t64\na4c6255-151ed0d13d9-7367ca\tnull\t64\na4c6256-14a8275cef3-40b0c8\tnull\t64\na4c6255-150003407f2-89032d\tnull\t63\na4c6255-15058004bec-7ef9a7\tnull\t62\na4c6256-15099a04430-117592f\tnull\t62\na4c6256-14e6a1e9183-103604\tnull\t62\na4c628c-14e32fcddb2-f62bb\tnull\t61\na4c6256-15120d67242-1b7078\tnull\t61\na4c628c-152ca2b4158-23f832\tnull\t61\na4c6257-1536fe02821-167325\tnull\t61\na4c6255-14fc281130a-28447a\tnull\t61\na4c6255-151697efac2-f6d79\tnull\t60\na4c62a6-15250350412-3db26\tnull\t60\na4c6291-1522b3218d8-e6f7a0\tnull\t60\na4c62e8-15296cc1a05-f59b\tnull\t60\na4c622a-152e5038255-f5b607\tnull\t60\na4c6255-14c0f10b3ad-23e7e\tnull\t60\na4c622b-1520c5be483-2e8eb8a\tnull\t60\na4c62a6-152755c9f7c-ce837\tnull\t59\na4c62e8-152c977438f-59bee\tnull\t59\na4c62a6-14aaffb46bc-122123\tnull\t58\na4c6291-14be0890b17-13674\tnull\t58\na4c6257-151b673f707-fd4ce\tnull\t58\na4c6257-1527eead10a-f4e05\tnull\t58\na4c6257-1523d0c244b-91ac\tASUSTeK COMPUTER ASUS VivoBook F200MA KX376B - 11.6\u0026quot; Celeron N2830 2 Go RAM 500 Go HDD\t57\na4c62a6-152b247176f-1db365\tnull\t57\na4c62a6-152f9400790-2fb645\tnull\t57\na4c6291-151aa50a489-129a19\tnull\t57\na4c6257-151b197efac-eba65\tnull\t57\na4c6255-15249eaa864-153e03\tnull\t57\na4c637-150fec86167-3812b\tnull\t57\na4c628c-15179515a24-e74e9\tnull\t57\na4c722a-148e6a1e235-18e4d2b\tnull\t57\na4c6255-151c8599c70-3586d5\tnull\t56\na4c622b-1526f9084c6-1d75228\tnull\t56\na4c6255-152df33c6b3-a88305\tnull\t56\na4c628c-1527df95ee9-f018d\tnull\t55\na4c6291-1489426b8f3-31fee3\tnull\t55\na4c62a6-152f06ca39d-2dbf3d\tnull\t55\na4c622b-14c68127cf6-a77d11\tnull\t55\na4c62a6-15356d08a8c-10bc7b\tMini Camera Espion Multi Support\t54\na4c622b-14227882a63-6146ecf\tnull\t54\na4c628c-14e52694613-9881\tnull\t53\na4c6257-1523d0c244b-91ac\tAsustek ASUS N550JK CN466H - 15.6\u0026quot; Core i7 I7-4710HQ 2.5 GHz 8 Go RAM 1 To HDD\t53\na4c62e8-14e0ab55bdb-2736c\tnull\t53\na4c62a6-152dc68c0bf-28e981\tnull\t53\na4c6255-1531fddd07e-137d88\tnull\t53\na4c7256-14de8839629-bf6db\tnull\t53\na4c6256-14b4532d65a-1d98c9\tnull\t53\na4c628c-152f3d0ea52-2e6b2b\tnull\t53\na4c6257-1516da27f89-af3e9\tnull\t53\na4c628c-152567f90bb-58034\tnull\t52\na4c628c-1506c40887a-b1fb8\tnull\t52\na4c6256-150f266835b-ff999\tnull\t52\na4c6257-1524fe822ab-3bddb\tnull\t52\na4c6257-152e5c54b7d-2b2f26\tnull\t52\na4c622a-152b35913c8-631e7\tLAURENT GERRA\t51\na4c622b-1525e0a37da-13cbbb3\tnull\t51\na4c6255-14f36f98da4-26ebb5\tnull\t51\na4c62fa-14706f4733f-199e\tnull\t51\na4c62a6-15328cd68fe-4b540\tnull\t51\na4c6257-1523d0c244b-91ac\tAsustek ASUS ROG G741JM T4047H - 17.3\u0026quot; Core i5 I5-4200H 2.8 GHz 8 Go RAM 1 To HDD\t51\na4c6256-15230234273-f0d7eb\tnull\t50\na4c6257-1523d0c244b-91ac\tnull\t50\na4c62a6-15393dc1ba4-1e2ab0\tnull\t50\na4c62e8-14bc6f6e5e6-9ad\tnull\t50\na4c6291-147b621dde1-625e7e\tnull\t50\na4c622b-1402e87188e-9bb045\tnull\t50\na4c62e8-14f83ff808e-919f8\tnull\t50\na4c62a6-152ca36b380-23fe3c\tnull\t50\na4c62cc-147f5f827f6-14b4\tnull\t50\na4c6257-1523d0c244b-91ac\tApple MacBook Pro Avec écran Retina MGXA2F/A - 15.4\u0026quot; Core i7 2.2 GHz 16 Go RAM 256 Go SSD\t49\na4c6256-147bb332725-7365c1\tnull\t49\na4c6256-152e6ce8318-bc956b\tnull\t49\na4c6256-14d8f3ae15c-9de130\tnull\t49\na4c628c-152a7e526c6-1acf7b\tnull\t49\na4c62a6-1525a9d9488-67652\tnull\t48\na4c628c-1520cded751-745df\tnull\t48\na4c628c-14c4d336e75-45b6e\tnull\t48\na4c6257-1523d0c244b-91ac\tIBM ThinkPad Helix 20CG - 11.6\u0026quot; Core M 5Y10c 800 MHz 4 Go RAM 180 Go SSD\t48\na4c6256-151abbf9f8e-256ba\tnull\t48\na4c628c-150a03349d3-3f6fd\tnull\t48\na4c7255-1480f8d2b65-dfb5f\tnull\t48\na4c62e8-153050e7a19-a7d7f\tnull\t48\na4c62e8-151e9a741e8-27406\tnull\t48\na4c628c-14fff438c5e-34316\tnull\t47\na4c6256-150fc53dc0a-38714\tnull\t47\na4c62e8-15382829511-3d7c0\tnull\t47\na4c6257-151513bb323-37c61\tnull\t47\na4c6257-1529ab1e093-17310c\tAsus Ultrabook UX303UA-R4178T PC Portable 13.3\u0026quot; Full HD Argent (Intel Core i5, 8 Go de RAM, SSD 512 Go, Windows 10)\t47\na4c62e8-152b28d36e3-39728\tnull\t47\na4c72bc-146b544e36a-18e3\tnull\t47\na4c6255-150779a9a59-c895ee\tnull\t47\na4c6255-151af7a751a-8653a\tnull\t47\na4c62e8-15319085da6-71a3\tnull\t47\na4c628c-1508b5cb319-9878\tnull\t47\na4c6257-152f139eeb9-2e0748\tnull\t47\na4c6291-1506f61703c-b87cc4\tnull\t47\na4c628c-151939e53fc-688fe\tnull\t47\na4c6257-1522ffc0fd3-170651\tnull\t46\na4c6257-152d1690ac2-260f40\tnull\t46\na4c628c-153425cb742-b1565\tHE BOIS DE CEDRE\t46\na4c62a6-15227d1bdbf-14e7ed\tnull\t46\na4c628c-15365a10a61-142135\tnull\t46\na4c6257-1526fd1b825-b62cf\tnull\t46\na4c6291-1521d61200f-cc6ba4\tnull\t46\na4c62a6-152f7024ce0-2f55a4\tnull\t46\na4c6256-1523600a134-fd9bf2\tnull\t45\na4c722b-148c5635f5e-bbed55\tnull\t45\na4c6255-1485bda8e00-89028\tnull\t45\na4c6257-15323d8ca08-3a220\tnull\t45\na4c628c-14d417c0b78-551b3\tnull\t45\na4c622b-150f1a20e73-13a6e16\tnull\t45\na4c6257-1523d0c244b-91ac\tToshiba Satellite C50-B-131 - 15.6\u0026quot; Pentium N3530 4 Go RAM 1 To HDD\t45\na4c62e8-15241cc7497-3e5d\tnull\t45\na4c637-14ec01d6009-101a\tnull\t45\na4c7254-14d1fbc8bd3-3c767\tnull\t45\na4c6256-1521d21c11b-ca946d\tnull\t45\na4c6255-1518fdd8c62-556ee8\tnull\t45\na4c62a6-150f07b2d1b-a80cf\tcarrelage Elite 60x60 Cemento R11 A+B+C exterieur aspect béton ciré -\t44\na4c8258-152133e8044-6ef6\tnull\t44\na4c6257-15287bb33bf-11bfd3\tnull\t44\na4c62e8-15264163a10-2f8e9\tnull\t44\na4c6257-14f6750c000-fb72f\tnull\t44\na4c6256-14eb97c9a83-ad8b27\tnull\t44\na4c6255-152f4d66068-d7fd3d\tnull\t44\na4c622b-1528daa7a03-2e2be3f\tnull\t44\na4c628c-1506b8fdcba-aea20\tnull\t44\na4c6255-14da6e9d12d-32187f\tnull\t44\na4c6257-152fde4e352-30b729\tnull\t44\na4c628c-15159dd1a3b-5926d\tnull\t44\na4c6257-1536b607961-1574fa\tnull\t43\na4c62fd-14a593c88a0-4a\tnull\t43\na4c6257-150fb109158-28e7d\tnull\t43\na4c6257-15264c1201e-8cbbe\tnull\t43\na4c62a6-1510462a91b-dbf4\tnull\t43\na4c8212-14f27337cd4-674c\tnull\t43\na4c6256-15245d4d139-cc33e\tnull\t43\na4c6256-147cb073f55-af326f\tnull\t43\na4c62a6-1521ce8d9c1-11f850\tAsustek ASUS P750LB T2059G - 17.3\u0026quot; Core i5 I5-4200U 1.6 GHz 4 Go RAM 500 Go HDD\t43\na4c628c-152e3a44d11-2a8893\tnull\t43\na4c6257-1520563a16f-bf00d\tnull\t43\na4c6257-14a1ec7f428-16516\tnull\t43\na4c62a6-152ad301de0-1c2f84\tnull\t43\na4c62a6-14e9a83c36e-a190c\tnull\t43\na4c72a6-148d479800e-a2\tnull\t42\na4c6255-151bb785859-1d8dfd\tnull\t42\na4c6256-14c5b513190-337a07\tnull\t42\na4c62a6-151aa9157ed-cb703\tnull\t42\na4c6255-14e1cfdf438-654dc8\tnull\t42\na4c62a6-15291ba0f61-1461d0\tnull\t42\na4c62fb-1472109ffca-1c11\tnull\t42\na4c6255-14fa94f0650-3e89f\tnull\t42\na4c628c-14ebd49c141-10c9e8\tnull\t42\na4c6257-152b7233f82-1f1377\tnull\t42\na4c62e8-152e713ae18-82f75\tnull\t42\na4c6256-14b11fb5eca-14fa\tnull\t42\na4c6257-152cd0613e4-24f57c\tnull\t42\na4c628c-14e63fb909c-19d2\tnull\t42\na4c6291-1535cf12257-7499dc\tnull\t42\na4c62a6-150fffe4208-3d1db\tnull\t42\na4c6256-15196926749-10ed3b\tnull\t42\na4c6255-152b010c6fc-44b949\tnull\t41\na4c6257-15336670367-7ce8f\tnull\t41\na4c6255-14b5e835019-cc032\tnull\t41\na4c62e8-14e632d9400-10301\tnull\t41\na4c7249-14d9f839131-e3e2\tnull\t41\na4c6257-1537b7ab4d2-191c0b\tnull\t41\na4c622a-15225dd2ef4-3bf44d6\tnull\t41\na4c628c-1529cd6f7f4-17b8c3\tnull\t41\na4c62a6-153609ee70c-1315e1\tnull\t41\na4c6257-152f50eec2f-2ece6b\tnull\t41\na4c62a6-152d96c733e-27f0b4\tnull\t41\na4c62e8-152b647de28-3e732\tnull\t41\na4c62a6-151c4b069c7-12d2dc\tnull\t41\na4c6256-152f9fccdb9-e22086\tnull\t41\na4c62a6-151b2d344c9-edf49\tnull\t41\na4c6291-152c12ad2f2-69e84d\tnull\t41\na4c6257-1534b847a5c-d94cc\tnull\t41\na4c62a6-1521ce8d9c1-11f850\tApple MacBook Pro Avec écran Retina MGXA2F/A - 15.4\u0026quot; Core i7 2.2 GHz 16 Go RAM 256 Go SSD\t41\na4c722a-1438184bfc8-3333763\tnull\t41\na4c62a6-14f83d9e53e-13e9c1\tnull\t41\na4c622b-15176bb1cb7-2f2e1bc\tnull\t41\na4c6257-152bb909dc9-205c0b\tnull\t41\na4c622b-150f4104522-14f9f5e\tnull\t41\na4c7254-148ccb083de-52bc6b\tnull\t40\na4c62e8-152b55f64a7-3cf2c\tnull\t40\na4c62a6-150f07b2d1b-a80cf\tProform Vélo elliptique ProForm Elipse 4S\t40\na4c62a6-152ff9312a8-3133d9\tnull\t40\na4c6257-1522dd39fc9-16aa8b\tnull\t40\na4c628c-152f67c64c3-2f3229\tnull\t40\na4c6257-1523d0c244b-91ac\tAsustek Ordinateur Portable Gamer ROG G751JYT7073H Asus\t40\na4c6257-1523d0c244b-91ac\tAsustek ASUS P750LB T2059G - 17.3\u0026quot; Core i5 I5-4200U 1.6 GHz 4 Go RAM 500 Go HDD\t40\na4c62a6-1530843f682-332a2d\tnull\t40\na4c6257-152c5d8950b-22ec63\tnull\t40\na4c637-1528ce23e80-2eb\tnull\t40\na4c62e8-14ee8e2c941-5903\tnull\t40\na4c6255-14f5dfa48ab-5a2fa8\tnull\t40\na4c628c-15245753022-140b7\tnull\t40\na4c628c-15301e36f32-31ab0b\tnull\t40\na4c62a6-150f07b2d1b-a80cf\tRibiland Tuyau plat 3 couches de refoulement. Ø 38 (1“1/2)/20 m pour motopompe 63cc\t40\na4c6257-1533bc9af0e-93952\tnull\t40\na4c62e8-1527d35e519-5079e\tnull\t40\na4c62a6-1513fe4b0ad-12211d\tnull\t40\na4c62a6-152cc65415c-24b5af\tnull\t40\na4c62a6-1519a6c192b-8590d\tnull\t40\na4c6291-15251319c05-2982e2\tnull\t39\na4c62a6-1527a14671a-e1c01\tnull\t39\na4c7249-14c3ec080af-63bb\tnull\t39\na4c6291-1535a185e5e-6d6fce\tnull\t39\na4c6256-152a4387d21-2d6eb0\tnull\t39\na4c62a6-15195e5a688-71828\tnull\t39\na4c6257-151ddffe16e-3925f\tnull\t39\na4c628c-15159f86134-59d88\tDell Vostro V130 - Intel Core i5 1.33 GHz - 4 Go RAM - DD 500 Go - Ecran 13\u0026quot;\t39\na4c637-14fd6825700-24a0dd\tnull\t39\na4c6255-14e12f1f5ee-481832\tnull\t39\na4c6256-14d9b848cac-1915b3\tnull\t39\na4c622b-14cc79a545b-34d15cf\tnull\t39\na4c6256-150e233d5b5-2d331a\tnull\t39\na4c62a6-15061aef97d-8b303\tnull\t39\na4c62a6-15277f0dce7-d7213\tnull\t39\na4c62a6-152db5c951e-289369\tnull\t38\na4c6256-14ae7b14192-95b5\tLES BODIN\u0026#39;S\t38\na4c628c-151c381a9db-127f93\tnull\t38\na4c637-15102ac4928-69690\tnull\t38\na4c62a6-152e05be176-29d663\tnull\t38\na4c62a6-150f07b2d1b-a80cf\tINSIDE 75 Armoire lit escamotable CRONOS, noir mat. Matelas TRECA inclus couchage 140 * 22 * 200 cm.\t38\na4c6255-14b401c0052-fab4f\tnull\t38\na4c628c-152b75ad24c-1f2308\tnull\t38\na4c62a6-150f07b2d1b-a80cf\tProform Vélo d\u0026#39;appartement ProForm Slide Touch 7.0\t38\na4c62a6-14ec1c1eb80-11b9d8\tnull\t38\na4c6257-1523d0c244b-91ac\tASUSTeK COMPUTER ASUS X751LD TY087H - 17.3\u0026quot; Core i5 I5-4200U 1.6 GHz 4 Go RAM 1 To HDD\t38\na4c628c-14dda5ab589-7871\tnull\t38\na4c637-152d7645e72-33d7ef\tnull\t38\na4c7249-14daac358e5-3318f\tnull\t38\na4c6257-15163d2c7cf-88a01\tnull\t38\na4c62a6-1523b024e14-2b5e9\tnull\t38\na4c637-15220eb5529-4641b0\tnull\t38\na4c6255-152a8441f90-34f6da\tnull\t38\na4c62a6-152752e7a09-cd876\tnull\t38\na4c6257-152d0c2f58f-25dab6\tnull\t37\na4c6256-150b34dc4ff-1571650\tnull\t37\na4c6257-1514f8eea33-325db\tnull\t37\na4c628c-152ca76c642-240de7\tnull\t37\na4c6257-15249873fcf-220b5\tnull\t37\na4c62a6-150f6108a96-12c92\tnull\t37\na4c628c-1526980ff86-9d8a6\tnull\t37\na4c628c-151ea20c636-65d78\tnull\t37\na4c62e8-152bcdf05fd-49881\tnull\t37\na4c6256-150faa5da0c-239b2e\tnull\t37\na4c62a6-14f226c45b0-44526\tnull\t37\na4c62a6-150619608e5-8ab28\tnull\t37\na4c62a6-15207dc99e4-c8736\tnull\t37\na4c6257-151a7a06de2-c5070\tnull\t37\na4c62a6-150d2a1cc26-2d1b0\tnull\t37\na4c62fb-14750b8358c-2127\tnull\t37\na4c628c-15228b059e7-e8ccf\tnull\t37\na4c6291-152c01351a8-66dea2\tnull\t37\na4c62a6-151beadceeb-116847\tnull\t37\na4c62a6-15366766978-145c54\tnull\t37\na4c6257-15028974f64-37ef7\tnull\t37\na4c62a6-152c666041f-231053\tnull\t37\na4c628c-15159f86134-59d88\tAsustek ASUS N550JK CN466H - 15.6\u0026quot; Core i7 I7-4710HQ 2.5 GHz 8 Go RAM 1 To HDD\t36\na4c6257-1528427edec-10cc2a\tnull\t36\na4c6257-152922a5a08-148a1a\tnull\t36\na4c6257-1528568cb6b-1146e9\tnull\t36\na4c637-14ba7c47731-6882\tnull\t36\na4c6256-15291ec0ec6-8e4ba\tnull\t36\na4c6255-152f58d25b0-da2b36\tnull\t36\na4c6255-15249911b03-144b52\tnull\t36\na4c62e8-151c9d84b87-5c87\tnull\t36\na4c628c-1535f33b2cb-12b8ae\tnull\t36\na4c637-150f8cf66b3-b9c49\tnull\t36\na4c6255-14c508460b2-c7761\tnull\t36\na4c62a6-152a831d6c9-1ae66d\tnull\t36\na4c62a6-152bb116988-20241f\tnull\t36\na4c6256-15297bd5f93-12336e\tnull\t36\na4c6291-152b9f963e7-59b21f\tnull\t36\na4c7221-1477313bc6e-30c\tnull\t36\na4c6257-15287a47680-11b9e7\tnull\t36\na4c6255-14fb6d23e98-18089f\tnull\t36\na4c6255-15011e5509c-bc73dd\tnull\t36\na4c62a6-15191027d8e-59cb2\tnull\t36\na4c628c-15299907ea1-16faae\tnull\t36\na4c6257-1523d0c244b-91ac\tThomann Rack Case 6U\t36\na4c6257-15350312a38-ef4d3\tnull\t36\na4c628c-1533ed0b9a4-a42b4\tnull\t36\na4c628c-1527f54c563-f6d53\tnull\t36\na4c62e8-151ff1b8ec7-3d044\tnull\t36\na4c6255-1522854763a-e14dc6\tnull\t36\na4c6220-14a53f3f4bf-2bd\tnull\t35\na4c6291-152d5a9efbc-962066\tnull\t35\na4c62a6-150f07b2d1b-a80cf\tHolzinger Couronne diamant pour carotteuse 82 x 400 mm\t35\na4c6257-152f3c7e7fa-2e79aa\tnull\t35\na4c62a6-150f07b2d1b-a80cf\tCarrelage 30,3x60,8 Timeless white A+B+C - Castelvetro - Carrelage 1er choix\t35\na4c6255-1503ec99700-4512eb\tnull\t35\na4c62a6-152c861107e-23b2ed\tnull\t35\na4c62a6-152d714829d-27805b\tnull\t35\na4c6255-152d1217fee-8b8d49\tnull\t35\na4c6256-14d5d0eaeb2-31411b\tnull\t35\na4c6291-1483cc43487-2222ce\tnull\t35\na4c6257-15215c4e931-ffd8d\tSARENZA Mocassins SARENZA( Femme )\t35\na4c62a6-14bad4a0e2e-65ee2\tnull\t35\na4c6291-152d6443f8f-97e594\tnull\t35\na4c62a6-14f5f3927e9-e0167\tnull\t35\na4c6256-152e1043ec4-af017a\tnull\t35\na4c62a6-151c6b13791-1365c2\tnull\t35\na4c6291-14f7e83faaa-322b71\tnull\t35\na4c6291-14bd1ae3f09-16dd7d\tnull\t35\na4c6257-14b7ec03718-17c21\tnull\t35\na4c637-1531522b901-13a4d\tnull\t35\na4c62a6-1537566e60d-17c8e1\tnull\t35\na4c62a6-151afcab864-dfee9\tnull\t35\na4c6291-14cd1946fbf-26b1b6\tnull\t35\na4c62e8-152c2673abb-50f06\tnull\t35\na4c62a6-152b93b860d-1fb988\tnull\t35\na4c6291-1517d7b1083-35c58b\tnull\t35\na4c6257-14f3f625277-90720\tnull\t35\na4c62e8-14fd12ce6e7-1f489\tnull\t35\na4c6291-150fc6d397e-3f867\tnull\t34\na4c62a6-150f07b2d1b-a80cf\tWeider Appareil à charges guidées Weider PRO 4500\t34\na4c628c-151dea635c6-3c179\tnull\t34\na4c6256-1488d8e0999-143349\tnull\t34\na4c62e8-152a6599b33-26ef3\tnull\t34\na4c628c-152047358e0-52113\tnull\t34\na4c62e8-152b9c81521-44628\tnull\t34\na4c628c-1523ca9eda5-72f3\tnull\t34\na4c72bc-14792bf2947-11b0\tnull\t34\na4c72e-14da63c2167-246dc\tnull\t34\na4c62a6-150f07b2d1b-a80cf\tiFit.com Carte iFit® SD Performance Niveau 4\t34\na4c62a6-150f07b2d1b-a80cf\tiFit.com Bracelet connecté iFit Act\t34\na4c62a6-14cf5623c2a-2e796\tnull\t34\na4c6257-15204b8696f-bd941\tnull\t34\na4c6257-1529a220e47-171c8a\tnull\t34\na4c6291-147d84d20d6-e7b2b7\tnull\t34\na4c62a6-1530ea0fa59-3449d4\tnull\t34\na4c6291-150d39b2fc6-2b070\tnull\t34\na4c62a6-1535c7f0691-122576\tnull\t34\na4c62a6-150f07b2d1b-a80cf\tcarrelage 10x20 Metro-Blanc-Noir-Rouge-carrelage 1er choix\t34\na4c6257-152adb8d525-1c6263\tnull\t34\na4c62a6-150f07b2d1b-a80cf\tiFit.com Bracelet connecté iFit Link\t34\na4c6257-14c89a0a1e5-2bc17\tnull\t34\na4c6291-1529c40cd42-196c18\tnull\t34\na4c6257-1525aede38c-68fc9\tnull\t34\na4c6257-1528f467f66-13eca6\tnull\t34\na4c62a6-1520e24a06e-e5d9f\tnull\t34\na4c6257-15308a5b3b4-334fa2\tnull\t34\na4c628c-153644eb403-13da0b\tnull\t34\na4c6255-15221a9ef22-d23cdb\tnull\t34\na4c637-1525da7f253-16febc\tnull\t34\na4c6256-14e840552fc-43e291\tnull\t34\na4c6291-14f5b8884de-543cbc\tnull\t34\na4c62e8-152f183a098-902ac\tnull\t34\na4c6256-1526582be74-566abd\tnull\t34\na4c628c-152aa70af54-1b7cbf\tnull\t34\na4c62a6-1535be7e064-11f2d9\tnull\t34\na4c62a6-152874c9d87-11a096\tnull\t34\na4c628c-1529e2f2163-182977\tnull\t34\na4c6255-14b3ebf9d6a-bc8c2\tnull\t34\na4c628c-152e9b02954-2c1106\tnull\t33\na4c628c-151bacbeab1-10a5a0\tnull\t33\na4c622a-152fbf84f36-1bdff28\tnull\t33\na4c62a6-152a6829732-1a5b5f\tnull\t33\na4c6256-152fa391c5d-e2a89f\tnull\t33\na4c6257-15215c4e931-ffd8d\tzooplus Selection Adult Sensitive poulet, riz pour chien - 24 x 800 g\t33\na4c6257-15253ec7a3d-4b60f\tnull\t33\na4c6291-14feee3ba7c-b1c4d9\tnull\t33\na4c62a6-1520d96923b-e262c\tnull\t33\na4c622a-152e13dcdfd-d57059\tnull\t33\na4c62a6-153135831f5-1ac5\tnull\t33\na4c6257-1528e44c1ae-139ed1\tnull\t33\na4c628c-152ff441cd1-31117b\tnull\t33\na4c62e8-152eb96149f-8890b\tnull\t33\na4c6257-1532d9a2d25-5bc08\tnull\t33\na4c62a6-150f07b2d1b-a80cf\tINSIDE 75 Armoire lit escamotable VERTIGO chêne blanc couchage 140 * 14 * 200 cm\t33\na4c6255-152b691a429-519268\tnull\t33\na4c6257-153429d4d24-b3142\tnull\t33\na4c62a6-153475ceec2-c84ad\tnull\t33\na4c628b-147a4d74b74-19\tnull\t33\na4c6256-1535d0e97a1-7465c4\tnull\t33\na4c6257-152c9781480-23e10d\tnull\t33\na4c628c-152ee9ce42c-2d3907\tnull\t33\na4c6257-15324028138-3ad66\tnull\t33\na4c6291-152b819ae0e-56cf26\tnull\t33\na4c62a6-150f07b2d1b-a80cf\tINSIDE 75 Armoire lit escamotable CRONOS, chêne blanc. Matelas TRECA inclus couchage 140 * 22 * 200 cm.\t33\na4c6257-1529e5e7ade-1839a9\tnull\t33\na4c628c-15138d1463f-1059f8\tnull\t33\na4c62a6-1521ce8d9c1-11f850\tAsustek ASUS N550JK CN466H - 15.6\u0026quot; Core i7 I7-4710HQ 2.5 GHz 8 Go RAM 1 To HDD\t33\na4c6256-14ba7c91b86-178e8\tnull\t33\na4c62a6-151cb91c9be-63e9\tnull\t33\na4c62a6-152560342cc-54cd8\tnull\t33\na4c622b-1430fdea434-129e8e0\tnull\t33\na4c6257-152adfe4418-1c7bb8\tnull\t33\na4c6255-14ecfc83f36-2d72f\tnull\t32\na4c6257-151cb8cc07f-65d3\tDallage 61x61 Morvan Pedra 20 mm - Rocersa - Carrelage 1er choix\t32\na4c628c-152b1068f17-1d4aad\tnull\t32\na4c62e8-1531ed398c5-d73a\tnull\t32\na4c62e8-1528f4afec4-4b51\tnull\t32\na4c628c-1532ed19d18-617ea\tnull\t32\na4c6257-14d8a08b351-529b7\tnull\t32\na4c6291-15323d475ea-18abfa\tnull\t32\na4c62a6-14e8cb3638f-722dd\tnull\t32\na4c62a6-14eeadf71f2-53380\tnull\t32\na4c622a-150a99e875b-aaec34\tnull\t32\na4c622a-14922612070-19fbfa5\tnull\t32\na4c6257-15215c4e931-ffd8d\tFC-Moto Big German - ,\t32\na4c6257-15280398957-fb7b0\tnull\t32\na4c6256-15326f0ac04-1c5213\tnull\t32\na4c6255-150320c9eb6-230207\tnull\t32\na4c6256-14fda50a75d-77b099\tnull\t32\na4c6257-152e35678ae-2a8b8e\tnull\t32\na4c62e8-15297352f6c-101c0\tnull\t32\na4c6257-152e5e7f2bf-2b3b8f\tnull\t32\na4c62e8-1528a8e3625-64e46\tnull\t32\na4c6257-15215c4e931-ffd8d\tSARENZA Sandales et nu-pieds SARENZA( Femme )\t32\na4c6257-152855ef5f3-114498\tnull\t32\na4c628c-15240ae0dc4-fda\tnull\t32\na4c6255-152eb02792f-c37dd1\tnull\t32\na4c6257-1538dce9dc1-1ce616\tnull\t32\na4c62a6-1521b29a62a-116ca0\tnull\t32\na4c62a6-153237a819b-37e87\tnull\t32\na4c62a6-15196c56c90-767a7\tnull\t32\na4c6255-1523551b05f-fafda3\tnull\t32\na4c6291-15161ef36c5-37fbf4\tnull\t32\na4c6257-14b4629d97a-48537\tnull\t32\na4c6256-14ef7a1e0d7-a28e1\tnull\t32\na4c62a6-152ea65176d-2c4a83\tnull\t32\na4c62a6-15226a8665a-147f3c\tnull\t32\na4c62e8-1530a9011e5-aebb7\tnull\t32\na4c6291-14f75f7facc-1f3319\tnull\t32\na4c62a6-1515dead09f-66665\tnull\t32\na4c6257-152c09e9847-21af6b\tnull\t32\na4c62a6-15324e106d0-3e0a5\tnull\t32\na4c6291-14cf24e8892-16bac5\tnull\t32\na4c6227-128b62abef7-487f\tnull\t32\na4c62a6-1521ce8d9c1-11f850\tToshiba Satellite C50-B-131 - 15.6\u0026quot; Pentium N3530 4 Go RAM 1 To HDD\t32\na4c6257-152ee485437-2d3152\tnull\t32\na4c6256-1509936e1db-1162e98\tnull\t32\na4c6257-152a4ab8702-1a06e8\tnull\t32\na4c628c-14f36b0188d-7ddf1\tnull\t32\na4c62a6-1527514fe58-ccf1c\tnull\t32\na4c6256-1529e26e07c-1eb1d7\tnull\t32\na4c6257-153061f9ce0-32e2c2\tnull\t32\na4c628c-152901664bf-1419f8\tnull\t32\na4c6257-1534e598a4f-ea443\tnull\t32\na4c628c-152c04df209-2192e1\tnull\t32\na4c62e8-15279458402-4b421\tnull\t32\na4c622b-15143dfed90-1235e31\tnull\t32\na4c6291-14c02adaad0-707775\tnull\t31\na4c6257-15391836a5a-1dcace\tnull\t31\na4c6291-1519cbaa537-702f0c\tnull\t31\na4c6255-152d3f959df-916518\tnull\t31\na4c6257-14f7d7b807e-12a14a\tnull\t31\na4c6221-150c456a24b-344\tnull\t31\na4c6291-1501f74d0f6-250dab\tnull\t31\na4c628c-14fdf1b2618-b332\tnull\t31\na4c637-14f0a0d322d-84dbb\tnull\t31\na4c6257-152fbc3dc0f-3069b2\tnull\t31\na4c628c-15349477400-d2162\tnull\t31\na4c628c-150d3b85c85-338fd\tnull\t31\na4c62a6-152b84a6ae7-1f7691\tnull\t31\na4c6257-15369cb7445-14fdc2\tnull\t31\na4c6256-14f0c2aa65f-1b02ff\tnull\t31\na4c628c-14e11e4d681-8b729\tnull\t31\na4c62a6-15362f341b1-13c1cd\tnull\t31\na4c62a6-14f89cb538e-151bc9\tnull\t31\na4c6257-1537bae68d9-192b6e\tnull\t31\na4c62a6-150f07b2d1b-a80cf\tcarrelage Elite 60x60 aspect béton ciré -\t31\na4c62e8-14f650a42a6-781bc\tnull\t31\na4c6257-152ab508c24-1ba2c2\tnull\t31\na4c6257-1523d0c244b-91ac\tAsustek Portable ASUS R751JB-TY016H Metal\t31\na4c72bd-1477932f757-212c\tnull\t31\na4c6256-14d9ff789ef-225e5b\tnull\t31\na4c637-14b82cbdccc-623fa\tnull\t31\na4c628c-1522789fd2e-e31d9\tnull\t31\na4c6256-15345d3e344-50cbd0\tnull\t31\na4c62a6-1531ececed7-27c87\tnull\t31\na4c6256-151151b53a2-3900dc\tnull\t31\na4c62a6-150f07b2d1b-a80cf\tFleurs de Bach - Honeysuckle ( Chèvrefeuille ) 20ml\t31\na4c62a6-15208771be3-cc22a\tnull\t31\na4c62a6-15089c8c2c0-1d81\tnull\t31\na4c6257-1523d0c244b-91ac\tThomann Speaker Strap\t31\na4c6291-14c4903dbc7-c9559\tnull\t31\na4c62e8-1522251dfba-18c3\tnull\t31\na4c6291-14d30999a88-11aa28\tnull\t31\na4c6256-14bd168601e-15c3a8\tnull\t31\na4c6291-1527b32ea07-8846b6\tnull\t31\na4c6257-14c567d055d-62215\tnull\t31\na4c628c-152b7e56c91-1f54f7\tnull\t31\na4c62e8-152e9469b94-84fd4\tnull\t31\na4c62e8-152a6f80615-27ec1\tMeuble CD / DVD merisier laqué 3 tiroirs multicolore\t31\na4c6255-14af3f127c3-18cbe3\tnull\t31\na4c628c-152a7dc78f9-1acc00\tnull\t31\na4c7255-14b2f712939-e8c1f\tnull\t31\na4c62a6-151fcbcd27d-990e4\tnull\t31\na4c62a6-152ef38e453-2d6774\tnull\t31\na4c6256-1489ea76f35-db359\tnull\t31\na4c6256-14ebc19530a-b46c20\tnull\t31\na4c628c-15351197f8d-f3761\tnull\t31\na4c8240-1532d50b7b2-2ca0\tnull\t31\na4c6255-152c3440457-6fb549\tnull\t31\na4c6257-151cb8cc07f-65d3\tCarrelage 30,3x60,8 Timeless white A+B+C - Castelvetro - Carrelage 1er choix\t31\na4c637-152c647d671-26eacd\tnull\t30\na4c6291-15180d65c21-3c5d00\tnull\t30\na4c628c-152ad42765c-1c3741\tnull\t30\na4c6256-14c69d4e969-6ab2a8\tnull\t30\na4c62e8-14f17d6e50e-3356c\tnull\t30\na4c6291-14f09d61332-1830d8\tnull\t30\na4c6257-15252fa5836-48ff4\tnull\t30\na4c6255-14d951640fd-a0c7e\tnull\t30\na4c62a6-151e3c18b76-4d179\tnull\t30\na4c628c-152b15d55e9-1d6873\tnull\t30\na4c6255-150ebe50654-836d\tnull\t30\na4c6291-152d9fe20f9-9ed3a6\tnull\t30\na4c62a6-151d47ffa84-1ee0f\tnull\t30\na4c6291-14a5ce5d64d-33f641\tnull\t30\na4c628c-1528eb68acc-13c2be\tnull\t30\na4c6291-14d9205c747-575ca\tnull\t30\na4c622a-15259f97ed5-1177d4c\tnull\t30\na4c6257-151f581fc71-88e87\tnull\t30\na4c628c-152c73bb96a-235834\tnull\t30\na4c6255-152a4ad2541-2dca9d\tnull\t30\na4c6256-153319da9da-2d8e97\tnull\t30\na4c6291-14d48f96efb-4bf13\tnull\t30\na4c62a6-152c81bb2c8-23a2f9\tnull\t30\na4c628c-151d4c81b5f-1fb29\tnull\t30\na4c6256-14c837e5adc-2d512f\tLES BODIN\u0026#39;S\t30\na4c628c-1529955497a-16e5af\tnull\t30\na4c6255-1526f7c2815-6c6076\tnull\t30\na4c6291-151356fa7e9-2825f8\tnull\t30\na4c6257-15293a6be2b-150f42\tnull\t30\na4c6291-14f9848efce-7bb01b\tnull\t30\na4c6255-1517d7c0e7a-355c8e\tnull\t30\na4c6255-14c417da815-552ff5\tnull\t30\na4c6255-152e5a86d4f-b7cf0d\tnull\t30\na4c622b-1538688dcab-42106d\tnull\t30\na4c72bc-1472fcb0639-1287\tnull\t30\na4c628c-151b0327c19-e18cd\tnull\t30\na4c62a6-1517ed8f463-ed4d\tnull\t30\na4c6256-14cbb22f77d-70b2dc\tnull\t30\na4c6257-152c7c76e91-239113\tnull\t30\na4c6257-1535d786c6e-1284c9\tnull\t30\na4c62e8-151a1a047e9-4dcfe\tnull\t30\na4c6255-151dfa619f0-5905de\tnull\t30\na4c6255-1538a1db3a0-eef44\tnull\t30\na4c62a6-150c4fde99b-c84e2\tnull\t30\na4c637-1530f4367ba-59367b\tnull\t30\na4c6255-152b78e2a01-54614b\tnull\t29\na4c724e-14735746260-1883\tnull\t29\na4c6255-1530a97cc86-100f119\tnull\t29\na4c628c-1513b0de2c6-110e7d\tnull\t29\na4c6257-1515eda91b2-7557c\tnull\t29\na4c6257-1514f6ffd0e-31b9f\tnull\t29\na4c62a6-1532824d045-47b0b\tnull\t29\na4c628c-152a667db1e-1a57c0\tnull\t29\na4c6256-152eebb248a-cb48b9\tnull\t29\na4c6257-15317bc838a-1030b\tnull\t29\na4c637-14efe60707d-636f\tnull\t29\na4c6257-1535a827ef6-119316\tnull\t29\na4c7254-1480da97dde-10487\tnull\t29\na4c6257-14a628742e0-1070e\tnull\t29\na4c7256-147a0801144-3a5d9a\tnull\t29\na4c628c-14f64f6e3c7-f2021\tnull\t29\na4c628c-152cd626c3f-250671\tnull\t29\na4c637-1520dde112f-394e2e\tnull\t29\na4c6257-150c24f825f-b88e3\tnull\t29\na4c628c-15351724c91-f5be9\tnull\t29\na4c6257-152bbd5f30c-207690\tnull\t29\na4c628c-1528e08616b-138cdb\tnull\t29\na4c6255-1510608b516-17e852\tnull\t29\na4c6255-15332dbeaa8-3085fa\tnull\t29\na4c62a6-14d757c5a32-1f069\tnull\t29\na4c628c-15159f86134-59d88\tApple MacBook Pro Avec écran Retina MGXA2F/A - 15.4\u0026quot; Core i7 2.2 GHz 16 Go RAM 256 Go SSD\t29\na4c6291-150f670d325-19962d\tnull\t29\na4c6257-14e95fd1ccc-93975\tnull\t29\na4c6255-1516e4f67b7-17f1c5\tnull\t29\na4c62a6-1521ce8d9c1-11f850\tAsustek ASUS ROG G741JM T4047H - 17.3\u0026quot; Core i5 I5-4200H 2.8 GHz 8 Go RAM 1 To HDD\t29\na4c6257-14ab45ce439-13274e\tnull\t29\na4c628c-151c3ce909f-12915e\tnull\t29\na4c7255-14abb44e55f-556376\tnull\t29\na4c628c-15159f86134-59d88\tAsustek ASUS P750LB T2059G - 17.3\u0026quot; Core i5 I5-4200U 1.6 GHz 4 Go RAM 500 Go HDD\t29\na4c7254-14df3530d4e-25cc21\tnull\t29\na4c62a6-15323e4641b-39e99\tnull\t29\na4c62a6-152c78069ac-2370e5\tnull\t29\na4c62e8-150822a8032-5f744\tnull\t29\na4c628c-1529f26827a-1883c8\tnull\t29\na4c6291-1531f60acdf-12ae21\tnull\t29\na4c6257-15280d9bc48-fd514\tnull\t29\na4c6257-151b5669d67-f89c9\tnull\t29\na4c6291-14f9e73f125-f994b\tnull\t29\na4c62e8-14e1237b96e-2ef50\tnull\t29\na4c7225-1472548648c-e06\tnull\t29\na4c6257-152ea9838bb-2c5d8e\tnull\t29\na4c628c-153058b30ca-32a68f\tnull\t29\na4c62a6-15262ea3c63-8578c\tnull\t29\na4c6255-152e92ba8bf-bebfe3\tApple iPhone 6s 64 Go Gris\t29\na4c628c-1534ba449d7-d9a80\tnull\t29\na4c6291-14efc80faf0-13fb84\tnull\t29\na4c62a6-152df542f80-297daf\tnull\t29\na4c62fa-146ab0b94a7-150c\tnull\t29\na4c6256-14fda46d78c-7789d5\tnull\t29\na4c6257-1533cd52591-98e4a\tnull\t28\na4c6256-150f5cc266f-16f428\tnull\t28\na4c6257-15318c7a6f2-144f6\tnull\t28\na4c6256-15254d70d28-307504\tnull\t28\na4c628c-1537904be2a-18844d\tnull\t28\na4c6291-1494357aac4-480f4\tnull\t28\na4c6256-14fa95f39dc-43730\tnull\t28\na4c6257-1523d0c244b-91ac\tThomann T-Shirt \u0026quot;Stage Rebel\u0026quot; M BK\t28\na4c6257-1527f2be39f-f6349\tnull\t28\na4c6256-14b2b5bc1ef-1468c0\tnull\t28\na4c6257-15248afcf59-20405\tnull\t28\na4c6257-1526cc56e85-a91f1\tnull\t28\na4c62a6-1528bcc4511-12ef55\tnull\t28\na4c6257-1523d0c244b-91ac\tDell Vostro V130 - Intel Core i5 1.33 GHz - 4 Go RAM - DD 500 Go - Ecran 13\u0026quot;\t28\na4c637-1522d9be08d-4fd466\tnull\t28\na4c6255-152e42b0781-b3b467\tnull\t28\na4c62a6-15267f8b617-97982\tAsustek ASUS Transformer Book T200TA CP003H - 11.6\u0026quot; Atom Z3775 1.46 GHz 2 Go RAM 32 Go SSD\t28\na4c628c-151f9059d10-28188\tnull\t28\na4c6256-1509bcd5c67-11eb5f8\tnull\t28\na4c6255-15222cfd6b9-d5a748\tnull\t28\na4c628c-14ff6b8e42a-18ec8\tnull\t28\na4c6257-1518598453a-2a16f\tnull\t28\na4c6291-152e578ad25-b8a28c\tnull\t28\na4c62e8-15154a3a002-1e2cb\tnull\t28\na4c6255-152ff92c4bc-eb5a5f\tnull\t28\na4c6255-14fbf4afa4a-1c93b1\tnull\t28\na4c628c-152c0fb4ec7-21c416\tnull\t28\na4c6256-150bf95aaf2-16ef47d\tnull\t28\na4c628c-152e3c2cc30-2a8d35\tnull\t28\na4c622a-150dd8e7bd8-8b8cab\tnull\t28\na4c6291-152abf2cab7-3c7389\tnull\t28\na4c6256-152ea606bfc-c2641d\tnull\t28\na4c628c-14cddd4a4c9-180aa\tnull\t28\na4c6257-15398a9aa72-1f3f42\tnull\t28\na4c62a6-151428a61a0-12adef\tnull\t28\na4c62a6-1513023ca4e-e61ed\tnull\t28\na4c62a6-14e62c6e862-16a9\tnull\t28\na4c6291-14edaa2d479-1b47c0\tnull\t28\na4c628c-151b1d0bf82-ea76e\tnull\t28\na4c62a6-151d47d95b6-1ed97\tnull\t28\na4c6291-152d1eb6cb6-8f815e\tnull\t28\na4c628c-1526a971bf2-a24b4\tnull\t28\na4c62a6-14feb41c935-34a93\tnull\t28\na4c62a6-15267f8b617-97982\tIBM ThinkPad Helix 20CG - 11.6\u0026quot; Core M 5Y10c 800 MHz 4 Go RAM 180 Go SSD\t28\na4c6256-1480258bcff-17facb\tnull\t28\na4c62a6-152c474efc9-2293a2\tnull\t28\na4c6257-151cac4b4dd-31b0\tnull\t28\na4c823f-14f70260b41-1b870\tnull\t28\na4c6255-14f071a7f48-10d3af\tnull\t28\na4c6257-15304a254b0-326c2e\tnull\t28\na4c6291-1505b55ac53-882214\tnull\t28\na4c6291-151a704b7c9-d6d17\tnull\t28\na4c6255-14fcc2124c6-4eff61\tnull\t28\na4c628c-1521d6d305f-b89c5\tnull\t28\na4c6255-151df91a4a5-58d1ac\tnull\t28\na4c6291-15228754421-e39cb8\tnull\t28\na4c6256-147c5ac4658-9a0a20\tnull\t28\na4c6257-14f7491eccc-1112ea\tnull\t28\na4c6257-1529180c233-1457ac\tnull\t28\na4c62a6-14fef0b3e20-4149b\tnull\t28\na4c622b-14a1fe8cf22-183e264\tnull\t28\na4c628c-152f49ed279-2e9e38\tnull\t28\na4c62a6-15272ff6a77-c11ac\tnull\t28\na4c6291-14fb6f871c4-18c8bd\tnull\t28\na4c62a6-152fa92310f-300bc1\tnull\t28\na4c622a-152ac5cae6f-357d5e\tnull\t28\na4c6257-152760975fe-d2016\tnull\t28\na4c6291-14df6cea302-14ab2\tnull\t28\na4c6255-1510284112c-124fb2\tnull\t28\na4c637-150ce5f21ba-887c2e\tnull\t28\na4c628c-1515ed4bdeb-75382\tnull\t28\na4c62a6-153293f598e-4db16\tnull\t28\na4c62a6-150d8fe7041-4b70e\tnull\t28\na4c628c-15051f8260e-4fefa\tnull\t28\na4c62e8-150bec86b15-7f43\tnull\t28\na4c62a6-150f7425d3c-18e3e\tnull\t28\na4c8241-1518c8f372b-13f61\tLES BODIN\u0026#39;S\t28\na4c62a6-152e0c6d719-29fab5\tnull\t28\na4c62a6-152a78bc13a-1aaee4\tDell OptiPlex 360\t28\na4c6256-14d8cbecbc7-986af0\tnull\t27\na4c628c-153677898fd-14aa47\tnull\t27\na4c6256-1529c7444bd-19bafc\tnull\t27\na4c62fd-148c26c55af-4f9\tnull\t27\na4c62a6-152d11348de-25ee1d\tnull\t27\na4c62a6-152c1e6b52a-2207d0\tnull\t27\na4c72e-14f4be5c3a2-173ca\tLES BODIN\u0026#39;S\t27\na4c628c-152d135a40b-25f35d\tnull\t27\na4c6257-1522810262e-1503a7\tnull\t27\na4c62a6-152a5b9df20-1a28ae\tnull\t27\na4c6256-15294e92f82-f147b\tnull\t27\na4c6257-15365425b92-141296\tnull\t27\na4c6256-1534895d9f9-55be69\tnull\t27\na4c6256-1522258ba16-d5057d\tnull\t27\na4c622b-152122ced96-31d798b\tnull\t27\na4c6255-14ed09715c3-57b6a\tnull\t27\na4c6256-1518af11347-4fb293\tnull\t27\na4c6257-152f4bd438a-2eb772\tnull\t27\na4c628c-152823b4e0f-101902\tnull\t27\na4c6255-14b67bd0653-307ebd\tnull\t27\na4c62a6-1522cfb8e77-165cf4\tnull\t27\na4c6255-15191ed9f02-59bece\tnull\t27\na4c6255-15253ed42e0-2deed2\tnull\t27\na4c8257-151241fd24b-5588\tnull\t27\na4c62a6-151cf36ba38-10044\tnull\t27\na4c6257-15173bad847-ca012\tnull\t27\na4c62a6-1532742e042-43adb\tnull\t27\na4c6255-1516393c75f-2a3bf\tnull\t27\na4c6255-15284141e9f-9b1ff7\tnull\t27\na4c62a6-15374170d42-177383\tnull\t27\na4c6255-14fb41c5de7-13cafb\tnull\t27\na4c6257-15355ef3a56-107c5f\tnull\t27\na4c6291-152f8df088d-e0d7b8\tnull\t27\na4c6257-151cb8cc07f-65d3\tProform Vélo elliptique ProForm Elipse 4S\t27\na4c62a6-15376eb22cf-183f25\tnull\t27\na4c628c-151d50037d3-20562\tnull\t27\na4c724e-1473ead3155-489\tnull\t27\na4c62a6-14eeff09941-63f24\tnull\t27\na4c628c-1531ea0efdf-271f1\tnull\t27\na4c6256-151393baf96-2f2f94\tnull\t27\na4c6256-14ceffffee7-11165a\tnull\t27\na4c6291-14ebc217c41-b43e4a\tnull\t27\na4c6255-152a8df7f42-374445\tnull\t27\na4c62a6-152bab750bb-20052d\tnull\t27\na4c628c-152b8bfcc5f-1f9947\tnull\t27\na4c622a-152ac50236d-353714\tnull\t27\na4c622a-152c62ca021-91b721\tnull\t27\na4c6256-15245d15969-cb936\tnull\t27\na4c62a6-1535f60f578-12c301\tnull\t27\na4c6256-14fbf71de94-1c8806\tnull\t27\na4c6255-152df3019b6-a8773e\tnull\t27\na4c6257-14e3f35f27a-11cb7d\tnull\t27\na4c6257-152c5a02c4a-22dda5\tnull\t27\na4c62a6-152db1bf298-287a26\tnull\t27\na4c628c-152ff4ed1f0-31150b\tnull\t27\na4c622b-152acea083f-3af871\tnull\t27\na4c6291-15308d8146a-fe2733\tnull\t27\na4c6291-151ed80ecf5-758e64\tnull\t27\na4c622b-146bb98e4bb-7a4236\tnull\t27\na4c62a6-1533d25d3d0-9ac02\tnull\t27\na4c628c-1522caa6790-f9d6c\tnull\t27\na4c622a-1523bc54718-271c7\tnull\t27\na4c62e8-15307fe1a0b-aad2b\tnull\t27\na4c628c-152d9e865ba-280cb4\tnull\t27\na4c62a6-14f89d1608a-151d91\tnull\t27\na4c6291-1514e347e58-f2a5d\tnull\t27\na4c6257-151a69bfdd0-bea87\tnull\t27\na4c62a6-150b47329dd-8bcdc\tnull\t27\na4c6256-14b69f116d6-37dd88\tnull\t27\na4c62a6-153418d6314-ad162\tnull\t27\na4c62a6-152f5fc9ee2-2f18f4\tnull\t27\na4c6256-1527ac77e98-86ad69\tnull\t27\na4c637-14cf4b2aff0-89657\tnull\t27\na4c62a6-150eb8c667d-943d7\tnull\t27\na4c6257-151da1f0073-2d927\tnull\t27\na4c6257-150441a6464-21065\tnull\t27\na4c6257-1509eae0c73-3723d\tnull\t27\na4c6350-152b8b9b524-681a0\tnull\t26\na4c62a6-1533e9a0df3-a39c3\tnull\t26\na4c628c-1534b3fdc38-d7aca\tnull\t26\na4c62e8-15134fa30e6-524f1\tnull\t26\na4c622b-15331c21924-cf6e0a\tnull\t26\na4c62a6-14ef825f85e-7e5e5\tnull\t26\na4c62a6-150f07b2d1b-a80cf\tSAMSUNG Galaxy Tab 4 SM T230 7\u0026#39;\u0026#39; 8 Go Wifi Blanc Carte mémoire Micro SDHC SAMSUNG EVO 16 Go Classe 10\t26\na4c62a6-14bf53a8ba4-24732\tnull\t26\na4c62a6-152a996d65b-1b5d0a\tnull\t26\na4c6256-152eaa2b03c-c314d9\tnull\t26\na4c6291-14dd9cbd1b7-58aed4\tnull\t26\na4c6255-152daecebb0-a00aea\tnull\t26\na4c6291-148a1f99b63-19bf63\tnull\t26\na4c6255-14eabeaeddd-9037e6\tSac enfant - Canard\t26\na4c7255-14abbb33214-5a0896\tnull\t26\na4c6257-15308265a70-332e46\tnull\t26\na4c62a6-152a483e88a-19fc9a\tnull\t26\na4c6255-1510afc972c-22f97a\tnull\t26\na4c62a6-15300db5539-318eab\tnull\t26\na4c6291-150e1f26757-2dc15a\tnull\t26\na4c6257-15373f2d516-1770c2\tnull\t26\na4c62a6-150b8cb475b-9a456\tnull\t26\na4c628c-14cd286ee4c-32765\tnull\t26\na4c62a6-150f07b2d1b-a80cf\tFleurs de Bach - Cherry Plum (Prunus) 20ml\t26\na4c62a6-152b1257cbd-1d543d\tnull\t26\na4c62a6-152c70c0f46-234a12\tnull\t26\na4c6256-152354b5e93-fbc99b\tnull\t26\na4c6257-1523d0c244b-91ac\tThomann Headphone Case\t26\na4c6257-14ed9524e56-1f34b\tnull\t26\na4c6257-152615d98be-82512\tnull\t26\na4c628c-152ffaea9d6-313311\tnull\t26\na4c6256-14fd601cca2-6a8676\tnull\t26\na4c6291-150134a2dc3-11dc165\tnull\t26\na4c62a6-1528d51294a-134ecf\tnull\t26\na4c6257-1517cee2744-4a7d\tnull\t26\na4c6257-151f26f3667-7c70e\tnull\t26\na4c6256-14f6fbb2584-151e44\tnull\t26\na4c6257-1527a8f00b0-e4db6\tnull\t26\na4c8257-15212adb459-5871\tnull\t26\na4c6291-151bb845b19-1ddaf4\tnull\t26\na4c628c-14a98a555dc-c7f13\tFrance: Ajaccio\t26\na4c6255-152897d105e-a7fc0b\tnull\t26\na4c62a6-152f986ee18-2fc660\tnull\t26\na4c6257-1523d0c244b-91ac\tHOTPOINT Congélateur Armoire Hotpoint Upsi 1722 F J/ha\t26\na4c62a6-15148e2332f-14510\tnull\t26\na4c628c-151d4133bea-1d83c\tnull\t26\na4c62a6-152822db6c2-101528\tnull\t26\na4c6257-1530070be34-317d9d\tnull\t26\na4c6255-14f1845c2ff-2627e\tnull\t26\na4c62a6-1523a60116a-28aa0\tnull\t26\na4c72bc-1477d435650-238\tnull\t26\na4c6257-151d97056cf-2b0cb\tnull\t26\na4c637-14d1af001d6-1758be\tnull\t26\na4c637-150d85ea418-5fec6\tnull\t26\na4c6255-15126041a22-305b8\tnull\t26\na4c62e8-15241cc7497-3e5d\tFrance: Ajaccio\t26\na4c62e8-14fdc1b767b-257f\tnull\t26\na4c628c-152e1c22b9a-2a3e7b\tnull\t26\na4c62a6-1533df6cc68-9fb6c\tnull\t26\na4c628c-152877e0064-11ae6d\tnull\t26\na4c62a6-15375d351bd-17e840\tnull\t26\na4c62a6-150f07b2d1b-a80cf\tINSIDE 75 Lit superposé RICK en pin massif couchage 90 x 190 cm\t26\na4c62a6-15148d5be15-141df\tnull\t26\na4c6257-152d65a7a4a-274eb3\tnull\t26\na4c622a-152a32d03d9-13243b\tnull\t26\na4c6257-1533873499d-86aa4\tnull\t26\na4c628c-1528ca70bb6-132222\tnull\t26\na4c722b-14d9ebc2cb5-9f970a\tnull\t26\na4c6256-14eb5a90bd3-a5641a\tnull\t26\na4c62a6-150f07b2d1b-a80cf\tProform Tapis de course Proform Performance 1500\t26\na4c6257-1523d0c244b-91ac\tHP 312A : Le meilleur du compatible : Cartouche de Toner Magenta de marque France Toner (2 700 pages) équivalent à HP CF383A pour imprimante HP COLOR LASERJET PRO M476\t26\na4c6257-14b075bc42e-586d1\tnull\t26\na4c6256-14bd6ff93ca-2c2eee\tnull\t26\na4c6255-14f1f132bff-79211\tnull\t26\na4c6257-1532994e1f2-4fbb3\tnull\t26\na4c722a-142d3e5f786-f111b1\tFrance\t26\na4c8258-1518d6fe69e-cd24\tnull\t26\na4c62a6-1520b8423ba-d7063\tnull\t26\na4c6257-152d77143f3-27a3cb\tnull\t26\na4c6256-1510229ea2c-11229c\tnull\t26\na4c6257-14e38616d3f-1055a3\tnull\t26\na4c622a-152b30441bf-3ebb4\tnull\t26\na4c6257-14b5df91c35-bdb8\tnull\t26\na4c6257-149ec7ba0d4-35f0d\tnull\t26\na4c62a6-14a8c7dbdbf-93248\tnull\t26\na4c6257-15192b185c7-66401\tnull\t26\na4c6255-14fe9c37326-458a4a\tnull\t25\na4c6257-150a5494efb-5304d\tnull\t25\na4c6255-152f0d240c0-d0c2cf\tnull\t25\na4c628c-14a7d635d9a-5c5fc\tnull\t25\na4c62a6-152319c475e-6569\tnull\t25\na4c6257-1509e5b6104-3573f\tnull\t25\na4c628c-14f45e79475-a7a27\tnull\t25\na4c62a6-1528906d793-121a32\tnull\t25\na4c6255-14c6b87c42f-7128ee\tnull\t25\na4c62a6-15288a8981b-11fc7d\tnull\t25\na4c62a6-150f07b2d1b-a80cf\tRétroviseurs moto et scooter Chaft Early Noir Mat Noir CE\t25\na4c6291-152d2773d8d-917e49\tnull\t25\na4c628c-150b408010f-89a3a\tnull\t25\na4c6291-1522285f9f4-d6ae9e\tnull\t25\na4c6255-15289241d17-a6b720\tnull\t25\na4c6291-1534721a205-536285\tnull\t25\na4c62e8-152a3169fc6-228fb\tnull\t25\na4c62a6-14ffc18c548-2b8f5\tnull\t25\na4c6291-14f737da1c1-168195\tnull\t25\na4c6257-14d8c355f70-5cf69\tnull\t25\na4c628c-152b2bcf4ee-1ddb4e\tnull\t25\na4c628c-15353295b38-fedc0\tnull\t25\na4c6257-1532b72d81c-54119\tnull\t25\na4c62a6-15283b0c757-1099ee\tnull\t25\na4c62a6-151f8481daa-8f4e7\tnull\t25\na4c62e8-15228158295-a134\tnull\t25\na4c62e8-14f59fe04f5-6c4db\tnull\t25\na4c62a6-152606565c5-7d8b6\tnull\t25\na4c6291-14be3865d76-a7f9d\tLES BODIN\u0026#39;S\t25\na4c628c-1531d0b09c5-20c2f\tnull\t25\na4c622a-140ce740a77-2c3a494\tnull\t25\na4c6257-1523d0c244b-91ac\tLENOVO Unité Centrale Lenovo K450e\t25\na4c6255-152bc418af0-5e3ac6\tnull\t25\na4c6257-152eab7ac37-2c6681\tnull\t25\na4c62fd-147f439a560-6be\tnull\t25\na4c637-14e64df427f-1c564\tnull\t25\na4c6291-1530db5a0d6-1077382\tnull\t25\na4c62e8-152a1d6f2be-203fb\tnull\t25\na4c6257-1527ef00fe6-f4fb8\tnull\t25\na4c628c-1532e0ecc6f-5da46\tnull\t25\na4c6257-1535729c1ff-10dde7\tnull\t25\na4c7255-148e9565c41-972aa\tnull\t25\na4c6255-1506c535c04-b09055\tnull\t25\na4c622b-152a346a8e9-135913\tnull\t25\na4c6255-152a8ba56cf-36aba7\tnull\t25\na4c62fd-149e0f12f55-11\tnull\t25\na4c6257-1522cad24e6-1643b8\tnull\t25\na4c62a6-14e3e4d6782-11633d\tnull\t25\na4c6229-147bccfc41c-1a93\tnull\t25\na4c628c-150d6ee09f8-40d60\tnull\t25\na4c6222-139d96c1e22-67e\tnull\t25\na4c622b-151e86da4ab-1bd6857\tnull\t25\na4c62a6-15298245e1e-166381\tnull\t25\na4c62a6-15288b7b9cf-120088\tnull\t25\na4c6257-1525f9a466c-79cd2\tnull\t25\na4c722a-14e21d7256f-1926e5\tnull\t25\na4c628c-152a68ad26e-1a612f\tnull\t25\na4c628c-149445a9252-5b577\tnull\t25\na4c62e8-152a6f80615-27ec1\tnull\t25\na4c6291-14f36036aa4-2350ba\tnull\t25\na4c62a6-150f07b2d1b-a80cf\tBaskets Moto V\u0026#39;QUATTRO Milano Holiday Noir Bleu\t25\na4c62a6-14d581f74d4-92966\tnull\t25\na4c6257-152b35315fb-1e128f\tnull\t25\na4c6256-14f9a0a0f2b-59d2d\tnull\t25\na4c6257-151317d8252-edfef\tnull\t25\n\n\u003cfont color\u003dred\u003eResults are limited by 1000.\u003c/font\u003e"
+      },
+      "dateCreated": "Apr 5, 2016 1:18:39 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val parquetFileClick \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypso_data_feb_march/calypso_data_feb_march/click/fr/2016/*/*/\")\nval parquetFileOffers \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypso_data_feb_march/calypso_data_feb_march/offerView/fr/2016/*/*/\")\nval groupedOffers \u003d parquetFileOffers.groupBy(\"userId\").count.sort(desc(\"count\"))\nval groupedClicks \u003d parquetFileClick.groupBy(\"userId\").count.sort(desc(\"count\"))\ngroupedOffers.select(avg($\"count\")).show\ngroupedClicks.select(avg($\"count\")).show\n",
+      "authenticationInfo": {},
+      "dateUpdated": "Apr 28, 2016 10:48:52 AM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1459811919358_2102188083",
+      "id": "20160405-011839_2088979714",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "parquetFileClick: org.apache.spark.sql.DataFrame \u003d [userId: string, ip: string, userAgent: struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e, geolocation: struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, offerViewId: string, clickId: string, earning: decimal(38,18)]\nparquetFileOffers: org.apache.spark.sql.DataFrame \u003d [eventType: string, userId: string, ip: string, userAgent: struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e, geolocation: struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, adType: string, offerRank: int, searchId: string, offerViewId: string, contentPageType: string, adPlacement: string, adViewability: string, adSize: string]\ngroupedOffers: org.apache.spark.sql.DataFrame \u003d [userId: string, count: bigint]\ngroupedClicks: org.apache.spark.sql.DataFrame \u003d [userId: string, count: bigint]\n+----------------+\n|      avg(count)|\n+----------------+\n|29.5777663039567|\n+----------------+\n\n+------------------+\n|        avg(count)|\n+------------------+\n|1.5943138731988529|\n+------------------+\n\n"
+      },
+      "dateCreated": "Apr 5, 2016 1:18:39 AM",
+      "dateStarted": "Apr 28, 2016 10:48:52 AM",
+      "dateFinished": "Apr 28, 2016 10:52:40 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "averageOffesPerPerson.show\naverageClicksPerPerson.show",
+      "authenticationInfo": {},
+      "dateUpdated": "Apr 28, 2016 10:37:54 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1461830799411_1016027974",
+      "id": "20160428-100639_1054365942",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "+----------------+\n|      avg(count)|\n+----------------+\n|29.5777663039567|\n+----------------+\n\n+----------------+\n|      avg(count)|\n+----------------+\n|29.5777663039567|\n+----------------+\n\n"
+      },
+      "dateCreated": "Apr 28, 2016 10:06:39 AM",
+      "dateStarted": "Apr 28, 2016 10:37:54 AM",
+      "dateFinished": "Apr 28, 2016 10:42:44 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1461831267838_-1711799044",
+      "id": "20160428-101427_234376360",
+      "dateCreated": "Apr 28, 2016 10:14:27 AM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "statsTwoMonthsData",
+  "id": "2BGA7MP4M",
+  "angularObjects": {
+    "2BGHSKCA7": [],
+    "2BFMBPKAB": [],
+    "2BHKKP27G": [],
+    "2BJHJDBK6": [],
+    "2BJAQG5W4": [],
+    "2BJGSXM37": [],
+    "2BFXEV5XZ": [],
+    "2BG77RV7M": [],
+    "2BF969NNB": [],
+    "2BG8QQJNC": [],
+    "2BGVG5JP4": [],
+    "2BJ5FCP57": [],
+    "2BFEDXCTE": [],
+    "2BJ8AEWCT": [],
+    "2BH9AVVKH": [],
+    "2BJ7KKX85": [],
+    "2BHKAE8WK": [],
+    "2BJ6HN5AY": []
+  },
+  "config": {},
+  "info": {}
+}

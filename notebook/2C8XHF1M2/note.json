@@ -1,0 +1,238 @@
+{
+  "paragraphs": [
+    {
+      "text": "val parquetFileClick \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypso_purch_data/click/*/*/*/*/*.parquet\")\nval distinctWeeks \u003d parquetFileClick.select(weekofyear(parquetFileClick(\"utcDate\"))).distinct\nz.show(distinctWeeks)",
+      "authenticationInfo": {},
+      "dateUpdated": "Feb 5, 2017 12:24:00 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1486249341744_294918693",
+      "id": "20170205-000221_959316751",
+      "dateCreated": "Feb 5, 2017 12:02:21 AM",
+      "dateStarted": "Feb 5, 2017 12:24:00 AM",
+      "dateFinished": "Feb 5, 2017 12:30:31 AM",
+      "status": "FINISHED",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val parquetFileOffer \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypso_purch_data/offerview/*/*/*/*/*.parquet\")\nval distinctWeeks \u003d parquetFileOffer.select(weekofyear(parquetFileOffer(\"utcDate\"))).distinct\nz.show(distinctWeeks)",
+      "authenticationInfo": {},
+      "dateUpdated": "Feb 5, 2017 12:35:22 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1486250040014_2043233543",
+      "id": "20170205-001400_1986870913",
+      "dateCreated": "Feb 5, 2017 12:14:00 AM",
+      "dateStarted": "Feb 5, 2017 12:35:22 AM",
+      "dateFinished": "Feb 5, 2017 12:41:39 AM",
+      "status": "FINISHED",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val parquetFileClick \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypso_purch_data/click/*/*/*/*/*.parquet\")\nval groupByDate \u003d parquetFileClick.groupBy(to_date(parquetFileClick(\"utcDate\"))).count.sort(desc(\"count\"))\ngroupByDate.rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/purch/dat.dateCount\")",
+      "authenticationInfo": {},
+      "dateUpdated": "Feb 5, 2017 1:41:11 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1486251299849_401514920",
+      "id": "20170205-003459_2092013673",
+      "dateCreated": "Feb 5, 2017 12:34:59 AM",
+      "dateStarted": "Feb 5, 2017 1:41:11 AM",
+      "dateFinished": "Feb 5, 2017 1:41:16 AM",
+      "status": "ERROR",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val parquetFileOffer \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypso_purch_data/offerview/*/*/*/*/*.parquet\")\nval groupByDate \u003d parquetFileOffer.groupBy(to_date(parquetFileOffer(\"utcDate\"))).count.sort(desc(\"count\"))\ngroupByDate.rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/purch/dat.dateOfferCount\")",
+      "authenticationInfo": {},
+      "dateUpdated": "Feb 5, 2017 1:46:14 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1486255524808_1365347543",
+      "id": "20170205-014524_597208977",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "parquetFileOffer: org.apache.spark.sql.DataFrame \u003d [eventType: string, userInfo: struct\u003cuserId:string,ip:string,userAgent:struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e,userGeolocation:struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e,adBlocked:boolean\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, offerRank: int, searchId: string, offerViewId: string, contentPageType: string, adInfo: struct\u003cadType:string,adPlacement:string,adViewability:string,adSize:string\u003e, offerId: string]\ngroupByDate: org.apache.spark.sql.DataFrame \u003d [todate(utcDate): date, count: bigint]\n"
+      },
+      "dateCreated": "Feb 5, 2017 1:45:24 AM",
+      "dateStarted": "Feb 5, 2017 1:46:14 AM",
+      "dateFinished": "Feb 5, 2017 1:52:54 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val groupByWeek \u003d parquetFileOffer.groupBy(weekofyear(parquetFileOffer(\"utcDate\"))).count\nz.show(groupByWeek)",
+      "dateUpdated": "Feb 5, 2017 12:51:37 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1486252285053_-1717516222",
+      "id": "20170205-005125_335787046",
+      "dateCreated": "Feb 5, 2017 12:51:25 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val groupByWeek \u003d parquetFileClick.groupBy(weekofyear(parquetFileClick(\"utcDate\"))).count\nz.show(groupByWeek)",
+      "dateUpdated": "Feb 5, 2017 12:52:14 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1486252322410_-2073347658",
+      "id": "20170205-005202_1632039088",
+      "dateCreated": "Feb 5, 2017 12:52:02 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "",
+      "dateUpdated": "Feb 6, 2017 1:27:49 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1486340805276_120828767",
+      "id": "20170206-012645_2002883820",
+      "dateCreated": "Feb 6, 2017 1:26:45 AM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "purchBaselines: bugNote",
+  "id": "2C8XHF1M2",
+  "angularObjects": {
+    "2BGHSKCA7": [],
+    "2BFMBPKAB": [],
+    "2BHKKP27G": [],
+    "2BJHJDBK6": [],
+    "2BJAQG5W4": [],
+    "2BJGSXM37": [],
+    "2BFXEV5XZ": [],
+    "2BG77RV7M": [],
+    "2BF969NNB": [],
+    "2BG8QQJNC": [],
+    "2BGVG5JP4": [],
+    "2BJ5FCP57": [],
+    "2BFEDXCTE": [],
+    "2BJ8AEWCT": [],
+    "2BH9AVVKH": [],
+    "2BJ7KKX85": [],
+    "2BHKAE8WK": [],
+    "2BJ6HN5AY": []
+  },
+  "config": {},
+  "info": {}
+}

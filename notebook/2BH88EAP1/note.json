@@ -1,0 +1,298 @@
+{
+  "paragraphs": [
+    {
+      "text": "\n\n\nval parquetFileClick \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypso_data_feb_march/calypso_data_feb_march/click/fr/2016/*/*\")\nval clicks \u003d parquetFileClick.filter(!($\"offerViewId\".isNull))\nval clicks \u003d \nval ratings_positive \u003d clicks.groupBy(\"userId\",\"offerViewId\").count\n\n\n\nval parquetFileOffer \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypso_data_feb_march/calypso_data_feb_march/offerView/fr/2016/*/*\")\nval ratings \u003d parquetFileOffer.groupBy(\"userId\",\"offerViewId\").count\n\nval ratings_positive_negative \u003d ratings_positive.join(ratings,ratings_positive(\"userId\")\u003c\u003d\u003eratings(\"userId\") \u0026\u0026 ratings_positive(\"offerViewId\")\u003c\u003d\u003eratings(\"offerViewId\"),\"right_outer\")\n",
+      "authenticationInfo": {},
+      "dateUpdated": "Apr 14, 2016 9:22:36 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [
+            {
+              "name": "userId",
+              "index": 0.0,
+              "aggr": "sum"
+            }
+          ],
+          "values": [
+            {
+              "name": "offerViewId",
+              "index": 1.0,
+              "aggr": "sum"
+            }
+          ],
+          "groups": [],
+          "scatter": {
+            "xAxis": {
+              "name": "userId",
+              "index": 0.0,
+              "aggr": "sum"
+            },
+            "yAxis": {
+              "name": "offerViewId",
+              "index": 1.0,
+              "aggr": "sum"
+            }
+          }
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1460411481187_1198174192",
+      "id": "20160411-235121_722153740",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "parquetFileClick: org.apache.spark.sql.DataFrame \u003d [userId: string, ip: string, userAgent: struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e, geolocation: struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, offerViewId: string, clickId: string, earning: decimal(38,18)]\nclicks: org.apache.spark.sql.DataFrame \u003d [userId: string, ip: string, userAgent: struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e, geolocation: struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, offerViewId: string, clickId: string, earning: decimal(38,18)]\nratings_positive: org.apache.spark.sql.DataFrame \u003d [userId: string, offerViewId: string, count: bigint]\nparquetFileOffer: org.apache.spark.sql.DataFrame \u003d [eventType: string, userId: string, ip: string, userAgent: struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e, geolocation: struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, adType: string, offerRank: int, searchId: string, offerViewId: string, contentPageType: string, adPlacement: string, adViewability: string, adSize: string]\nratings: org.apache.spark.sql.DataFrame \u003d [userId: string, offerViewId: string, count: bigint]\nratings_positive_negative: org.apache.spark.sql.DataFrame \u003d [userId: string, offerViewId: string, count: bigint, userId: string, offerViewId: string]\n"
+      },
+      "dateCreated": "Apr 11, 2016 11:51:21 PM",
+      "dateStarted": "Apr 14, 2016 12:31:31 PM",
+      "dateFinished": "Apr 14, 2016 12:31:38 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val parquetFileClick \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypso_data_feb_march/calypso_data_feb_march/click/fr/2016/*/*\")\nval clicks \u003d parquetFileClick.filter(!($\"offerViewId\".isNull))\nval clicksTime \u003d clicks.where(to_date($\"utcDate\") \u003e to_date(lit(\"2016-01-31\")))\n\n//val dates \u003d clicks.select(\"utcDate\")\n//val ratings_positive \u003d clicks.groupBy(\"userId\",\"offerViewId\").count\n\nval distinctDates \u003d clicksTime.select(to_date($\"utcDate\")).distinct()\nval dates \u003d distinctDates.select(\"todate(utcDate)\").rdd.map(r \u003d\u003e r(0)).collect()",
+      "authenticationInfo": {},
+      "dateUpdated": "Apr 17, 2016 2:00:15 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [
+            {
+              "name": "todate(utcDate)",
+              "index": 0.0,
+              "aggr": "sum"
+            }
+          ],
+          "values": [],
+          "groups": [],
+          "scatter": {
+            "xAxis": {
+              "name": "todate(utcDate)",
+              "index": 0.0,
+              "aggr": "sum"
+            }
+          }
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1460661757926_1701319123",
+      "id": "20160414-212237_518529981",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "parquetFileClick: org.apache.spark.sql.DataFrame \u003d [userId: string, ip: string, userAgent: struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e, geolocation: struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, offerViewId: string, clickId: string, earning: decimal(38,18)]\nclicks: org.apache.spark.sql.DataFrame \u003d [userId: string, ip: string, userAgent: struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e, geolocation: struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, offerViewId: string, clickId: string, earning: decimal(38,18)]\nclicksTime: org.apache.spark.sql.DataFrame \u003d [userId: string, ip: string, userAgent: struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e, geolocation: struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, offerViewId: string, clickId: string, earning: decimal(38,18)]\ndistinctDates: org.apache.spark.sql.DataFrame \u003d [todate(utcDate): date]\ndates: Array[Any] \u003d Array(2016-02-04, 2016-02-05, 2016-02-06, 2016-02-07, 2016-02-08, 2016-02-09, 2016-02-10, 2016-02-11, 2016-02-12, 2016-02-13, 2016-02-14, 2016-02-15, 2016-02-16, 2016-02-17, 2016-02-18, 2016-02-19, 2016-02-20, 2016-02-21, 2016-02-22, 2016-02-23, 2016-02-24, 2016-02-25, 2016-02-26, 2016-02-27, 2016-02-28, 2016-02-29, 2016-03-01, 2016-03-02, 2016-03-03, 2016-03-04, 2016-03-05, 2016-03-06, 2016-03-07, 2016-03-08, 2016-03-09, 2016-03-10, 2016-03-11, 2016-03-12, 2016-03-13, 2016-03-14, 2016-03-15, 2016-03-16, 2016-03-17, 2016-03-18, 2016-03-19, 2016-03-20, 2016-03-21, 2016-03-22)\n"
+      },
+      "dateCreated": "Apr 14, 2016 9:22:37 PM",
+      "dateStarted": "Apr 17, 2016 2:00:15 PM",
+      "dateFinished": "Apr 17, 2016 2:00:51 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val parquetFileClick \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypso_data_feb_march/calypso_data_feb_march/click/fr/2016/201603/20160321\")\nval distinctDates \u003d parquetFileClick.select(to_date($\"utcDate\")).distinct()\nval dates \u003d distinctDates.select(\"todate(utcDate)\").rdd.map(r \u003d\u003e r(0)).collect()\nval count \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypso_data_feb_march/calypso_data_feb_march/click/fr/2016/201603/20160321\").count",
+      "authenticationInfo": {},
+      "dateUpdated": "Apr 19, 2016 11:15:02 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1460902293755_1756989635",
+      "id": "20160417-161133_1823093453",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "parquetFileClick: org.apache.spark.sql.DataFrame \u003d [userId: string, ip: string, userAgent: struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e, geolocation: struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, offerViewId: string, clickId: string, earning: decimal(38,18)]\ndistinctDates: org.apache.spark.sql.DataFrame \u003d [todate(utcDate): date]\ndates: Array[Any] \u003d Array(2016-03-21, 2016-03-22)\ncount: Long \u003d 88760\n"
+      },
+      "dateCreated": "Apr 17, 2016 4:11:33 PM",
+      "dateStarted": "Apr 19, 2016 11:15:02 AM",
+      "dateFinished": "Apr 19, 2016 11:15:11 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "\nfor(i \u003c- 0 until dates.length){\n    //println(\"i is: \" + i);\n    //println(\"i\u0027th element is: \" + dates(i));\n    val date \u003d dates(i)\n    \n    //print(date.toString.substring(0,4))\n    //print(date.toString.substring(5,7))\n    //print(date.toString.substring(8,10))\n    val year \u003d date.toString.substring(0,4)\n    val month \u003d date.toString.substring(5,7)\n    val day \u003d date.toString.substring(8,10)\n    print(year+month+day)\n    \n    val parquetFileClick \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypso_data_feb_march/calypso_data_feb_march/click/fr/\"+year+\"/\"+year+month+\"/\"+year+month+day)\n    val clicks \u003d parquetFileClick.filter(!($\"offerViewId\".isNull))\n    val ratings_positive \u003d clicks.groupBy(\"userId\",\"offerViewId\").count\n    \n    val parquetFileOffer \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypso_data_feb_march/calypso_data_feb_march/offerView/fr/\"+year+\"/\"+year+month+\"/\"+year+month+day)\n    val ratings \u003d parquetFileOffer.groupBy(\"userId\",\"offerViewId\").count\n    \n    val ratings_positive_negative \u003d ratings_positive.join(ratings,ratings_positive(\"userId\")\u003c\u003d\u003eratings(\"userId\") \u0026\u0026 ratings_positive(\"offerViewId\")\u003c\u003d\u003eratings(\"offerViewId\"),\"right_outer\")\n    \n}",
+      "authenticationInfo": {},
+      "dateUpdated": "Apr 17, 2016 4:54:06 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1460664131724_-1280314118",
+      "id": "20160414-220211_1325139789",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "20160319"
+      },
+      "dateCreated": "Apr 14, 2016 10:02:11 PM",
+      "dateStarted": "Apr 17, 2016 4:53:46 PM",
+      "dateFinished": "Apr 17, 2016 4:53:48 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val i \u003d 0\n    //println(\"i is: \" + i);\n    //println(\"i\u0027th element is: \" + dates(i));\n    val date \u003d dates(i)\n    \n    //print(date.toString.substring(0,4))\n    //print(date.toString.substring(5,7))\n    //print(date.toString.substring(8,10))\n    val year \u003d date.toString.substring(0,4)\n    val month \u003d date.toString.substring(5,7)\n    val day \u003d date.toString.substring(8,10)\n    print(year+month+day)\n    \n    val parquetFileClick \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypso_data_feb_march/calypso_data_feb_march/click/fr/\"+year+\"/\"+year+month+\"/\"+year+month+day)\n    //z.show(parquetFileClick.select(\"utcDate\"))\n    \n    //val clicks \u003d parquetFileClick.filter(!($\"offerViewId\".isNull))\n    //val ratings_positive \u003d clicks.groupBy(\"userId\",\"offerViewId\").count\n    \n    //val parquetFileOffer \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypso_data_feb_march/calypso_data_feb_march/offerView/fr/\"+year+\"/\"+year+month+\"/\"+year+month+day)\n    //val ratings \u003d parquetFileOffer.groupBy(\"userId\",\"offerViewId\").count\n    \n   // val ratings_positive_negative \u003d ratings_positive.join(ratings,ratings_positive(\"userId\")\u003c\u003d\u003eratings(\"userId\") \u0026\u0026 ratings_positive(\"offerViewId\")\u003c\u003d\u003eratings(\"offerViewId\"),\"right_outer\")\n    \n",
+      "authenticationInfo": {},
+      "dateUpdated": "Apr 17, 2016 3:44:48 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [
+            {
+              "name": "utcDate",
+              "index": 0.0,
+              "aggr": "sum"
+            }
+          ],
+          "values": [],
+          "groups": [],
+          "scatter": {
+            "xAxis": {
+              "name": "utcDate",
+              "index": 0.0,
+              "aggr": "sum"
+            }
+          }
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1460900549593_349660834",
+      "id": "20160417-154229_202272310",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "i: Int \u003d 0\ndate: Any \u003d 2016-02-04\nyear: String \u003d 2016\nmonth: String \u003d 02\nday: String \u003d 04\n20160204parquetFileClick: org.apache.spark.sql.DataFrame \u003d [userId: string, ip: string, userAgent: struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e, geolocation: struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, offerViewId: string, clickId: string, earning: decimal(38,18)]\n"
+      },
+      "dateCreated": "Apr 17, 2016 3:42:29 PM",
+      "dateStarted": "Apr 17, 2016 3:44:48 PM",
+      "dateFinished": "Apr 17, 2016 3:44:49 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "\nratings_positive_negative.write.format(\"com.databricks.spark.csv\").save(\"/home/ama/sidana/multi_task_learning_recsys/joinedtable.csv\")\n//z.show(joinedTable)\n//joinedTable.write.format(\"com.databricks.spark.csv\").save(\"/home/ama/sidana/multi_task_learning_recsys/joinedtable.csv\")",
+      "authenticationInfo": {},
+      "dateUpdated": "Apr 14, 2016 12:32:01 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1460418204211_-938349082",
+      "id": "20160412-014324_764590920",
+      "result": {
+        "code": "ERROR",
+        "type": "TEXT",
+        "msg": "org.apache.spark.SparkException: Job aborted due to stage failure: Task 1424 in stage 4.0 failed 4 times, most recent failure: Lost task 1424.3 in stage 4.0 (TID 1520, racer.imag.fr): java.io.IOException: Aucun espace disponible sur le périphérique\n\tat java.io.FileOutputStream.writeBytes(Native Method)\n\tat java.io.FileOutputStream.write(FileOutputStream.java:345)\n\tat org.apache.spark.storage.TimeTrackingOutputStream.write(TimeTrackingOutputStream.java:58)\n\tat java.io.BufferedOutputStream.flushBuffer(BufferedOutputStream.java:82)\n\tat java.io.BufferedOutputStream.write(BufferedOutputStream.java:126)\n\tat org.xerial.snappy.SnappyOutputStream.dumpOutput(SnappyOutputStream.java:343)\n\tat org.xerial.snappy.SnappyOutputStream.compressInput(SnappyOutputStream.java:357)\n\tat org.xerial.snappy.SnappyOutputStream.rawWrite(SnappyOutputStream.java:280)\n\tat org.xerial.snappy.SnappyOutputStream.write(SnappyOutputStream.java:115)\n\tat org.apache.spark.io.SnappyOutputStreamWrapper.write(CompressionCodec.scala:202)\n\tat java.io.BufferedOutputStream.flushBuffer(BufferedOutputStream.java:82)\n\tat java.io.BufferedOutputStream.write(BufferedOutputStream.java:126)\n\tat java.io.DataOutputStream.write(DataOutputStream.java:107)\n\tat org.apache.spark.sql.catalyst.expressions.UnsafeRow.writeToStream(UnsafeRow.java:586)\n\tat org.apache.spark.sql.execution.UnsafeRowSerializerInstance$$anon$2.writeValue(UnsafeRowSerializer.scala:61)\n\tat org.apache.spark.storage.DiskBlockObjectWriter.write(DiskBlockObjectWriter.scala:185)\n\tat org.apache.spark.shuffle.sort.BypassMergeSortShuffleWriter.write(BypassMergeSortShuffleWriter.java:151)\n\tat org.apache.spark.scheduler.ShuffleMapTask.runTask(ShuffleMapTask.scala:73)\n\tat org.apache.spark.scheduler.ShuffleMapTask.runTask(ShuffleMapTask.scala:41)\n\tat org.apache.spark.scheduler.Task.run(Task.scala:89)\n\tat org.apache.spark.executor.Executor$TaskRunner.run(Executor.scala:214)\n\tat java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)\n\tat java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:615)\n\tat java.lang.Thread.run(Thread.java:745)\n\nDriver stacktrace:\n\tat org.apache.spark.scheduler.DAGScheduler.org$apache$spark$scheduler$DAGScheduler$$failJobAndIndependentStages(DAGScheduler.scala:1431)\n\tat org.apache.spark.scheduler.DAGScheduler$$anonfun$abortStage$1.apply(DAGScheduler.scala:1419)\n\tat org.apache.spark.scheduler.DAGScheduler$$anonfun$abortStage$1.apply(DAGScheduler.scala:1418)\n\tat scala.collection.mutable.ResizableArray$class.foreach(ResizableArray.scala:59)\n\tat scala.collection.mutable.ArrayBuffer.foreach(ArrayBuffer.scala:47)\n\tat org.apache.spark.scheduler.DAGScheduler.abortStage(DAGScheduler.scala:1418)\n\tat org.apache.spark.scheduler.DAGScheduler$$anonfun$handleTaskSetFailed$1.apply(DAGScheduler.scala:799)\n\tat org.apache.spark.scheduler.DAGScheduler$$anonfun$handleTaskSetFailed$1.apply(DAGScheduler.scala:799)\n\tat scala.Option.foreach(Option.scala:236)\n\tat org.apache.spark.scheduler.DAGScheduler.handleTaskSetFailed(DAGScheduler.scala:799)\n\tat org.apache.spark.scheduler.DAGSchedulerEventProcessLoop.doOnReceive(DAGScheduler.scala:1640)\n\tat org.apache.spark.scheduler.DAGSchedulerEventProcessLoop.onReceive(DAGScheduler.scala:1599)\n\tat org.apache.spark.scheduler.DAGSchedulerEventProcessLoop.onReceive(DAGScheduler.scala:1588)\n\tat org.apache.spark.util.EventLoop$$anon$1.run(EventLoop.scala:48)\n\tat org.apache.spark.scheduler.DAGScheduler.runJob(DAGScheduler.scala:620)\n\tat org.apache.spark.SparkContext.runJob(SparkContext.scala:1832)\n\tat org.apache.spark.SparkContext.runJob(SparkContext.scala:1845)\n\tat org.apache.spark.SparkContext.runJob(SparkContext.scala:1922)\n\tat org.apache.spark.rdd.PairRDDFunctions$$anonfun$saveAsHadoopDataset$1.apply$mcV$sp(PairRDDFunctions.scala:1213)\n\tat org.apache.spark.rdd.PairRDDFunctions$$anonfun$saveAsHadoopDataset$1.apply(PairRDDFunctions.scala:1156)\n\tat org.apache.spark.rdd.PairRDDFunctions$$anonfun$saveAsHadoopDataset$1.apply(PairRDDFunctions.scala:1156)\n\tat org.apache.spark.rdd.RDDOperationScope$.withScope(RDDOperationScope.scala:150)\n\tat org.apache.spark.rdd.RDDOperationScope$.withScope(RDDOperationScope.scala:111)\n\tat org.apache.spark.rdd.RDD.withScope(RDD.scala:316)\n\tat org.apache.spark.rdd.PairRDDFunctions.saveAsHadoopDataset(PairRDDFunctions.scala:1156)\n\tat org.apache.spark.rdd.PairRDDFunctions$$anonfun$saveAsHadoopFile$4.apply$mcV$sp(PairRDDFunctions.scala:1060)\n\tat org.apache.spark.rdd.PairRDDFunctions$$anonfun$saveAsHadoopFile$4.apply(PairRDDFunctions.scala:1026)\n\tat org.apache.spark.rdd.PairRDDFunctions$$anonfun$saveAsHadoopFile$4.apply(PairRDDFunctions.scala:1026)\n\tat org.apache.spark.rdd.RDDOperationScope$.withScope(RDDOperationScope.scala:150)\n\tat org.apache.spark.rdd.RDDOperationScope$.withScope(RDDOperationScope.scala:111)\n\tat org.apache.spark.rdd.RDD.withScope(RDD.scala:316)\n\tat org.apache.spark.rdd.PairRDDFunctions.saveAsHadoopFile(PairRDDFunctions.scala:1026)\n\tat org.apache.spark.rdd.PairRDDFunctions$$anonfun$saveAsHadoopFile$1.apply$mcV$sp(PairRDDFunctions.scala:952)\n\tat org.apache.spark.rdd.PairRDDFunctions$$anonfun$saveAsHadoopFile$1.apply(PairRDDFunctions.scala:952)\n\tat org.apache.spark.rdd.PairRDDFunctions$$anonfun$saveAsHadoopFile$1.apply(PairRDDFunctions.scala:952)\n\tat org.apache.spark.rdd.RDDOperationScope$.withScope(RDDOperationScope.scala:150)\n\tat org.apache.spark.rdd.RDDOperationScope$.withScope(RDDOperationScope.scala:111)\n\tat org.apache.spark.rdd.RDD.withScope(RDD.scala:316)\n\tat org.apache.spark.rdd.PairRDDFunctions.saveAsHadoopFile(PairRDDFunctions.scala:951)\n\tat org.apache.spark.rdd.RDD$$anonfun$saveAsTextFile$1.apply$mcV$sp(RDD.scala:1457)\n\tat org.apache.spark.rdd.RDD$$anonfun$saveAsTextFile$1.apply(RDD.scala:1436)\n\tat org.apache.spark.rdd.RDD$$anonfun$saveAsTextFile$1.apply(RDD.scala:1436)\n\tat org.apache.spark.rdd.RDDOperationScope$.withScope(RDDOperationScope.scala:150)\n\tat org.apache.spark.rdd.RDDOperationScope$.withScope(RDDOperationScope.scala:111)\n\tat org.apache.spark.rdd.RDD.withScope(RDD.scala:316)\n\tat org.apache.spark.rdd.RDD.saveAsTextFile(RDD.scala:1436)\n\tat com.databricks.spark.csv.package$CsvSchemaRDD.saveAsCsvFile(package.scala:169)\n\tat com.databricks.spark.csv.DefaultSource.createRelation(DefaultSource.scala:165)\n\tat org.apache.spark.sql.execution.datasources.ResolvedDataSource$.apply(ResolvedDataSource.scala:222)\n\tat org.apache.spark.sql.DataFrameWriter.save(DataFrameWriter.scala:148)\n\tat org.apache.spark.sql.DataFrameWriter.save(DataFrameWriter.scala:139)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:41)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:48)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:50)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:52)\n\tat $iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:54)\n\tat $iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:56)\n\tat $iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:58)\n\tat $iwC.\u003cinit\u003e(\u003cconsole\u003e:60)\n\tat \u003cinit\u003e(\u003cconsole\u003e:62)\n\tat .\u003cinit\u003e(\u003cconsole\u003e:66)\n\tat .\u003cclinit\u003e(\u003cconsole\u003e)\n\tat .\u003cinit\u003e(\u003cconsole\u003e:7)\n\tat .\u003cclinit\u003e(\u003cconsole\u003e)\n\tat $print(\u003cconsole\u003e)\n\tat sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)\n\tat sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)\n\tat sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\n\tat java.lang.reflect.Method.invoke(Method.java:606)\n\tat org.apache.spark.repl.SparkIMain$ReadEvalPrint.call(SparkIMain.scala:1065)\n\tat org.apache.spark.repl.SparkIMain$Request.loadAndRun(SparkIMain.scala:1346)\n\tat org.apache.spark.repl.SparkIMain.loadAndRunReq$1(SparkIMain.scala:840)\n\tat org.apache.spark.repl.SparkIMain.interpret(SparkIMain.scala:871)\n\tat org.apache.spark.repl.SparkIMain.interpret(SparkIMain.scala:819)\n\tat org.apache.zeppelin.spark.SparkInterpreter.interpretInput(SparkInterpreter.java:812)\n\tat org.apache.zeppelin.spark.SparkInterpreter.interpret(SparkInterpreter.java:755)\n\tat org.apache.zeppelin.spark.SparkInterpreter.interpret(SparkInterpreter.java:748)\n\tat org.apache.zeppelin.interpreter.ClassloaderInterpreter.interpret(ClassloaderInterpreter.java:57)\n\tat org.apache.zeppelin.interpreter.LazyOpenInterpreter.interpret(LazyOpenInterpreter.java:93)\n\tat org.apache.zeppelin.interpreter.remote.RemoteInterpreterServer$InterpretJob.jobRun(RemoteInterpreterServer.java:331)\n\tat org.apache.zeppelin.scheduler.Job.run(Job.java:171)\n\tat org.apache.zeppelin.scheduler.FIFOScheduler$1.run(FIFOScheduler.java:139)\n\tat java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:471)\n\tat java.util.concurrent.FutureTask.run(FutureTask.java:262)\n\tat java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:178)\n\tat java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:292)\n\tat java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)\n\tat java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:615)\n\tat java.lang.Thread.run(Thread.java:745)\nCaused by: java.io.IOException: Aucun espace disponible sur le périphérique\n\tat java.io.FileOutputStream.writeBytes(Native Method)\n\tat java.io.FileOutputStream.write(FileOutputStream.java:345)\n\tat org.apache.spark.storage.TimeTrackingOutputStream.write(TimeTrackingOutputStream.java:58)\n\tat java.io.BufferedOutputStream.flushBuffer(BufferedOutputStream.java:82)\n\tat java.io.BufferedOutputStream.write(BufferedOutputStream.java:126)\n\tat org.xerial.snappy.SnappyOutputStream.dumpOutput(SnappyOutputStream.java:343)\n\tat org.xerial.snappy.SnappyOutputStream.compressInput(SnappyOutputStream.java:357)\n\tat org.xerial.snappy.SnappyOutputStream.rawWrite(SnappyOutputStream.java:280)\n\tat org.xerial.snappy.SnappyOutputStream.write(SnappyOutputStream.java:115)\n\tat org.apache.spark.io.SnappyOutputStreamWrapper.write(CompressionCodec.scala:202)\n\tat java.io.BufferedOutputStream.flushBuffer(BufferedOutputStream.java:82)\n\tat java.io.BufferedOutputStream.write(BufferedOutputStream.java:126)\n\tat java.io.DataOutputStream.write(DataOutputStream.java:107)\n\tat org.apache.spark.sql.catalyst.expressions.UnsafeRow.writeToStream(UnsafeRow.java:586)\n\tat org.apache.spark.sql.execution.UnsafeRowSerializerInstance$$anon$2.writeValue(UnsafeRowSerializer.scala:61)\n\tat org.apache.spark.storage.DiskBlockObjectWriter.write(DiskBlockObjectWriter.scala:185)\n\tat org.apache.spark.shuffle.sort.BypassMergeSortShuffleWriter.write(BypassMergeSortShuffleWriter.java:151)\n\tat org.apache.spark.scheduler.ShuffleMapTask.runTask(ShuffleMapTask.scala:73)\n\tat org.apache.spark.scheduler.ShuffleMapTask.runTask(ShuffleMapTask.scala:41)\n\tat org.apache.spark.scheduler.Task.run(Task.scala:89)\n\tat org.apache.spark.executor.Executor$TaskRunner.run(Executor.scala:214)\n\t... 3 more\n\n"
+      },
+      "dateCreated": "Apr 12, 2016 1:43:24 AM",
+      "dateStarted": "Apr 14, 2016 12:32:01 PM",
+      "dateFinished": "Apr 14, 2016 12:39:03 PM",
+      "status": "ERROR",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1460588532908_-911728575",
+      "id": "20160414-010212_1897144111",
+      "dateCreated": "Apr 14, 2016 1:02:12 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "multi_task_recsys_input_data",
+  "id": "2BH88EAP1",
+  "angularObjects": {
+    "2BGHSKCA7": [],
+    "2BFMBPKAB": [],
+    "2BHKKP27G": [],
+    "2BJHJDBK6": [],
+    "2BJAQG5W4": [],
+    "2BJGSXM37": [],
+    "2BFXEV5XZ": [],
+    "2BG77RV7M": [],
+    "2BF969NNB": [],
+    "2BG8QQJNC": [],
+    "2BGVG5JP4": [],
+    "2BJ5FCP57": [],
+    "2BFEDXCTE": [],
+    "2BJ8AEWCT": [],
+    "2BH9AVVKH": [],
+    "2BJ7KKX85": [],
+    "2BHKAE8WK": [],
+    "2BJ6HN5AY": []
+  },
+  "config": {},
+  "info": {}
+}

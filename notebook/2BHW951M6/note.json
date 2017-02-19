@@ -1,0 +1,124 @@
+{
+  "paragraphs": [
+    {
+      "text": "            import org.apache.spark.mllib.recommendation.ALS\n            import org.apache.spark.mllib.recommendation.MatrixFactorizationModel\n            import org.apache.spark.mllib.recommendation.Rating\n            import org.apache.spark.ml.feature.StringIndexer\n            import org.apache.spark.sql.Row\n            \n            \n            val time1 \u003d java.lang.System.currentTimeMillis()\n            \n            //val sqlContext \u003d new org.apache.spark.sql.SQLContext(sc)\n            val df \u003d sqlContext.read\n        .format(\"com.databricks.spark.csv\")\n        .option(\"header\", \"true\") // Use first line of all files as header\n        .option(\"inferSchema\", \"true\") // Automatically infer data types\n        .option(\"delimiter\", \"\\t\")\n        .load(\"file:/home/ama/sidana/recommendersystemchallenge/data/data/interactions.csv\")\n            val validInteractions \u003d df.filter(df(\"interaction_type\") \u003d\u003d\u003d 1||df(\"interaction_type\")\u003d\u003d\u003d2||df(\"interaction_type\")\u003d\u003d\u003d3)\n            val clickedoffers \u003d validInteractions.select(\"user_id\", \"item_id\", \"interaction_type\")\n            val groupedOffers \u003d clickedoffers.groupBy(\"user_id\",\"item_id\").count\n            val ratings \u003d groupedOffers.map{\n        case Row(user_id, item_id, count) \u003d\u003e Rating(user_id.asInstanceOf[Int].intValue, item_id.asInstanceOf[Int].intValue, count.asInstanceOf[Long].doubleValue)\n    }\n    \n            \n            val dfItem \u003d sqlContext.read\n        .format(\"com.databricks.spark.csv\")\n        .option(\"header\", \"true\") // Use first line of all files as header\n        .option(\"inferSchema\", \"true\") // Automatically infer data types\n        .option(\"delimiter\", \"\\t\")\n        .load(/\"home/ama/sidana/recommendersystemchallenge/data/data/items.csv\")\n        val validItems \u003d dfItem.filter(dfItem(\"active_during_test\")\u003d\u003d\u003d1).select(\"id\")\n        validItems.count\n        \n        \n            val rank \u003d 100\n            val numIterations \u003d 20\n            val model \u003d ALS.train(ratings, rank, numIterations, 0.01)\n            val time2 \u003d java.lang.System.currentTimeMillis()\n            val time \u003d time2 - time1\n            print(time)\n            \n      val target_users \u003d sqlContext.read.format(\"com.databricks.spark.csv\").option(\"header\", \"true\").load(\"/home/ama/sidana/recommendersystemchallenge/data/target_users.csv\")\n    import java.nio.file.{ Files, Paths }\n    import scala.collection.mutable.ListBuffer\n    import java.io.PrintWriter\n    import util.control.Breaks._\n    \n    val pw \u003d new PrintWriter(\"/home/ama/sidana/recommendersystemchallenge/output/als_v3.txt\");\n    val total \u003d target_users.count - 1\n    val actualusers \u003d target_users.collect()\n    val keys \u003d model.userFeatures.keys.collect()\n    for(user \u003c- 0 to total.toInt){\n        val user_id \u003d actualusers(user).getString(0)\n        pw.print(user_id+\"\\t\")\n        breakable{\n            if(!(keys.exists(_ \u003d\u003d user_id.toInt))){\n                pw.print(\"1053452,2268722,1007923,2778525,1244196,1729618,657183,581327,2791339,1386412,2663343,1805804,1078303,536047,1053542,2432923,278589,79531,1928254,2446769,1984327,1583705,1133414,2242152,1742926,1201171,2532610,784737,1233470,830073\")\n                pw.println()\n                break\n            }\n        else{\n        val topKRecs \u003d model.recommendProducts(user_id.toInt,1000)\n         topKRecs.map(rating \u003d\u003e (rating.product)).foreach(a\u003d\u003eif(validItems.filter(validItems(\"id\")\u003d\u003d\u003da.toInt).count\u003e0){pw.print(a+\",\")})\n        pw.println()\n       }\n        }\n    }\n    pw.close()  \n    \n    \n\n",
+      "authenticationInfo": {},
+      "dateUpdated": "May 4, 2016 5:44:08 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1461267298477_-1952867747",
+      "id": "20160421-213458_1184242982",
+      "result": {
+        "code": "ERROR",
+        "type": "TEXT",
+        "msg": "import org.apache.spark.mllib.recommendation.ALS\nimport org.apache.spark.mllib.recommendation.MatrixFactorizationModel\nimport org.apache.spark.mllib.recommendation.Rating\nimport org.apache.spark.ml.feature.StringIndexer\nimport org.apache.spark.sql.Row\ntime1: Long \u003d 1461791187806\ndf: org.apache.spark.sql.DataFrame \u003d [user_id: int, item_id: int, interaction_type: int, created_at: int]\nvalidInteractions: org.apache.spark.sql.DataFrame \u003d [user_id: int, item_id: int, interaction_type: int, created_at: int]\nclickedoffers: org.apache.spark.sql.DataFrame \u003d [user_id: int, item_id: int, interaction_type: int]\ngroupedOffers: org.apache.spark.sql.DataFrame \u003d [user_id: int, item_id: int, count: bigint]\nratings: org.apache.spark.rdd.RDD[org.apache.spark.mllib.recommendation.Rating] \u003d MapPartitionsRDD[18] at map at \u003cconsole\u003e:40\ndfItem: org.apache.spark.sql.DataFrame \u003d [id: int, title: string, career_level: int, discipline_id: int, industry_id: int, country: string, region: int, latitude: string, longitude: string, employment: int, tags: string, created_at: string, active_during_test: int]\nvalidItems: org.apache.spark.sql.DataFrame \u003d [id: int]\nres0: Long \u003d 327003\nrank: Int \u003d 100\nnumIterations: Int \u003d 20\norg.apache.spark.SparkException: Job 7 cancelled part of cancelled job group zeppelin-20160421-213458_1184242982\n\tat org.apache.spark.scheduler.DAGScheduler.org$apache$spark$scheduler$DAGScheduler$$failJobAndIndependentStages(DAGScheduler.scala:1431)\n\tat org.apache.spark.scheduler.DAGScheduler.handleJobCancellation(DAGScheduler.scala:1370)\n\tat org.apache.spark.scheduler.DAGScheduler$$anonfun$handleJobGroupCancelled$1.apply$mcVI$sp(DAGScheduler.scala:783)\n\tat org.apache.spark.scheduler.DAGScheduler$$anonfun$handleJobGroupCancelled$1.apply(DAGScheduler.scala:783)\n\tat org.apache.spark.scheduler.DAGScheduler$$anonfun$handleJobGroupCancelled$1.apply(DAGScheduler.scala:783)\n\tat scala.collection.mutable.HashSet.foreach(HashSet.scala:79)\n\tat org.apache.spark.scheduler.DAGScheduler.handleJobGroupCancelled(DAGScheduler.scala:783)\n\tat org.apache.spark.scheduler.DAGSchedulerEventProcessLoop.doOnReceive(DAGScheduler.scala:1619)\n\tat org.apache.spark.scheduler.DAGSchedulerEventProcessLoop.onReceive(DAGScheduler.scala:1599)\n\tat org.apache.spark.scheduler.DAGSchedulerEventProcessLoop.onReceive(DAGScheduler.scala:1588)\n\tat org.apache.spark.util.EventLoop$$anon$1.run(EventLoop.scala:48)\n\tat org.apache.spark.scheduler.DAGScheduler.runJob(DAGScheduler.scala:620)\n\tat org.apache.spark.SparkContext.runJob(SparkContext.scala:1832)\n\tat org.apache.spark.SparkContext.runJob(SparkContext.scala:1845)\n\tat org.apache.spark.SparkContext.runJob(SparkContext.scala:1858)\n\tat org.apache.spark.SparkContext.runJob(SparkContext.scala:1929)\n\tat org.apache.spark.rdd.RDD.count(RDD.scala:1157)\n\tat org.apache.spark.mllib.recommendation.ALS.run(ALS.scala:263)\n\tat org.apache.spark.mllib.recommendation.ALS$.train(ALS.scala:328)\n\tat org.apache.spark.mllib.recommendation.ALS$.train(ALS.scala:346)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:46)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:51)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:53)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:55)\n\tat $iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:57)\n\tat $iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:59)\n\tat $iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:61)\n\tat $iwC.\u003cinit\u003e(\u003cconsole\u003e:63)\n\tat \u003cinit\u003e(\u003cconsole\u003e:65)\n\tat .\u003cinit\u003e(\u003cconsole\u003e:69)\n\tat .\u003cclinit\u003e(\u003cconsole\u003e)\n\tat .\u003cinit\u003e(\u003cconsole\u003e:7)\n\tat .\u003cclinit\u003e(\u003cconsole\u003e)\n\tat $print(\u003cconsole\u003e)\n\tat sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)\n\tat sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)\n\tat sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\n\tat java.lang.reflect.Method.invoke(Method.java:606)\n\tat org.apache.spark.repl.SparkIMain$ReadEvalPrint.call(SparkIMain.scala:1065)\n\tat org.apache.spark.repl.SparkIMain$Request.loadAndRun(SparkIMain.scala:1346)\n\tat org.apache.spark.repl.SparkIMain.loadAndRunReq$1(SparkIMain.scala:840)\n\tat org.apache.spark.repl.SparkIMain.interpret(SparkIMain.scala:871)\n\tat org.apache.spark.repl.SparkIMain.interpret(SparkIMain.scala:819)\n\tat org.apache.zeppelin.spark.SparkInterpreter.interpretInput(SparkInterpreter.java:812)\n\tat org.apache.zeppelin.spark.SparkInterpreter.interpret(SparkInterpreter.java:755)\n\tat org.apache.zeppelin.spark.SparkInterpreter.interpret(SparkInterpreter.java:748)\n\tat org.apache.zeppelin.interpreter.ClassloaderInterpreter.interpret(ClassloaderInterpreter.java:57)\n\tat org.apache.zeppelin.interpreter.LazyOpenInterpreter.interpret(LazyOpenInterpreter.java:93)\n\tat org.apache.zeppelin.interpreter.remote.RemoteInterpreterServer$InterpretJob.jobRun(RemoteInterpreterServer.java:331)\n\tat org.apache.zeppelin.scheduler.Job.run(Job.java:171)\n\tat org.apache.zeppelin.scheduler.FIFOScheduler$1.run(FIFOScheduler.java:139)\n\tat java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:471)\n\tat java.util.concurrent.FutureTask.run(FutureTask.java:262)\n\tat java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:178)\n\tat java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:292)\n\tat java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)\n\tat java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:615)\n\tat java.lang.Thread.run(Thread.java:745)\n\n"
+      },
+      "dateCreated": "Apr 21, 2016 9:34:58 PM",
+      "dateStarted": "Apr 27, 2016 11:05:41 PM",
+      "dateFinished": "Apr 27, 2016 11:09:00 PM",
+      "status": "ERROR",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "//val validitemsRDD \u003d validItems.collect()\nval target_users \u003d sqlContext.read.format(\"com.databricks.spark.csv\").option(\"header\", \"true\").load(\"/home/ama/sidana/recommendersystemchallenge/data/target_users.csv\")\nimport java.nio.file.{ Files, Paths }\nimport scala.collection.mutable.ListBuffer\nimport java.io.PrintWriter\nimport util.control.Breaks._\n\nval pw \u003d new PrintWriter(\"/home/ama/sidana/recommendersystemchallenge/output/als_v2.txt\");\nval total \u003d target_users.count - 1\nval actualusers \u003d target_users.collect()\nval keys \u003d model.userFeatures.keys.collect()\nfor(user \u003c- 0 to total.toInt){\n    val user_id \u003d actualusers(user).getString(0)\n    pw.print(user_id+\"\\t\")\n    breakable{\n        if(!(keys.exists(_ \u003d\u003d user_id.toInt))){\n            pw.print(\"1053452,2268722,1007923,2778525,1244196,1729618,657183,581327,2791339,1386412,2663343,1805804,1078303,536047,1053542,2432923,278589,79531,1928254,2446769,1984327,1583705,1133414,2242152,1742926,1201171,2532610,784737,1233470,830073\")\n            pw.println()\n            break\n        }\n    else{\n    val topKRecs \u003d model.recommendProducts(user_id.toInt,100)\n     topKRecs.map(rating \u003d\u003e (rating.product)).foreach(a\u003d\u003eif(validitems.filter(validitems(\"id\") \u003d\u003d\u003d a.toInt).count\u003e0){pw.print(a+\",\")})\n    pw.println()\n   }\n    }\n}\npw.close()",
+      "authenticationInfo": {},
+      "dateUpdated": "Apr 22, 2016 9:50:01 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1461270832565_-2050902693",
+      "id": "20160421-223352_133851699",
+      "dateCreated": "Apr 21, 2016 10:33:52 PM",
+      "dateStarted": "Apr 22, 2016 9:33:42 PM",
+      "dateFinished": "Apr 22, 2016 9:33:55 PM",
+      "status": "ERROR",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "\n",
+      "dateUpdated": "Apr 22, 2016 8:39:17 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1461268034148_-2098261793",
+      "id": "20160421-214714_1378537388",
+      "dateCreated": "Apr 21, 2016 9:47:14 PM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "recsys_challenge: mllib_als_big",
+  "id": "2BHW951M6",
+  "angularObjects": {
+    "2BGHSKCA7": [],
+    "2BFMBPKAB": [],
+    "2BHKKP27G": [],
+    "2BJHJDBK6": [],
+    "2BJAQG5W4": [],
+    "2BJGSXM37": [],
+    "2BFXEV5XZ": [],
+    "2BG77RV7M": [],
+    "2BF969NNB": [],
+    "2BG8QQJNC": [],
+    "2BGVG5JP4": [],
+    "2BJ5FCP57": [],
+    "2BFEDXCTE": [],
+    "2BJ8AEWCT": [],
+    "2BH9AVVKH": [],
+    "2BJ7KKX85": [],
+    "2BHKAE8WK": [],
+    "2BJ6HN5AY": []
+  },
+  "config": {
+    "looknfeel": "default"
+  },
+  "info": {}
+}

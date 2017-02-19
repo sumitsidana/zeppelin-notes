@@ -1,0 +1,111 @@
+{
+  "paragraphs": [
+    {
+      "text": "%pyspark\nfrom sklearn.externals.joblib import Memory\nfrom sklearn.datasets import load_svmlight_file\nmem \u003d Memory(\"./mycache\")\n\n@mem.cache\ndef get_data():\n    data \u003d load_svmlight_file(\"/home/ama/sidana/recommendersystemchallenge/output/input.similarity\")\n    return data[0], data[1]\n\nX, y \u003d get_data()\n\ntype X\n",
+      "authenticationInfo": {},
+      "dateUpdated": "May 15, 2016 9:59:12 PM",
+      "config": {
+        "enabled": true,
+        "tableHide": false,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1463342028478_1865342583",
+      "id": "20160515-215348_211621551",
+      "result": {
+        "code": "ERROR",
+        "type": "TEXT",
+        "msg": "Traceback (most recent call last):\n  File \"/tmp/zeppelin_pyspark.py\", line 233, in \u003cmodule\u003e\n    compiledCode \u003d compile(final_code, \"\u003cstring\u003e\", \"exec\")\n  File \"\u003cstring\u003e\", line 9\n    type X\n         ^\nSyntaxError: invalid syntax\n"
+      },
+      "dateCreated": "May 15, 2016 9:53:48 PM",
+      "dateStarted": "May 15, 2016 9:59:13 PM",
+      "dateFinished": "May 15, 2016 9:59:13 PM",
+      "status": "ERROR",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "type X\nprint X",
+      "authenticationInfo": {},
+      "dateUpdated": "May 15, 2016 9:58:20 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1463342144190_-204485550",
+      "id": "20160515-215544_1656582259",
+      "result": {
+        "code": "ERROR",
+        "type": "TEXT",
+        "msg": "\u003cconsole\u003e:30: error: missing arguments for method print in object Predef;\nfollow this method with `_\u0027 if you want to treat it as a partially applied function\n              print X\n              ^\n"
+      },
+      "dateCreated": "May 15, 2016 9:55:44 PM",
+      "dateStarted": "May 15, 2016 9:58:22 PM",
+      "dateFinished": "May 15, 2016 9:58:22 PM",
+      "status": "ERROR",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1463342213830_-1207602554",
+      "id": "20160515-215653_1386909709",
+      "dateCreated": "May 15, 2016 9:56:53 PM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "ranking_similarity_v1",
+  "id": "2BM9PEZZW",
+  "angularObjects": {
+    "2BGHSKCA7": [],
+    "2BFMBPKAB": [],
+    "2BHKKP27G": [],
+    "2BJHJDBK6": [],
+    "2BJAQG5W4": [],
+    "2BJGSXM37": [],
+    "2BFXEV5XZ": [],
+    "2BG77RV7M": [],
+    "2BF969NNB": [],
+    "2BG8QQJNC": [],
+    "2BGVG5JP4": [],
+    "2BJ5FCP57": [],
+    "2BFEDXCTE": [],
+    "2BJ8AEWCT": [],
+    "2BH9AVVKH": [],
+    "2BJ7KKX85": [],
+    "2BHKAE8WK": [],
+    "2BJ6HN5AY": []
+  },
+  "config": {},
+  "info": {}
+}

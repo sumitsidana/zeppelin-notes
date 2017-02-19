@@ -1,0 +1,967 @@
+{
+  "paragraphs": [
+    {
+      "text": "val parquetFileClick \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypso_kk_june_data/click/*/2016/*/*/*.parquet\")\nval clicksWithKFS  \u003d parquetFileClick.filter(($\"source\".contains(\"kfs\")))\nval clicksWithoutKFS \u003d parquetFileClick.filter(!($\"source\".contains(\"kfs\")))",
+      "authenticationInfo": {},
+      "dateUpdated": "Dec 2, 2016 4:00:09 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1476799646670_-2136643176",
+      "id": "20161018-160726_847450801",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "parquetFileClick: org.apache.spark.sql.DataFrame \u003d [userId: string, ip: string, userAgent: struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e, geolocation: struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, offerViewId: string, clickId: string, earning: decimal(38,18)]\nclicksWithKFS: org.apache.spark.sql.DataFrame \u003d [userId: string, ip: string, userAgent: struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e, geolocation: struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, offerViewId: string, clickId: string, earning: decimal(38,18)]\nclicksWithoutKFS: org.apache.spark.sql.DataFrame \u003d [userId: string, ip: string, userAgent: struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e, geolocation: struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, offerViewId: string, clickId: string, earning: decimal(38,18)]\n"
+      },
+      "dateCreated": "Oct 18, 2016 4:07:26 PM",
+      "dateStarted": "Dec 2, 2016 4:00:09 PM",
+      "dateFinished": "Dec 2, 2016 4:00:56 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val parquetFileClick \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypso_kk_june_data/click/*/2016/*/*/*.parquet\")\nval validSource  \u003d parquetFileClick.filter(($\"source\".contains(\":\")))\nval invalidSource \u003d parquetFileClicks.filter(!($\"source\".contains(\":\")))\n\nparquetFileClick.count\nvalidSource.count\n",
+      "authenticationInfo": {},
+      "dateUpdated": "Dec 1, 2016 8:21:23 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1476802267396_-663882991",
+      "id": "20161018-165107_1324513152",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "parquetFileClick: org.apache.spark.sql.DataFrame \u003d [userId: string, ip: string, userAgent: struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e, geolocation: struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, offerViewId: string, clickId: string, earning: decimal(38,18)]\nvalidSource: org.apache.spark.sql.DataFrame \u003d [userId: string, ip: string, userAgent: struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e, geolocation: struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, offerViewId: string, clickId: string, earning: decimal(38,18)]\nres0: Long \u003d 16107227\nres1: Long \u003d 15005348\n"
+      },
+      "dateCreated": "Oct 18, 2016 4:51:07 PM",
+      "dateStarted": "Nov 2, 2016 3:04:55 PM",
+      "dateFinished": "Nov 2, 2016 3:05:08 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val source \u003d validSource.groupBy(validSource(\"source\").substr(locate(\":\",validSource(\"source\")),length(validSource(\"source\")))).withColumnRenamed(\"substring(source,locate(:,source,0),length(source))\", \"source\")\nz.show(source)\nsource.count\n",
+      "authenticationInfo": {},
+      "dateUpdated": "Dec 1, 2016 8:41:31 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [
+            {
+              "name": "source",
+              "index": 0.0,
+              "aggr": "sum"
+            }
+          ],
+          "values": [],
+          "groups": [],
+          "scatter": {
+            "xAxis": {
+              "name": "source",
+              "index": 0.0,
+              "aggr": "sum"
+            }
+          }
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1476803144243_-597251913",
+      "id": "20161018-170544_987636088",
+      "result": {
+        "code": "ERROR",
+        "type": "TEXT",
+        "msg": "\u003cconsole\u003e:31: error: value withColumnRenamed is not a member of org.apache.spark.sql.GroupedData\n         val source \u003d validSource.groupBy(validSource(\"source\").substr(locate(\":\",validSource(\"source\")),length(validSource(\"source\")))).withColumnRenamed(\"substring(source,locate(:,source,0),length(source))\", \"source\").count\n                                                                                                                                         ^\n"
+      },
+      "dateCreated": "Oct 18, 2016 5:05:44 PM",
+      "dateStarted": "Nov 2, 2016 3:07:16 PM",
+      "dateFinished": "Nov 2, 2016 3:07:16 PM",
+      "status": "ERROR",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val sourceCounts \u003d validSource.groupBy(validSource(\"source\").\nsubstr(locate(\":\",validSource(\"source\"))+1,length(validSource(\"source\")))).count.sort(desc(\"count\")).withColumnRenamed(\"substring(source,locate(:,source,0),length(source))\", \"source\")\n\n//z.show(sourceCounts)",
+      "authenticationInfo": {},
+      "dateUpdated": "Dec 1, 2016 8:04:03 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [
+            {
+              "name": "source",
+              "index": 0.0,
+              "aggr": "sum"
+            }
+          ],
+          "values": [
+            {
+              "name": "count",
+              "index": 1.0,
+              "aggr": "sum"
+            }
+          ],
+          "groups": [],
+          "scatter": {
+            "xAxis": {
+              "name": "source",
+              "index": 0.0,
+              "aggr": "sum"
+            },
+            "yAxis": {
+              "name": "count",
+              "index": 1.0,
+              "aggr": "sum"
+            }
+          }
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1476806871744_-534082003",
+      "id": "20161018-180751_2102438468",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TABLE",
+        "msg": "source\tcount\n:ecs3\t10396319\n:kfs\t2650391\n:ecs3r8\t1320958\n:ecsAd\t546756\n:ecsContextualAd\t38077\n:travelR8\t37577\n:ecsAdFallback\t4858\n:ecsRetargetingAd\t4535\n:ecsContextualAdFallback\t3258\n:pws\t1813\n:travelWL\t769\n:ecsRetargetingAdFallback\t29\n://www.bing.com:ecs3r8\t6\n:ecswidget\t2\n"
+      },
+      "dateCreated": "Oct 18, 2016 6:07:51 PM",
+      "dateStarted": "Oct 18, 2016 6:15:00 PM",
+      "dateFinished": "Oct 18, 2016 6:15:37 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "clicksWithKFS.select(\"\")",
+      "authenticationInfo": {},
+      "dateUpdated": "Oct 18, 2016 4:13:16 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1476799901441_-898365806",
+      "id": "20161018-161141_1040120150",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "+--------------------+---------------+--------------------+-----------+--------------------+----------+--------------------+--------------------+-----------+--------------------+--------+-----------+--------+--------------------+--------------------+--------------------+\n|              userId|             ip|           userAgent|geolocation|          siteDomain|dataCenter|             utcDate|          offerTitle|   category|               price|merchant|     source|keywords|         offerViewId|             clickId|             earning|\n+--------------------+---------------+--------------------+-----------+--------------------+----------+--------------------+--------------------+-----------+--------------------+--------+-----------+--------+--------------------+--------------------+--------------------+\n|a4c62e8-1550d0c47...|  93.231.250.88|[Computer,Windows...|       null|[at,www.ladenzeil...|       dc1|2016-06-01 19:39:...|Carlo Milano Deko...|[100323123]|121.5100000000000...|14146213|96947539kfs|      []|5d343cbec96d0a9dc...|dc1-kls-prod-silo...|0.160000000000000000|\n|a4c628c-1550c8ad7...|  80.109.49.212|[Computer,Windows...|       null|[at,www.ladenzeil...|       dc1|2016-06-01 17:17:...|LUCA BESSONI Hoch...|   [136201]|102.8500000000000...|15118913|96947539kfs|      []|7387ce75d15066355...|dc1-kls-prod-srv-...|0.210000000000000000|\n|a4c62a6-1550cef8a...| 213.55.184.215|[Mobile,Android M...|       null|[at,www.alleklein...|       dc1|2016-06-01 19:07:...|VOGUE SPA LED-Whi...|[100462723]|6723.980000000000...|14140813|96949849kfs|      []|18fb6d85c311889cb...|dc1-kls-prod-srv-...|0.180000000000000000|\n|a4c62a6-1550d36f0...| 89.144.205.235|[Mobile,Android 5...|       null|[at,www.alleklein...|       dc1|2016-06-01 20:25:...|MÖBELIX Klappbett...|   [137001]|114.8000000000000...|15118913|96949849kfs|      []|03a5f03b9f786fbfe...|dc1-kls-prod-srv-...|0.210000000000000000|\n|a4c628c-1550d345f...|  213.33.21.234|[Computer,Windows...|       null| [at,rabatt-rudi.at]|       dc1|2016-06-01 20:23:...|Heimeier Rücklauf...|[100233223]|15.21000000000000...|14145313|96948153kfs|      []|ed8a3f28004b0d03d...|dc1-kls-prod-srv-...|0.210000000000000000|\n|a4c6257-1550bdb91...|  212.45.57.110|[Computer,Windows...|       null|  [at,girofferte.at]|       dc1|2016-06-01 14:07:...|Villeroy \u0026 Boch W...|[100566313]|1736.610000000000...|14142813|96949093kfs|      []|93d7a9039da705b81...|dc1-kls-prod-silo...|0.160000000000000000|\n|a4c628c-1550af769...|194.153.217.248|[Computer,Windows...|       null|[at,www.alleklein...|       dc1|2016-06-01 09:57:...|MÖBELIX Modul-lou...|   [137701]|183.9000000000000...|15118913|96949849kfs|      []|706550de00073061d...|dc1-kls-prod-srv-...|0.180000000000000000|\n|a4c6257-1550b6676...|   91.141.2.198|[Computer,Windows...|       null|[at,www.alleklein...|       dc1|2016-06-01 11:58:...|Thule Multisport ...|[100544223]|997.9900000000000...|15140813|96949849kfs|      []|2410c445e28b52507...|dc1-kls-prod-srv-...|0.190000000000000000|\n|a4c6257-1550bdb91...|  212.45.57.110|[Computer,Windows...|       null|  [at,girofferte.at]|       dc1|2016-06-01 14:07:...|Villeroy \u0026 Boch W...|[100566313]|1736.610000000000...|14142813|96949093kfs|      []|93d7a9039da705b81...|dc1-kls-prod-srv-...|0.160000000000000000|\n|a4c6350-1550e1d7c...|178.190.203.115|[Computer,Mac OS ...|       null|[at,click-server....|       dc1|2016-06-02 00:46:...|Tatonka Flowell J...|[100332223]|112.9900000000000...|14933913|96947731kfs|      []|b1c1e6c29f22f958d...|dc1-kls-prod-srv-...|0.160000000000000000|\n|a4c62a6-1550d1ef5...|  91.115.180.70|[Computer,Windows...|       null|[at,click-server....|       dc1|2016-06-01 19:59:...|X-Bionic Effektor...|[100332323]|97.99000000000000...|14933613|96947731kfs|      []|c8a59493c4835abd8...|dc1-kls-prod-srv-...|0.160000000000000000|\n|a4c62a6-1550ced71...|  89.16.198.182|[Computer,Windows...|       null|           [at,null]|       dc1|2016-06-01 19:05:...|Happy Hopp Hüpfbu...|[100302923]|298.9700000000000...|15140813|96947539kfs|      []|08bd2666dcc9bae67...|dc1-kls-prod-srv-...|0.190000000000000000|\n|a4c6257-1550b862b...|   188.22.60.30|[Tablet,iOS 9 (iP...|       null|[at,www.alleklein...|       dc1|2016-06-01 12:34:...|BABYJOGGER Jogger...|[100472023]|750.9500000000000...|14145213|96949849kfs|      []|6106dd45c75c5dbb9...|dc1-kls-prod-silo...|0.160000000000000000|\n|a4c62a6-1550dab50...|  80.110.89.142|[Computer,Windows...|       null|[at,click-server....|       dc1|2016-06-01 22:34:...|MÖBELIX Spiegel F...|[100440723]|124.8000000000000...|15118913|96947731kfs|      []|943a101d42aafb7cc...|dc1-kls-prod-srv-...|0.210000000000000000|\n|a4c62e8-1550d1aca...|    91.141.0.88|[Mobile,Windows P...|       null|           [at,null]|       dc1|2016-06-01 19:55:...|MÖBELIX Hängematt...|   [138301]|22.94000000000000...|15118913|96949849kfs|      []|2b9cdb4907bf99b4e...|dc1-kls-prod-silo...|0.180000000000000000|\n|a4c628c-1550ad560...|  90.176.69.201|[Computer,Windows...|       null|[at,www.lionshome...|       dc1|2016-06-01 09:20:...|Eisenberg Sanit W...|[100232023]|51.85000000000000...|14572213|96948755kfs|      []|c47bd91e184a1ab29...|dc1-kls-prod-srv-...|0.210000000000000000|\n|a4c6257-1550af06d...|  62.178.47.126|[Computer,Windows...|       null|[at,click-server....|       dc1|2016-06-01 21:16:...|MÖBELIX Nachtlich...|   [138201]|5.940000000000000000|15118913|96947731kfs|      []|5e8f1bba50f0e3518...|dc1-kls-prod-srv-...|0.210000000000000000|\n|a4c6257-1550b3123...|  193.81.99.213|[Computer,Windows...|       null|[at,www.alleklein...|       dc1|2016-06-01 11:01:...|VAUDE Grody Ponch...|[100544223]|48.98000000000000...|14933613|96949849kfs|      []|30c13fcac2e48a481...|dc1-kls-prod-srv-...|0.160000000000000000|\n|a4c62a6-1550bac60...| 193.154.240.49|[Mobile,Android 4...|       null|[at,m.ladenzeile.at]|       dc1|2016-06-01 13:16:...|MÖBELIX Hartschal...|   [170101]|81.95000000000000...|15118913|96947539kfs|      []|04311818d077140ef...|dc1-kls-prod-srv-...|0.190000000000000000|\n|a4c62a6-1550cd625...|  193.170.67.25|[Tablet,Android 4...|       null| [at,rabatt-rudi.at]|       dc1|2016-06-01 18:40:...|FC-Moto Geschenk-...|[100014113]|57.90000000000000...|14160113|96948153kfs|      []|0a20ccf8ec33875cd...|dc1-kls-prod-srv-...|0.160000000000000000|\n+--------------------+---------------+--------------------+-----------+--------------------+----------+--------------------+--------------------+-----------+--------------------+--------+-----------+--------+--------------------+--------------------+--------------------+\nonly showing top 20 rows\n\n"
+      },
+      "dateCreated": "Oct 18, 2016 4:11:41 PM",
+      "dateStarted": "Oct 18, 2016 4:12:40 PM",
+      "dateFinished": "Oct 18, 2016 4:12:43 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val invalidClicks \u003d clicksWithoutKFS.filter(($\"offerViewId\".isNull))\ninvalidClicks.count",
+      "authenticationInfo": {},
+      "dateUpdated": "Oct 18, 2016 4:15:35 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1476799960759_-1864577563",
+      "id": "20161018-161240_1883189136",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "invalidClicks: org.apache.spark.sql.DataFrame \u003d [userId: string, ip: string, userAgent: struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e, geolocation: struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, offerViewId: string, clickId: string, earning: decimal(38,18)]\nres3: Long \u003d 272234\n"
+      },
+      "dateCreated": "Oct 18, 2016 4:12:40 PM",
+      "dateStarted": "Oct 18, 2016 4:15:35 PM",
+      "dateFinished": "Oct 18, 2016 4:15:41 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "clicksWithoutKFS.count",
+      "authenticationInfo": {},
+      "dateUpdated": "Oct 18, 2016 4:16:00 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1476800126215_-1512334750",
+      "id": "20161018-161526_484258995",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "res5: Long \u003d 13284438\n"
+      },
+      "dateCreated": "Oct 18, 2016 4:15:26 PM",
+      "dateStarted": "Oct 18, 2016 4:16:00 PM",
+      "dateFinished": "Oct 18, 2016 4:16:02 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val invalidSource \u003d invalidClicks.select(\"source\").distinct",
+      "authenticationInfo": {},
+      "dateUpdated": "Oct 18, 2016 4:19:33 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1476800160216_1152328863",
+      "id": "20161018-161600_1145607527",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "invalidSource: org.apache.spark.sql.DataFrame \u003d [source: string]\n"
+      },
+      "dateCreated": "Oct 18, 2016 4:16:00 PM",
+      "dateStarted": "Oct 18, 2016 4:19:33 PM",
+      "dateFinished": "Oct 18, 2016 4:19:34 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "z.show(invalidSource)",
+      "authenticationInfo": {},
+      "dateUpdated": "Oct 18, 2016 4:19:36 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1476800192480_2044207462",
+      "id": "20161018-161632_54452949",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TABLE",
+        "msg": "source\n96945308:ecs3r8\n96937985:ecs3r8\n96935554:ecs3r8\n96937970ecs3r8\n96945699:travelWL\nes.ask.com:pws\ncdn.viglink.com:ecs3r8\nwww.izito.fr:ecs3r8\nwww.helpmij.nl:ecs3r8\nwww.google.as:ecs3r8\n96943155:ecs3r8\nsearch.babylon.com:travelR8\n96937651ecs3r8\n8910345:travelR8\nnulltravelR8\nviajes.kelkoo.estravelR8\nsearches.uninstallmaster.comtravelR8\n96942522pws\nit.findeen.com:ecs3r8\n96938226:ecs3r8\nwww.google.rs:ecs3r8\n96949474:travelR8\ngoogle.com.co:ecs3r8\nvinduogdor-no.comecs3r8\n8903790:travelR8\n96947894ecs3r8\n96942042ecs3r8\nwww.topsimilarsites.com:travelR8\n96937241:travelR8\nwww.scegliprezzi.it:ecs3r8\n96942999:travelR8\nwww.google.gpecs3r8\n96945167ecs3r8\n96922133ecs3r8\nwww.google.catravelR8\n96946136ecs3r8\n96937967:ecs3r8\ncommunaute.leroymerlin.fr:ecs3r8\nwww.helpmij.nlecs3r8\nwww.google.nl:ecs3r8\nreise.kelkoo.no:travelR8\n96942624ecs3r8\n96937446ecs3r8\ntissu.galerie-creation.com:ecs3r8\n96935657:ecs3r8\nwww.istella.it:ecs3r8\nwww.kelkoo.seecs3r8\n96938192:ecs3r8\nwww.google.itecs3r8\nviaggi.kelkoo.it:travelR8\n96937625:ecs3r8\nwww.startsiden.no:pws\nwww.google.cd:travelR8\nwww.spainexpat.com:ecs3r8\nwww.leblogdistanbul.com:travelR8\n96948786ecs3\nwww.dragon-guide.net:ecs3r8\n96942970:ecs3r8\n96945827:ecs3r8\n96920024:ecs3r8\ngoogle.com.au:travelR8\n96946185ecs3r8\n96935592ecs3r8\nsearchfunmoods.com:ecs3r8\n96923324:ecs3r8\nwww.google.plecs3r8\nacheter.galerie-creation.com:ecs3r8\ntelegraph.co.uk:travelR8\nwww.google.dk:travelR8\n96946926:ecs3r8\n96935610:ecs3r8\n96944036:ecs3r8\ncooltoj.com:ecs3r8\nblog.naver.com:ecs3r8\ngoogle.com.sv:travelR8\nawin1.com:ecs3r8\nwww.izito.dkecs3r8\n96946511:ecs3r8\nzhidao.baidu.com:ecs3r8\nwww.bing.com:travelR8\n96941751ecs3r8\n96947030:ecs3r8\nwww.google.si:travelR8\n96942385travelR8\n96943388:ecs3\nwww.kelkoo.se:ecs3r8\n96945300:ecs3r8\nkingtale2.inspsearch.com:ecs3r8\nrideaux.galerie-creation.com:ecs3r8\n96949160ecs3r8\n96942036:travelR8\nlampe.galerie-creation.com:ecs3r8\nwww.startsiden.no:travelR8\n96946762:ecs3r8\nsuche.t-online.de:travelR8\n96946551ecs3r8\n96942973ecs3r8\n96937470:ecs3r8\n96945551:ecs3r8\nwww.google.pttravelR8\ngoogle.co.iltravelR8\n96947003:ecs3r8\nno.zapmeta.com:ecs3r8\nautokinito.ru:ecs3r8\n96945390ecs3r8\n96935548:ecs3r8\n96947640:ecs3r8\n96945165:ecs3r8\n96944582:ecs3r8\nintranet:travelR8\n96946328:ecs3r8\n96937858:ecs3r8\n242.129.119:ecs3r8\nsearch.aol.com:ecs3r8\n96937443:ecs3r8\n96945857ecs3r8\n96947015ecs3r8\nstart.mysearchdial.com:ecs3r8\n96945457pws\n96948703:ecs3r8\nwww.findhurtig.dk:travelR8\nwww.google.ca:ecs3r8\nmystart4.dealwifi.com:ecs3r8\nwww.navigaweb.net:ecs3r8\nsearch.softonic.com:ecs3r8\ngoogle.co.uktravelR8\n96942522travelR8\n96944418ecs3r8\nvaleur.galerie-creation.comecs3r8\n96947039pws\nwww.buenosearch.com:travelR8\nforum.viva.nlecs3r8\n96938055ecs3r8\n96950257:travelR8\n96946070:ecs3\nanonser.dk:ecs3r8\n96942515ecs3r8\n96919489:ecs3r8\nwww.google.az:travelR8\n96942596:ecs3r8\ngoogle.com.co:travelR8\ntenu.galerie-creation.com:ecs3r8\nwww.cityzeum.com:ecs3r8\n96935584:travelR8\n96946142ecs3r8\n96923028:ecs3\nkelkoo.co.uk:travelR8\nyandex.ua:ecs3r8\n96946928ecs3r8\nwww.google.gptravelR8\nwww.megashopbot.comecs3r8\n96947339ecs3r8\n96943353:ecs3r8\n96941858ecs3r8\nblog.daum.net:ecs3r8\nwww.google.gm:travelR8\nit.zapmeta.com:ecs3r8\nwetekno.com:ecs3r8\n8906013:travelR8\nwww.jubii.dk:ecs3r8\nwww.google.cl:ecs3r8\nshopping.kelkoo.es:ecs3r8\n96943712:ecs3r8\n96942384:ecs3r8\n96946977ecs3r8\n96943011:ecs3r8\n96950150:ecs3r8\nhotell.kelkoo.se:travelR8\n96937968ecs3r8\nbbs.qyer.compws\nsearch.ozipcompression.com:travelR8\n96942622:ecs3r8\n96944352:ecs3r8\nshopping.delovia.fr:ecs3r8\nwww.google.ht:travelR8\nwww.secury-search.com:ecs3r8\n96942042:ecs3r8\n96935604:ecs3r8\nwww.theguardian.com:ecs3r8\n96945551ecs3r8\n96942053ecs3r8\n96946977:ecs3r8\n96946397:ecs3r8\n96943374:ecs3\n96947339:ecs3r8\nwww.google.tn:travelR8\nsearch.ask.com:travelR8\n96943009ecs3r8\n96935620:travelR8\nwww.google.ae:pws\n96913932:ecs3r8\n96942172:ecs3r8\n96935620ecs3r8\n96935569:ecs3r8\n96943353ecs3r8\n8905637:ecs3r8\ngoogle.android.googlequicksearchbox:ecs3r8\nwww.startsiden.no:ecs3r8\nvoyages.kelkoo.fr:travelR8\n96943392:ecs3r8\n96943602:travelR8\nbinkiland.com:ecs3r8\nwww.google.beecs3r8\n96914381ecs3\nricerca.virgilio.itecs3r8\nhagemobler-no.comecs3r8\nwww.google.hu:ecs3r8\n96945167:travelR8\nwww.linternaute.com:travelR8\n96937469ecs3r8\n96946185:ecs3r8\nkelkoo.com.br:ecs3r8\n96942145:ecs3r8\nwww.aolsearch.com:ecs3r8\n96944280ecs3\nthisismoney.co.uk:ecs3r8\n96933372:ecs3\nmillionstore.com:ecs3r8\n96945427:travelR8\nwww.zapmeta.cl:ecs3r8\n96946350:ecs3r8\nwww.aranzulla.it:ecs3r8\nkelkoo.no:travelR8\n96942024:ecs3r8\n96948231ecs3r8\n96943869ecs3r8\niform.nu:ecs3r8\nwww.google.be:ecs3r8\nnull:ecs3r8\n96942504:ecs3r8\ngoogle.co.uk:pws\n96938048:travelR8\nwww.kelkoo.at:ecs3r8\nwww.startsiden.dk:ecs3r8\n96944412ecs3r8\nmanege.galerie-creation.com:ecs3r8\n96935599:ecs3r8\nwww.wereldwijzer.nl:pws\nwww.zapmeta.seecs3r8\nmagazinzarubezhom.ru:ecs3r8\nwww.google.se:ecs3r8\ndnserror.tim.it:ecs3r8\nwww.antikviteter.netecs3r8\nwww.le-homecinema.com:ecs3r8\n96945390:ecs3r8\ngoogle.co.ma:travelR8\nhotel.kelkoo.fr:pws\nkelkoo.co.ukecs3r8\n96943660:ecs3r8\n96947321ecs3r8\nwww.google.jo:travelR8\n96946111ecs3r8\n96937983:ecs3r8\n96945306:ecs3r8\n96935552:ecs3r8\nwww.fotozona.itecs3r8\nmobile.virgilio.it:ecs3r8\ngoogle.co.kr:ecs3r8\nwww.google.lt:ecs3r8\n96941786ecs3r8\ngoogle.com.ua:ecs3r8\n96906567:ecs3r8\nit.kelkoopartners.net:ecs3r8\nwww.google.pltravelR8\nwww.valuebasket.esecs3r8\nbrands.datahc.com:travelR8\nwww.google.cz:ecs3r8\nwww.yingyanso.com:ecs3r8\n96942764:ecs3r8\n96935566:travelR8\nfr.kelkoopartners.net:ecs3r8\n96946111:ecs3r8\nwww.digitmania.it:ecs3r8\n96948786:ecs3\n96944216:ecs3r8\nno.ask.com:travelR8\n96947673:ecs3r8\n8902565:travelR8\nwww.basiclinks.de:ecs3r8\nwww.google.ad:travelR8\ngrossiste.galerie-creation.com:ecs3r8\nwww.zapmeta.dk:travelR8\n96919204travelR8\nwww.kelkoo.es:ecs3r8\nwww.google.se:travelR8\nwww.google.hr:travelR8\n96944855:ecs3\nwww.google.ie:pws\nwww.zapmeta.it:ecs3r8\nsuche.aol.de:ecs3r8\n96942036:ecs3r8\ngoogle.com.py:ecs3r8\n96942616:ecs3r8\n96947110:ecs3r8\n96947646:ecs3r8\n96945852:ecs3r8\nwebsite.informer.com:travelR8\n96947018:ecs3r8\nwww.google.frecs3r8\n96935655:ecs3r8\nwww.google.nl:pws\n96943957:ecs3r8\n96943003ecs3r8\nsearch.free.fr:ecs3r8\n96949037:travelWL\nnl.kelkoo.be:ecs3r8\n96945995ecs3r8\nwww.villasanraffaello.com:travelR8\nwww.digitalkameraer.org:ecs3r8\n96945510:ecs3r8\n96942616ecs3r8\n96935535ecs3r8\n96949832travelWL\ngoogle.com.hk:travelR8\n96945165:travelR8\nwww.google.tg:ecs3r8\ngoogle.co.jp:travelR8\nsas.nl:ecs3r8\n96937458:ecs3r8\n96932949:travelR8\n96943015ecs3r8\n96946472ecs3r8\nwww.startsiden.noecs3r8\nwww.google.nopws\n96938193ecs3r8\n96945539:ecs3r8\n96946686:ecs3r8\nwww.google.dz:travelR8\n96945677:travelWL\nsearch.ask.comtravelR8\n96949164:ecs3r8\n96944134:ecs3r8\nwww.electro10count.com:ecs3r8\nwww.dekkonline.com:ecs3r8\ngoogle.com.trtravelR8\nwww.google.nlecs3r8\n96944237ecs3r8\nmoneytalk.knack.be:ecs3r8\n96943745:ecs3r8\n96918965:ecs3r8\nforum.doctissimo.fr:ecs3r8\nwww.gigagunstig.be:ecs3r8\n96944236:travelR8\nwww.buenosearch.com:ecs3r8\n96942997:ecs3r8\n96942346ecs3r8\n96942018:ecs3r8\ngoogle.com.mxecs3r8\n96946177ecs3r8\nwww.google.pt:travelR8\ngoogle.co.za:ecs3r8\nwww.google.ie:travelR8\n96945537ecs3r8\ngovome4.insppartner.com:ecs3r8\n96949407pws\nhotels.kelkoo.de:pws\nwww.google.at:pws\ngoogle.android.googlequicksearchboxtravelR8\n96943017:ecs3r8\n96935573:ecs3r8\n96937605:ecs3r8\n96923060:ecs3\nthesmartsearch.net:travelR8\ngoogle.com.hk:ecs3r8\n96947343:ecs3r8\n96942395ecs3r8\n96945994:pws\nwww.pristjekket.dk:ecs3r8\n96938227ecs3r8\n96937600ecs3r8\n96944237:ecs3r8\n96945308ecs3r8\nwww.google.nltravelR8\nwww.google.frpws\ngoogle.com.lb:travelR8\n96918995:ecs3r8\n96949164ecs3r8\n96937977:ecs3r8\n96938048travelR8\n96937856:ecs3r8\n96942399:ecs3r8\nwww.megashopbot.com:ecs3r8\n96937441:ecs3r8\nmobile-danmark.eu:ecs3r8\n96946890:ecs3r8\n96950330:ecs3r8\n96944995:ecs3r8\n96935618ecs3r8\n96947824:ecs3\n96937612ecs3r8\nwww.20minutos.es:travelR8\ngoogle.com.vn:ecs3r8\n96935655ecs3r8\nwww.google.ca:pws\n96947010:ecs3r8\ngoogle.co.za:travelR8\n96937986:ecs3r8\nwww.google.at:ecs3r8\nwww.searchmobileonline.com:ecs3r8\nfind.rockettab.com:ecs3r8\nwww.ultihost.nl:ecs3r8\n96941789:ecs3r8\n96945994:ecs3r8\n96937450:ecs3r8\ngoogle.com.mt:ecs3r8\n96947019ecs3r8\nwww.google.bi:travelR8\n96942537:ecs3r8\nuk250.co.uk:ecs3r8\n96946338ecs3r8\n96944460ecs3r8\n96943801:ecs3r8\n96918977:ecs3r8\nairzip.inspsearch.com:travelR8\nclkuk.tradedoubler.com:ecs3r8\nyandex.ru:ecs3r8\n96941858:travelR8\n96946110ecs3r8\n96935535):ecs3r8\n96922002:ecs3r8\n96945846:ecs3r8\nduckduckgo.com:ecs3r8\n96935528:ecs3r8\nsearch.mywebsearch.com:ecs3r8\n8906217travelR8\n96913933ecs3r8\ngoogle.com.mttravelR8\nairzip2.inspsearch.com:travelR8\n96935585:ecs3r8\n96943186:ecs3r8\nes.alhea.com:ecs3r8\ngoogle.co.cr:ecs3r8\n96935600:travelR8\nvgd.no:ecs3r8\nkelkoo.no:ecs3r8\nno.zapmeta.comecs3r8\nmoneygrabbing.co.uk:ecs3r8\n96948914ecs3r8\n96944206ecs3r8\n96947638ecs3r8\nwww.google.at:travelR8\nwww.google.it:pws\n96946144:ecs3r8\n96942261:ecs3r8\necommercenews.eu:ecs3r8\n96945428ecs3r8\n96937137ecs3r8\n96942399travelR8\nm.baidu.com:ecs3r8\n96937985ecs3r8\n96946338:ecs3r8\n96938193:ecs3r8\n96944608:ecs3r8\nwww.google.es:ecs3r8\n96942040:ecs3r8\ngoedkoop.nenda.eu:ecs3r8\nwww.google.seecs3r8\n96935602:ecs3r8\ndata.taggify.net:ecs3r8\ngoogle.com.gt:travelR8\nwww.vinden.nl:ecs3r8\n96946975:ecs3r8\n96942391:ecs3r8\n96938118ecs3r8\ngoogle.co.jptravelR8\nlemoteur.orange.frecs3r8\njobs.kelkoo.fr:ecs3r8\n96947022:ecs3r8\nwww.yougoo.fr:ecs3r8\nwww.prijsverkenner.nl:ecs3r8\n96945302ecs3r8\nclk.tradedoubler.com:travelR8\nclk.tradedoubler.comtravelR8\n96913930:ecs3r8\n96943335:ecs3\nwww.snakewool.nlpws\nwww.wazzzup.nl:ecs3r8\n96937462:ecs3r8\n96938221ecs3r8\n96935600ecs3r8\n96946468:ecs3r8\nbelysning-dk.com:ecs3r8\n96942170:ecs3r8\n96946145:travelR8\nlm.facebook.com:travelR8\n96946126:ecs3r8\nstart.iminent.com:ecs3r8\n96937870:ecs3\n96935612ecs3r8\n96945280travelR8\n96937515ecs3r8\n96942022:ecs3r8\n96947346:ecs3r8\n96944608ecs3r8\nwww.world68.com:ecs3r8\nreisen.kelkoo.detravelR8\n96950445:ecs3r8\nwww.google.hn:travelR8\nfr.audiofanzine.com:ecs3r8\nhongpao.co.uk:ecs3r8\nwww.zapmeta.es:ecs3r8\n96937241travelR8\ngoogle.com.hkpws\n96947004:ecs3r8\ntf.wamawama.com:travelR8\nsearch5.fvpimageviewer.com:travelR8\n96942780:ecs3r8\nwww.google.bg:travelR8\nminhave.comecs3r8\n96943927ecs3r8\n96937629:ecs3r8\n96935610travelR8\nwww.zapmeta.se:travelR8\nwww.google.fr:travelR8\n96942145travelR8\n96935648ecs3r8\n96946350:travelR8\n96942974:ecs3r8\n96943957travelR8\n96943957:travelR8\n96937444:ecs3r8\nwww.google.httravelR8\nminhave.com:ecs3r8\n96942346:ecs3r8\nwww.google.chtravelR8\nwww.iorisparmioenergia.com:ecs3r8\n96941754ecs3r8\nwww.google.rsecs3r8\nkomplettfritid.no:ecs3r8\n96948842ecs3r8\n96945304:ecs3r8\n96943988ecs3r8\n96935550:ecs3r8\n96946910:ecs3r8\n96947892:ecs3r8\n96944134ecs3r8\nit-it.facebook.com:ecs3r8\n96944629:ecs3r8\nwww.google.dktravelR8\nwww.google.ro:ecs3r8\n96941778ecs3r8\n96945280:travelR8\n8913949:ecs3r8\n96936907:ecs3r8\n96946140ecs3r8\n96946926ecs3r8\n96943747ecs3r8\nchaise.galerie-creation.com:ecs3r8\nkelkoo.co.uktravelR8\nwww.tpu.ro:ecs3r8\nrusbid.com:ecs3r8\n96946138:ecs3r8\narianna.libero.ittravelR8\n96943003:ecs3r8\nwww.superstart.se:ecs3r8\n96942255:ecs3r8\n8902474:travelR8\nduckduckgo.comtravelR8\ngoogle.com.do:travelR8\nwww.google.by:travelR8\n96942759ecs3r8\n96943640:ecs3r8\nforum.viva.nl:ecs3r8\nno.izito.comecs3r8\nastromenda.com:ecs3r8\n96950393:ecs3r8\nacquistare.munuc.eu:ecs3r8\n96942026ecs3r8\n96942385:ecs3r8\n96942518ecs3r8\nus.wow.com:travelR8\nwww.findeen.fr:pws\nwww.virtualmagie.com:ecs3r8\nclk.tradedoubler.compws\n96949449ecs3\n96947843:travelWL\nwww.windowssearch.com:ecs3r8\n96935605:ecs3r8\n96943389ecs3\n96937456:ecs3r8\n96943020ecs3r8\nautomototomelloso.com:ecs3r8\n96947637ecs3r8\nwww.google.gp:pws\n221.29.49:ecs3r8\n96942043:ecs3r8\nwww.vinden.nl:travelR8\n96945537:ecs3r8\n96935552ecs3r8\nforums.futura-sciences.com:ecs3r8\nwww.google.nlpws\nwww.google.aetravelR8\nvinduogdor-no.com:ecs3r8\nwww.google.it:travelR8\nwww.google.be:travelR8\n8911420:travelR8\n96946993:ecs3\n96947039:travelR8\n96943602ecs3r8\n96943042:ecs3r8\n96942995:ecs3r8\n96946177:ecs3r8\nwww.kelkoo.com:ecs3r8\n96941927ecs3r8\n96944612:ecs3r8\nnegozi-biciclette.tuttosuitalia.comecs3r8\n96905366:ecs3r8\n96919204:ecs3r8\nwww.google.cm:travelR8\nwww.ostamyy.comecs3r8\nyandex.ru:travelR8\n96935576ecs3r8\nnullecs3r8\n96945301ecs3r8\n96945611:ecs3r8\n96943015:ecs3r8\nfind.rockettab.comecs3r8\n96906586:ecs3r8\n96946830ecs3r8\n96935571:ecs3r8\nwww.auktionshilfe.info:ecs3r8\n96937629:travelR8\n96935588ecs3r8\n96944050ecs3r8\n96946472:ecs3r8\n96945382:ecs3r8\ngoogle.co.ve:travelR8\nwww.izito.nl:ecs3r8\n96944235:ecs3r8\ngoogle.co.kr:travelR8\n96941735ecs3r8\n96947608:ecs3r8\ngoogle.com.mx:travelR8\nricerca.virgilio.it:ecs3r8\nsearches.uninstallmaster.com:ecs3r8\n96942399ecs3r8\n96942397:ecs3r8\nsearch.yahoo.compws\n96947624:ecs3\n96947028:ecs3r8\n96932945:ecs3r8\nus.intoautos.com:ecs3r8\nwww.google.rstravelR8\n96937854:ecs3r8\n96944607ecs3r8\n96913936:ecs3r8\ntracker.tradedoubler.com:ecs3r8\nresor.kelkoo.se:travelR8\nwww.google.setravelR8\n96937468:ecs3r8\n96937512:ecs3r8\n96905366:travelR8\nwww.minatica.be:ecs3r8\n96935617:ecs3r8\navg.nation.com:ecs3r8\n96947202:ecs3r8\ngoogle.co.th:travelR8\nwww.carlights.de:ecs3r8\n96945428:ecs3r8\n96935647ecs3r8\nr.duckduckgo.com:travelR8\n96935553:ecs3r8\nwww.similarsitesearch.com:ecs3r8\ngoogle.com.vn:travelR8\n96937653ecs3r8\n96942028:ecs3r8\nwww.badshop.se:ecs3r8\n96944415ecs3r8\nduckduckgo.comecs3r8\n96945723:ecs3r8\nl.facebook.com:ecs3r8\n96944274:ecs3r8\ngoogle.com.tr:travelR8\n96943001ecs3r8\nsearch.ask.comecs3r8\n96942385:travelR8\n96943885:ecs3r8\nmys.yoursearch.me:ecs3r8\nmobil.sol.no:ecs3r8\n96943009:travelR8\n96946925ecs3r8\nduckduckgo.com:travelR8\nwww.google.ch:ecs3r8\n96944412:ecs3r8\nwww.google.lu:travelR8\n96946126ecs3r8\n96946142:ecs3r8\n96942517:ecs3r8\nwww.inforapido.ch:ecs3r8\nno.ask.comecs3r8\nwww.google.bepws\n8904178travelR8\n96937461ecs3r8\n96935592:ecs3r8\ngovome.inspsearch.com:ecs3r8\n96944235ecs3r8\n96935600:ecs3r8\n96946974ecs3r8\n96946138ecs3r8\ngoogle.com.uy:travelR8\nwww.searchthis.com:ecs3r8\nwww.secury-search.com:travelR8\nwww.google.ie:ecs3r8\nwww.diskusjon.no:ecs3r8\n96942384travelR8\n96949165:ecs3r8\n96946973:ecs3r8\n96935629:ecs3r8\n96950369:ecs3r8\nes.kelkoopartners.netecs3r8\nwww.zapmeta.fr:travelR8\n96947020:ecs3r8\nforum.fok.nl:ecs3r8\n96945457ecs3r8\n96946175ecs3r8\n8913949ecs3r8\nwww.findhurtig.dk:ecs3r8\n96943988:ecs3r8\n96944156:ecs3r8\n96943009:ecs3r8\n96943632ecs3r8\n96935565:ecs3r8\nwww.google.de:pws\n96944601ecs3r8\n96942397travelR8\ngoogle.com.py:travelR8\nwww.buscasur.es:travelR8\nwww.google.fitravelR8\nwww.google.compws\nwww.peeplo.com:ecs3r8\n96941973:ecs3r8\n96942145:travelR8\n96942020:ecs3r8\n96937590:ecs3r8\n96948914:ecs3r8\n96945653:travelWL\n96947325:travelWL\nwww.google.pl:travelR8\ngoogle.com.sg:ecs3r8\n96945290ecs3r8\n96938294:ecs3r8\n8906276:travelR8\n96935604ecs3r8\nwww.superstart.se:travelR8\ngoogle.co.zm:travelR8\n96946375:ecs3r8\n96933362ecs3\n96945808:ecs3r8\nwww.google.ba:ecs3r8\n96947002:ecs3r8\n96942975ecs3r8\nwww.msn.com:ecs3r8\n96935547:ecs3r8\n96947595:ecs3r8\nwww.randonner-leger.org:ecs3r8\n96944808ecs3\nwww.istitutomajorana.it:ecs3r8\nstart.myplaycity.com:ecs3r8\n96935628ecs3r8\n96949678ecs3r8\nfr.ask.com:ecs3r8\n8904690:travelR8\nwww.securesearch.co:ecs3r8\n96946928:ecs3r8\ngoogle.com.pe:travelR8\n96943956ecs3r8\ngoogle.co.th:ecs3r8\ngoogle.android.googlequicksearchbox:pws\nforum.techzine.nl:ecs3r8\n96942981:ecs3r8\n96945302:ecs3r8\ngoogle.com.br:ecs3r8\nairzip2.inspsearch.comecs3r8\nclkuk.tradedoubler.compws\n96945995:ecs3r8\n96949474ecs3r8\nwww.tuugo.dk:ecs3r8\nwww.liverpool.no:travelR8\n96944608:pws\n96943194ecs3r8\n96935577:ecs3r8\n96938055:ecs3r8\n96936671ecs3r8\n96935621:ecs3r8\nwww.shoppingsherlock.com:ecs3r8\ngoogle.com.ni:travelR8\n8903023:travelR8\nr.duckduckgo.comecs3r8\nrejser.kelkoo.dk:ecs3r8\nsearch.symbalooplaces.comecs3r8\nfr.kelkoo.be:ecs3r8\n96946136:ecs3r8\nwww.istitutomajorana.itecs3r8\n96942040:travelR8\n96943001:ecs3r8\n96947162:ecs3r8\n96936519:ecs3r8\nreise.kelkoo.notravelR8\n96919233travelR8\n96947342ecs3r8\nwww.google.hrtravelR8\nyandex.rutravelR8\n96949449:ecs3\ncsh.lt:ecs3r8\n96935586:ecs3r8\nrejser.kelkoo.dktravelR8\nwww.kingshopitalia.com:ecs3r8\nwww.search-results.mobi:ecs3r8\nignaciosantiago.com:ecs3r8\nwww.izito.it:ecs3r8\n96946980ecs3r8\npeeplo.co.uk:ecs3r8\n96937983ecs3r8\nclk.tradedoubler.com:ecs3r8\n96944415:ecs3r8\n96947014:ecs3r8\n96944770ecs3r8\narianna.libero.it:ecs3r8\n96946145:ecs3r8\n96946266:ecs3r8\n96945562:ecs3r8\nwww.izito.se:ecs3r8\nwww.andstn.net:ecs3r8\nwww.bing.compws\ngoogle.com.vntravelR8\nsearch.free.fr:travelR8\nwww.cobra.fr:ecs3r8\n96937055:travelR8\n96944609:ecs3r8\n96949639:ecs3r8\nrecherche.aol.fr:travelR8\nwww.google.sn:travelR8\n96941994:ecs3r8\nwww.google.al:travelR8\n96935603:ecs3r8\n96935610:travelR8\n8902969:travelR8\nwww.image-nature.com:ecs3r8\n96943000ecs3r8\n96935559:ecs3r8\n96946504:ecs3r8\nstart.iminent.com:pws\n96942041:ecs3r8\nwww.online.no:ecs3r8\n96946070ecs3\nelektrofahrzeuge.in:ecs3r8\nwww.findhurtig.dkecs3r8\n96937970:ecs3r8\n96935660:ecs3r8\n96947845:ecs3r8\nwww.niedziela.nl:ecs3r8\n96917347:ecs3\n96947162ecs3r8\n96943012ecs3r8\n96944086:ecs3r8\nm.facebook.com:ecs3r8\nwww.trouver.fr:ecs3r8\nwww.google.mg:travelR8\ntalktalk.co.uk:ecs3r8\nsearch.yahoo.com:travelR8\nwww.google.ch:pws\n96948485:ecs3r8\n96946175:ecs3r8\n96945457:pws\ngoogle.com.af:travelR8\nwww.furgovw.org:ecs3r8\nwww.comparateurdeprix.ws:ecs3r8\n96943355:ecs3r8\n96942596ecs3r8\n96941782:ecs3r8\nshopping.kelkoo.no:ecs3r8\n8914516:travelR8\n8906276:ecs3r8\nwww.handlasmartare.se:ecs3r8\n96935581ecs3r8\n96944246ecs3r8\nwww.kvasir.noecs3r8\n96946468ecs3r8\nwww.google.ht:ecs3r8\n96935568ecs3r8\n96942522:travelR8\n96949363:ecs3r8\nara.no:ecs3r8\nl.facebook.com:travelR8\nwww.secure-surf.com:ecs3r8\n96949678:ecs3r8\nwww.google.tn:ecs3r8\n96946264ecs3r8\nwww.dinstartside.no:ecs3r8\nwww.dinside.no:ecs3r8\nsearch.mpc.am:ecs3r8\n8902474:pws\nwww.moneysavingexpert.com:ecs3r8\n96942392ecs3r8\nwww.chercheur.be:ecs3r8\n96942975:ecs3r8\n96944607:travelR8\n96943721ecs3r8\n96942399:travelR8\n96942395:ecs3r8\n96945305ecs3r8\ngoogle.com.ng:travelR8\n96941752ecs3r8\nbe.findeen.com:ecs3r8\nvliegtickets-aanbieders.startpagina.nl:ecs3r8\nclkde.tradedoubler.comecs3r8\nimages.google.es:ecs3r8\n96919193:ecs3\nwww.onlineprisen.dkecs3r8\ntb.ask.com:ecs3r8\n96942053:ecs3r8\n96935615:ecs3r8\nwww.google.frtravelR8\nclostra.galerie-creation.com:ecs3r8\n96942974ecs3r8\nwww.google.deecs3r8\nwww.komprabien.esecs3r8\n96947321:ecs3r8\nm.qyer.compws\n96948981travelWL\nwww.google.gr:travelR8\nkelkoo.fr:travelR8\nrecherche.aol.fr:pws\n96945457travelR8\n96945912ecs3r8\n96944678:ecs3r8\nclkde.tradedoubler.com:ecs3r8\ntilbehortilbaby.comecs3r8\n96945305:ecs3r8\ngoogle.com.peecs3r8\nfind.rockettab.com:travelR8\n96950328:ecs3r8\nwww.ustart.org:ecs3r8\nwww.griechenland-hotels.com:travelR8\n96946110:ecs3r8\n96946350:pws\nresor.kelkoo.se:ecs3r8\n96941858:ecs3r8\n96943632:ecs3r8\nreizen.kelkoo.nl:ecs3r8\n96942998ecs3r8\n96941788ecs3r8\n96949407travelR8\nfr.rapidfinder.ca:ecs3r8\ngoogle.com.br:pws\n8902967:travelR8\n96946139:ecs3r8\n96937645ecs3r8\n96949475:pws\nmediasrv03.com:ecs3r8\nwww.google.fiecs3r8\ninfo.dogpile.com:ecs3r8\n96942504ecs3r8\ngoogle.com.ua:travelR8\n96947645:ecs3r8\ntb.ask.com:travelR8\n8906526:ecs3r8\nwww.aranzulla.itecs3r8\n8914248:ecs3r8\nwww.danielecantoni.itecs3r8\nwww.google.me:travelR8\nwww.kelkoo.fi:ecs3r8\n96943334:ecs3\nno.ask.com:ecs3r8\n96943956:ecs3r8\n96942515:ecs3r8\nwww.google.cltravelR8\nsearch.sosodesktop.comecs3r8\nwww.los6mejores.com:ecs3r8\n96937441ecs3r8\nwww.everyclick.com:ecs3r8\n96935590:ecs3r8\n96935550ecs3r8\n96937585:travelR8\nwww.google.nl:travelR8\n8905637:travelR8\nchaises.galerie-creation.com:ecs3r8\nwww1.search-results.comtravelR8\n96947360:ecs3r8\n96908802:ecs3r8\n96946143ecs3r8\n96947896:ecs3r8\nwww.soapandthecity.com:travelR8\nwww.accessify.com:travelR8\n96945538:ecs3r8\n96943334ecs3\nwww.google.comecs3r8\nwww.kelkoo.no:ecs3r8\n96949475:travelR8\n96935627:ecs3r8\nwww.searchlock.com:ecs3r8\ngoogle.com.pe:ecs3r8\ngoogle.co.ukecs3r8\n96949163:ecs3r8\n96939049ecs3r8\nimages.google.frecs3r8\n96935563:ecs3r8\n96944280:ecs3\nwww.segnalidivita.com:ecs3r8\n8914516:ecs3r8\n\n\u003cfont color\u003dred\u003eResults are limited by 1000.\u003c/font\u003e"
+      },
+      "dateCreated": "Oct 18, 2016 4:16:32 PM",
+      "dateStarted": "Oct 18, 2016 4:19:36 PM",
+      "dateFinished": "Oct 18, 2016 4:20:05 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val parquetFileSearch \u003d sqlContext.read.parquet(\"/data/calypso/calypso_kk_june_data/search/*/2016/*/*/*.parquet\")",
+      "authenticationInfo": {},
+      "dateUpdated": "Dec 1, 2016 1:32:54 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1476800239728_-347514294",
+      "id": "20161018-161719_1355787879",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "parquetFileSearch: org.apache.spark.sql.DataFrame \u003d [userId: string, ip: string, userAgent: struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e, geolocation: string, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, queryString: string, filters: map\u003cstring,string\u003e, source: string, searchId: string, isPrompt: boolean, acquisitionCost: decimal(38,18), bidPrice: decimal(38,18)]\n"
+      },
+      "dateCreated": "Oct 18, 2016 4:17:19 PM",
+      "dateStarted": "Dec 1, 2016 1:32:55 PM",
+      "dateFinished": "Dec 1, 2016 1:34:25 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "\n\n",
+      "authenticationInfo": {},
+      "dateUpdated": "Dec 1, 2016 2:08:06 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [
+            {
+              "name": "userId",
+              "index": 0.0,
+              "aggr": "sum"
+            }
+          ],
+          "values": [
+            {
+              "name": "ip",
+              "index": 1.0,
+              "aggr": "sum"
+            }
+          ],
+          "groups": [],
+          "scatter": {
+            "xAxis": {
+              "name": "userId",
+              "index": 0.0,
+              "aggr": "sum"
+            },
+            "yAxis": {
+              "name": "ip",
+              "index": 1.0,
+              "aggr": "sum"
+            }
+          }
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1480595574977_1156819864",
+      "id": "20161201-133254_606926805",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "isPromptCount: org.apache.spark.sql.DataFrame \u003d [isPrompt: boolean, count: bigint]\n"
+      },
+      "dateCreated": "Dec 1, 2016 1:32:54 PM",
+      "dateStarted": "Dec 1, 2016 1:54:09 PM",
+      "dateFinished": "Dec 1, 2016 1:54:10 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val parquetFileClick \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypso_kk_june_data/click/*/2016/*/*/*.parquet\")",
+      "authenticationInfo": {},
+      "dateUpdated": "Dec 1, 2016 8:24:44 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1480595809162_-1127694344",
+      "id": "20161201-133649_1285362769",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "parquetFileClick: org.apache.spark.sql.DataFrame \u003d [userId: string, ip: string, userAgent: struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e, geolocation: struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, offerViewId: string, clickId: string, earning: decimal(38,18)]\n"
+      },
+      "dateCreated": "Dec 1, 2016 1:36:49 PM",
+      "dateStarted": "Dec 1, 2016 8:24:44 PM",
+      "dateFinished": "Dec 1, 2016 8:25:14 PM",
+      "status": "ABORT",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val validSource  \u003d parquetFileClick.filter(($\"source\".contains(\":\")))\nval sourceCounts \u003d validSource.groupBy(validSource(\"source\").\nsubstr(locate(\":\",validSource(\"source\"))+1,length(validSource(\"source\")))).count.sort(desc(\"count\")).withColumnRenamed(\"substring(source,locate(:,source,0),length(source))\", \"source\")\nz.show(sourceCounts)",
+      "authenticationInfo": {},
+      "dateUpdated": "Dec 8, 2016 12:08:34 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1480620284116_-912817728",
+      "id": "20161201-202444_1016423067",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "validSource: org.apache.spark.sql.DataFrame \u003d [userId: string, ip: string, userAgent: struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e, geolocation: struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, offerViewId: string, clickId: string, earning: decimal(38,18)]\nsourceCounts: org.apache.spark.sql.DataFrame \u003d [substring(source,(locate(:,source,0) + 1),length(source)): string, count: bigint]\n"
+      },
+      "dateCreated": "Dec 1, 2016 8:24:44 PM",
+      "dateStarted": "Dec 1, 2016 8:42:49 PM",
+      "dateFinished": "Dec 1, 2016 8:42:50 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "z.show(sourceCounts)",
+      "authenticationInfo": {},
+      "dateUpdated": "Dec 1, 2016 8:44:16 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [
+            {
+              "name": "substring(source,(locate(:,source,0) + 1),length(source))",
+              "index": 0.0,
+              "aggr": "sum"
+            }
+          ],
+          "values": [
+            {
+              "name": "count",
+              "index": 1.0,
+              "aggr": "sum"
+            }
+          ],
+          "groups": [],
+          "scatter": {
+            "xAxis": {
+              "name": "substring(source,(locate(:,source,0) + 1),length(source))",
+              "index": 0.0,
+              "aggr": "sum"
+            },
+            "yAxis": {
+              "name": "count",
+              "index": 1.0,
+              "aggr": "sum"
+            }
+          }
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1480621369237_1726156888",
+      "id": "20161201-204249_2110985478",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TABLE",
+        "msg": "substring(source,(locate(:,source,0) + 1),length(source))\tcount\necs3\t10396319\nkfs\t2650391\necs3r8\t1320958\necsAd\t546756\necsContextualAd\t38077\ntravelR8\t37577\necsAdFallback\t4858\necsRetargetingAd\t4535\necsContextualAdFallback\t3258\npws\t1813\ntravelWL\t769\necsRetargetingAdFallback\t29\n//www.bing.com:ecs3r8\t6\necswidget\t2\n"
+      },
+      "dateCreated": "Dec 1, 2016 8:42:49 PM",
+      "dateStarted": "Dec 1, 2016 8:43:04 PM",
+      "dateFinished": "Dec 1, 2016 8:43:39 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val parquetFileOffer \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypso_kk_june_data/offerView/*/2016/*/*/*.parquet\")\nval validSource  \u003d parquetFileOffer.filter(($\"source\".contains(\":\")))\nval invalidSource \u003d parquetFileOffer.filter(!($\"source\".contains(\":\")))\nvalidSource.count\ninvalidSource.count",
+      "authenticationInfo": {},
+      "dateUpdated": "Dec 8, 2016 1:07:19 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1480621384452_56361986",
+      "id": "20161201-204304_1591557934",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "parquetFileOffer: org.apache.spark.sql.DataFrame \u003d [eventType: string, userId: string, ip: string, userAgent: struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e, geolocation: struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, adType: string, offerRank: int, searchId: string, offerViewId: string, contentPageType: string, adPlacement: string, adViewability: string, adSize: string]\nvalidSource: org.apache.spark.sql.DataFrame \u003d [eventType: string, userId: string, ip: string, userAgent: struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e, geolocation: struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, adType: string, offerRank: int, searchId: string, offerViewId: string, contentPageType: string, adPlacement: string, adViewability: string, adSize: string]\ninvalidSource: org.apache.spark.sql.DataFrame \u003d [eventType: string, userId: string, ip: string, userAgent: struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e, geolocation: struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, adType: string, offerRank: int, searchId: string, offerViewId: string, contentPageType: string, adPlacement: string, adViewability: string, adSize: string]\nres0: Long \u003d 0\nres1: Long \u003d 3210050267\n"
+      },
+      "dateCreated": "Dec 1, 2016 8:43:04 PM",
+      "dateStarted": "Dec 8, 2016 1:07:19 AM",
+      "dateFinished": "Dec 8, 2016 1:09:13 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val parquetFileClick \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypso_kk_june_data/click/*/2016/*/*/*.parquet\")\nval validSource  \u003d parquetFileClick.filter(($\"source\".contains(\":\")))\nval source \u003d validSource.groupBy(validSource(\"source\").substr(0,8),validSource(\"source\").\nsubstr(locate(\":\",validSource(\"source\"))+1,length(validSource(\"source\")))).count.sort(desc(\"count\"))\nz.show(source)",
+      "authenticationInfo": {},
+      "dateUpdated": "Dec 4, 2016 1:14:20 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [
+            {
+              "name": "substring(source,0,8)",
+              "index": 0.0,
+              "aggr": "sum"
+            }
+          ],
+          "values": [
+            {
+              "name": "count",
+              "index": 1.0,
+              "aggr": "sum"
+            }
+          ],
+          "groups": [],
+          "scatter": {
+            "yAxis": {
+              "name": "count",
+              "index": 1.0,
+              "aggr": "sum"
+            }
+          }
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1480622828677_1419040254",
+      "id": "20161201-210708_153678673",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TABLE",
+        "msg": "substring(source,0,8)\tsubstring(source,(locate(:,source,0) + 1),length(source))\tcount\n96944671\tkfs\t517098\n96948199\tecs3\t339352\n96946711\tecs3\t286178\n96944629\tecs3\t264204\nwww.goog\tecs3r8\t235952\n96946753\tecs3\t234302\n96947616\tecs3\t232259\n96947624\tecs3\t224218\n96944907\tecs3\t208402\n96944280\tecs3\t199380\n96942374\tecs3\t185629\n96949637\tkfs\t179764\n96946993\tecs3\t177677\n96945595\tecs3\t162901\n96948839\tecsAd\t162588\n96944964\tecs3\t147267\n96946231\tecs3\t144410\n96950260\tecs3\t144232\n96942116\tkfs\t140816\n96947233\tecs3\t138875\n96949661\tkfs\t132049\n96946644\tecs3\t128934\n96943721\tecs3\t128297\n96949776\tecsAd\t127309\nnull:ecs\tecs3r8\t118482\n96947618\tecs3\t115456\n96946226\tecs3\t113461\n96942755\tecs3r8\t109948\n96947154\tkfs\t107886\n96944905\tecs3\t100512\n96944792\tecs3\t89418\n96943745\tecs3\t87077\n96946528\tecs3\t85447\n96937737\tecs3\t85418\n96946784\tecs3\t84683\n96942123\tkfs\t81834\n96929488\tecs3\t81208\n96942678\tecs3\t80903\n96944906\tecs3\t80487\n96947151\tkfs\t80470\n96943042\tecs3\t79552\n96948852\tecs3\t79443\n96929487\tecs3\t78665\n96946768\tecs3\t78546\n96935787\tecs3\t78335\nwww.bing\tecs3r8\t77369\n96950149\tecs3\t75591\n96941969\tkfs\t74360\n96948062\tecs3\t72755\n96949490\tecs3\t72617\n96947158\tkfs\t71708\n96945004\tkfs\t70445\n96935786\tecs3\t68982\n96942138\tecs3\t68128\n96950135\tecsAd\t68064\n96945152\tecs3\t66158\n96947156\tkfs\t66017\n96947846\tecs3\t64969\n96919246\tecs3\t62219\n96947617\tecs3\t62213\n96947271\tecs3\t61765\n96948224\tecs3\t60954\n96944612\tecs3r8\t60648\n96942127\tkfs\t60441\n96950086\tecs3\t60251\n96945659\tecs3\t59881\n96943147\tecs3\t59288\n96946729\tecs3\t59288\n96942887\tecs3\t55121\n96944200\tecs3\t54307\n96947622\tecs3\t53652\n96946270\tecs3\t53487\n96948188\tecs3\t52675\n96949489\tecs3\t51726\n96949585\tkfs\t50927\n96948023\tecs3\t50405\n96948186\tecs3\t49900\n96949669\tecs3\t49258\n96949714\tecs3\t49182\n96929759\tecs3\t49118\n96944963\tkfs\t48978\n96948716\tecs3\t48255\n96946070\tecs3\t48234\n96947604\tecs3\t47265\n96942016\tecs3\t46736\n96948913\tecs3\t45712\n96948185\tecs3\t45286\n96949509\tecs3\t43093\n96948724\tecs3\t42964\n96949958\tecs3\t42700\n96943949\tecs3\t40318\n96947044\tecs3\t40316\n96949102\tecs3\t40308\n96935014\tecs3\t39964\n96949845\tecs3\t38352\n96946517\tecs3\t37825\n96944612\tecs3\t36745\n96943148\tecs3\t36686\n96946154\tecs3\t36463\n96947533\tkfs\t35434\n96944975\tkfs\t35379\n96946441\tkfs\t34837\n96941880\tecs3\t33777\n96942999\tecs3r8\t33653\n96944626\tecs3\t33415\n96948187\tecs3\t33394\n96949138\tecs3\t33035\n96947139\tkfs\t32927\n96943899\tecs3\t32851\n96949785\tecs3\t32679\n96946268\tecs3\t32233\n96942763\tecs3r8\t31796\n96943932\tecs3\t31577\n96947273\tecs3\t31183\n96946143\tecs3r8\t31077\n96944805\tkfs\t30519\n96947161\tkfs\t30315\n96944654\tecs3\t30285\n96948294\tecs3\t30235\n96947060\tecs3\t30096\n96948293\tecs3\t29822\n96949130\tecs3\t29383\n96946368\tecs3\t29320\n96949200\tecs3\t29009\n96947290\tkfs\t28804\n96946142\tecs3r8\t28731\n96946447\tecs3\t28558\n96947939\tecs3\t28175\n96947183\tkfs\t28044\n96948654\tecs3\t27790\n96950145\tecs3\t27484\n96947845\tecsAd\t27469\n96942764\tecs3r8\t27371\n96947217\tecs3\t26655\n96946444\tecs3\t26630\n96946450\tecs3\t26617\n96943077\tecs3\t26592\n96947219\tecs3\t26586\n96949143\tecs3\t26248\n96949511\tecs3\t25915\n96942874\tecs3\t25536\n96949738\tecsAd\t25310\n96949663\tecs3\t25032\n96944624\tecs3\t24906\n96949732\tkfs\t24876\n96947804\tecs3\t24606\nsearch.y\tecs3r8\t24583\n96945729\tkfs\t24322\n96937919\tecsAd\t23227\n96949210\tecs3\t23129\n96947266\tkfs\t23113\n96945277\tkfs\t23069\n96945808\tecsAd\t22867\n96949260\tecs3\t22435\n96941820\tecs3\t22331\n96944631\tecs3\t22098\n96948658\tkfs\t21617\n96949241\tecs3\t21551\n96942929\tecs3\t21446\n96946797\tecs3\t21254\n96948653\tecs3\t21180\n96944193\tecs3\t20966\n96949878\tecs3\t20904\n96947269\tecs3\t20876\n96948558\tecs3\t20870\n96949496\tecs3\t20842\n96948316\tecs3\t20644\n96944358\tecs3\t20595\n96944960\tkfs\t20466\n96944948\tkfs\t20343\n96949129\tecs3\t20340\n96944993\tkfs\t19967\n96947367\tkfs\t19771\n96948688\tecs3\t19763\n96941786\tecs3r8\t19619\n96948440\tecs3\t19374\n96949127\tecs3\t19159\n96947214\tecs3\t19043\n96935795\tecs3\t18964\n96943931\tecs3\t18953\n96949677\tkfs\t18803\n96945981\tecs3\t18741\n96948501\tecsAd\t18641\n96943679\tecs3\t18565\n96944656\tecs3\t18372\n96946440\tecs3\t18277\n96948643\tecs3\t18187\n96947493\tkfs\t17912\n96948666\tecs3\t17768\n96948511\tkfs\t17680\n96949135\tecs3\t17307\n96946856\tkfs\t17065\n96949202\tecs3\t17031\n96947798\tecs3\t16957\n96949881\tecs3\t16624\n96949132\tecs3\t16469\n96948572\tecs3\t16457\n96944961\tkfs\t16335\n96949880\tecs3\t16323\n96948812\tecsAd\t16139\n96949781\tecs3\t16094\n96947477\tecs3\t16083\n96948594\tecs3\t15890\n96947935\tkfs\t15799\nclk.trad\tecs3r8\t15749\n96932667\tecs3\t15617\n96948929\tecs3\t15532\n96944900\tkfs\t15259\n96944986\tecs3\t15236\n96945213\tecs3\t15086\n96948025\tkfs\t15023\n96948630\tecs3\t14797\n96943076\tecs3\t14786\n96945244\tecs3\t14621\n96950064\tkfs\t14447\n96947160\tkfs\t14139\n96945985\tkfs\t13806\n96947218\tecs3\t13785\n96949137\tecs3\t13763\n96948210\tecs3\t13746\n96948007\tecs3\t13719\n96948048\tecs3\t13451\n96947292\tecs3\t13267\n96948626\tecs3\t13242\n96946605\tecs3\t13161\n96948052\tecs3\t13103\n96948009\tecs3\t13073\n96949176\tecs3\t13033\n96948712\tecs3\t13024\nnull:tra\ttravelR8\t13020\n96945961\tecs3\t12975\n96914200\tecs3\t12799\n96949696\tkfs\t12788\nwww.goog\ttravelR8\t12784\n96949005\tecs3\t12775\n96949090\tkfs\t12749\n96942770\tecs3r8\t12642\n96946323\tecs3\t12536\n96942675\tecs3\t12535\n96949035\tecs3\t12528\n96944246\tecsAd\t12385\n96947500\tkfs\t12352\n96948832\tecs3\t12045\n96944360\tecs3\t11993\n96948645\tecs3\t11915\n96944629\tecsContextualAd\t11893\n96946547\tecs3\t11884\n96929486\tecs3\t11857\n96945119\tecs3\t11724\n96944687\tecs3\t11709\n96949259\tecs3\t11560\n96937645\tecs3r8\t11533\n96943957\tecs3r8\t11392\n96942384\tecs3r8\t11365\n96944966\tkfs\t11125\n96949837\tecs3\t11022\n96947575\tecs3\t10990\n96946365\tecs3\t10796\n96949896\tecs3\t10783\n96948576\tecs3\t10765\ngoogle.a\tecs3r8\t10752\n96948304\tecs3\t10734\n96942622\tecs3r8\t10728\n96941858\tecs3r8\t10722\n96947802\tecs3\t10704\n96947249\tecs3\t10697\n96946139\tecs3r8\t10691\n96945290\tecs3r8\t10582\n96944303\tecs3\t10569\n96949128\tecs3\t10514\n96947100\tecs3\t10481\n96944745\tkfs\t10471\n96945987\tkfs\t10428\n96949126\tecs3\t10329\n96949492\tecs3\t10251\n96944361\tecs3\t10241\n96945313\tkfs\t10048\n96947991\tecs3\t9975\n96949002\tecs3\t9958\n96944771\tecs3\t9871\nwww.kelk\tecs3r8\t9852\n96948748\tecs3\t9833\n96946193\tecs3\t9803\n96942970\tecs3r8\t9782\n96944301\tecs3\t9772\n96949985\tecs3\t9713\n96943071\tecs3\t9662\n96946125\tecs3r8\t9651\n96917356\tecs3\t9620\n96949237\tkfs\t9464\n96935796\tecs3\t9278\n96947870\tkfs\t9260\n96945691\tkfs\t9018\n96948706\tkfs\t9006\n96948109\tecs3\t8951\n96946105\tecs3\t8931\n96950178\tecs3\t8901\n96941986\tecs3r8\t8888\n96949038\tecs3\t8816\n96946371\tecs3\t8784\n96949001\tecs3\t8504\n96949976\tecs3\t8477\n96944962\tkfs\t8449\n96949981\tecs3\t8427\n96935676\tecs3\t8413\n96947122\tkfs\t8350\n96950294\tkfs\t8345\n96946854\tkfs\t8332\n96949021\tecs3\t8327\n96949284\tecs3\t8320\n96947985\tecs3\t8286\n96943020\tecs3r8\t8216\n96945744\tkfs\t8144\n96947184\tkfs\t8077\n96945886\tecs3\t8076\n96948786\tecs3\t8030\n96943009\tecs3r8\t8016\n96950068\tecs3\t7949\n96949502\tecs3\t7827\n96949098\tecs3\t7798\n96949235\tecs3\t7778\n96947961\tecs3\t7753\n96949234\tecs3\t7746\n96949000\tecs3\t7613\n96950176\tecs3\t7577\n96946126\tecs3r8\t7362\n96909618\tecs3r8\t7353\n96945986\tkfs\t7324\n96946454\tecs3\t7177\n96948995\tecs3\t7125\n96942981\tecs3r8\t7114\n96947054\tecs3\t7047\n96937605\tecs3r8\t7010\n96949043\tecs3\t6982\n96944997\tecs3\t6920\n96949956\tkfs\t6909\n96948925\tecs3\t6880\n96949908\tecs3\t6873\n96949515\tecs3\t6835\ngoogle.c\tecs3r8\t6645\n96936025\tkfs\t6596\n96949718\tkfs\t6548\n96941787\tecs3r8\t6538\n96949323\tecs3\t6487\n96937629\tecs3r8\t6484\n96945215\tecs3\t6414\n96946369\tecs3\t6390\n96945263\tecs3\t6336\n96947903\tecs3\t6271\n96949165\tecs3r8\t6261\n96932948\tecs3r8\t6190\n96946436\tecs3\t6164\n96944817\tecs3\t6139\n96943014\tecs3r8\t6138\n96948649\tecs3\t6116\n96945233\tecs3\t6049\n96943746\tecs3\t6027\n96943929\tecs3\t6014\n96945457\tecs3r8\t5994\n96945980\tecs3\t5993\n96948441\tecs3\t5964\n96949694\tkfs\t5827\n96927470\tecs3\t5811\n96937281\tecs3\t5663\n96922131\tecs3\t5635\n96947498\tkfs\t5615\n96947136\tkfs\t5604\n96947967\tkfs\t5502\n96927471\tecs3\t5437\n96944607\tecs3r8\t5422\n96943965\tecs3\t5319\n96949901\tecs3\t5312\n96944235\tecs3r8\t5310\n96946438\tecs3\t5296\n96945557\tecs3r8\t5248\n96947819\tecs3\t5241\n96945150\tecs3\t5192\n96945261\tecs3\t5183\n96949928\tecs3\t5081\n96921713\tecs3\t5069\n96948737\tecs3\t5064\n96949780\tecs3\t4982\n96947155\tkfs\t4977\n96942881\tecs3\t4951\n96943194\tecs3r8\t4931\n96949519\tecs3\t4901\n96943254\tecs3\t4851\n96943956\tecs3r8\t4837\n96947128\tecs3\t4822\n96942780\tecs3r8\t4807\n96943257\tecs3\t4767\n96946138\tecs3r8\t4740\n96945122\tecs3\t4696\n96947133\tkfs\t4683\n96946437\tecs3\t4668\n96948726\tecs3\t4649\n96949149\tecs3\t4577\n96944248\tecs3r8\t4573\n96949424\tecs3\t4556\n96944402\tecs3\t4549\n96944302\tecs3\t4547\n96948393\tecs3\t4526\n96935789\tecs3\t4520\n96943602\tecs3r8\t4513\n96944410\tecs3\t4506\n96948222\tecs3\t4399\n96944236\tecs3r8\t4377\n96949451\tecs3\t4365\n96945037\tecs3\t4348\n96949308\tecs3\t4341\n96946757\tecs3\t4333\n96923287\tecs3\t4321\n96942522\tecs3r8\t4290\n96948105\tecs3\t4263\n96947532\tkfs\t4221\n96946182\tecs3r8\t4178\n96949464\tecs3\t4173\n96947400\tecs3\t4153\n96943625\tecs3r8\t4146\n96943872\tecs3\t4119\n96935664\tecs3\t4091\n96948089\tecs3\t4082\n96945260\tecs3\t4080\n96948057\tkfs\t4079\n96949721\tecsAd\t4067\n96948735\tecs3\t4052\n96947392\tecs3\t3966\n96946830\tecs3r8\t3966\n96944299\tecs3\t3926\n96946269\tecs3\t3917\n8902510:\tecs3r8\t3912\n96945872\tkfs\t3906\n96943027\tkfs\t3844\n96944688\tecs3\t3843\n96945512\tkfs\t3808\nkelkoo.c\tecs3r8\t3794\n96944984\tecs3\t3785\n96943210\tecs3\t3738\n96935791\tecs3\t3722\n96942506\tecs3r8\t3705\n96946136\tecs3r8\t3699\n96948167\tecs3\t3679\n96942301\tecs3r8\t3647\n96948761\tkfs\t3642\n96949297\tecs3\t3637\n96944952\tkfs\t3635\n96949223\tecs3\t3615\n96922130\tecs3\t3598\n96949526\tecs3\t3590\n96949136\tkfs\t3589\n96947576\tecs3\t3588\n96945875\tecs3\t3539\n96945264\tecs3\t3514\n96945427\tecs3r8\t3499\n96944968\tkfs\t3498\n96947974\tecs3\t3496\n96914381\tecs3\t3460\n96920231\tecsAd\t3439\n96948014\tkfs\t3423\n96944601\tecs3r8\t3420\n96945495\tecs3\t3410\n96945765\tecs3\t3394\n96948635\tkfs\t3388\n96944304\tecs3\t3369\n96948190\tecs3\t3350\n96934993\tecs3\t3309\n96919433\tecs3r8\t3306\n96947114\tecs3\t3306\n96949520\tecs3\t3304\n96943721\tecsContextualAd\t3300\n96948701\tkfs\t3276\n96948162\tkfs\t3271\n96947233\tecsAd\t3236\n96948740\tecs3\t3215\n96948016\tecs3\t3192\n96945280\tecs3r8\t3188\n96948221\tecs3\t3185\n96945638\tecs3\t3182\n96946140\tecs3r8\t3143\n96942756\tecs3\t3141\n96943042\tecsContextualAd\t3128\n96945243\tecs3\t3120\n96944210\tecs3\t3119\n96941751\tecs3r8\t3118\n96944017\tecs3\t3111\n96939082\tecs3\t3109\n96942504\tecs3r8\t3101\n96943988\tecs3\t3090\n96948241\tecs3\t3042\n96948648\tecs3\t3013\n96945428\tecs3r8\t3008\n96948045\tecs3\t3003\n96945033\tecs3\t2991\n96945556\tkfs\t2953\n96948437\tecs3\t2945\nwww.star\tecs3r8\t2924\n96945514\tkfs\t2894\n96945879\tkfs\t2889\n96947096\tecs3\t2877\n96947093\tecs3\t2872\n96944388\tecs3\t2837\n96947494\tkfs\t2837\n96947882\tkfs\t2808\n96949164\tecs3r8\t2805\n96947270\tecs3\t2801\n96919193\tecs3\t2800\n96943176\tecs3\t2800\n96946855\tkfs\t2792\n96942261\tecs3r8\t2717\n96947673\tecs3r8\t2713\n96939083\tecs3\t2656\n96948189\tecs3\t2654\n96941782\tecs3r8\t2651\n96947989\tecs3\t2606\n96944234\tecs3\t2599\n96949281\tecs3\t2582\n96949267\tecs3\t2561\n96948121\tecs3\t2559\n96948907\tecs3\t2523\n96948518\tecsAd\t2522\n96947152\tkfs\t2510\n96945433\tkfs\t2491\n96945827\tecs3r8\t2487\n96947131\tkfs\t2486\n96923290\tecs3\t2485\n96945107\tecs3\t2483\n96948619\tkfs\t2480\n96946020\tecsContextualAd\t2475\n96943745\tecsContextualAd\t2474\n96936558\tecs3\t2454\n96947700\tecs3\t2452\n96944206\tecs3\t2448\n96950167\tecs3\t2442\n96922133\tecs3\t2391\n96944608\tecs3r8\t2386\n96943988\tecs3r8\t2383\n96947091\tecs3\t2355\n96948574\tecs3\t2348\n96948152\tecs3\t2329\n96944716\tecs3\t2320\n96948223\tecs3\t2319\n96949850\tkfs\t2303\n96950127\tkfs\t2299\n96947153\tkfs\t2290\n96945900\tecs3\t2281\n96945151\tecs3\t2269\n96945274\tecs3\t2256\n96944368\tecs3\t2255\n96942875\tecs3\t2255\n96949302\tecs3\t2253\n96949194\tecs3\t2246\n96948382\tecs3\t2230\n96945710\tecs3\t2222\n96949930\tkfs\t2220\n96942384\ttravelR8\t2218\n96948899\tecs3\t2211\n96948184\tecs3\t2205\n96948003\tecs3\t2203\n96947095\tecs3\t2195\n96942860\tecs3\t2194\n96945036\tecs3\t2189\n96947495\tkfs\t2184\n96948079\tecsAd\t2164\n96914179\tecs3\t2161\n96949953\tecs3r8\t2158\n96948262\tecs3\t2137\n96947094\tecs3\t2136\n96941735\tecs3\t2132\n96949745\tecs3\t2132\n96947166\tecs3\t2121\nduckduck\tecs3r8\t2119\n96946435\tecs3\t2117\n96949422\tecs3\t2111\n96948047\tkfs\t2105\n96948926\tecs3\t2084\n96949279\tecs3\t2078\n96945482\tecs3\t2077\n96935600\tecs3r8\t2070\n96946132\tecs3\t2059\n96945183\tecsAd\t2039\n96948753\tkfs\t2037\n96942799\tecs3\t2028\n96945066\tecs3\t2023\n96946144\tecs3r8\t2022\n96947831\tecs3\t2022\n96941950\tecs3\t1994\n96946153\tecs3\t1992\n96950203\tecs3\t1992\n96949349\tecs3\t1972\n96920436\tecs3\t1967\n96917381\tecs3\t1960\n96945117\tecs3\t1958\n96949836\tecs3\t1944\n96943873\tecs3\t1944\n96948713\tecs3\t1931\n96949893\tecs3\t1929\n96935612\tecs3r8\t1898\n96948842\tecs3r8\t1878\n96943735\tecs3\t1860\n96949852\tecsAd\t1840\n96947213\tecs3\t1837\n96947368\tecs3\t1832\n96947174\tkfs\t1828\n96949472\tecs3\t1818\n96932945\tecs3r8\t1810\n96935245\tecs3\t1803\n96949196\tecs3\t1772\n96947185\tecs3\t1765\n96949581\tecs3\t1760\n96943042\tecsRetargetingAd\t1755\n96949053\tecs3\t1742\n96946240\tecs3\t1724\n96950146\tecs3\t1702\n96945995\tecs3r8\t1688\n96949352\tecs3\t1686\n96935603\tecs3r8\t1681\nshopping\tecs3r8\t1678\n96945721\tecs3\t1676\n96920231\tecsContextualAd\t1672\n96944359\tecs3\t1668\n96945579\tecs3\t1657\n96949433\tecs3\t1655\n96914889\tecs3\t1654\n96946612\tecs3\t1651\n96948924\tecs3\t1645\n96948376\tecs3\t1636\n96946302\tecs3\t1612\n96942385\tecs3r8\t1607\n96946152\tecs3\t1603\n96947052\tecs3\t1597\n96948640\tecs3\t1597\n96948263\tecs3\t1591\n96948941\tecsAd\t1586\n96948044\tecs3\t1584\n96945227\tecs3\t1581\n96937137\tecs3r8\t1579\n96947089\tecs3\t1576\n96943000\tecs3r8\t1574\n96949405\tecsContextualAd\t1559\n96942616\tecs3r8\t1556\n96948897\tecs3\t1555\n96949390\tecs3\t1554\n96941788\tecs3r8\t1538\n96948723\tecs3\t1533\n96934496\tecs3\t1520\n96947800\tecs3\t1519\n96942399\tecs3r8\t1519\n96947061\tecs3\t1511\n96949728\tecs3r8\t1511\n96935792\tecs3\t1493\n96949565\tecs3\t1492\n96941971\tecs3\t1489\n96949271\tecs3\t1478\n96947080\tecs3\t1476\n96944404\tecs3\t1463\n96948821\tecs3\t1442\n96947972\tecs3\t1441\n96949654\tecs3r8\t1431\n96948913\tecsAd\t1428\n96935535\tecs3r8\t1425\n96949612\tecs3\t1409\n96947167\tecs3\t1405\n96949995\tecs3\t1402\n96945012\tecs3\t1397\n96948575\tecs3\t1391\nwww.aran\tecs3r8\t1389\n96949613\tecs3\t1387\n96948644\tecs3\t1384\n96947044\tecsContextualAd\t1378\n96943018\tecs3r8\t1368\n96947835\tecs3\t1349\n96950093\tecs3\t1345\n96947889\tecs3\t1332\n96947971\tecs3\t1330\n96943403\tecs3\t1329\n96944886\tecs3\t1314\n96949563\tecs3\t1311\n96920518\tecs3\t1290\n96948068\tecsAd\t1287\n96919489\tecs3\t1286\n96950125\tkfs\t1279\n96947932\tkfs\t1279\n96944260\tecs3\t1268\n8915815:\tecs3r8\t1268\n96937884\tecs3\t1252\n96949151\tecs3\t1231\n96945302\tecs3r8\t1229\n96946141\tecs3r8\t1224\n96937653\tecs3r8\t1216\n96948503\tkfs\t1204\n96948150\tecs3\t1195\n96944724\tecs3\t1191\n96949432\tecs3\t1190\n96935280\tecs3\t1184\n96947994\tkfs\t1176\n96933361\tecs3\t1156\n96948556\tecs3\t1153\n96923291\tecs3\t1148\n96941881\tecs3\t1145\n96949420\tecs3\t1141\n96946156\tecs3\t1141\n96948994\tecs3\t1137\n96937600\tecs3r8\t1119\n96944352\tecsAd\t1109\n96947996\tecs3\t1108\n96944824\tecsAd\t1106\n96942984\tecs3r8\t1097\n96947090\tecs3\t1091\n96949970\tecs3\t1091\n96942979\tecs3r8\t1083\n96931480\tecs3\t1083\n96946362\tecs3\t1079\n96935477\tecs3\t1078\n96943721\tecsRetargetingAd\t1078\n96948695\tecs3\t1075\n96948530\tecs3\t1068\n96938227\tecs3r8\t1066\n96948094\tecsAdFallback\t1059\n96942746\tecs3\t1055\n96949318\tecsAd\t1051\n96943155\tecsAd\t1050\nwww.bing\ttravelR8\t1049\n96944401\tecs3r8\t1042\n96947341\tecs3r8\t1030\n96942145\tecs3r8\t1028\nwww.sceg\tecs3r8\t1028\nclkuk.tr\tecs3r8\t1024\n96947355\tecs3\t1021\n96935604\tecs3r8\t1019\n96945890\tecs3\t1017\n96944406\tecs3\t1012\n96948227\tecsAd\t1006\n96949849\tkfs\t1005\n96947881\tecs3r8\t1003\n96945994\tecs3r8\t995\n96943003\tecs3r8\t995\n96945245\tecs3\t991\n96935605\tecs3r8\t991\n96947966\tecs3\t985\n96944237\tecs3r8\t981\n96947534\tecs3\t980\n96942677\tecs3\t969\n96947690\tecs3\t961\n96949861\tecsAd\t957\n96945034\tecs3\t929\n96945521\tecs3\t925\n96949619\tecs3\t923\n96944415\tecs3r8\t908\n96944582\tecs3r8\t905\n96948600\tecs3\t904\n96945390\tecs3r8\t903\n96949434\tecs3\t900\n96920435\tecs3\t896\n96936663\tecs3\t891\n96949431\tecs3\t886\nwww.star\ttravelR8\t880\n96943397\tecs3\t866\n96937469\tecs3r8\t865\n96944825\tecsAd\t863\n96945522\tecs3\t863\n96920991\tecs3\t863\n96947083\tecs3\t860\n96933736\tecsContextualAd\t858\n96947731\tkfs\t855\n96943745\tecsRetargetingAd\t855\n96948911\tecs3\t849\nwww.mega\tecs3r8\t848\n96941789\tecs3r8\t842\n96942596\tecs3r8\t839\n96944995\tecs3r8\t835\n96932950\tecs3r8\t835\n96948596\tecs3\t820\n96949005\tecsContextualAd\t819\n96945455\tkfs\t818\n96944362\tecs3\t817\n96945868\tecs3r8\t817\n96948725\tecs3\t815\n96949109\tecs3\t814\n96948526\tecs3\t811\n96944609\tecs3r8\t807\n96947223\tecs3\t805\n96947845\tecs3r8\t804\n96949929\tecsContextualAd\t803\n96944132\tecsAd\t803\n96949955\tecs3\t803\n96947147\tecs3\t799\n96943927\tecs3r8\t797\n96945064\tecs3\t790\n96947796\tkfs\t789\n96949738\tecsAdFallback\t789\n96935602\tecs3r8\t789\n96946431\tecsContextualAd\t786\n96944285\tecs3\t785\n96944770\tecs3r8\t779\n96921067\tecs3\t777\n96944050\tecs3r8\t777\n96948727\tecs3\t775\n96945956\tecs3\t767\nwww.qwan\tecs3r8\t766\n96942930\tecs3\t761\n96942397\ttravelR8\t760\n96944910\tecs3\t760\n96949160\tecs3r8\t760\n96942518\tecs3r8\t753\n96926869\tecs3\t741\n96935647\tecs3r8\t741\n96944369\tecs3\t740\n96948755\tkfs\t739\ngoogle.c\ttravelR8\t738\n96947356\tecs3\t737\n96944283\tecs3\t734\n96921885\tecs3\t725\n96948282\tecs3\t718\n96944279\tecs3\t717\n96949795\tecs3\t716\n96949610\tecs3\t716\n96945065\tecs3\t712\n96950149\tecsAd\t708\n96949690\tecs3\t706\nwww.zapm\tecs3r8\t705\n96949282\tecs3\t705\n96920576\tecsContextualAd\t704\n96946397\tecs3r8\t703\n96947868\tecs3\t701\n96947099\tecs3\t699\n96926870\tecs3\t696\nnull:pws\tpws\t694\n96948700\tecs3r8\t691\n96949448\tecs3\t691\n96947104\tecs3\t687\n96948024\tecs3\t686\n96949287\tecs3\t685\n96946796\tecs3\t685\n96948046\tecs3\t684\n96942515\tecs3r8\t684\n96946222\tecsContextualAd\t684\n96945303\tecs3r8\t683\n96949558\tecsContextualAd\t683\n96923289\tecs3\t681\n96935608\tecs3r8\t681\n96949145\tecs3\t679\n96944626\tecsContextualAd\t678\n96944387\tecs3\t676\n96945975\tecs3\t674\nvoyages.\ttravelR8\t673\n96916819\tecs3\t670\nwww.goog\tpws\t664\n96946730\tecsAd\t659\n96938048\tecs3r8\t653\n96944017\tecsAd\t653\n96947539\tkfs\t649\n96947088\tecs3\t637\n96944385\tecs3\t637\n96946204\tecsContextualAd\t636\n96949418\tkfs\t635\n96937138\tecs3r8\t630\n96946324\tecs3\t629\n96935606\tecs3r8\t622\n96927963\tecs3\t620\n96945481\tecs3\t619\n96927361\tecs3\t618\n96947314\tecs3r8\t615\n96947637\tecs3r8\t614\n8914516:\tecs3r8\t614\n96943833\tecsAd\t608\n96948914\tecs3r8\t605\n96946569\tecs3\t600\n96947097\tecs3\t599\n96949568\tecs3\t597\n96949156\tecs3\t597\n96949561\tecs3\t595\nlemoteur\tecs3r8\t591\n96949139\tecs3\t586\n96950393\tecs3r8\t584\n96948839\tecsAdFallback\t582\n96935660\ttravelR8\t582\n96935609\tecs3r8\t581\n96945969\tkfs\t578\n96943632\tecs3r8\t572\n96935646\tecs3r8\t572\n96942399\ttravelR8\t572\n96945566\tecs3\t569\n96942759\tecs3r8\t563\n96948900\tecs3\t563\n96947340\tecs3r8\t563\n96935588\tecs3r8\t562\n96948563\tecs3\t558\n96947640\tecs3r8\t554\n96934549\tecs3\t552\n96945983\tecs3\t552\n96950118\tecsContextualAdFallback\t550\n96948703\tecs3r8\t550\n96948485\tecs3r8\t549\n96948998\tecs3\t548\n96942998\tecs3r8\t548\n96942392\tecs3r8\t547\n96946471\tecs3\t544\n96937634\tecs3r8\t544\n96944042\tecs3\t543\n96945020\tecs3\t543\nreise.ke\ttravelR8\t538\n96941752\tecs3r8\t538\n96941753\tecs3r8\t538\n96929381\tecs3\t537\n96945681\ttravelWL\t529\n96937652\tecs3r8\t528\n96947321\tecs3r8\t525\n96948902\tecs3\t523\n96945011\tecs3\t521\n96949819\tecs3\t518\n96947039\tecs3r8\t514\n96948876\tecs3\t509\n96918641\tecs3r8\t507\n96942822\tecsAd\t504\n96942397\tecs3r8\t503\n96937706\tecs3r8\t499\n96949007\tecs3\t497\n96949312\tkfs\t493\n96949906\tecs3\t491\n96937004\tecs3r8\t488\nwww.hand\tecs3r8\t486\n96944206\tecs3r8\t482\n96946145\tecs3r8\t480\n96943392\tecs3r8\t477\n96947976\tecs3\t470\n96946928\tecs3r8\t468\n96949889\tecs3\t468\n96942825\tecs3\t466\n96946350\tecs3r8\t461\n96947885\tkfs\t461\n96948073\tecsAd\t460\nsearch.s\tecs3r8\t456\n96945725\tecs3\t454\n96942635\tecs3\t452\n96944319\tecs3\t452\n96941950\tecsContextualAd\t451\n96946925\tecs3r8\t451\n96949343\tecsAd\t450\n96949887\tecsContextualAd\t449\n96943015\tecs3r8\t447\n96947877\tecs3\t446\n96944274\tecs3r8\t444\n96944911\tecs3\t443\nsearch.y\ttravelR8\t442\n96942522\ttravelR8\t438\n96943801\tecs3r8\t437\n96950369\tecsContextualAdFallback\t436\n96949796\tecsAd\t435\n96935999\tecs3\t434\n96944305\tecs3\t433\n96949848\tecsAd\t431\n96947098\tecs3\t427\n96948602\tecs3\t427\n96948604\tkfs\t424\n96942908\tecs3\t424\nwww.onli\tecs3r8\t424\n96949866\tecs3\t423\n96945298\tecs3r8\t421\n96948728\tecs3\t418\n96949614\tecs3\t418\n96949524\tecs3\t417\n96949559\tecs3\t414\n96946727\tecs3r8\t413\n96947713\tecs3\t412\n96949188\tecs3\t410\n96950330\tecs3r8\t409\n96946926\tecs3r8\t408\n96946972\tecs3r8\t404\n96943747\tecs3r8\t402\nclk.trad\ttravelR8\t402\n96945974\tecs3\t401\n96947159\tkfs\t399\n96942394\tecs3r8\t399\n96947339\tecs3r8\t397\n96948818\tecs3\t393\nricerca.\tecs3r8\t392\n96944134\tecs3r8\t390\n96948071\tecsAd\t390\n96944656\tecsContextualAd\t390\n96948129\tecs3\t388\n96945306\tecs3r8\t388\n96949421\tecs3\t386\narianna.\tecs3r8\t386\n96942036\tecs3r8\t384\n96944036\tecs3r8\t379\n96949564\tecs3\t374\nairzip2.\tecs3r8\t373\n96937651\tecs3r8\t373\n96948085\tecsAd\t373\n96945510\tecs3r8\t368\n96944580\tecs3\t368\n96922136\tecs3\t368\n96949991\tecs3\t362\n96949776\tecsAdFallback\t361\n96945808\tecs3r8\t360\n96943001\tecs3r8\t357\n96944156\tecs3r8\t356\n96947849\tkfs\t356\n96950156\tecs3\t355\n96946110\tecs3r8\t354\n\n\u003cfont color\u003dred\u003eResults are limited by 1000.\u003c/font\u003e"
+      },
+      "dateCreated": "Dec 1, 2016 9:07:08 PM",
+      "dateStarted": "Dec 4, 2016 1:14:20 AM",
+      "dateFinished": "Dec 4, 2016 1:14:56 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val col \u003dvalidSource.select(locate(\":\",validSource(\"source\")))",
+      "authenticationInfo": {},
+      "dateUpdated": "Dec 4, 2016 1:08:13 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1480809065105_1363043362",
+      "id": "20161204-005105_1375998212",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "col: org.apache.spark.sql.DataFrame \u003d [locate(:,source,0): int]\n"
+      },
+      "dateCreated": "Dec 4, 2016 12:51:05 AM",
+      "dateStarted": "Dec 4, 2016 1:08:14 AM",
+      "dateFinished": "Dec 4, 2016 1:08:14 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val parquetFileClick \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypso_kk_june_data/click/*/2016/*/*/*.parquet\")\nval validSource  \u003d parquetFileClick.filter(($\"source\".contains(\":\")))\nval source \u003d validSource.select(validSource(\"source\").substr(0,8)).distinct.count\n",
+      "authenticationInfo": {},
+      "dateUpdated": "Dec 4, 2016 1:20:57 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1480809586844_1488994694",
+      "id": "20161204-005946_911803103",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "parquetFileClick: org.apache.spark.sql.DataFrame \u003d [userId: string, ip: string, userAgent: struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e, geolocation: struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, offerViewId: string, clickId: string, earning: decimal(38,18)]\nvalidSource: org.apache.spark.sql.DataFrame \u003d [userId: string, ip: string, userAgent: struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e, geolocation: struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, offerViewId: string, clickId: string, earning: decimal(38,18)]\nsource: Long \u003d 2976\n"
+      },
+      "dateCreated": "Dec 4, 2016 12:59:46 AM",
+      "dateStarted": "Dec 4, 2016 1:20:57 AM",
+      "dateFinished": "Dec 4, 2016 1:21:30 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val parquetFileClick \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypso_kk_june_data/click/*/2016/*/*/*.parquet\")\nval validSource  \u003d parquetFileClick.filter(($\"source\".contains(\":\")))\nval source \u003d validSource.select(validSource(\"source\").substr(0,8),validSource(\"source\").\nsubstr(locate(\":\",validSource(\"source\"))+1,length(validSource(\"source\"))))",
+      "authenticationInfo": {},
+      "dateUpdated": "Dec 4, 2016 1:25:24 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1480809767309_-1260158791",
+      "id": "20161204-010247_680254087",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "parquetFileClick: org.apache.spark.sql.DataFrame \u003d [userId: string, ip: string, userAgent: struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e, geolocation: struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, offerViewId: string, clickId: string, earning: decimal(38,18)]\nvalidSource: org.apache.spark.sql.DataFrame \u003d [userId: string, ip: string, userAgent: struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e, geolocation: struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, offerViewId: string, clickId: string, earning: decimal(38,18)]\nsource: org.apache.spark.sql.DataFrame \u003d [substring(source,0,8): string, substring(source,(locate(:,source,0) + 1),length(source)): string]\n"
+      },
+      "dateCreated": "Dec 4, 2016 1:02:47 AM",
+      "dateStarted": "Dec 4, 2016 1:25:24 AM",
+      "dateFinished": "Dec 4, 2016 1:25:26 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val kwebsitesource \u003d source.where(($\"substring(source,(locate(:,source,0) + 1),length(source))\"\u003d\u003d\u003d\"ecs3r8\"))",
+      "authenticationInfo": {},
+      "dateUpdated": "Dec 4, 2016 1:27:26 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1480811124687_2087066339",
+      "id": "20161204-012524_1282545029",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "kwebsitesource: org.apache.spark.sql.DataFrame \u003d [substring(source,0,8): string, substring(source,(locate(:,source,0) + 1),length(source)): string]\n"
+      },
+      "dateCreated": "Dec 4, 2016 1:25:24 AM",
+      "dateStarted": "Dec 4, 2016 1:27:26 AM",
+      "dateFinished": "Dec 4, 2016 1:27:27 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val partnersource \u003d source.where(!($\"substring(source,(locate(:,source,0) + 1),length(source))\"\u003d\u003d\u003d\"ecs3r8\"))\nz.show(partnersource)\n//val psourcecount \u003d partnersource.select(partnersource(\"source\").substr(0,8)).distinct.count",
+      "authenticationInfo": {},
+      "dateUpdated": "Dec 4, 2016 1:40:29 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [
+            {
+              "name": "substring(source,0,8)",
+              "index": 0.0,
+              "aggr": "sum"
+            }
+          ],
+          "values": [
+            {
+              "name": "substring(source,(locate(:,source,0) + 1),length(source))",
+              "index": 1.0,
+              "aggr": "sum"
+            }
+          ],
+          "groups": [],
+          "scatter": {
+            "xAxis": {
+              "name": "substring(source,0,8)",
+              "index": 0.0,
+              "aggr": "sum"
+            },
+            "yAxis": {
+              "name": "substring(source,(locate(:,source,0) + 1),length(source))",
+              "index": 1.0,
+              "aggr": "sum"
+            }
+          }
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1480811246802_-56184248",
+      "id": "20161204-012726_424610946",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TABLE",
+        "msg": "substring(source,0,8)\tsubstring(source,(locate(:,source,0) + 1),length(source))\n96947214\tecs3\n96950176\tecs3\n96947214\tecs3\n96948262\tecs3\n96947273\tecs3\n96947100\tecs3\n96947214\tecs3\n96947273\tecs3\n96948726\tecs3\n96947214\tecs3\n96950176\tecs3\n96950176\tecs3\n96950176\tecs3\n96947273\tecs3\n96947392\tecs3\n96948152\tecs3\n96947273\tecs3\n96947214\tecs3\n96947392\tecs3\n96947214\tecs3\n96947273\tecs3\n96947214\tecs3\n96947539\tkfs\n96947214\tecs3\n96947273\tecs3\n96947100\tecs3\n96948152\tecs3\n96948755\tkfs\n96950176\tecs3\n96947214\tecs3\n96947273\tecs3\n96947214\tecs3\n96947273\tecs3\n96948998\tecs3\n96948152\tecs3\n96950176\tecs3\n96947214\tecs3\n96947100\tecs3\n96950176\tecs3\n96947273\tecs3\n96947273\tecs3\n96947100\tecs3\n96947100\tecs3\n96947214\tecs3\n96947273\tecs3\n96950176\tecs3\n96948726\tecs3\n96950176\tecs3\n96947214\tecs3\n96947080\tecs3\n96947100\tecs3\n96947100\tecs3\n96947392\tecs3\n96948755\tkfs\n96948998\tecs3\n96947539\tkfs\n96948262\tecs3\n96947392\tecs3\n96947100\tecs3\n96947080\tecs3\n96947100\tecs3\n96947100\tecs3\n96947273\tecs3\n96947273\tecs3\n96948726\tecs3\n96947273\tecs3\n96948152\tecs3\n96947392\tecs3\n96948726\tecs3\n96947273\tecs3\n96948153\tkfs\n96950176\tecs3\n96947273\tecs3\n96947273\tecs3\n96947273\tecs3\n96948262\tecs3\n96947273\tecs3\n96947273\tecs3\n96947080\tecs3\n96947214\tecs3\n96948726\tecs3\n96947273\tecs3\n96950176\tecs3\n96947100\tecs3\n96947273\tecs3\n96947392\tecs3\n96947100\tecs3\n96947273\tecs3\n96948998\tecs3\n96947214\tecs3\n96949849\tkfs\n96947080\tecs3\n96948726\tecs3\n96947214\tecs3\n96947392\tecs3\n96947100\tecs3\n96947539\tkfs\n96947731\tkfs\n96947100\tecs3\n96948152\tecs3\n96947392\tecs3\n96947273\tecs3\n96950176\tecs3\n96947214\tecs3\n96947214\tecs3\n96947273\tecs3\n96947214\tecs3\n96947214\tecs3\n96947080\tecs3\n96947114\tecs3\n96947273\tecs3\n96947114\tecs3\n96950176\tecs3\n96947214\tecs3\n96948262\tecs3\n96947100\tecs3\n96947214\tecs3\n96948152\tecs3\n96948726\tecs3\n96947214\tecs3\n96947100\tecs3\n96947273\tecs3\n96950176\tecs3\n96948152\tecs3\n96947100\tecs3\n96947392\tecs3\n96947273\tecs3\n96948726\tecs3\n96947223\tecs3\n96947100\tecs3\n96947273\tecs3\n96947114\tecs3\n96950176\tecs3\n96948726\tecs3\n96947214\tecs3\n96947392\tecs3\n96947273\tecs3\n96947100\tecs3\n96947273\tecs3\n96947273\tecs3\n96947100\tecs3\n96947273\tecs3\n96947214\tecs3\n96947214\tecs3\n96947100\tecs3\n96947273\tecs3\n96947392\tecs3\n96947214\tecs3\n96947100\tecs3\n96948262\tecs3\n96948726\tecs3\n96947105\tecs3\n96947100\tecs3\n96947273\tecs3\n96947100\tecs3\n96947223\tecs3\n96947100\tecs3\n96947100\tecs3\n96948152\tecs3\n96947273\tecs3\n96947214\tecs3\n96947876\tecs3\n96947273\tecs3\n96947214\tecs3\n96950176\tecs3\n96947273\tecs3\n96947100\tecs3\n96947273\tecs3\n96947214\tecs3\n96950176\tecs3\n96947214\tecs3\n96947214\tecs3\n96947273\tecs3\n96950176\tecs3\n96947214\tecs3\n96948726\tecs3\n96947100\tecs3\n96947273\tecs3\n96947273\tecs3\n96947273\tecs3\n96948152\tecs3\n96950176\tecs3\n96947273\tecs3\n96947392\tecs3\n96947273\tecs3\n96947214\tecs3\n96948152\tecs3\n96948152\tecs3\n96947392\tecs3\n96948152\tecs3\n96947273\tecs3\n96947214\tecs3\n96948726\tecs3\n96947214\tecs3\n96947100\tecs3\n96947223\tecs3\n96947392\tecs3\n96949849\tkfs\n96947214\tecs3\n96950176\tecs3\n96947214\tecs3\n96950176\tecs3\n96947114\tecs3\n96947214\tecs3\n96947214\tecs3\n96949093\tkfs\n96947100\tecs3\n96947392\tecs3\n96947080\tecs3\n96948262\tecs3\n96947214\tecs3\n96947100\tecs3\n96947273\tecs3\n96947273\tecs3\n96947392\tecs3\n96950176\tecs3\n96947214\tecs3\n96947214\tecs3\n96947100\tecs3\n96950176\tecs3\n96950176\tecs3\n96947214\tecs3\n96950176\tecs3\n96947100\tecs3\n96948755\tkfs\n96950176\tecs3\n96948262\tecs3\n96947100\tecs3\n96947223\tecs3\n96947214\tecs3\n96948152\tecs3\n96947730\tecs3\n96947100\tecs3\n96947273\tecs3\n96947214\tecs3\n96947100\tecs3\n96947273\tecs3\n96949849\tkfs\n96948152\tecs3\n96947100\tecs3\n96947214\tecs3\n96947273\tecs3\n96947273\tecs3\n96947214\tecs3\n96947214\tecs3\n96947214\tecs3\n96947392\tecs3\n96947214\tecs3\n96950176\tecs3\n96947273\tecs3\n96947273\tecs3\n96947273\tecs3\n96947214\tecs3\n96947731\tkfs\n96947100\tecs3\n96947214\tecs3\n96947100\tecs3\n96950176\tecs3\n96950176\tecs3\n96947273\tecs3\n96947214\tecs3\n96947273\tecs3\n96947214\tecs3\n96947273\tecs3\n96947392\tecs3\n96947392\tecs3\n96947273\tecs3\n96948726\tecs3\n96947273\tecs3\n96950176\tecs3\n96947214\tecs3\n96947114\tecs3\n96947214\tecs3\n96947273\tecs3\n96947105\tecs3\n96950176\tecs3\n96947273\tecs3\n96947273\tecs3\n96947273\tecs3\n96947100\tecs3\n96947214\tecs3\n96947273\tecs3\n96947273\tecs3\n96947214\tecs3\n96947273\tecs3\n96947273\tecs3\n96947273\tecs3\n96947730\tecs3\n96948755\tkfs\n96947273\tecs3\n96947539\tkfs\n96947273\tecs3\n96947214\tecs3\n96947273\tecs3\n96949849\tkfs\n96949849\tkfs\n96950176\tecs3\n96947214\tecs3\n96950176\tecs3\n96948152\tecs3\n96947214\tecs3\n96950176\tecs3\n96947273\tecs3\n96947273\tecs3\n96950176\tecs3\n96947273\tecs3\n96947114\tecs3\n96950176\tecs3\n96947214\tecs3\n96948262\tecs3\n96947214\tecs3\n96950176\tecs3\n96947273\tecs3\n96947214\tecs3\n96947100\tecs3\n96947273\tecs3\n96947100\tecs3\n96947214\tecs3\n96947392\tecs3\n96947214\tecs3\n96947731\tkfs\n96947273\tecs3\n96947214\tecs3\n96947273\tecs3\n96947214\tecs3\n96947273\tecs3\n96947273\tecs3\n96947100\tecs3\n96947273\tecs3\n96947392\tecs3\n96947214\tecs3\n96947214\tecs3\n96947080\tecs3\n96950176\tecs3\n96947273\tecs3\n96947273\tecs3\n96947214\tecs3\n96950176\tecs3\n96947273\tecs3\n96947100\tecs3\n96950176\tecs3\n96947214\tecs3\n96948152\tecs3\n96947273\tecs3\n96947273\tecs3\n96947214\tecs3\n96947223\tecs3\n96947214\tecs3\n96947214\tecs3\n96947214\tecs3\n96947114\tecs3\n96947273\tecs3\n96950176\tecs3\n96947273\tecs3\n96947214\tecs3\n96950176\tecs3\n96947273\tecs3\n96947214\tecs3\n96947273\tecs3\n96947080\tecs3\n96947100\tecs3\n96947214\tecs3\n96950176\tecs3\n96947273\tecs3\n96950176\tecs3\n96947273\tecs3\n96947273\tecs3\n96947214\tecs3\n96950176\tecs3\n96947100\tecs3\n96947273\tecs3\n96947273\tecs3\n96950176\tecs3\n96947100\tecs3\n96947114\tecs3\n96947273\tecs3\n96950176\tecs3\n96947214\tecs3\n96947104\tecs3\n96950176\tecs3\n96947273\tecs3\n96947273\tecs3\n96947100\tecs3\n96947273\tecs3\n96947273\tecs3\n96947214\tecs3\n96947273\tecs3\n96950176\tecs3\n96947273\tecs3\n96950176\tecs3\n96948262\tecs3\n96947273\tecs3\n96947114\tecs3\n96947114\tecs3\n96947100\tecs3\n96947273\tecs3\n96948726\tecs3\n96947100\tecs3\n96948726\tecs3\n96950176\tecs3\n96947100\tecs3\n96947100\tecs3\n96947214\tecs3\n96947273\tecs3\n96947273\tecs3\n96947214\tecs3\n96947273\tecs3\n96947214\tecs3\n96947214\tecs3\n96948152\tecs3\n96947273\tecs3\n96947273\tecs3\n96947114\tecs3\n96947114\tecs3\n96947223\tecs3\n96947273\tecs3\n96947539\tkfs\n96947100\tecs3\n96948726\tecs3\n96948152\tecs3\n96947214\tecs3\n96947214\tecs3\n96950176\tecs3\n96947214\tecs3\n96948755\tkfs\n96947273\tecs3\n96947214\tecs3\n96949849\tkfs\n96947100\tecs3\n96947273\tecs3\n96948262\tecs3\n96947731\tkfs\n96948153\tkfs\n96947273\tecs3\n96950176\tecs3\n96947114\tecs3\n96950176\tecs3\n96947730\tecs3\n96947273\tecs3\n96947273\tecs3\n96947114\tecs3\n96947214\tecs3\n96947214\tecs3\n96947100\tecs3\n96947223\tecs3\n96947104\tecs3\n96947273\tecs3\n96947214\tecs3\n96948152\tecs3\n96947214\tecs3\n96947273\tecs3\n96947273\tecs3\n96947731\tkfs\n96947273\tecs3\n96947100\tecs3\n96947214\tecs3\n96947273\tecs3\n96947273\tecs3\n96947273\tecs3\n96947273\tecs3\n96947100\tecs3\n96947273\tecs3\n96947273\tecs3\n96948726\tecs3\n96947273\tecs3\n96947273\tecs3\n96947114\tecs3\n96947214\tecs3\n96949849\tkfs\n96948726\tecs3\n96950176\tecs3\n96948726\tecs3\n96947273\tecs3\n96947080\tecs3\n96950176\tecs3\n96947214\tecs3\n96947100\tecs3\n96950176\tecs3\n96947273\tecs3\n96948152\tecs3\n96947273\tecs3\n96948152\tecs3\n96947080\tecs3\n96947100\tecs3\n96947273\tecs3\n96948152\tecs3\n96947214\tecs3\n96947214\tecs3\n96948262\tecs3\n96950176\tecs3\n96947273\tecs3\n96947273\tecs3\n96947223\tecs3\n96947273\tecs3\n96947223\tecs3\n96947100\tecs3\n96947273\tecs3\n96947214\tecs3\n96947100\tecs3\n96947273\tecs3\n96950176\tecs3\n96947273\tecs3\n96947100\tecs3\n96948726\tecs3\n96947273\tecs3\n96947214\tecs3\n96947214\tecs3\n96947214\tecs3\n96950176\tecs3\n96947273\tecs3\n96947273\tecs3\n96950176\tecs3\n96947214\tecs3\n96950176\tecs3\n96947273\tecs3\n96947100\tecs3\n96947273\tecs3\n96947214\tecs3\n96950176\tecs3\n96950176\tecs3\n96948262\tecs3\n96950176\tecs3\n96947273\tecs3\n96950176\tecs3\n96947730\tecs3\n96947273\tecs3\n96947273\tecs3\n96947080\tecs3\n96947223\tecs3\n96947214\tecs3\n96947100\tecs3\n96947273\tecs3\n96948726\tecs3\n96947273\tecs3\n96947214\tecs3\n96947100\tecs3\n96947273\tecs3\n96947273\tecs3\n96947273\tecs3\n96947214\tecs3\n96950176\tecs3\n96947539\tkfs\n96947080\tecs3\n96947100\tecs3\n96947214\tecs3\n96947273\tecs3\n96947273\tecs3\n96947100\tecs3\n96950176\tecs3\n96947214\tecs3\n96950176\tecs3\n96947214\tecs3\n96947214\tecs3\n96948726\tecs3\n96947214\tecs3\n96948726\tecs3\n96947100\tecs3\n96948152\tecs3\n96950176\tecs3\n96947100\tecs3\n96947214\tecs3\n96947114\tecs3\n96947214\tecs3\n96947100\tecs3\n96947214\tecs3\n96948152\tecs3\n96947273\tecs3\n96947214\tecs3\n96947273\tecs3\n96947273\tecs3\n96948755\tkfs\n96947214\tecs3\n96947214\tecs3\n96949849\tkfs\n96947214\tecs3\n96947392\tecs3\n96947214\tecs3\n96947214\tecs3\n96947273\tecs3\n96947214\tecs3\n96948152\tecs3\n96947214\tecs3\n96947214\tecs3\n96947214\tecs3\n96947214\tecs3\n96950176\tecs3\n96947100\tecs3\n96947214\tecs3\n96947214\tecs3\n96947273\tecs3\n96947214\tecs3\n96947214\tecs3\n96948726\tecs3\n96947273\tecs3\n96947273\tecs3\n96947273\tecs3\n96947100\tecs3\n96947214\tecs3\n96947273\tecs3\n96947214\tecs3\n96947104\tecs3\n96947273\tecs3\n96947273\tecs3\n96947080\tecs3\n96947114\tecs3\n96947214\tecs3\n96947273\tecs3\n96947080\tecs3\n96950176\tecs3\n96947273\tecs3\n96949849\tkfs\n96950176\tecs3\n96947080\tecs3\n96947223\tecs3\n96947273\tecs3\n96947214\tecs3\n96947273\tecs3\n96947214\tecs3\n96947273\tecs3\n96947214\tecs3\n96947273\tecs3\n96947214\tecs3\n96947214\tecs3\n96947273\tecs3\n96947214\tecs3\n96948726\tecs3\n96947100\tecs3\n96947273\tecs3\n96947214\tecs3\n96947100\tecs3\n96947273\tecs3\n96947223\tecs3\n96947273\tecs3\n96950176\tecs3\n96948262\tecs3\n96947100\tecs3\n96947100\tecs3\n96947080\tecs3\n96948152\tecs3\n96947214\tecs3\n96947214\tecs3\n96947214\tecs3\n96948230\tecs3\n96947214\tecs3\n96947273\tecs3\n96948726\tecs3\n96947214\tecs3\n96947214\tecs3\n96947273\tecs3\n96947392\tecs3\n96948152\tecs3\n96947273\tecs3\n96947114\tecs3\n96950176\tecs3\n96948152\tecs3\n96947273\tecs3\n96947273\tecs3\n96947273\tecs3\n96947214\tecs3\n96947214\tecs3\n96947100\tecs3\n96948726\tecs3\n96947273\tecs3\n96947273\tecs3\n96947100\tecs3\n96947214\tecs3\n96947273\tecs3\n96947273\tecs3\n96948755\tkfs\n96947214\tecs3\n96947392\tecs3\n96950176\tecs3\n96947273\tecs3\n96947214\tecs3\n96947273\tecs3\n96947273\tecs3\n96947214\tecs3\n96950176\tecs3\n96948726\tecs3\n96947273\tecs3\n96947214\tecs3\n96950176\tecs3\n96948726\tecs3\n96950176\tecs3\n96947273\tecs3\n96947214\tecs3\n96947273\tecs3\n96948262\tecs3\n96947273\tecs3\n96947100\tecs3\n96947114\tecs3\n96947273\tecs3\n96947273\tecs3\n96947214\tecs3\n96947100\tecs3\n96947273\tecs3\n96948726\tecs3\n96947273\tecs3\n96947539\tkfs\n96950176\tecs3\n96948755\tkfs\n96950176\tecs3\n96948152\tecs3\n96947223\tecs3\n96948262\tecs3\n96947080\tecs3\n96947100\tecs3\n96947273\tecs3\n96947223\tecs3\n96947214\tecs3\n96947214\tecs3\n96947214\tecs3\n96947273\tecs3\n96950176\tecs3\n96947273\tecs3\n96947214\tecs3\n96947273\tecs3\n96947273\tecs3\n96947214\tecs3\n96947273\tecs3\n96947100\tecs3\n96947392\tecs3\n96948726\tecs3\n96947392\tecs3\n96947214\tecs3\n96947273\tecs3\n96947214\tecs3\n96947214\tecs3\n96948152\tecs3\n96947273\tecs3\n96947100\tecs3\n96947114\tecs3\n96947273\tecs3\n96947392\tecs3\n96947273\tecs3\n96947100\tecs3\n96947273\tecs3\n96947392\tecs3\n96947273\tecs3\n96947100\tecs3\n96947100\tecs3\n96947273\tecs3\n96948153\tkfs\n96947214\tecs3\n96950176\tecs3\n96947214\tecs3\n96947273\tecs3\n96947100\tecs3\n96947214\tecs3\n96947100\tecs3\n96947539\tkfs\n96947100\tecs3\n96947214\tecs3\n96947273\tecs3\n96947273\tecs3\n96948726\tecs3\n96947273\tecs3\n96947100\tecs3\n96947214\tecs3\n96947273\tecs3\n96947214\tecs3\n96947080\tecs3\n96950176\tecs3\n96947100\tecs3\n96950176\tecs3\n96947214\tecs3\n96947214\tecs3\n96947273\tecs3\n96947214\tecs3\n96948262\tecs3\n96947214\tecs3\n96947214\tecs3\n96947273\tecs3\n96950176\tecs3\n96947114\tecs3\n96947100\tecs3\n96950176\tecs3\n96947214\tecs3\n96947100\tecs3\n96947539\tkfs\n96947105\tecs3\n96947273\tecs3\n96950176\tecs3\n96947100\tecs3\n96947100\tecs3\n96947273\tecs3\n96947273\tecs3\n96947273\tecs3\n96950176\tecs3\n96950176\tecs3\n96947114\tecs3\n96950176\tecs3\n96947080\tecs3\n96947273\tecs3\n96947100\tecs3\n96947273\tecs3\n96947214\tecs3\n96947392\tecs3\n96950176\tecs3\n96947100\tecs3\n96947214\tecs3\n96947273\tecs3\n96950176\tecs3\n96950176\tecs3\n96947273\tecs3\n96947114\tecs3\n96947214\tecs3\n96947273\tecs3\n96947214\tecs3\n96947214\tecs3\n96947100\tecs3\n96947539\tkfs\n96947273\tecs3\n96947273\tecs3\n96947273\tecs3\n96947214\tecs3\n96947100\tecs3\n96947214\tecs3\n96947273\tecs3\n96950176\tecs3\n96947214\tecs3\n96947273\tecs3\n96947104\tecs3\n96947100\tecs3\n96947273\tecs3\n96947100\tecs3\n96948726\tecs3\n96950176\tecs3\n96947273\tecs3\n96947214\tecs3\n96947080\tecs3\n96947731\tkfs\n96947273\tecs3\n96947273\tecs3\n96947100\tecs3\n96949849\tkfs\n96947114\tecs3\n96950176\tecs3\n96950176\tecs3\n96949849\tkfs\n96950176\tecs3\n96947273\tecs3\n96948726\tecs3\n96950176\tecs3\n96947273\tecs3\n96947214\tecs3\n96950176\tecs3\n96947273\tecs3\n96947100\tecs3\n96949849\tkfs\n96950176\tecs3\n96947273\tecs3\n96947273\tecs3\n96948726\tecs3\n96950176\tecs3\n96947273\tecs3\n96947114\tecs3\n96950176\tecs3\n96947100\tecs3\n96947214\tecs3\n96948152\tecs3\n96947214\tecs3\n96947214\tecs3\n96950176\tecs3\n96947100\tecs3\n96948152\tecs3\n96947273\tecs3\n96948755\tkfs\n96947273\tecs3\n96947100\tecs3\n96947100\tecs3\n96947273\tecs3\n96948152\tecs3\n96947273\tecs3\n96947273\tecs3\n96947080\tecs3\n96950176\tecs3\n96950176\tecs3\n96947100\tecs3\n96947214\tecs3\n96950176\tecs3\n96947214\tecs3\n96948726\tecs3\n96947104\tecs3\n96947100\tecs3\n96947214\tecs3\n96948726\tecs3\n96950176\tecs3\n96947392\tecs3\n96947214\tecs3\n96947100\tecs3\n96947273\tecs3\n96947214\tecs3\n96947100\tecs3\n96947273\tecs3\n96950176\tecs3\n96948726\tecs3\n96947223\tecs3\n96948726\tecs3\n96947273\tecs3\n96948152\tecs3\n96948726\tecs3\n96950176\tecs3\n96947214\tecs3\n96947214\tecs3\n96947273\tecs3\n96948262\tecs3\n96947273\tecs3\n96947100\tecs3\n96948152\tecs3\n96947100\tecs3\n96947273\tecs3\n96947273\tecs3\n96947214\tecs3\n96947273\tecs3\n96948152\tecs3\n96947273\tecs3\n96947273\tecs3\n96950176\tecs3\n96947214\tecs3\n96948262\tecs3\n96947114\tecs3\n96947214\tecs3\n96947273\tecs3\n96948726\tecs3\n96947100\tecs3\n96947273\tecs3\n96947100\tecs3\n96947273\tecs3\n96947392\tecs3\n96947214\tecs3\n96947114\tecs3\n96950176\tecs3\n96947214\tecs3\n96947273\tecs3\n96947214\tecs3\n96947273\tecs3\n96947223\tecs3\n96947114\tecs3\n96947104\tecs3\n96947273\tecs3\n96947100\tecs3\n96950176\tecs3\n96947100\tecs3\n96947273\tecs3\n96947273\tecs3\n96947273\tecs3\n96947273\tecs3\n96947100\tecs3\n96947214\tecs3\n96947392\tecs3\n96949849\tkfs\n96948152\tecs3\n96947273\tecs3\n96947214\tecs3\n96947273\tecs3\n96947273\tecs3\n96947273\tecs3\n96950176\tecs3\n96948726\tecs3\n96947273\tecs3\n96950176\tecs3\n96947273\tecs3\n96947273\tecs3\n96947100\tecs3\n96947100\tecs3\n96947214\tecs3\n96947100\tecs3\n96948726\tecs3\n96948726\tecs3\n96947273\tecs3\n96947114\tecs3\n96947214\tecs3\n96947273\tecs3\n96950176\tecs3\n96947214\tecs3\n96947100\tecs3\n96947114\tecs3\n96950176\tecs3\n96948726\tecs3\n96947273\tecs3\n96948262\tecs3\n96947214\tecs3\n96947273\tecs3\n96947114\tecs3\n96947273\tecs3\n96947273\tecs3\n96947214\tecs3\n96947730\tecs3\n96948152\tecs3\n96947392\tecs3\n96950176\tecs3\n96947273\tecs3\n96947114\tecs3\n96947080\tecs3\n96950176\tecs3\n96947104\tecs3\n96947273\tecs3\n96947273\tecs3\n96947273\tecs3\n\n\u003cfont color\u003dred\u003eResults are limited by 1000.\u003c/font\u003e"
+      },
+      "dateCreated": "Dec 4, 2016 1:27:26 AM",
+      "dateStarted": "Dec 4, 2016 1:40:29 AM",
+      "dateFinished": "Dec 4, 2016 1:40:30 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val partnersource \u003d source.where(($\"substring(source,(locate(:,source,0) + 1),length(source))\"\u003d\u003d\u003d\"ecs3\"))\nval psourcecount \u003d partnersource.select(partnersource(\"substring(source,0,8)\")).distinct.count",
+      "authenticationInfo": {},
+      "dateUpdated": "Dec 4, 2016 1:44:07 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1480811271529_-895290951",
+      "id": "20161204-012751_1481939900",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "partnersource: org.apache.spark.sql.DataFrame \u003d [substring(source,0,8): string, substring(source,(locate(:,source,0) + 1),length(source)): string]\npsourcecount: Long \u003d 1097\n"
+      },
+      "dateCreated": "Dec 4, 2016 1:27:51 AM",
+      "dateStarted": "Dec 4, 2016 1:44:07 AM",
+      "dateFinished": "Dec 4, 2016 1:44:39 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val parquetFileClick \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypso_kk_june_data/click/*/2016/*/*/*.parquet\")\nval validSource  \u003d parquetFileClick.filter(($\"source\".contains(\":\")))\nparquetFileClick.count\nvalidSource.count",
+      "authenticationInfo": {},
+      "dateUpdated": "Dec 8, 2016 12:17:15 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1480812081875_240071284",
+      "id": "20161204-014121_159618525",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "parquetFileClick: org.apache.spark.sql.DataFrame \u003d [userId: string, ip: string, userAgent: struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e, geolocation: struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, offerViewId: string, clickId: string, earning: decimal(38,18)]\nvalidSource: org.apache.spark.sql.DataFrame \u003d [userId: string, ip: string, userAgent: struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e, geolocation: struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, offerViewId: string, clickId: string, earning: decimal(38,18)]\nres2: Long \u003d 16107227\nres3: Long \u003d 15005348\n"
+      },
+      "dateCreated": "Dec 4, 2016 1:41:21 AM",
+      "dateStarted": "Dec 8, 2016 12:17:15 PM",
+      "dateFinished": "Dec 8, 2016 12:17:25 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1481195759539_-1387568250",
+      "id": "20161208-121559_741194576",
+      "dateCreated": "Dec 8, 2016 12:15:59 PM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "analyzeSource",
+  "id": "2BYWMQD26",
+  "angularObjects": {
+    "2BGHSKCA7": [],
+    "2BFMBPKAB": [],
+    "2BHKKP27G": [],
+    "2BJHJDBK6": [],
+    "2BJAQG5W4": [],
+    "2BJGSXM37": [],
+    "2BFXEV5XZ": [],
+    "2BG77RV7M": [],
+    "2BF969NNB": [],
+    "2BG8QQJNC": [],
+    "2BGVG5JP4": [],
+    "2BJ5FCP57": [],
+    "2BFEDXCTE": [],
+    "2BJ8AEWCT": [],
+    "2BH9AVVKH": [],
+    "2BJ7KKX85": [],
+    "2BHKAE8WK": [],
+    "2BJ6HN5AY": []
+  },
+  "config": {
+    "looknfeel": "default"
+  },
+  "info": {}
+}

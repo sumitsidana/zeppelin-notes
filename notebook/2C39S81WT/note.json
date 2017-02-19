@@ -1,0 +1,177 @@
+{
+  "paragraphs": [
+    {
+      "text": "import java.nio.file.{ Files, Paths }\nimport scala.collection.mutable.ListBuffer\nimport java.io.FileWriter\n//,(,\nval countryCodes \u003d Array(\"at\",\"be\",\"br\",\"ch\",\"cz\",\"de\",\"dk\",\"es\",\"fi\",\"ie\",\"nb\",\"nl\",\"no\",\"pl\",\"pt\",\"ru\",\"se\",\"uk\",\"it\",\"fr\")\nval fw \u003d new FileWriter(\"/home/ama/sidana/recsysBaselines/data/input/inputfile.txt\", true)\n\nfor (code \u003c- countryCodes){\n    \n    val t1 \u003d System.currentTimeMillis\n    val clicksTemp \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypso_kk_june_data/click/\"+code+\"/2016/*/*/\")\n    val userClicks \u003d clicksTemp.select(clicksTemp(\"userId\"),substring_index(clicksTemp(\"offerViewId\"),\"-\",1)).withColumnRenamed(\"substring_index(offerViewId,-,1)\",\"offerIdClicks\").withColumnRenamed(\"userId\",\"userIdClicks\")\n    \n    \n    val parquetFileOffers \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypso_kk_june_data/offerView/\"+code+\"/2016/*/*/\")\n    val userOffers \u003d parquetFileOffers.select(parquetFileOffers(\"userId\"),substring_index(parquetFileOffers(\"offerViewId\"),\"-\",1),$\"siteDomain\".getItem(\"countryCode\"),parquetFileOffers(\"category\")(0),parquetFileOffers(\"merchant\"),parquetFileOffers(\"utcDate\")).withColumnRenamed(\"substring_index(offerViewId,-,1)\",\"offerIdOfferView\").withColumnRenamed(\"userId\",\"userIdOfferView\")\n    \n    //inner join\n    val userOfferCommon \u003d userClicks.join(userOffers,userClicks(\"userIdClicks\")\u003c\u003d\u003euserOffers(\"userIdOfferView\")).drop(userClicks(\"userIdClicks\")).drop(userClicks(\"offerIdClicks\"))\n    \n    \n    //outerjoin\n    val cOOuterJoin \u003d userClicks.join(userOfferCommon,userClicks(\"userIdClicks\")\u003c\u003d\u003euserOfferCommon(\"userIdOfferView\") \u0026\u0026 userClicks(\"offerIdClicks\")\u003c\u003d\u003euserOfferCommon(\"offerIdOfferView\"),\"right_outer\")\n\n   cOOuterJoin.rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/recsysBaselines/december/atleastone/totalData_\"+code+\".csv\")\n}\nfw.close()",
+      "authenticationInfo": {},
+      "dateUpdated": "Feb 7, 2017 10:27:48 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala",
+        "editorHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1480203173116_-2055875744",
+      "id": "20161127-003253_1337274739",
+      "dateCreated": "Nov 27, 2016 12:32:53 AM",
+      "dateStarted": "Feb 7, 2017 10:27:48 PM",
+      "dateFinished": "Feb 8, 2017 1:34:35 AM",
+      "status": "ERROR",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "\nimport scala.collection.mutable.ListBuffer\nimport java.io.FileWriter\nimport org.apache.spark.sql.functions.year\n\n\n\n\t\t\t\tval countryCodes \u003d Array(\"at\",\"be\",\"br\",\"ch\",\"cz\",\"de\",\"dk\",\"es\",\"fi\",\"ie\",\"nb\",\"nl\",\"no\",\"pl\",\"pt\",\"ru\",\"se\",\"uk\",\"it\",\"fr\")\n\n\n\t\t\t\tval fw \u003d new FileWriter(\"/data/sidana/recsysBaselines/experiments/inputfile/inputfile.txt\", true)\n\t\t\t\tfor (code \u003c- countryCodes){\n\t\t\t\t\tval t1 \u003d System.currentTimeMillis\n\t\t\t\t\t\t\tval offers \u003d sqlContext.read\n\t\t\t\t\t\t\t.format(\"com.databricks.spark.csv\")\n\t\t\t\t\t\t\t.option(\"header\", \"true\") // Use first line of all files as header\n\t\t\t\t\t\t\t.option(\"inferSchema\", \"true\") // Automatically infer data types\n\t\t\t\t\t\t\t.option(\"delimiter\", \",\")\n\t\t\t\t\t\t\t.load(\"/data/sidana/recsysBaselines/experiments/rawfiles/rawFile_\"+code+\".csv\").withColumn(\"utcdate\",unix_timestamp($\"utcdate\",\"yyyy-MM-dd HH:mm:ss\").cast(\"timestamp\")).withColumnRenamed(\"cast(unixtimestamp(utcdate,yyyy-MM-dd HH:mm:ss) as timestamp)\",\"utcdate\")\n\n\n\t\t\t\t\t\t\tval csvOuterJoin \u003d offers.orderBy(\"utcdate\")\n\t\t\t\t\t\t\tval totalItems \u003d csvOuterJoin.count\n\t\t\t\t\t\t\tval cnt \u003d totalItems * 0.7\n\n\t\t\t\t\t\t\tval trainDF \u003d sqlContext.createDataFrame(csvOuterJoin.rdd.zipWithIndex.filter {\n\t\t\t\t\t\t\tcase (_, i) \u003d\u003e i \u003c\u003d cnt \n\t\t\t\t\t\t\t}.map(_._1), csvOuterJoin.schema)\n\n\t\t\t\t\t\t\tval testDF \u003d sqlContext.createDataFrame(csvOuterJoin.rdd.zipWithIndex.filter {\n\t\t\t\t\t\t\tcase (_, i) \u003d\u003e i \u003e cnt \n\t\t\t\t\t\t\t}.map(_._1), csvOuterJoin.schema)\n\n\t\t\t\t\t\t\t//form distinct values\n\t\t\t\t\t\t\tval inputTrain \u003d trainDF.select(\"useridclicks\",\"offeridclicks\",\"useridoffers\",\"offeridoffers\",\"countrycode\",\"category\",\"merchant\",\"utcdate\").distinct\n\t\t\t\t\t\t\tval inputTest \u003d testDF.select(\"useridclicks\",\"offeridclicks\",\"useridoffers\",\"offeridoffers\",\"countrycode\",\"category\",\"merchant\",\"utcdate\").distinct\n\t\t\t\t\t\t\tinputTrain.rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/recsysBaselines/experiments/inputfile/train_\"+code+\".csv\")\n\t\t\t\t\t\t\tinputTest.rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/recsysBaselines/experiments/inputfile/test_\"+code+\".csv\")\n\t\t\t\t\t\t\tval t2 \u003d System.currentTimeMillis\n\t\t\t\t\t\t\tprintln((t2 - t1) + \" msecs\")\n\t\t\t\t\t\t\tfw.write(\"code,\"+(t2 - t1) + \" msecs\")\n\t\t\t\t}\n\t\tfw.close()\n    ",
+      "dateUpdated": "Dec 10, 2016 6:39:44 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1480362141728_-1468302181",
+      "id": "20161128-204221_36094560",
+      "dateCreated": "Nov 28, 2016 8:42:21 PM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val clicksTemp \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypso_kk_dec_data/logs/offerView/\"+\"at\"+\"/2016/*/*/\")\nval userId \u003d clicksTemp.select(clicksTemp(\"userInfo\").getItem(\"userId\"))",
+      "authenticationInfo": {},
+      "dateUpdated": "Feb 7, 2017 10:24:15 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1486501997385_49118906",
+      "id": "20170207-221317_79198368",
+      "dateCreated": "Feb 7, 2017 10:13:17 PM",
+      "dateStarted": "Feb 7, 2017 10:24:15 PM",
+      "dateFinished": "Feb 7, 2017 10:24:16 PM",
+      "status": "FINISHED",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "//December\n\nimport java.nio.file.{ Files, Paths }\nimport scala.collection.mutable.ListBuffer\nimport java.io.FileWriter\n//,(,\n//\"at\",\"be\",\"br\",\"ch\",\"cz\",\"de\",\"dk\",\nval countryCodes \u003d Array(\"es\",\"fi\",\"ie\",\"nb\",\"nl\",\"no\",\"pl\",\"pt\",\"ru\",\"se\",\"uk\",\"it\",\"fr\")\nval fw \u003d new FileWriter(\"/home/ama/sidana/recsysBaselines/data/input/inputfile.txt\", true)\n\nfor (code \u003c- countryCodes){\n    \n    val t1 \u003d System.currentTimeMillis\n    val clicksTemp \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypso_kk_dec_data/logs/click/\"+code+\"/2016/*/*/\")\n    val userClicks \u003d clicksTemp.select(clicksTemp(\"userInfo\").getItem(\"userId\"),substring_index(clicksTemp(\"offerViewId\"),\"-\",1)).withColumnRenamed(\"substring_index(offerViewId,-,1)\",\"offerIdClicks\").withColumnRenamed(\"userInfo[userId]\",\"userIdClicks\")\n    \n    \n    val parquetFileOffers \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypso_kk_dec_data/logs/offerView/\"+code+\"/2016/*/*/\")\n    val userOffers \u003d parquetFileOffers.select(parquetFileOffers(\"userInfo\").getItem(\"userId\"),substring_index(parquetFileOffers(\"offerViewId\"),\"-\",1),$\"siteDomain\".getItem(\"countryCode\"),parquetFileOffers(\"category\")(0),parquetFileOffers(\"merchant\"),parquetFileOffers(\"utcDate\")).withColumnRenamed(\"substring_index(offerViewId,-,1)\",\"offerIdOfferView\").withColumnRenamed(\"userInfo[userId]\",\"userIdOfferView\")\n    \n    //inner join\n    val userOfferCommon \u003d userClicks.join(userOffers,userClicks(\"userIdClicks\")\u003c\u003d\u003euserOffers(\"userIdOfferView\")).drop(userClicks(\"userIdClicks\")).drop(userClicks(\"offerIdClicks\"))\n    \n    \n    //outerjoin\n    val cOOuterJoin \u003d userClicks.join(userOfferCommon,userClicks(\"userIdClicks\")\u003c\u003d\u003euserOfferCommon(\"userIdOfferView\") \u0026\u0026 userClicks(\"offerIdClicks\")\u003c\u003d\u003euserOfferCommon(\"offerIdOfferView\"),\"right_outer\")\n\n   cOOuterJoin.rdd.saveAsTextFile(\"/data/sidana/recsysBaselines/december/atleastone/totalData_\"+code+\".csv\")\n}\nfw.close()",
+      "authenticationInfo": {},
+      "dateUpdated": "Feb 8, 2017 11:23:08 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1486501100495_1984548201",
+      "id": "20170207-215820_1710574242",
+      "dateCreated": "Feb 7, 2017 9:58:20 PM",
+      "dateStarted": "Feb 7, 2017 10:26:44 PM",
+      "dateFinished": "Feb 7, 2017 10:27:20 PM",
+      "status": "ERROR",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "    import scala.collection.mutable.ListBuffer\nimport java.io.FileWriter\nimport org.apache.spark.sql.functions.year\n\n//\"at\",\"be\",\"br\",\"ch\",\"cz\",\"de\",\"dk\",\"es\",\n\n\t\t\t\tval countryCodes \u003d Array(\"fi\",\"ie\",\"nb\",\"nl\",\"no\",\"pl\",\"pt\",\"ru\",\"se\",\"uk\",\"it\",\"fr\")\n\n\n\t\t\t\tval fw \u003d new FileWriter(\"/data/sidana/recsysBaselines/experiments/inputfile/inputfile.txt\", true)\n\t\t\t\tfor (code \u003c- countryCodes){\n\t\t\t\t\tval t1 \u003d System.currentTimeMillis\n\t\t\t\t\t\t\tval offers \u003d sqlContext.read\n\t\t\t\t\t\t\t.format(\"com.databricks.spark.csv\")\n\t\t\t\t\t\t\t.option(\"header\", \"true\") // Use first line of all files as header\n\t\t\t\t\t\t\t.option(\"inferSchema\", \"true\") // Automatically infer data types\n\t\t\t\t\t\t\t.option(\"delimiter\", \",\")\n\t\t\t\t\t\t\t.load(\"/data/sidana/recsysBaselines/december/rawfiles/rawFile_\"+code+\".csv\").withColumn(\"utcdate\",unix_timestamp($\"utcdate\",\"yyyy-MM-dd HH:mm:ss\").cast(\"timestamp\")).withColumnRenamed(\"cast(unixtimestamp(utcdate,yyyy-MM-dd HH:mm:ss) as timestamp)\",\"utcdate\")\n\n\n\t\t\t\t\t\t\tval csvOuterJoin \u003d offers.orderBy(\"utcdate\")\n\t\t\t\t\t\t\tval totalItems \u003d csvOuterJoin.count\n\t\t\t\t\t\t\tval cnt \u003d totalItems * 0.7\n\n\t\t\t\t\t\t\tval trainDF \u003d sqlContext.createDataFrame(csvOuterJoin.rdd.zipWithIndex.filter {\n\t\t\t\t\t\t\tcase (_, i) \u003d\u003e i \u003c\u003d cnt \n\t\t\t\t\t\t\t}.map(_._1), csvOuterJoin.schema)\n\n\t\t\t\t\t\t\tval testDF \u003d sqlContext.createDataFrame(csvOuterJoin.rdd.zipWithIndex.filter {\n\t\t\t\t\t\t\tcase (_, i) \u003d\u003e i \u003e cnt \n\t\t\t\t\t\t\t}.map(_._1), csvOuterJoin.schema)\n\n\t\t\t\t\t\t\t//form distinct values\n\t\t\t\t\t\t\tval inputTrain \u003d trainDF.select(\"useridclicks\",\"offeridclicks\",\"useridoffers\",\"offeridoffers\",\"countrycode\",\"category\",\"merchant\",\"utcdate\").distinct\n\t\t\t\t\t\t\tval inputTest \u003d testDF.select(\"useridclicks\",\"offeridclicks\",\"useridoffers\",\"offeridoffers\",\"countrycode\",\"category\",\"merchant\",\"utcdate\").distinct\n\t\t\t\t\t\t\tinputTrain.rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/recsysBaselines/december/inputfile/train_\"+code+\".csv\")\n\t\t\t\t\t\t\tinputTest.rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/recsysBaselines/december/inputfile/test_\"+code+\".csv\")\n\t\t\t\t\t\t\tval t2 \u003d System.currentTimeMillis\n\t\t\t\t\t\t\tprintln((t2 - t1) + \" msecs\")\n\t\t\t\t\t\t\tfw.write(\"code,\"+(t2 - t1) + \" msecs\")\n\t\t\t\t}\n\t\tfw.close()",
+      "dateUpdated": "Feb 14, 2017 4:19:15 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1487024255046_-1665275109",
+      "id": "20170213-231735_260690876",
+      "dateCreated": "Feb 13, 2017 11:17:35 PM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "kelkooBaselines: WriteInputFile",
+  "id": "2C39S81WT",
+  "angularObjects": {
+    "2BGHSKCA7": [],
+    "2BFMBPKAB": [],
+    "2BHKKP27G": [],
+    "2BJHJDBK6": [],
+    "2BJAQG5W4": [],
+    "2BJGSXM37": [],
+    "2BFXEV5XZ": [],
+    "2BG77RV7M": [],
+    "2BF969NNB": [],
+    "2BG8QQJNC": [],
+    "2BGVG5JP4": [],
+    "2BJ5FCP57": [],
+    "2BFEDXCTE": [],
+    "2BJ8AEWCT": [],
+    "2BH9AVVKH": [],
+    "2BJ7KKX85": [],
+    "2BHKAE8WK": [],
+    "2BJ6HN5AY": []
+  },
+  "config": {},
+  "info": {}
+}

@@ -1,0 +1,127 @@
+{
+  "paragraphs": [
+    {
+      "text": "%pyspark\nfrom sklearn.externals.joblib import Memory\nfrom sklearn.datasets import load_svmlight_file\nmem \u003d Memory(\"./mycache\")\n\n@mem.cache\ndef get_data():\n    data \u003d load_svmlight_file(\"/home/ama/sidana/recommendersystemchallenge/output/input.similarity\")\n    return data[0], data[1]\n\nX, y \u003d get_data()\nprint X\nprint y",
+      "authenticationInfo": {},
+      "dateUpdated": "May 15, 2016 9:54:59 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala",
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1463085606250_-973222706",
+      "id": "20160512-224006_1910481550",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "/tmp/zeppelin_pyspark.py:8: JobLibCollisionWarning: Cannot detect name collisions for function \u0027get_data\u0027\n  #\nWARNING:root:[MemorizedFunc(func\u003d\u003cfunction get_data at 0x7fb9a9254cf8\u003e, cachedir\u003d\u0027./mycache/joblib\u0027)]: Clearing cache ./mycache/joblib/__main__/get_data-alias\n________________________________________________________________________________\n[Memory] Calling __main__.get_data-alias...\nget_data-alias()\n__________________________________________________get_data-alias - 69.2s, 1.2min\n  (0, 18889)\t0.0\n  (0, 71090)\t0.0\n  (0, 110015)\t0.0\n  (0, 110710)\t0.0\n  (0, 136922)\t0.0\n  (0, 171509)\t0.0\n  (0, 192143)\t0.0\n  (0, 198107)\t0.0\n  (0, 209179)\t0.0\n  (0, 226748)\t0.0\n  (0, 240342)\t0.0\n  (0, 248539)\t0.0\n  (0, 271153)\t0.0\n  (0, 271997)\t0.0\n  (0, 273031)\t0.0\n  (0, 298710)\t0.0\n  (0, 306856)\t0.0\n  (0, 322972)\t0.0\n  (0, 353398)\t0.0\n  (0, 357021)\t0.0\n  (0, 436524)\t0.0\n  (0, 437244)\t0.0\n  (0, 438340)\t0.0\n  (0, 472039)\t0.0\n  (0, 475505)\t0.0\n  :\t:\n  (522534, 2219077)\t0.0\n  (522534, 2265254)\t0.0\n  (522534, 2265719)\t0.0\n  (522534, 2268721)\t0.0\n  (522534, 2335071)\t0.0\n  (522534, 2340114)\t0.0\n  (522534, 2405261)\t0.0\n  (522534, 2415610)\t0.0\n  (522534, 2446757)\t0.0\n  (522534, 2454285)\t0.0\n  (522534, 2454885)\t0.0\n  (522534, 2494690)\t0.0\n  (522534, 2503629)\t0.0\n  (522534, 2516372)\t0.0\n  (522534, 2533645)\t0.0\n  (522534, 2561912)\t0.0\n  (522534, 2584348)\t0.0\n  (522534, 2643016)\t0.0\n  (522534, 2702061)\t0.0\n  (522534, 2705758)\t0.0\n  (522534, 2778524)\t0.0\n  (522534, 2801348)\t0.0\n  (522534, 2801522)\t0.0\n  (522534, 2814249)\t0.0\n  (522534, 2837597)\t0.0\n[  9.00000000e+00   2.30000000e+01   3.20000000e+01 ...,   2.98488500e+06\n   2.98488700e+06   2.98488800e+06]\n"
+      },
+      "dateCreated": "May 12, 2016 10:40:06 PM",
+      "dateStarted": "May 15, 2016 5:27:39 PM",
+      "dateFinished": "May 15, 2016 5:28:51 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "import org.apache.spark.mllib.linalg.{Vector, Vectors, Matrix, Matrices}\nimport org.apache.spark.mllib.linalg.distributed.RowMatrix\n\nval filename \u003d \"/home/ama/sidana/recommendersystemchallenge/output/input.similarity\"\nval threshold \u003d 0.01\n \n// Load and parse the data file.\nval rows \u003d sc.textFile(filename).map { line \u003d\u003e\n  val values \u003d line.split(\u0027 \u0027).map(_.toDouble)\n  Vectors.dense(values)\n}\nval mat \u003d new RowMatrix(rows)\n \n// Compute similar columns perfectly, with brute force.\nval simsPerfect \u003d mat.columnSimilarities()\n \n// Compute similar columns with estimation using DIMSUM\nval simsEstimate \u003d mat.columnSimilarities(threshold)",
+      "authenticationInfo": {},
+      "dateUpdated": "May 15, 2016 9:54:56 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala",
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1463312293998_-21243859",
+      "id": "20160515-133813_421593281",
+      "result": {
+        "code": "ERROR",
+        "type": "TEXT",
+        "msg": "import org.apache.spark.mllib.linalg.{Vector, Vectors, Matrix, Matrices}\nimport org.apache.spark.mllib.linalg.distributed.RowMatrix\nfilename: String \u003d /home/ama/sidana/recommendersystemchallenge/output/input.similarity\nthreshold: Double \u003d 0.01\nrows: org.apache.spark.rdd.RDD[org.apache.spark.mllib.linalg.Vector] \u003d MapPartitionsRDD[2] at map at \u003cconsole\u003e:33\nmat: org.apache.spark.mllib.linalg.distributed.RowMatrix \u003d org.apache.spark.mllib.linalg.distributed.RowMatrix@14dca98e\norg.apache.spark.SparkException: Job aborted due to stage failure: Task 6 in stage 0.0 failed 4 times, most recent failure: Lost task 6.3 in stage 0.0 (TID 28, tiger.imag.fr): java.lang.NumberFormatException: For input string: \"4472:0\"\n\tat sun.misc.FloatingDecimal.readJavaFormatString(FloatingDecimal.java:1250)\n\tat java.lang.Double.parseDouble(Double.java:540)\n\tat scala.collection.immutable.StringLike$class.toDouble(StringLike.scala:232)\n\tat scala.collection.immutable.StringOps.toDouble(StringOps.scala:31)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$anonfun$1$$anonfun$2.apply(\u003cconsole\u003e:34)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$anonfun$1$$anonfun$2.apply(\u003cconsole\u003e:34)\n\tat scala.collection.TraversableLike$$anonfun$map$1.apply(TraversableLike.scala:244)\n\tat scala.collection.TraversableLike$$anonfun$map$1.apply(TraversableLike.scala:244)\n\tat scala.collection.IndexedSeqOptimized$class.foreach(IndexedSeqOptimized.scala:33)\n\tat scala.collection.mutable.ArrayOps$ofRef.foreach(ArrayOps.scala:108)\n\tat scala.collection.TraversableLike$class.map(TraversableLike.scala:244)\n\tat scala.collection.mutable.ArrayOps$ofRef.map(ArrayOps.scala:108)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$anonfun$1.apply(\u003cconsole\u003e:34)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$anonfun$1.apply(\u003cconsole\u003e:33)\n\tat scala.collection.Iterator$$anon$11.next(Iterator.scala:328)\n\tat scala.collection.Iterator$class.foreach(Iterator.scala:727)\n\tat scala.collection.AbstractIterator.foreach(Iterator.scala:1157)\n\tat scala.collection.TraversableOnce$class.foldLeft(TraversableOnce.scala:144)\n\tat scala.collection.AbstractIterator.foldLeft(Iterator.scala:1157)\n\tat scala.collection.TraversableOnce$class.aggregate(TraversableOnce.scala:201)\n\tat scala.collection.AbstractIterator.aggregate(Iterator.scala:1157)\n\tat org.apache.spark.rdd.RDD$$anonfun$treeAggregate$1$$anonfun$23.apply(RDD.scala:1135)\n\tat org.apache.spark.rdd.RDD$$anonfun$treeAggregate$1$$anonfun$23.apply(RDD.scala:1135)\n\tat org.apache.spark.rdd.RDD$$anonfun$treeAggregate$1$$anonfun$24.apply(RDD.scala:1136)\n\tat org.apache.spark.rdd.RDD$$anonfun$treeAggregate$1$$anonfun$24.apply(RDD.scala:1136)\n\tat org.apache.spark.rdd.RDD$$anonfun$mapPartitions$1$$anonfun$apply$20.apply(RDD.scala:710)\n\tat org.apache.spark.rdd.RDD$$anonfun$mapPartitions$1$$anonfun$apply$20.apply(RDD.scala:710)\n\tat org.apache.spark.rdd.MapPartitionsRDD.compute(MapPartitionsRDD.scala:38)\n\tat org.apache.spark.rdd.RDD.computeOrReadCheckpoint(RDD.scala:306)\n\tat org.apache.spark.rdd.RDD.iterator(RDD.scala:270)\n\tat org.apache.spark.rdd.MapPartitionsRDD.compute(MapPartitionsRDD.scala:38)\n\tat org.apache.spark.rdd.RDD.computeOrReadCheckpoint(RDD.scala:306)\n\tat org.apache.spark.rdd.RDD.iterator(RDD.scala:270)\n\tat org.apache.spark.scheduler.ShuffleMapTask.runTask(ShuffleMapTask.scala:73)\n\tat org.apache.spark.scheduler.ShuffleMapTask.runTask(ShuffleMapTask.scala:41)\n\tat org.apache.spark.scheduler.Task.run(Task.scala:89)\n\tat org.apache.spark.executor.Executor$TaskRunner.run(Executor.scala:214)\n\tat java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)\n\tat java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:615)\n\tat java.lang.Thread.run(Thread.java:745)\n\nDriver stacktrace:\n\tat org.apache.spark.scheduler.DAGScheduler.org$apache$spark$scheduler$DAGScheduler$$failJobAndIndependentStages(DAGScheduler.scala:1431)\n\tat org.apache.spark.scheduler.DAGScheduler$$anonfun$abortStage$1.apply(DAGScheduler.scala:1419)\n\tat org.apache.spark.scheduler.DAGScheduler$$anonfun$abortStage$1.apply(DAGScheduler.scala:1418)\n\tat scala.collection.mutable.ResizableArray$class.foreach(ResizableArray.scala:59)\n\tat scala.collection.mutable.ArrayBuffer.foreach(ArrayBuffer.scala:47)\n\tat org.apache.spark.scheduler.DAGScheduler.abortStage(DAGScheduler.scala:1418)\n\tat org.apache.spark.scheduler.DAGScheduler$$anonfun$handleTaskSetFailed$1.apply(DAGScheduler.scala:799)\n\tat org.apache.spark.scheduler.DAGScheduler$$anonfun$handleTaskSetFailed$1.apply(DAGScheduler.scala:799)\n\tat scala.Option.foreach(Option.scala:236)\n\tat org.apache.spark.scheduler.DAGScheduler.handleTaskSetFailed(DAGScheduler.scala:799)\n\tat org.apache.spark.scheduler.DAGSchedulerEventProcessLoop.doOnReceive(DAGScheduler.scala:1640)\n\tat org.apache.spark.scheduler.DAGSchedulerEventProcessLoop.onReceive(DAGScheduler.scala:1599)\n\tat org.apache.spark.scheduler.DAGSchedulerEventProcessLoop.onReceive(DAGScheduler.scala:1588)\n\tat org.apache.spark.util.EventLoop$$anon$1.run(EventLoop.scala:48)\n\tat org.apache.spark.scheduler.DAGScheduler.runJob(DAGScheduler.scala:620)\n\tat org.apache.spark.SparkContext.runJob(SparkContext.scala:1832)\n\tat org.apache.spark.SparkContext.runJob(SparkContext.scala:1952)\n\tat org.apache.spark.rdd.RDD$$anonfun$reduce$1.apply(RDD.scala:1025)\n\tat org.apache.spark.rdd.RDDOperationScope$.withScope(RDDOperationScope.scala:150)\n\tat org.apache.spark.rdd.RDDOperationScope$.withScope(RDDOperationScope.scala:111)\n\tat org.apache.spark.rdd.RDD.withScope(RDD.scala:316)\n\tat org.apache.spark.rdd.RDD.reduce(RDD.scala:1007)\n\tat org.apache.spark.rdd.RDD$$anonfun$treeAggregate$1.apply(RDD.scala:1150)\n\tat org.apache.spark.rdd.RDDOperationScope$.withScope(RDDOperationScope.scala:150)\n\tat org.apache.spark.rdd.RDDOperationScope$.withScope(RDDOperationScope.scala:111)\n\tat org.apache.spark.rdd.RDD.withScope(RDD.scala:316)\n\tat org.apache.spark.rdd.RDD.treeAggregate(RDD.scala:1127)\n\tat org.apache.spark.mllib.linalg.distributed.RowMatrix.computeColumnSummaryStatistics(RowMatrix.scala:405)\n\tat org.apache.spark.mllib.linalg.distributed.RowMatrix.columnSimilarities(RowMatrix.scala:512)\n\tat org.apache.spark.mllib.linalg.distributed.RowMatrix.columnSimilarities(RowMatrix.scala:454)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:37)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:44)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:46)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:48)\n\tat $iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:50)\n\tat $iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:52)\n\tat $iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:54)\n\tat $iwC.\u003cinit\u003e(\u003cconsole\u003e:56)\n\tat \u003cinit\u003e(\u003cconsole\u003e:58)\n\tat .\u003cinit\u003e(\u003cconsole\u003e:62)\n\tat .\u003cclinit\u003e(\u003cconsole\u003e)\n\tat .\u003cinit\u003e(\u003cconsole\u003e:7)\n\tat .\u003cclinit\u003e(\u003cconsole\u003e)\n\tat $print(\u003cconsole\u003e)\n\tat sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)\n\tat sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)\n\tat sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\n\tat java.lang.reflect.Method.invoke(Method.java:606)\n\tat org.apache.spark.repl.SparkIMain$ReadEvalPrint.call(SparkIMain.scala:1065)\n\tat org.apache.spark.repl.SparkIMain$Request.loadAndRun(SparkIMain.scala:1346)\n\tat org.apache.spark.repl.SparkIMain.loadAndRunReq$1(SparkIMain.scala:840)\n\tat org.apache.spark.repl.SparkIMain.interpret(SparkIMain.scala:871)\n\tat org.apache.spark.repl.SparkIMain.interpret(SparkIMain.scala:819)\n\tat org.apache.zeppelin.spark.SparkInterpreter.interpretInput(SparkInterpreter.java:812)\n\tat org.apache.zeppelin.spark.SparkInterpreter.interpret(SparkInterpreter.java:755)\n\tat org.apache.zeppelin.spark.SparkInterpreter.interpret(SparkInterpreter.java:748)\n\tat org.apache.zeppelin.interpreter.ClassloaderInterpreter.interpret(ClassloaderInterpreter.java:57)\n\tat org.apache.zeppelin.interpreter.LazyOpenInterpreter.interpret(LazyOpenInterpreter.java:93)\n\tat org.apache.zeppelin.interpreter.remote.RemoteInterpreterServer$InterpretJob.jobRun(RemoteInterpreterServer.java:331)\n\tat org.apache.zeppelin.scheduler.Job.run(Job.java:171)\n\tat org.apache.zeppelin.scheduler.FIFOScheduler$1.run(FIFOScheduler.java:139)\n\tat java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:471)\n\tat java.util.concurrent.FutureTask.run(FutureTask.java:262)\n\tat java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:178)\n\tat java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:292)\n\tat java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)\n\tat java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:615)\n\tat java.lang.Thread.run(Thread.java:745)\nCaused by: java.lang.NumberFormatException: For input string: \"4472:0\"\n\tat sun.misc.FloatingDecimal.readJavaFormatString(FloatingDecimal.java:1250)\n\tat java.lang.Double.parseDouble(Double.java:540)\n\tat scala.collection.immutable.StringLike$class.toDouble(StringLike.scala:232)\n\tat scala.collection.immutable.StringOps.toDouble(StringOps.scala:31)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$anonfun$1$$anonfun$2.apply(\u003cconsole\u003e:34)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$anonfun$1$$anonfun$2.apply(\u003cconsole\u003e:34)\n\tat scala.collection.TraversableLike$$anonfun$map$1.apply(TraversableLike.scala:244)\n\tat scala.collection.TraversableLike$$anonfun$map$1.apply(TraversableLike.scala:244)\n\tat scala.collection.IndexedSeqOptimized$class.foreach(IndexedSeqOptimized.scala:33)\n\tat scala.collection.mutable.ArrayOps$ofRef.foreach(ArrayOps.scala:108)\n\tat scala.collection.TraversableLike$class.map(TraversableLike.scala:244)\n\tat scala.collection.mutable.ArrayOps$ofRef.map(ArrayOps.scala:108)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$anonfun$1.apply(\u003cconsole\u003e:34)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$anonfun$1.apply(\u003cconsole\u003e:33)\n\tat scala.collection.Iterator$$anon$11.next(Iterator.scala:328)\n\tat scala.collection.Iterator$class.foreach(Iterator.scala:727)\n\tat scala.collection.AbstractIterator.foreach(Iterator.scala:1157)\n\tat scala.collection.TraversableOnce$class.foldLeft(TraversableOnce.scala:144)\n\tat scala.collection.AbstractIterator.foldLeft(Iterator.scala:1157)\n\tat scala.collection.TraversableOnce$class.aggregate(TraversableOnce.scala:201)\n\tat scala.collection.AbstractIterator.aggregate(Iterator.scala:1157)\n\tat org.apache.spark.rdd.RDD$$anonfun$treeAggregate$1$$anonfun$23.apply(RDD.scala:1135)\n\tat org.apache.spark.rdd.RDD$$anonfun$treeAggregate$1$$anonfun$23.apply(RDD.scala:1135)\n\tat org.apache.spark.rdd.RDD$$anonfun$treeAggregate$1$$anonfun$24.apply(RDD.scala:1136)\n\tat org.apache.spark.rdd.RDD$$anonfun$treeAggregate$1$$anonfun$24.apply(RDD.scala:1136)\n\tat org.apache.spark.rdd.RDD$$anonfun$mapPartitions$1$$anonfun$apply$20.apply(RDD.scala:710)\n\tat org.apache.spark.rdd.RDD$$anonfun$mapPartitions$1$$anonfun$apply$20.apply(RDD.scala:710)\n\tat org.apache.spark.rdd.MapPartitionsRDD.compute(MapPartitionsRDD.scala:38)\n\tat org.apache.spark.rdd.RDD.computeOrReadCheckpoint(RDD.scala:306)\n\tat org.apache.spark.rdd.RDD.iterator(RDD.scala:270)\n\tat org.apache.spark.rdd.MapPartitionsRDD.compute(MapPartitionsRDD.scala:38)\n\tat org.apache.spark.rdd.RDD.computeOrReadCheckpoint(RDD.scala:306)\n\tat org.apache.spark.rdd.RDD.iterator(RDD.scala:270)\n\tat org.apache.spark.scheduler.ShuffleMapTask.runTask(ShuffleMapTask.scala:73)\n\tat org.apache.spark.scheduler.ShuffleMapTask.runTask(ShuffleMapTask.scala:41)\n\tat org.apache.spark.scheduler.Task.run(Task.scala:89)\n\tat org.apache.spark.executor.Executor$TaskRunner.run(Executor.scala:214)\n\t... 3 more\n\n"
+      },
+      "dateCreated": "May 15, 2016 1:38:13 PM",
+      "dateStarted": "May 15, 2016 7:30:09 PM",
+      "dateFinished": "May 15, 2016 7:30:48 PM",
+      "status": "ERROR",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "dateUpdated": "May 15, 2016 9:54:50 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "tableHide": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1463332038779_1407614059",
+      "id": "20160515-190718_1758074262",
+      "dateCreated": "May 15, 2016 7:07:18 PM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "ranking_similarity",
+  "id": "2BMBM4QEC",
+  "angularObjects": {
+    "2BGHSKCA7": [],
+    "2BFMBPKAB": [],
+    "2BHKKP27G": [],
+    "2BJHJDBK6": [],
+    "2BJAQG5W4": [],
+    "2BJGSXM37": [],
+    "2BFXEV5XZ": [],
+    "2BG77RV7M": [],
+    "2BF969NNB": [],
+    "2BG8QQJNC": [],
+    "2BGVG5JP4": [],
+    "2BJ5FCP57": [],
+    "2BFEDXCTE": [],
+    "2BJ8AEWCT": [],
+    "2BH9AVVKH": [],
+    "2BJ7KKX85": [],
+    "2BHKAE8WK": [],
+    "2BJ6HN5AY": []
+  },
+  "config": {},
+  "info": {}
+}

@@ -1,0 +1,396 @@
+{
+  "paragraphs": [
+    {
+      "text": "//overall click stats\n\nval parquetFileClick \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypso_kk_june_data/click/*/2016/*/*/*.parquet\")\nval clicksWithoutKFS \u003d parquetFileClick.filter(!($\"source\".contains(\"kfs\")))\nval uniqueUsers \u003d clicksWithoutKFS.select(\"userId\").distinct\nval uniqueOfferViews \u003d clicksWithoutKFS.select(\"offerViewId\").distinct\nval uniqueOfferCategories \u003d clicksWithoutKFS.select(\"category\").distinct\nval observedNumberOfRatings \u003d clicksWithoutKFS.groupBy(\"userId\",\"offerViewId\")\n\nval numClicks \u003d clicksWithoutKFS.count\nval numUsers \u003d uniqueUsers.count\nval numOfferViews \u003d uniqueOfferViews.count\nval numOfferCategories \u003d uniqueOfferCategories.count\nval numInteractions \u003d observedNumberOfRatings.count.count\n\n\nval offerId \u003d clicksWithoutKFS.select(substring_index(clicksWithoutKFS(\"offerViewId\"),\"-\",1))\nval uniqueOfferId \u003d offerId.select(\"substring_index(offerViewId,-,1)\").distinct\nval numOffers \u003d uniqueOfferId.count\n\nval groupedClicks \u003d clicksWithoutKFS.groupBy(\"userId\").count.sort(desc(\"count\"))\nval clickAvg \u003d groupedClicks.select(avg($\"count\"))\nclickAvg.show",
+      "authenticationInfo": {},
+      "dateUpdated": "Oct 14, 2016 4:54:44 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1467638014239_557387193",
+      "id": "20160704-151334_300093514",
+      "result": "org.apache.thrift.transport.TTransportException",
+      "dateCreated": "Jul 4, 2016 3:13:34 PM",
+      "dateStarted": "Oct 14, 2016 4:54:45 PM",
+      "dateFinished": "Oct 14, 2016 4:55:57 PM",
+      "status": "FINISHED",
+      "errorMessage": "org.apache.thrift.transport.TTransportException\n\tat org.apache.thrift.transport.TIOStreamTransport.read(TIOStreamTransport.java:132)\n\tat org.apache.thrift.transport.TTransport.readAll(TTransport.java:86)\n\tat org.apache.thrift.protocol.TBinaryProtocol.readAll(TBinaryProtocol.java:429)\n\tat org.apache.thrift.protocol.TBinaryProtocol.readI32(TBinaryProtocol.java:318)\n\tat org.apache.thrift.protocol.TBinaryProtocol.readMessageBegin(TBinaryProtocol.java:219)\n\tat org.apache.thrift.TServiceClient.receiveBase(TServiceClient.java:69)\n\tat org.apache.zeppelin.interpreter.thrift.RemoteInterpreterService$Client.recv_interpret(RemoteInterpreterService.java:232)\n\tat org.apache.zeppelin.interpreter.thrift.RemoteInterpreterService$Client.interpret(RemoteInterpreterService.java:216)\n\tat org.apache.zeppelin.interpreter.remote.RemoteInterpreter.interpret(RemoteInterpreter.java:240)\n\tat org.apache.zeppelin.interpreter.LazyOpenInterpreter.interpret(LazyOpenInterpreter.java:93)\n\tat org.apache.zeppelin.notebook.Paragraph.jobRun(Paragraph.java:242)\n\tat org.apache.zeppelin.scheduler.Job.run(Job.java:171)\n\tat org.apache.zeppelin.scheduler.RemoteScheduler$JobRunner.run(RemoteScheduler.java:328)\n\tat java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:471)\n\tat java.util.concurrent.FutureTask.run(FutureTask.java:262)\n\tat java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:178)\n\tat java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:292)\n\tat java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)\n\tat java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:615)\n\tat java.lang.Thread.run(Thread.java:745)\n",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "//number of users and offers which clicked/were clicked at least once\nval parquetFileClick \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypso_kk_june_data/click/*/2016/*/*/*.parquet\")\nval clicksWithoutKFS \u003d  parquetFileClick.filter(!($\"offerViewId\".isNull))\nval uniqueUsers \u003d clicksWithoutKFS.select(\"userId\").distinct\nval uniqueOffers \u003d clicksWithoutKFS.select(substring_index(clicksWithoutKFS(\"offerViewId\"),\"-\",1)).distinct\nuniqueUsers.count\nuniqueOffers.count",
+      "authenticationInfo": {},
+      "dateUpdated": "Feb 2, 2017 2:00:36 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1479227067813_1274815957",
+      "id": "20161115-172427_2002222346",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "parquetFileClick: org.apache.spark.sql.DataFrame \u003d [userId: string, ip: string, userAgent: struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e, geolocation: struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, offerViewId: string, clickId: string, earning: decimal(38,18)]\nclicksWithoutKFS: org.apache.spark.sql.DataFrame \u003d [userId: string, ip: string, userAgent: struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e, geolocation: struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, offerViewId: string, clickId: string, earning: decimal(38,18)]\nuniqueUsers: org.apache.spark.sql.DataFrame \u003d [userId: string]\nuniqueOffers: org.apache.spark.sql.DataFrame \u003d [substring_index(offerViewId,-,1): string]\nres1: Long \u003d 9275273\nres2: Long \u003d 4730568\n"
+      },
+      "dateCreated": "Nov 15, 2016 5:24:27 PM",
+      "dateStarted": "Nov 15, 2016 6:56:08 PM",
+      "dateFinished": "Nov 15, 2016 7:49:17 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "//Compute overall offer Stats\n\nval parquetFileOffer \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypso_kk_june_data/offerView/*/2016/*/*/*.parquet\")\nval uniqueUsers \u003d parquetFileOffer.select(\"userId\").distinct\nval uniqueOfferViews \u003d parquetFileOffer.select(\"offerViewId\").distinct\nval uniqueOfferCategories \u003d parquetFileOffer.select(\"category\").distinct\n\nparquetFileOffer.count\nuniqueUsers.count\nuniqueOfferViews.count\nuniqueOfferCategories.count\n\n\nval offerId \u003d parquetFileOffer.select(substring_index(parquetFileOffer(\"offerViewId\"),\"-\",1))\nval uniqueOfferId \u003d offerId.select(\"substring_index(offerViewId,-,1)\").distinct\n\nuniqueOfferId.count\nval groupedOffers \u003d parquetFileOffer.groupBy(\"userId\").count.sort(desc(\"count\"))\ngroupedOffers.select(avg($\"count\")).show",
+      "authenticationInfo": {},
+      "dateUpdated": "Sep 26, 2016 1:47:13 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 177.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1467641051630_1207529635",
+      "id": "20160704-160411_1287336823",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "parquetFileOffer: org.apache.spark.sql.DataFrame \u003d [eventType: string, userId: string, ip: string, userAgent: struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e, geolocation: struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, adType: string, offerRank: int, searchId: string, offerViewId: string, contentPageType: string, adPlacement: string, adViewability: string, adSize: string]\nofferId: org.apache.spark.sql.DataFrame \u003d [substring_index(offerViewId,-,1): string]\nuniqueOfferId: org.apache.spark.sql.DataFrame \u003d [substring_index(offerViewId,-,1): string]\nres0: Long \u003d 56667919\n"
+      },
+      "dateCreated": "Jul 4, 2016 4:04:11 PM",
+      "dateStarted": "Jul 7, 2016 3:48:31 PM",
+      "dateFinished": "Jul 7, 2016 3:59:46 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "//Computes click stats by country\n\nimport java.nio.file.{ Files, Paths }\nimport scala.collection.mutable.ListBuffer\nimport java.io.FileWriter\nval fw \u003d new FileWriter(\"/home/ama/sidana/kelkoo_june_stats/clickStats.txt\", true)\nval countryCodes \u003d Array(\"at\",\"be\",\"br\",\"ch\",\"cz\",\"de\",\"dk\",\"es\",\"fi\",\"ie\",\"nb\",\"nl\",\"no\",\"pl\",\"pt\",\"ru\",\"se\",\"uk\",\"it\",\"fr\")\nfor (code \u003c- countryCodes){\n    val parquetFileClick \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypso_kk_june_data/click/\"+code+\"/2016/*/*/\")\n    val clicksWithoutKFS \u003d parquetFileClick.filter(!($\"source\".contains(\"kfs\")))\n    val uniqueUsers \u003d clicksWithoutKFS.select(\"userId\").distinct.count\n    val uniqueOffers \u003d clicksWithoutKFS.select(\"offerViewId\").distinct.count\n    val observedNumberOfRatings \u003d clicksWithoutKFS.select(\"userId\",\"offerViewId\").distinct.count\n    val uniqueOfferCategories \u003d clicksWithoutKFS.select(\"category\").distinct.count\n    val numClicks \u003d clicksWithoutKFS.count\n    fw.write(code+\",\"+ numClicks +\",\"+uniqueUsers+\",\"+uniqueOffers+\",\"+observedNumberOfRatings+\",\"+uniqueOfferCategories+\"\\n\")\n}\nfw.close()",
+      "authenticationInfo": {},
+      "dateUpdated": "Oct 25, 2016 9:47:02 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1467920880236_-782776005",
+      "id": "20160707-214800_1526770949",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "import java.nio.file.{Files, Paths}\nimport scala.collection.mutable.ListBuffer\nimport java.io.FileWriter\nfw: java.io.FileWriter \u003d java.io.FileWriter@38fd21b5\ncountryCodes: Array[String] \u003d Array(at, be, br, ch, cz, de, dk, es, fi, ie, nb, nl, no, pl, pt, ru, se, uk, it, fr)\n"
+      },
+      "dateCreated": "Jul 7, 2016 9:48:00 PM",
+      "dateStarted": "Oct 26, 2016 12:33:45 AM",
+      "dateFinished": "Oct 26, 2016 12:41:17 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "//clicks per country\n\nval parquetFileClick \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypso_kk_june_data/click/*/2016/*/*/*.parquet\")\nval clicksWithoutKFS \u003d parquetFileClick.filter(!($\"source\".contains(\"kfs\")))\nval clicksbyCountry \u003d clicksWithoutKFS.groupBy($\"siteDomain\".getItem(\"countryCode\")).count.sort(desc(\"count\"))\nclicksbyCountry.rdd.coalesce(1, false).saveAsTextFile(\"/data/sidana/recsysBaselines/numClicksByCountry.csv\")",
+      "authenticationInfo": {},
+      "dateUpdated": "Oct 25, 2016 9:44:13 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1467905639918_1614570240",
+      "id": "20160707-173359_1825269003",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "parquetFileClick: org.apache.spark.sql.DataFrame \u003d [userId: string, ip: string, userAgent: struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e, geolocation: struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, offerViewId: string, clickId: string, earning: decimal(38,18)]\nclicksWithoutKFS: org.apache.spark.sql.DataFrame \u003d [userId: string, ip: string, userAgent: struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e, geolocation: struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, offerViewId: string, clickId: string, earning: decimal(38,18)]\nclicksbyCountry: org.apache.spark.sql.DataFrame \u003d [siteDomain[countryCode]: string, count: bigint]\n"
+      },
+      "dateCreated": "Jul 7, 2016 5:33:59 PM",
+      "dateStarted": "Oct 25, 2016 11:50:05 PM",
+      "dateFinished": "Oct 26, 2016 12:34:56 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "//users (who clicked at least once) by country\n\nval parquetFileClick \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypso_kk_june_data/click/*/2016/*/*/*.parquet\")\n//val clicksWithoutKFS \u003d parquetFileClick.filter(!($\"source\".contains(\"kfs\")))\nval clicksWithoutKFS \u003d parquetFileClick.filter(!($\"offerViewId\".isNull))\nval clicksbyCountry \u003d clicksWithoutKFS.groupBy($\"siteDomain\".getItem(\"countryCode\"),parquetFileClick(\"userId\")).count\nval usersbyCountry \u003d clicksbyCountry.groupBy(clicksbyCountry(\"siteDomain[countryCode]\")).count.sort(desc(\"count\"))\nusersbyCountry.rdd.coalesce(1, true).saveAsTextFile(\"/data/sidana/recsysBaselines/numUsers_C_ByCountry.csv\")",
+      "authenticationInfo": {},
+      "dateUpdated": "Nov 15, 2016 4:09:21 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1467925564786_-168147303",
+      "id": "20160707-230604_2140429207",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "parquetFileClick: org.apache.spark.sql.DataFrame \u003d [userId: string, ip: string, userAgent: struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e, geolocation: struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, offerViewId: string, clickId: string, earning: decimal(38,18)]\nclicksWithoutKFS: org.apache.spark.sql.DataFrame \u003d [userId: string, ip: string, userAgent: struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e, geolocation: struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, offerViewId: string, clickId: string, earning: decimal(38,18)]\nclicksbyCountry: org.apache.spark.sql.DataFrame \u003d [siteDomain[countryCode]: string, userId: string, count: bigint]\nusersbyCountry: org.apache.spark.sql.DataFrame \u003d [siteDomain[countryCode]: string, count: bigint]\n"
+      },
+      "dateCreated": "Jul 7, 2016 11:06:04 PM",
+      "dateStarted": "Nov 15, 2016 4:09:22 PM",
+      "dateFinished": "Nov 15, 2016 4:47:30 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "//offers (which were clicked at least once) by country\n\nval parquetFileClick \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypso_kk_june_data/click/*/2016/*/*/*.parquet\")\n//val clicksWithoutKFS \u003d parquetFileClick.filter(!($\"source\".contains(\"kfs\")))\nval clicksWithoutKFS \u003d parquetFileClick.filter(!($\"offerViewId\".isNull))\nval clicksbyCountry \u003d clicksWithoutKFS.select($\"siteDomain\".getItem(\"countryCode\"),substring_index(clicksWithoutKFS(\"offerViewId\"),\"-\",1)).distinct\nval offersbyCountry \u003d clicksbyCountry.groupBy(clicksbyCountry(\"siteDomain[countryCode]\")).count.sort(desc(\"count\"))\noffersbyCountry.rdd.coalesce(1, true).saveAsTextFile(\"/data/sidana/recsysBaselines/numOffers_C_ByCountry.csv\")\n",
+      "authenticationInfo": {},
+      "dateUpdated": "Nov 15, 2016 5:14:24 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1479225386811_-1629278011",
+      "id": "20161115-165626_1477539610",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "parquetFileClick: org.apache.spark.sql.DataFrame \u003d [userId: string, ip: string, userAgent: struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e, geolocation: struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, offerViewId: string, clickId: string, earning: decimal(38,18)]\nclicksWithoutKFS: org.apache.spark.sql.DataFrame \u003d [userId: string, ip: string, userAgent: struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e, geolocation: struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, offerViewId: string, clickId: string, earning: decimal(38,18)]\nclicksbyCountry: org.apache.spark.sql.DataFrame \u003d [siteDomain[countryCode]: string, substring_index(offerViewId,-,1): string]\noffersbyCountry: org.apache.spark.sql.DataFrame \u003d [siteDomain[countryCode]: string, count: bigint]\n"
+      },
+      "dateCreated": "Nov 15, 2016 4:56:26 PM",
+      "dateStarted": "Nov 15, 2016 5:14:25 PM",
+      "dateFinished": "Nov 15, 2016 5:54:01 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "// users (who were shown at least one offer)by country\nval parquetFileOffer \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypso_kk_june_data/offerView/*/2016/*/*/*.parquet\")\nval offersbyCountry \u003d parquetFileOffer.groupBy($\"siteDomain\".getItem(\"countryCode\"),parquetFileOffer(\"userId\")).count\nval usersbyCountry \u003d offersbyCountry.groupBy(offersbyCountry(\"siteDomain[countryCode]\")).count.sort(desc(\"count\"))\nusersbyCountry.rdd.coalesce(1, false).saveAsTextFile(\"/data/sidana/recsysBaselines/numUsersByCountry.csv\")",
+      "authenticationInfo": {},
+      "dateUpdated": "Oct 25, 2016 9:43:40 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1468185406808_-617015197",
+      "id": "20160710-231646_105447849",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "parquetFileOffer: org.apache.spark.sql.DataFrame \u003d [eventType: string, userId: string, ip: string, userAgent: struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e, geolocation: struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, adType: string, offerRank: int, searchId: string, offerViewId: string, contentPageType: string, adPlacement: string, adViewability: string, adSize: string]\noffersbyCountry: org.apache.spark.sql.DataFrame \u003d [siteDomain[countryCode]: string, userId: string, count: bigint]\nusersbyCountry: org.apache.spark.sql.DataFrame \u003d [siteDomain[countryCode]: string, count: bigint]\n"
+      },
+      "dateCreated": "Jul 10, 2016 11:16:46 PM",
+      "dateStarted": "Oct 25, 2016 9:43:40 PM",
+      "dateFinished": "Oct 26, 2016 12:33:45 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "//offerViews per country\n\nval parquetFileOffer \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypso_kk_june_data/offerView/*/2016/*/*/*.parquet\")\nval uniqueOffers \u003d parquetFileOffer.groupBy($\"siteDomain\".getItem(\"countryCode\")).count\nval uniqueOffersSorted \u003d uniqueOffers.sort($\"count\".desc)\nuniqueOffersSorted.rdd.coalesce(1, false).saveAsTextFile(\"/data/sidana/recsysBaselines/numOfferViewsByCountry.csv\")",
+      "authenticationInfo": {},
+      "dateUpdated": "Oct 25, 2016 9:43:32 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1467925838857_-173353710",
+      "id": "20160707-231038_1126126236",
+      "result": "org.apache.thrift.transport.TTransportException",
+      "dateCreated": "Jul 7, 2016 11:10:38 PM",
+      "dateStarted": "Oct 25, 2016 9:42:30 PM",
+      "dateFinished": "Oct 25, 2016 9:43:04 PM",
+      "status": "FINISHED",
+      "errorMessage": "org.apache.thrift.transport.TTransportException\n\tat org.apache.thrift.transport.TIOStreamTransport.read(TIOStreamTransport.java:132)\n\tat org.apache.thrift.transport.TTransport.readAll(TTransport.java:86)\n\tat org.apache.thrift.protocol.TBinaryProtocol.readAll(TBinaryProtocol.java:429)\n\tat org.apache.thrift.protocol.TBinaryProtocol.readI32(TBinaryProtocol.java:318)\n\tat org.apache.thrift.protocol.TBinaryProtocol.readMessageBegin(TBinaryProtocol.java:219)\n\tat org.apache.thrift.TServiceClient.receiveBase(TServiceClient.java:69)\n\tat org.apache.zeppelin.interpreter.thrift.RemoteInterpreterService$Client.recv_interpret(RemoteInterpreterService.java:232)\n\tat org.apache.zeppelin.interpreter.thrift.RemoteInterpreterService$Client.interpret(RemoteInterpreterService.java:216)\n\tat org.apache.zeppelin.interpreter.remote.RemoteInterpreter.interpret(RemoteInterpreter.java:240)\n\tat org.apache.zeppelin.interpreter.LazyOpenInterpreter.interpret(LazyOpenInterpreter.java:93)\n\tat org.apache.zeppelin.notebook.Paragraph.jobRun(Paragraph.java:242)\n\tat org.apache.zeppelin.scheduler.Job.run(Job.java:171)\n\tat org.apache.zeppelin.scheduler.RemoteScheduler$JobRunner.run(RemoteScheduler.java:328)\n\tat java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:471)\n\tat java.util.concurrent.FutureTask.run(FutureTask.java:262)\n\tat java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:178)\n\tat java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:292)\n\tat java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)\n\tat java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:615)\n\tat java.lang.Thread.run(Thread.java:745)\n",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1479328132932_319933936",
+      "id": "20161116-212852_1399066278",
+      "dateCreated": "Nov 16, 2016 9:28:52 PM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val parquetFileOfferView \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypso_kk_june_data/offerView/*/2016/*/*/*.parquet\")\nval parquetFileOffer \u003d parquetFileOfferView.select(substring_index(parquetFileOfferView(\"offerViewId\"),\"-\",1),$\"siteDomain\".getItem(\"countryCode\"))\nval offerCountryGroup \u003d parquetFileOffer.groupBy(\"siteDomain[countryCode]\",\"substring_index(offerViewId,-,1)\").count\nval uniqueOffers \u003d offerCountryGroup.groupBy(\"siteDomain[countryCode]\").count.sort(desc(\"count\"))\nuniqueOffers.rdd.coalesce(1, false).saveAsTextFile(\"/data/sidana/recsysBaselines/numOffersByCountry.csv\")",
+      "authenticationInfo": {},
+      "dateUpdated": "Oct 25, 2016 9:43:32 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1467926080577_-1837440320",
+      "id": "20160707-231440_144476891",
+      "result": {
+        "code": "ERROR",
+        "type": "TEXT",
+        "msg": "parquetFileOfferView: org.apache.spark.sql.DataFrame \u003d [eventType: string, userId: string, ip: string, userAgent: struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e, geolocation: struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, adType: string, offerRank: int, searchId: string, offerViewId: string, contentPageType: string, adPlacement: string, adViewability: string, adSize: string]\nparquetFileOffer: org.apache.spark.sql.DataFrame \u003d [substring_index(offerViewId,-,1): string, siteDomain[countryCode]: string]\nofferCountryGroup: org.apache.spark.sql.DataFrame \u003d [siteDomain[countryCode]: string, substring_index(offerViewId,-,1): string, count: bigint]\nuniqueOffers: org.apache.spark.sql.DataFrame \u003d [siteDomain[countryCode]: string, count: bigint]\norg.apache.hadoop.mapred.FileAlreadyExistsException: Output directory file:/data/sidana/recsysBaselines/numOffersByCountry.csv already exists\n\tat org.apache.hadoop.mapred.FileOutputFormat.checkOutputSpecs(FileOutputFormat.java:132)\n\tat org.apache.spark.rdd.PairRDDFunctions$$anonfun$saveAsHadoopDataset$1.apply$mcV$sp(PairRDDFunctions.scala:1179)\n\tat org.apache.spark.rdd.PairRDDFunctions$$anonfun$saveAsHadoopDataset$1.apply(PairRDDFunctions.scala:1156)\n\tat org.apache.spark.rdd.PairRDDFunctions$$anonfun$saveAsHadoopDataset$1.apply(PairRDDFunctions.scala:1156)\n\tat org.apache.spark.rdd.RDDOperationScope$.withScope(RDDOperationScope.scala:150)\n\tat org.apache.spark.rdd.RDDOperationScope$.withScope(RDDOperationScope.scala:111)\n\tat org.apache.spark.rdd.RDD.withScope(RDD.scala:316)\n\tat org.apache.spark.rdd.PairRDDFunctions.saveAsHadoopDataset(PairRDDFunctions.scala:1156)\n\tat org.apache.spark.rdd.PairRDDFunctions$$anonfun$saveAsHadoopFile$4.apply$mcV$sp(PairRDDFunctions.scala:1060)\n\tat org.apache.spark.rdd.PairRDDFunctions$$anonfun$saveAsHadoopFile$4.apply(PairRDDFunctions.scala:1026)\n\tat org.apache.spark.rdd.PairRDDFunctions$$anonfun$saveAsHadoopFile$4.apply(PairRDDFunctions.scala:1026)\n\tat org.apache.spark.rdd.RDDOperationScope$.withScope(RDDOperationScope.scala:150)\n\tat org.apache.spark.rdd.RDDOperationScope$.withScope(RDDOperationScope.scala:111)\n\tat org.apache.spark.rdd.RDD.withScope(RDD.scala:316)\n\tat org.apache.spark.rdd.PairRDDFunctions.saveAsHadoopFile(PairRDDFunctions.scala:1026)\n\tat org.apache.spark.rdd.PairRDDFunctions$$anonfun$saveAsHadoopFile$1.apply$mcV$sp(PairRDDFunctions.scala:952)\n\tat org.apache.spark.rdd.PairRDDFunctions$$anonfun$saveAsHadoopFile$1.apply(PairRDDFunctions.scala:952)\n\tat org.apache.spark.rdd.PairRDDFunctions$$anonfun$saveAsHadoopFile$1.apply(PairRDDFunctions.scala:952)\n\tat org.apache.spark.rdd.RDDOperationScope$.withScope(RDDOperationScope.scala:150)\n\tat org.apache.spark.rdd.RDDOperationScope$.withScope(RDDOperationScope.scala:111)\n\tat org.apache.spark.rdd.RDD.withScope(RDD.scala:316)\n\tat org.apache.spark.rdd.PairRDDFunctions.saveAsHadoopFile(PairRDDFunctions.scala:951)\n\tat org.apache.spark.rdd.RDD$$anonfun$saveAsTextFile$1.apply$mcV$sp(RDD.scala:1457)\n\tat org.apache.spark.rdd.RDD$$anonfun$saveAsTextFile$1.apply(RDD.scala:1436)\n\tat org.apache.spark.rdd.RDD$$anonfun$saveAsTextFile$1.apply(RDD.scala:1436)\n\tat org.apache.spark.rdd.RDDOperationScope$.withScope(RDDOperationScope.scala:150)\n\tat org.apache.spark.rdd.RDDOperationScope$.withScope(RDDOperationScope.scala:111)\n\tat org.apache.spark.rdd.RDD.withScope(RDD.scala:316)\n\tat org.apache.spark.rdd.RDD.saveAsTextFile(RDD.scala:1436)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:36)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:41)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:43)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:45)\n\tat $iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:47)\n\tat $iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:49)\n\tat $iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:51)\n\tat $iwC.\u003cinit\u003e(\u003cconsole\u003e:53)\n\tat \u003cinit\u003e(\u003cconsole\u003e:55)\n\tat .\u003cinit\u003e(\u003cconsole\u003e:59)\n\tat .\u003cclinit\u003e(\u003cconsole\u003e)\n\tat .\u003cinit\u003e(\u003cconsole\u003e:7)\n\tat .\u003cclinit\u003e(\u003cconsole\u003e)\n\tat $print(\u003cconsole\u003e)\n\tat sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)\n\tat sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)\n\tat sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\n\tat java.lang.reflect.Method.invoke(Method.java:606)\n\tat org.apache.spark.repl.SparkIMain$ReadEvalPrint.call(SparkIMain.scala:1065)\n\tat org.apache.spark.repl.SparkIMain$Request.loadAndRun(SparkIMain.scala:1346)\n\tat org.apache.spark.repl.SparkIMain.loadAndRunReq$1(SparkIMain.scala:840)\n\tat org.apache.spark.repl.SparkIMain.interpret(SparkIMain.scala:871)\n\tat org.apache.spark.repl.SparkIMain.interpret(SparkIMain.scala:819)\n\tat org.apache.zeppelin.spark.SparkInterpreter.interpretInput(SparkInterpreter.java:812)\n\tat org.apache.zeppelin.spark.SparkInterpreter.interpret(SparkInterpreter.java:755)\n\tat org.apache.zeppelin.spark.SparkInterpreter.interpret(SparkInterpreter.java:748)\n\tat org.apache.zeppelin.interpreter.ClassloaderInterpreter.interpret(ClassloaderInterpreter.java:57)\n\tat org.apache.zeppelin.interpreter.LazyOpenInterpreter.interpret(LazyOpenInterpreter.java:93)\n\tat org.apache.zeppelin.interpreter.remote.RemoteInterpreterServer$InterpretJob.jobRun(RemoteInterpreterServer.java:331)\n\tat org.apache.zeppelin.scheduler.Job.run(Job.java:171)\n\tat org.apache.zeppelin.scheduler.FIFOScheduler$1.run(FIFOScheduler.java:139)\n\tat java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:471)\n\tat java.util.concurrent.FutureTask.run(FutureTask.java:262)\n\tat java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:178)\n\tat java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:292)\n\tat java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)\n\tat java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:615)\n\tat java.lang.Thread.run(Thread.java:745)\n\n"
+      },
+      "dateCreated": "Jul 7, 2016 11:14:40 PM",
+      "dateStarted": "Oct 25, 2016 9:43:33 PM",
+      "dateFinished": "Oct 25, 2016 11:50:05 PM",
+      "status": "ERROR",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1468331373947_1146700090",
+      "id": "20160712-154933_312720961",
+      "dateCreated": "Jul 12, 2016 3:49:33 PM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "kelkooDataStats: June",
+  "id": "2BQPWFCNT",
+  "angularObjects": {
+    "2BGHSKCA7": [],
+    "2BFMBPKAB": [],
+    "2BHKKP27G": [],
+    "2BJHJDBK6": [],
+    "2BJAQG5W4": [],
+    "2BJGSXM37": [],
+    "2BFXEV5XZ": [],
+    "2BG77RV7M": [],
+    "2BF969NNB": [],
+    "2BG8QQJNC": [],
+    "2BGVG5JP4": [],
+    "2BJ5FCP57": [],
+    "2BFEDXCTE": [],
+    "2BJ8AEWCT": [],
+    "2BH9AVVKH": [],
+    "2BJ7KKX85": [],
+    "2BHKAE8WK": [],
+    "2BJ6HN5AY": []
+  },
+  "config": {},
+  "info": {}
+}

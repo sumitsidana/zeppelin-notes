@@ -1,0 +1,112 @@
+{
+  "paragraphs": [
+    {
+      "text": "import sqlContext.implicits._\nimport org.apache.spark.sql.types._\nimport org.apache.spark.sql._\n\nval parquetFileClick \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypso_kk_june_data/click/*/2016/*/*/*.parquet\")\n\nval clicks \u003d parquetFileClick.filter(!($\"offerViewId\".isNull))\n\nval orderedClicks \u003d clicks.orderBy(\"utcDate\")\norderedClicks.count\n\nval clicksUsersOffers \u003d orderedClicks.select(orderedClicks(\"userId\"),substring_index(parquetFileClick(\"offerViewId\"),\"-\",1)).withColumnRenamed(\"substring_index(offerViewId,-,1)\", \"offerId\")\nclicksUsersOffers.count\n\nclicksUsersOffers.rdd.coalesce(1, false).saveAsTextFile(\"/tmp/sidana/orderedClicksUsersOffers.csv\")",
+      "authenticationInfo": {},
+      "dateUpdated": "Oct 19, 2016 10:04:18 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1476693905717_-1579553924",
+      "id": "20161017-104505_57105399",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "import sqlContext.implicits._\nimport org.apache.spark.sql.types._\nimport org.apache.spark.sql._\nparquetFileClick: org.apache.spark.sql.DataFrame \u003d [userId: string, ip: string, userAgent: struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e, geolocation: struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, offerViewId: string, clickId: string, earning: decimal(38,18)]\nclicks: org.apache.spark.sql.DataFrame \u003d [userId: string, ip: string, userAgent: struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e, geolocation: struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, offerViewId: string, clickId: string, earning: decimal(38,18)]\norderedClicks: org.apache.spark.sql.DataFrame \u003d [userId: string, ip: string, userAgent: struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e, geolocation: struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, offerViewId: string, clickId: string, earning: decimal(38,18)]\nres1: Long \u003d 15834916\nclicksUsersOffers: org.apache.spark.sql.DataFrame \u003d [userId: string, offerId: string]\nres2: Long \u003d 15834916\n"
+      },
+      "dateCreated": "Oct 17, 2016 10:45:05 AM",
+      "dateStarted": "Oct 19, 2016 10:04:18 PM",
+      "dateFinished": "Oct 19, 2016 10:08:37 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val countryCodes \u003d Array(\"at\",\"be\",\"br\",\"ch\",\"cz\",\"de\",\"dk\",\"es\",\"fi\",\"ie\",\"nb\",\"nl\",\"no\",\"pl\",\"pt\",\"ru\",\"se\",\"uk\",\"it\",\"fr\")\nfor (code \u003c- countryCodes){\n    val parquetFileClick \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypso_kk_june_data/click/\"+code+\"/2016/*/*/\")\n    val clicks \u003d parquetFileClick.filter(!($\"offerViewId\".isNull))\n    val orderedClicks \u003d clicks.orderBy(\"utcDate\")\n    parquetFileClick.rdd.coalesce(1, true).saveAsTextFile(\"/tmp/sidana/\"+code)\n    val clicksUsersOffers \u003d orderedClicks.select(orderedClicks(\"userId\"),substring_index(parquetFileClick(\"offerViewId\"),\"-\",1)).withColumnRenamed(\"substring_index(offerViewId,-,1)\", \"offerId\")\n    clicksUsersOffers.rdd.coalesce(1, false).saveAsTextFile(\"/data/sidana/recsysBaselines/logs/orderedClicksUsersOffers_\"+code+\".csv\")\n}",
+      "authenticationInfo": {},
+      "dateUpdated": "Oct 26, 2016 11:31:18 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1476695537984_-1496515513",
+      "id": "20161017-111217_1979509709",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "countryCodes: Array[String] \u003d Array(at, be, br, ch, cz, de, dk, es, fi, ie, nb, nl, no, pl, pt, ru, se, uk, it, fr)\n"
+      },
+      "dateCreated": "Oct 17, 2016 11:12:17 AM",
+      "dateStarted": "Oct 26, 2016 11:31:18 PM",
+      "dateFinished": "Oct 26, 2016 11:50:06 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1477517478497_-954272001",
+      "id": "20161026-233118_398603503",
+      "dateCreated": "Oct 26, 2016 11:31:18 PM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "kelkooBaselines: savePartialClickFile",
+  "id": "2BY55MQUU",
+  "angularObjects": {
+    "2BGHSKCA7": [],
+    "2BFMBPKAB": [],
+    "2BHKKP27G": [],
+    "2BJHJDBK6": [],
+    "2BJAQG5W4": [],
+    "2BJGSXM37": [],
+    "2BFXEV5XZ": [],
+    "2BG77RV7M": [],
+    "2BF969NNB": [],
+    "2BG8QQJNC": [],
+    "2BGVG5JP4": [],
+    "2BJ5FCP57": [],
+    "2BFEDXCTE": [],
+    "2BJ8AEWCT": [],
+    "2BH9AVVKH": [],
+    "2BJ7KKX85": [],
+    "2BHKAE8WK": [],
+    "2BJ6HN5AY": []
+  },
+  "config": {
+    "looknfeel": "default"
+  },
+  "info": {}
+}

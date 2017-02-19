@@ -1,0 +1,405 @@
+{
+  "paragraphs": [
+    {
+      "text": "//val joinedUsers \u003d testDF,clickedOffersIndexedOffers\nval validusers \u003d clickedOffersIndexedOffers.select(\"userId\",\"user\")",
+      "dateUpdated": "Apr 5, 2016 1:22:51 AM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "editorHide": false,
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1459812171012_1198149117",
+      "id": "20160405-012251_537523652",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "validusers: org.apache.spark.sql.DataFrame \u003d [userId: string, user: double]\n"
+      },
+      "dateCreated": "Apr 5, 2016 1:22:51 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val validoffers \u003d clickedOffersIndexedOffers.select(\"offerViewId\",\"offer\")",
+      "dateUpdated": "Apr 5, 2016 1:22:51 AM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1459812171013_1197764368",
+      "id": "20160405-012251_1843799882",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "validoffers: org.apache.spark.sql.DataFrame \u003d [offerViewId: string, offer: double]\n"
+      },
+      "dateCreated": "Apr 5, 2016 1:22:51 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val validTestUsers \u003d testDF.join(validusers,testDF(\"userId\")\u003d\u003d\u003dvalidusers(\"userId\")).drop(validusers(\"userId\"))",
+      "dateUpdated": "Apr 5, 2016 1:22:51 AM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1459812171014_1198918614",
+      "id": "20160405-012251_555590564",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "validTestUsers: org.apache.spark.sql.DataFrame \u003d [userId: string, offerViewId: string, utcDate: timestamp, source: string, user: double]\n"
+      },
+      "dateCreated": "Apr 5, 2016 1:22:51 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val validTestUsersOffers \u003d validTestUsers.join(validoffers,validTestUsers(\"offerViewId\")\u003d\u003d\u003dvalidoffers(\"offerViewId\")).drop(validoffers(\"offerViewId\"))",
+      "dateUpdated": "Apr 5, 2016 1:22:51 AM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1459812171014_1198918614",
+      "id": "20160405-012251_551711992",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "validTestUsersOffers: org.apache.spark.sql.DataFrame \u003d [userId: string, offerViewId: string, utcDate: timestamp, source: string, user: double, offer: double]\n"
+      },
+      "dateCreated": "Apr 5, 2016 1:22:51 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "validusers.count\nvalidoffers.count\nvalidTestUsers.count\nvalidTestUsersOffers.count",
+      "dateUpdated": "Apr 5, 2016 1:22:51 AM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1459812171015_1198533865",
+      "id": "20160405-012251_1936545445",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "res60: Long \u003d 2250117\nres61: Long \u003d 2250117\nres62: Long \u003d 481833\nres63: Long \u003d 106\n"
+      },
+      "dateCreated": "Apr 5, 2016 1:22:51 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val groupedTestUsersOffers \u003d validTestUsersOffers.groupBy(\"user\",\"offer\").count",
+      "dateUpdated": "Apr 5, 2016 1:22:51 AM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1459812171016_1196610121",
+      "id": "20160405-012251_257140183",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "groupedTestUsersOffers: org.apache.spark.sql.DataFrame \u003d [user: double, offer: double, count: bigint]\n"
+      },
+      "dateCreated": "Apr 5, 2016 1:22:51 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": " val ratings \u003d groupedTestUsersOffers.map{\n    case Row(user, offer, count) \u003d\u003e Rating(user.asInstanceOf[Double].intValue, offer.asInstanceOf[Double].intValue, count.asInstanceOf[Long].doubleValue)\n}",
+      "dateUpdated": "Apr 5, 2016 1:22:51 AM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1459812171016_1196610121",
+      "id": "20160405-012251_1017957917",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "ratings: org.apache.spark.rdd.RDD[org.apache.spark.mllib.recommendation.Rating] \u003d MapPartitionsRDD[682] at map at \u003cconsole\u003e:95\n"
+      },
+      "dateCreated": "Apr 5, 2016 1:22:51 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val usersProducts \u003d ratings.map { case Rating(user, product, rate) \u003d\u003e\n  (user, product)\n}\nusersProducts.count\nval predictions \u003d model.predict(usersProducts).map { case Rating(user, product, rate) \u003d\u003e \n    ((user, product), rate)}\nval ratesAndPreds \u003d ratings.map { case Rating(user, product, rate) \u003d\u003e \n  ((user, product), rate)\n}.join(predictions)\nval MSE \u003d ratesAndPreds.map { case ((user, product), (r1, r2)) \u003d\u003e \n  val err \u003d (r1 - r2)\n  err * err\n}.mean()\nprintln(\"Mean Squared Error \u003d \" + MSE)",
+      "dateUpdated": "Apr 5, 2016 1:22:51 AM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1459812171017_1196225372",
+      "id": "20160405-012251_1963979017",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "usersProducts: org.apache.spark.rdd.RDD[(Int, Int)] \u003d MapPartitionsRDD[683] at map at \u003cconsole\u003e:97\nres70: Long \u003d 37\npredictions: org.apache.spark.rdd.RDD[((Int, Int), Double)] \u003d MapPartitionsRDD[692] at map at \u003cconsole\u003e:110\nratesAndPreds: org.apache.spark.rdd.RDD[((Int, Int), (Double, Double))] \u003d MapPartitionsRDD[696] at join at \u003cconsole\u003e:114\nMSE: Double \u003d 11.055848472707067\nMean Squared Error \u003d 11.055848472707067\n"
+      },
+      "dateCreated": "Apr 5, 2016 1:22:51 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "import sqlContext.implicits._\nimport org.apache.spark.sql.types._\nval rowsTest \u003d ratesAndPreds.toDF()",
+      "dateUpdated": "Apr 5, 2016 1:22:51 AM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1459812171018_1197379619",
+      "id": "20160405-012251_1771684329",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "import sqlContext.implicits._\nimport org.apache.spark.sql.types._\nrowsTest: org.apache.spark.sql.DataFrame \u003d [_1: struct\u003c_1:int,_2:int\u003e, _2: struct\u003c_1:double,_2:double\u003e]\n"
+      },
+      "dateCreated": "Apr 5, 2016 1:22:51 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "rowsTest.show",
+      "dateUpdated": "Apr 5, 2016 1:22:51 AM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1459812171018_1197379619",
+      "id": "20160405-012251_1837751848",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "+-----------------+--------------------+\n|               _1|                  _2|\n+-----------------+--------------------+\n|  [831739,928619]|[1.0,-0.441595612...|\n|  [400152,383441]|[1.0,0.0179482902...|\n|  [104969,394330]|[3.0,-0.098833671...|\n|[1496306,1137877]|[1.0,0.9899320012...|\n|  [594834,855451]|[1.0,0.1474910629...|\n|    [83245,50626]|[12.0,1.991082718...|\n|  [124820,827089]|[3.0,0.0941329337...|\n|  [71011,1198532]|[3.0,0.2428051330...|\n| [522797,1923206]|[1.0,0.9899319858...|\n|   [437610,74936]|[2.0,0.9936044716...|\n|   [99025,932661]|[6.0,0.9899320008...|\n|   [173207,11655]|[6.0,-0.032865164...|\n| [133365,2055974]|[2.0,-0.105200476...|\n|  [68260,1658331]|[3.0,0.2088964891...|\n| [300312,1259946]|[2.0,-0.071296033...|\n|  [337690,392326]|[2.0,-0.730638641...|\n| [694967,1883752]|[1.0,-0.587981097...|\n|  [604490,449048]|[1.0,-0.491836599...|\n|  [29408,1307348]|[5.0,0.0132586227...|\n| [405204,1327339]|[1.0,0.9899320033...|\n+-----------------+--------------------+\nonly showing top 20 rows\n\n"
+      },
+      "dateCreated": "Apr 5, 2016 1:22:51 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "rowsTest.count",
+      "dateUpdated": "Apr 5, 2016 1:22:51 AM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1459812171019_1196994870",
+      "id": "20160405-012251_1985498182",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "res77: Long \u003d 37\n"
+      },
+      "dateCreated": "Apr 5, 2016 1:22:51 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "dateUpdated": "Apr 5, 2016 1:22:51 AM",
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1459812171019_1196994870",
+      "id": "20160405-012251_519554141",
+      "dateCreated": "Apr 5, 2016 1:22:51 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "implementRMSE2Months_1",
+  "id": "2BGDX1S68",
+  "angularObjects": {
+    "2BGHSKCA7": [],
+    "2BFMBPKAB": [],
+    "2BHKKP27G": [],
+    "2BJHJDBK6": [],
+    "2BJAQG5W4": [],
+    "2BJGSXM37": [],
+    "2BFXEV5XZ": [],
+    "2BG77RV7M": [],
+    "2BF969NNB": [],
+    "2BG8QQJNC": [],
+    "2BGVG5JP4": [],
+    "2BJ5FCP57": [],
+    "2BFEDXCTE": [],
+    "2BJ8AEWCT": [],
+    "2BH9AVVKH": [],
+    "2BJ7KKX85": [],
+    "2BHKAE8WK": [],
+    "2BJ6HN5AY": []
+  },
+  "config": {},
+  "info": {}
+}

@@ -1,0 +1,109 @@
+{
+  "paragraphs": [
+    {
+      "text": "val parquetFileClick \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypso_purch_data/click/fr/2016/*/*/*.parquet\")\nval parquetFileOffer \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypso_purch_data/offerview/fr/2016/*/*/*.parquet\")\nval parquetFilePage \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypso_purch_data/pageview/fr/2016/*/*/*.parquet\")\n//val parquetFileSale \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypsodata/sale/fr/2016/*/*/*.parquet\")\n//val parquetFileSearch \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypsodata/search/fr/2016/*/*/*.parquet\")\n",
+      "authenticationInfo": {},
+      "dateUpdated": "Feb 13, 2017 2:31:20 PM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1486992422300_-916364631",
+      "id": "20170213-142702_878507417",
+      "result": {
+        "code": "ERROR",
+        "type": "TEXT",
+        "msg": "java.lang.AssertionError: assertion failed: No predefined schema found, and no Parquet data files or summary files found under .\n\tat scala.Predef$.assert(Predef.scala:179)\n\tat org.apache.spark.sql.execution.datasources.parquet.ParquetRelation$MetadataCache.org$apache$spark$sql$execution$datasources$parquet$ParquetRelation$MetadataCache$$readSchema(ParquetRelation.scala:512)\n\tat org.apache.spark.sql.execution.datasources.parquet.ParquetRelation$MetadataCache$$anonfun$12.apply(ParquetRelation.scala:421)\n\tat org.apache.spark.sql.execution.datasources.parquet.ParquetRelation$MetadataCache$$anonfun$12.apply(ParquetRelation.scala:421)\n\tat scala.Option.orElse(Option.scala:257)\n\tat org.apache.spark.sql.execution.datasources.parquet.ParquetRelation$MetadataCache.refresh(ParquetRelation.scala:421)\n\tat org.apache.spark.sql.execution.datasources.parquet.ParquetRelation.org$apache$spark$sql$execution$datasources$parquet$ParquetRelation$$metadataCache$lzycompute(ParquetRelation.scala:145)\n\tat org.apache.spark.sql.execution.datasources.parquet.ParquetRelation.org$apache$spark$sql$execution$datasources$parquet$ParquetRelation$$metadataCache(ParquetRelation.scala:143)\n\tat org.apache.spark.sql.execution.datasources.parquet.ParquetRelation$$anonfun$6.apply(ParquetRelation.scala:202)\n\tat org.apache.spark.sql.execution.datasources.parquet.ParquetRelation$$anonfun$6.apply(ParquetRelation.scala:202)\n\tat scala.Option.getOrElse(Option.scala:120)\n\tat org.apache.spark.sql.execution.datasources.parquet.ParquetRelation.dataSchema(ParquetRelation.scala:202)\n\tat org.apache.spark.sql.sources.HadoopFsRelation.schema$lzycompute(interfaces.scala:636)\n\tat org.apache.spark.sql.sources.HadoopFsRelation.schema(interfaces.scala:635)\n\tat org.apache.spark.sql.execution.datasources.LogicalRelation.\u003cinit\u003e(LogicalRelation.scala:37)\n\tat org.apache.spark.sql.SQLContext.baseRelationToDataFrame(SQLContext.scala:442)\n\tat org.apache.spark.sql.DataFrameReader.parquet(DataFrameReader.scala:316)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:27)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:32)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:34)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:36)\n\tat $iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:38)\n\tat $iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:40)\n\tat $iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:42)\n\tat $iwC.\u003cinit\u003e(\u003cconsole\u003e:44)\n\tat \u003cinit\u003e(\u003cconsole\u003e:46)\n\tat .\u003cinit\u003e(\u003cconsole\u003e:50)\n\tat .\u003cclinit\u003e(\u003cconsole\u003e)\n\tat .\u003cinit\u003e(\u003cconsole\u003e:7)\n\tat .\u003cclinit\u003e(\u003cconsole\u003e)\n\tat $print(\u003cconsole\u003e)\n\tat sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)\n\tat sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)\n\tat sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\n\tat java.lang.reflect.Method.invoke(Method.java:606)\n\tat org.apache.spark.repl.SparkIMain$ReadEvalPrint.call(SparkIMain.scala:1065)\n\tat org.apache.spark.repl.SparkIMain$Request.loadAndRun(SparkIMain.scala:1346)\n\tat org.apache.spark.repl.SparkIMain.loadAndRunReq$1(SparkIMain.scala:840)\n\tat org.apache.spark.repl.SparkIMain.interpret(SparkIMain.scala:871)\n\tat org.apache.spark.repl.SparkIMain.interpret(SparkIMain.scala:819)\n\tat org.apache.zeppelin.spark.SparkInterpreter.interpretInput(SparkInterpreter.java:812)\n\tat org.apache.zeppelin.spark.SparkInterpreter.interpret(SparkInterpreter.java:755)\n\tat org.apache.zeppelin.spark.SparkInterpreter.interpret(SparkInterpreter.java:748)\n\tat org.apache.zeppelin.interpreter.ClassloaderInterpreter.interpret(ClassloaderInterpreter.java:57)\n\tat org.apache.zeppelin.interpreter.LazyOpenInterpreter.interpret(LazyOpenInterpreter.java:93)\n\tat org.apache.zeppelin.interpreter.remote.RemoteInterpreterServer$InterpretJob.jobRun(RemoteInterpreterServer.java:331)\n\tat org.apache.zeppelin.scheduler.Job.run(Job.java:171)\n\tat org.apache.zeppelin.scheduler.FIFOScheduler$1.run(FIFOScheduler.java:139)\n\tat java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:471)\n\tat java.util.concurrent.FutureTask.run(FutureTask.java:262)\n\tat java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:178)\n\tat java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:292)\n\tat java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)\n\tat java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:615)\n\tat java.lang.Thread.run(Thread.java:745)\n\n"
+      },
+      "dateCreated": "Feb 13, 2017 2:27:02 PM",
+      "dateStarted": "Feb 13, 2017 2:31:20 PM",
+      "dateFinished": "Feb 13, 2017 2:31:20 PM",
+      "status": "ERROR",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "parquetFileClick.select(\"category\").show\nparquetFileOffer.select(\"category\").show\nparquetFileClick.select(\"offerTitle\").show\nparquetFileClick.select(\"keywords\").show",
+      "dateUpdated": "Feb 13, 2017 2:27:02 PM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1486992422301_-916749380",
+      "id": "20170213-142702_1124084394",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "+-----------+\n|   category|\n+-----------+\n|   [108301]|\n|   [128601]|\n|[100008013]|\n|[100008013]|\n|   [152401]|\n|   [141901]|\n|   [108301]|\n|   [132701]|\n|   [137001]|\n|[100392423]|\n|   [137001]|\n|[100508723]|\n|   [123501]|\n|   [123401]|\n|   [173101]|\n|[100450323]|\n|   [137701]|\n|[100392923]|\n|   [137001]|\n|   [143401]|\n+-----------+\nonly showing top 20 rows\n\n+-----------+\n|   category|\n+-----------+\n|[100532023]|\n|[100532023]|\n|   [108801]|\n|   [132701]|\n|   [108801]|\n|[100091913]|\n|[100091913]|\n|[100091913]|\n|[100091913]|\n|[100091913]|\n|[100091913]|\n|[100532023]|\n|[100091913]|\n|[100091913]|\n|[100091913]|\n|[100532023]|\n|   [132701]|\n|[100091913]|\n|[100091913]|\n|[100091913]|\n+-----------+\nonly showing top 20 rows\n\n+--------------------+\n|          offerTitle|\n+--------------------+\n|                null|\n|Erotique - Défis ...|\n|     HUMAX FR 1000HD|\n|     HUMAX FR 1000HD|\n|Promaster Mr 350 ...|\n|housse fauteuil e...|\n|Desigual - Femme ...|\n|Scitec Nutrition ...|\n|R baby Taie d\u0026#39...|\n|Nettoyeur Haute P...|\n|Befara LIT SURELE...|\n|Royal Brevi - Par...|\n|Gopro Caméra Spor...|\n|    meliconi DRP-400|\n|SecuriteGoodDeal ...|\n|BEBE2LUXE Pousset...|\n|Hespéride TABLE E...|\n|Ecozone Gel Anti-...|\n|Lit gigogne avec ...|\n|Bosch GKS 10,8 V-...|\n+--------------------+\nonly showing top 20 rows\n\n+--------------------+\n|            keywords|\n+--------------------+\n|                  []|\n|                  []|\n|                  []|\n|[decodeur optex ort]|\n|                  []|\n|                  []|\n|                  []|\n|                  []|\n|                  []|\n|                  []|\n|                  []|\n|                  []|\n|                  []|\n|                  []|\n|                  []|\n|                  []|\n|                  []|\n|                  []|\n|                  []|\n|                  []|\n+--------------------+\nonly showing top 20 rows\n\n"
+      },
+      "dateCreated": "Feb 13, 2017 2:27:02 PM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "dateUpdated": "Feb 13, 2017 2:27:02 PM",
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1486992422301_-916749380",
+      "id": "20170213-142702_1072767299",
+      "dateCreated": "Feb 13, 2017 2:27:02 PM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "purchBaselines: makenoteOfDataFields",
+  "id": "2C854SJU6",
+  "angularObjects": {
+    "2BGHSKCA7": [],
+    "2BFMBPKAB": [],
+    "2BHKKP27G": [],
+    "2BJHJDBK6": [],
+    "2BJAQG5W4": [],
+    "2BJGSXM37": [],
+    "2BFXEV5XZ": [],
+    "2BG77RV7M": [],
+    "2BF969NNB": [],
+    "2BG8QQJNC": [],
+    "2BGVG5JP4": [],
+    "2BJ5FCP57": [],
+    "2BFEDXCTE": [],
+    "2BJ8AEWCT": [],
+    "2BH9AVVKH": [],
+    "2BJ7KKX85": [],
+    "2BHKAE8WK": [],
+    "2BJ6HN5AY": []
+  },
+  "config": {},
+  "info": {}
+}

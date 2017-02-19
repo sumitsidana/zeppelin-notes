@@ -1,0 +1,77 @@
+{
+  "paragraphs": [
+    {
+      "text": "val df \u003d sqlContext.read\n   .format(\"com.databricks.spark.csv\")\n   .option(\"header\", \"true\") // Use first line of all files as header\n   .option(\"inferSchema\", \"true\") // Automatically infer data types\n   .option(\"delimiter\", \"\\t\")\n   .load(\"/home/ama/sidana/recommendersystemchallenge/data/data/interactions.csv\")\n   \n   val validInteractions \u003d df.filter(df(\"interaction_type\") \u003d\u003d\u003d 1||df(\"interaction_type\")\u003d\u003d\u003d2||df(\"interaction_type\")\u003d\u003d\u003d3)\n   val groupedInteractions \u003d validInteractions.groupBy(\"user_id\",\"item_id\").count().sort(desc(\"count\"))\n   groupedInteractions.rdd.coalesce(1, true).saveAsTextFile(\"/tmp/sidana/user_past_preference.csv\")",
+      "authenticationInfo": {},
+      "dateUpdated": "Apr 29, 2016 9:56:28 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1461952613470_374288873",
+      "id": "20160429-195653_1524201430",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "df: org.apache.spark.sql.DataFrame \u003d [user_id: int, item_id: int, interaction_type: int, created_at: int]\nvalidInteractions: org.apache.spark.sql.DataFrame \u003d [user_id: int, item_id: int, interaction_type: int, created_at: int]\ngroupedInteractions: org.apache.spark.sql.DataFrame \u003d [user_id: int, item_id: int, count: bigint]\n"
+      },
+      "dateCreated": "Apr 29, 2016 7:56:53 PM",
+      "dateStarted": "Apr 29, 2016 9:56:28 PM",
+      "dateFinished": "Apr 29, 2016 9:58:05 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1461953432232_1582008568",
+      "id": "20160429-201032_1750628002",
+      "dateCreated": "Apr 29, 2016 8:10:32 PM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "recsys_challenge: user_past_preference",
+  "id": "2BJD7JAJ2",
+  "angularObjects": {
+    "2BGHSKCA7": [],
+    "2BFMBPKAB": [],
+    "2BHKKP27G": [],
+    "2BJHJDBK6": [],
+    "2BJAQG5W4": [],
+    "2BJGSXM37": [],
+    "2BFXEV5XZ": [],
+    "2BG77RV7M": [],
+    "2BF969NNB": [],
+    "2BG8QQJNC": [],
+    "2BGVG5JP4": [],
+    "2BJ5FCP57": [],
+    "2BFEDXCTE": [],
+    "2BJ8AEWCT": [],
+    "2BH9AVVKH": [],
+    "2BJ7KKX85": [],
+    "2BHKAE8WK": [],
+    "2BJ6HN5AY": []
+  },
+  "config": {
+    "looknfeel": "default"
+  },
+  "info": {}
+}

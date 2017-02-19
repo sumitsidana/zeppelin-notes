@@ -1,0 +1,90 @@
+{
+  "paragraphs": [
+    {
+      "text": "val dfInteractions \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \"\\t\")\n    .load(\"/home/ama/sidana/recommendersystemchallenge/data/data/interactions.csv\")\nval dfitemsTemp \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \"\\t\")\n    .load(\"/home/ama/sidana/recommendersystemchallenge/data/data/items.csv\")\nval dfitems \u003d dfitemsTemp.select(\"id\",\"region\")\n\n    \nval itemInteractions \u003d dfInteractions.join(dfitems,dfInteractions(\"item_id\")\u003d\u003d\u003ddfitems(\"id\")).select(\"item_id\",\"region\")\nval result \u003d itemInteractions.groupBy(\"item_id\",\"region\").count().sort(desc(\"count\"))\nresult.rdd.coalesce(1, true).saveAsTextFile(\"/tmp/sidana/topRegionItems.txt\")",
+      "authenticationInfo": {},
+      "dateUpdated": "Jun 9, 2016 9:38:10 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1464894597496_1981793087",
+      "id": "20160602-210957_259667192",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "dfInteractions: org.apache.spark.sql.DataFrame \u003d [user_id: int, item_id: int, interaction_type: int, created_at: int]\ndfitemsTemp: org.apache.spark.sql.DataFrame \u003d [id: int, title: string, career_level: int, discipline_id: int, industry_id: int, country: string, region: int, latitude: string, longitude: string, employment: int, tags: string, created_at: string, active_during_test: int]\ndfitems: org.apache.spark.sql.DataFrame \u003d [id: int, region: int]\nitemInteractions: org.apache.spark.sql.DataFrame \u003d [item_id: int, region: int]\nresult: org.apache.spark.sql.DataFrame \u003d [item_id: int, region: int, count: bigint]\n"
+      },
+      "dateCreated": "Jun 2, 2016 9:09:57 PM",
+      "dateStarted": "Jun 9, 2016 9:38:10 AM",
+      "dateFinished": "Jun 9, 2016 9:38:56 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val dfInteractions \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \"\\t\")\n    .load(\"/home/ama/sidana/recommendersystemchallenge/data/data/interactions.csv\")\nval dfitemsTemp \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \"\\t\")\n    .load(\"/home/ama/sidana/recommendersystemchallenge/data/data/items.csv\")\nval dfitems \u003d dfitemsTemp.select(\"id\")\n\n    \nval itemInteractions \u003d dfInteractions.join(dfitems,dfInteractions(\"item_id\")\u003d\u003d\u003ddfitems(\"id\")).select(\"item_id\")\nval result \u003d itemInteractions.groupBy(\"item_id\").count().sort(desc(\"count\"))\nresult.rdd.coalesce(1, true).saveAsTextFile(\"/tmp/sidana/topItems.txt\")",
+      "dateUpdated": "Jun 9, 2016 9:31:00 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1464895485660_-1755002602",
+      "id": "20160602-212445_76138840",
+      "dateCreated": "Jun 2, 2016 9:24:45 PM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "recsys_challenge_7: topdisciplineItems",
+  "id": "2BKEQ528H",
+  "angularObjects": {
+    "2BGHSKCA7": [],
+    "2BFMBPKAB": [],
+    "2BHKKP27G": [],
+    "2BJHJDBK6": [],
+    "2BJAQG5W4": [],
+    "2BJGSXM37": [],
+    "2BFXEV5XZ": [],
+    "2BG77RV7M": [],
+    "2BF969NNB": [],
+    "2BG8QQJNC": [],
+    "2BGVG5JP4": [],
+    "2BJ5FCP57": [],
+    "2BFEDXCTE": [],
+    "2BJ8AEWCT": [],
+    "2BH9AVVKH": [],
+    "2BJ7KKX85": [],
+    "2BHKAE8WK": [],
+    "2BJ6HN5AY": []
+  },
+  "config": {},
+  "info": {}
+}

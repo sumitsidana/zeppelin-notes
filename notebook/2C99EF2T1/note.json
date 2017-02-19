@@ -1,0 +1,267 @@
+{
+  "paragraphs": [
+    {
+      "text": "//write distinct users\n\nval test \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/data/sidana/nnmf_ranking/netflix/netflix_data/dat.nf.withheaders\")\nval users \u003d test.select(\"userid\").distinct\nusers.rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/nnmf_ranking/netflix/netflix_data/dat.nf.users\")",
+      "authenticationInfo": {},
+      "dateUpdated": "Jan 21, 2017 1:47:15 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1484955197584_-53081738",
+      "id": "20170121-003317_1189444746",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "test: org.apache.spark.sql.DataFrame \u003d [userid: int, movieid: int, rating: int, timestamp: bigint]\nusers: org.apache.spark.sql.DataFrame \u003d [userid: int]\n"
+      },
+      "dateCreated": "Jan 21, 2017 12:33:17 AM",
+      "dateStarted": "Jan 21, 2017 1:47:15 AM",
+      "dateFinished": "Jan 21, 2017 1:48:35 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "//take sample users",
+      "dateUpdated": "Jan 21, 2017 12:35:30 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1484955286368_-443678493",
+      "id": "20170121-003446_1967696282",
+      "dateCreated": "Jan 21, 2017 12:34:46 AM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "//do join with sample users\nval sampleusers \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/data/sidana/nnmf_ranking/netflix/netflix_data/dat.nf.users.sample\")\nval testsample \u003d test.join(sampleusers,test(\"userid\")\u003d\u003d\u003dsampleusers(\"userid\")).drop(sampleusers(\"userid\"))",
+      "authenticationInfo": {},
+      "dateUpdated": "Jan 21, 2017 1:55:56 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1484955298017_413957454",
+      "id": "20170121-003458_779050983",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "sampleusers: org.apache.spark.sql.DataFrame \u003d [userid: int]\ntestsample: org.apache.spark.sql.DataFrame \u003d [userid: int, movieid: int, rating: int, timestamp: bigint]\n"
+      },
+      "dateCreated": "Jan 21, 2017 12:34:58 AM",
+      "dateStarted": "Jan 21, 2017 1:55:56 AM",
+      "dateFinished": "Jan 21, 2017 1:55:57 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "test.count\ntestsample.count\nsampleusers.count",
+      "authenticationInfo": {},
+      "dateUpdated": "Jan 21, 2017 1:56:01 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1484956207020_-14010326",
+      "id": "20170121-005007_1838168174",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "res12: Long \u003d 100480507\nres13: Long \u003d 20071077\nres14: Long \u003d 96038\n"
+      },
+      "dateCreated": "Jan 21, 2017 12:50:07 AM",
+      "dateStarted": "Jan 21, 2017 1:56:01 AM",
+      "dateFinished": "Jan 21, 2017 1:57:18 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "//write distinct offers\nval offers \u003d testsample.select(\"movieid\").distinct\noffers.rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/nnmf_ranking/netflix/netflix_data/dat.nf.movies\")",
+      "authenticationInfo": {},
+      "dateUpdated": "Jan 21, 2017 1:58:01 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1484955318467_-5788272",
+      "id": "20170121-003518_34515116",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "offers: org.apache.spark.sql.DataFrame \u003d [movieid: int]\n"
+      },
+      "dateCreated": "Jan 21, 2017 12:35:18 AM",
+      "dateStarted": "Jan 21, 2017 1:58:01 AM",
+      "dateFinished": "Jan 21, 2017 1:59:05 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "//take sample offers",
+      "dateUpdated": "Jan 21, 2017 12:38:23 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1484955403083_-611662165",
+      "id": "20170121-003643_622277282",
+      "dateCreated": "Jan 21, 2017 12:36:43 AM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "//do join with sample offers\nval samplemovies \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/data/sidana/nnmf_ranking/netflix/netflix_data/dat.nf.movies.sample\")\n\nval sample \u003d testsample.join(samplemovies,testsample(\"movieid\")\u003d\u003d\u003dsamplemovies(\"movieid\")).drop(samplemovies(\"movieid\"))\nsample.rdd.saveAsTextFile(\"/data/sidana//nnmf_ranking/netflix/netflix_data/dat.nf.sample\")",
+      "authenticationInfo": {},
+      "dateUpdated": "Jan 21, 2017 2:16:20 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1484955414818_-1974827518",
+      "id": "20170121-003654_1125075977",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "samplemovies: org.apache.spark.sql.DataFrame \u003d [movieid: int]\nsample: org.apache.spark.sql.DataFrame \u003d [userid: int, movieid: int, rating: int, timestamp: bigint]\n"
+      },
+      "dateCreated": "Jan 21, 2017 12:36:54 AM",
+      "dateStarted": "Jan 21, 2017 2:16:20 AM",
+      "dateFinished": "Jan 21, 2017 2:18:04 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1484960995043_1610061277",
+      "id": "20170121-020955_1169262534",
+      "dateCreated": "Jan 21, 2017 2:09:55 AM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "nnmf_ranking: netflixSampleCreation",
+  "id": "2C99EF2T1",
+  "angularObjects": {
+    "2BGHSKCA7": [],
+    "2BFMBPKAB": [],
+    "2BHKKP27G": [],
+    "2BJHJDBK6": [],
+    "2BJAQG5W4": [],
+    "2BJGSXM37": [],
+    "2BFXEV5XZ": [],
+    "2BG77RV7M": [],
+    "2BF969NNB": [],
+    "2BG8QQJNC": [],
+    "2BGVG5JP4": [],
+    "2BJ5FCP57": [],
+    "2BFEDXCTE": [],
+    "2BJ8AEWCT": [],
+    "2BH9AVVKH": [],
+    "2BJ7KKX85": [],
+    "2BHKAE8WK": [],
+    "2BJ6HN5AY": []
+  },
+  "config": {
+    "looknfeel": "default"
+  },
+  "info": {}
+}

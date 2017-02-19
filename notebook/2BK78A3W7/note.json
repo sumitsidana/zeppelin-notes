@@ -1,0 +1,250 @@
+{
+  "paragraphs": [
+    {
+      "text": "val parquetFileClick \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypso_data_feb_march/calypso_data_feb_march/click/fr/2016/201602/20160204/\")\nval clicks \u003d parquetFileClick.filter(!($\"offerViewId\".isNull))\nval parquetFileOffer \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypso_data_feb_march/calypso_data_feb_march/offerView/fr/2016/201602/20160204\")\n\nval userInInterestClick1 \u003d clicks.filter(clicks(\"userId\")\u003d\u003d\u003d\"a4c628c-152ad463c7a-1c3848\")\nval userInInterestOffer1 \u003d parquetFileOffer.filter(parquetFileOffer(\"userId\")\u003d\u003d\u003d\"a4c628c-152ad463c7a-1c3848\")\nuserInInterestClick1.count\nuserInInterestOffer1.count\n\nval userInInterestClick2 \u003d clicks.filter(clicks(\"userId\")\u003d\u003d\u003d\"a4c628c-152adb44e03-1c5da2\")\nval userInInterestOffer2 \u003d parquetFileOffer.filter(parquetFileOffer(\"userId\")\u003d\u003d\u003d\"a4c628c-152adb44e03-1c5da2\")\nuserInInterestClick2.count\nuserInInterestOffer2.count\n\nval userInInterestClick3 \u003d clicks.filter(clicks(\"userId\")\u003d\u003d\u003d\"a4c6257-152ae76b659-1c9e30\")\nval userInInterestOffer3 \u003d parquetFileOffer.filter(parquetFileOffer(\"userId\")\u003d\u003d\u003d\"a4c6257-152ae76b659-1c9e30\")\nuserInInterestClick2.count\nuserInInterestOffer2.count\n\n\n\nval offerInInterestClick1 \u003d clicks.filter(clicks(\"offerViewId\")\u003d\u003d\u003d\"bf7170f4961a24f851f87eafe5f61139-1076982047361_1454605801357_1586787\")\nval offerInInterestOffer1 \u003d parquetFileOffer.filter(parquetFileOffer(\"offerViewId\")\u003d\u003d\u003d\"bf7170f4961a24f851f87eafe5f61139-1076982047361_1454605801357_1586787\")\nofferInInterestClick1.count\nofferInInterestOffer1.count\n\n\nval offerInInterestClick2 \u003d clicks.filter(clicks(\"offerViewId\")\u003d\u003d\u003d\"8fba78a57b6cd253669bba9a77c006e4-1076982502173_1454613165841_1977603\")\nval offerInInterestOffer2 \u003d parquetFileOffer.filter(parquetFileOffer(\"offerViewId\")\u003d\u003d\u003d\"8fba78a57b6cd253669bba9a77c006e4-1076982502173_1454613165841_1977603\")\nofferInInterestClick2.count\nofferInInterestOffer2.count\n\nval offerInInterestClick3 \u003d clicks.filter(clicks(\"offerViewId\")\u003d\u003d\u003d\"6dfead6ec12c8601f9b993ad63a8ffe2-1076982516331_1454625932533_2538836\")\nval offerInInterestOffer3 \u003d parquetFileOffer.filter(parquetFileOffer(\"offerViewId\")\u003d\u003d\u003d\"6dfead6ec12c8601f9b993ad63a8ffe2-1076982516331_1454625932533_2538836\")\nofferInInterestClick3.count\nofferInInterestOffer3.count\n\n",
+      "authenticationInfo": {},
+      "dateUpdated": "Apr 26, 2016 4:41:32 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1461676590996_171703410",
+      "id": "20160426-151630_717283671",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "parquetFileClick: org.apache.spark.sql.DataFrame \u003d [userId: string, ip: string, userAgent: struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e, geolocation: struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, offerViewId: string, clickId: string, earning: decimal(38,18)]\nclicks: org.apache.spark.sql.DataFrame \u003d [userId: string, ip: string, userAgent: struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e, geolocation: struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, offerViewId: string, clickId: string, earning: decimal(38,18)]\nparquetFileOffer: org.apache.spark.sql.DataFrame \u003d [eventType: string, userId: string, ip: string, userAgent: struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e, geolocation: struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, adType: string, offerRank: int, searchId: string, offerViewId: string, contentPageType: string, adPlacement: string, adViewability: string, adSize: string]\nuserInInterestClick1: org.apache.spark.sql.DataFrame \u003d [userId: string, ip: string, userAgent: struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e, geolocation: struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, offerViewId: string, clickId: string, earning: decimal(38,18)]\nuserInInterestOffer1: org.apache.spark.sql.DataFrame \u003d [eventType: string, userId: string, ip: string, userAgent: struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e, geolocation: struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, adType: string, offerRank: int, searchId: string, offerViewId: string, contentPageType: string, adPlacement: string, adViewability: string, adSize: string]\nres0: Long \u003d 12\nres1: Long \u003d 0\nuserInInterestClick2: org.apache.spark.sql.DataFrame \u003d [userId: string, ip: string, userAgent: struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e, geolocation: struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, offerViewId: string, clickId: string, earning: decimal(38,18)]\nuserInInterestOffer2: org.apache.spark.sql.DataFrame \u003d [eventType: string, userId: string, ip: string, userAgent: struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e, geolocation: struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, adType: string, offerRank: int, searchId: string, offerViewId: string, contentPageType: string, adPlacement: string, adViewability: string, adSize: string]\nres2: Long \u003d 10\nres3: Long \u003d 0\nuserInInterestClick3: org.apache.spark.sql.DataFrame \u003d [userId: string, ip: string, userAgent: struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e, geolocation: struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, offerViewId: string, clickId: string, earning: decimal(38,18)]\nuserInInterestOffer3: org.apache.spark.sql.DataFrame \u003d [eventType: string, userId: string, ip: string, userAgent: struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e, geolocation: struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, adType: string, offerRank: int, searchId: string, offerViewId: string, contentPageType: string, adPlacement: string, adViewability: string, adSize: string]\nres4: Long \u003d 10\nres5: Long \u003d 0\nofferInInterestClick1: org.apache.spark.sql.DataFrame \u003d [userId: string, ip: string, userAgent: struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e, geolocation: struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, offerViewId: string, clickId: string, earning: decimal(38,18)]\nofferInInterestOffer1: org.apache.spark.sql.DataFrame \u003d [eventType: string, userId: string, ip: string, userAgent: struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e, geolocation: struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, adType: string, offerRank: int, searchId: string, offerViewId: string, contentPageType: string, adPlacement: string, adViewability: string, adSize: string]\nres6: Long \u003d 10\nres7: Long \u003d 0\nofferInInterestClick2: org.apache.spark.sql.DataFrame \u003d [userId: string, ip: string, userAgent: struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e, geolocation: struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, offerViewId: string, clickId: string, earning: decimal(38,18)]\nofferInInterestOffer2: org.apache.spark.sql.DataFrame \u003d [eventType: string, userId: string, ip: string, userAgent: struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e, geolocation: struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, adType: string, offerRank: int, searchId: string, offerViewId: string, contentPageType: string, adPlacement: string, adViewability: string, adSize: string]\nres8: Long \u003d 10\nres9: Long \u003d 0\nofferInInterestClick3: org.apache.spark.sql.DataFrame \u003d [userId: string, ip: string, userAgent: struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e, geolocation: struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, offerViewId: string, clickId: string, earning: decimal(38,18)]\nofferInInterestOffer3: org.apache.spark.sql.DataFrame \u003d [eventType: string, userId: string, ip: string, userAgent: struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e, geolocation: struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, adType: string, offerRank: int, searchId: string, offerViewId: string, contentPageType: string, adPlacement: string, adViewability: string, adSize: string]\nres10: Long \u003d 7\nres11: Long \u003d 0\n"
+      },
+      "dateCreated": "Apr 26, 2016 3:16:30 PM",
+      "dateStarted": "Apr 26, 2016 4:41:32 PM",
+      "dateFinished": "Apr 26, 2016 4:42:36 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val parquetFileClick \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypso_data_feb_march/calypso_data_feb_march/click/fr/2016/201602/20160204/\")\nval clicks \u003d parquetFileClick.filter(!($\"offerViewId\".isNull))\nval parquetFileOffer \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypso_data_feb_march/calypso_data_feb_march/offerView/fr/2016/201602/20160204\")\nval ratings_positive_day \u003d clicks.groupBy(\"userId\",\"offerViewId\").count\nval ratings_day \u003d parquetFileOffer.groupBy(\"userId\",\"offerViewId\").count\nval ratings_positive_negative_day \u003d ratings_positive_day.join(ratings_day,ratings_positive_day(\"userId\")\u003c\u003d\u003eratings_day(\"userId\") \u0026\u0026 ratings_positive_day(\"offerViewId\")\u003c\u003d\u003eratings_day(\"offerViewId\"))",
+      "authenticationInfo": {},
+      "dateUpdated": "Apr 27, 2016 11:18:01 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1461677267927_-457624318",
+      "id": "20160426-152747_2146506553",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "parquetFileClick: org.apache.spark.sql.DataFrame \u003d [userId: string, ip: string, userAgent: struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e, geolocation: struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, offerViewId: string, clickId: string, earning: decimal(38,18)]\nclicks: org.apache.spark.sql.DataFrame \u003d [userId: string, ip: string, userAgent: struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e, geolocation: struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, offerViewId: string, clickId: string, earning: decimal(38,18)]\nparquetFileOffer: org.apache.spark.sql.DataFrame \u003d [eventType: string, userId: string, ip: string, userAgent: struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e, geolocation: struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, adType: string, offerRank: int, searchId: string, offerViewId: string, contentPageType: string, adPlacement: string, adViewability: string, adSize: string]\nratings_positive_day: org.apache.spark.sql.DataFrame \u003d [userId: string, offerViewId: string, count: bigint]\nratings_day: org.apache.spark.sql.DataFrame \u003d [userId: string, offerViewId: string, count: bigint]\nratings_positive_negative_day: org.apache.spark.sql.DataFrame \u003d [userId: string, offerViewId: string, count: bigint, userId: string, offerViewId: string, count: bigint]\n"
+      },
+      "dateCreated": "Apr 26, 2016 3:27:47 PM",
+      "dateStarted": "Apr 26, 2016 11:11:03 PM",
+      "dateFinished": "Apr 26, 2016 11:11:48 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "ratings_positive_negative_day.count",
+      "authenticationInfo": {},
+      "dateUpdated": "Apr 26, 2016 11:12:16 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1461705063016_-428316345",
+      "id": "20160426-231103_2021956399",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "res1: Long \u003d 0\n"
+      },
+      "dateCreated": "Apr 26, 2016 11:11:03 PM",
+      "dateStarted": "Apr 26, 2016 11:12:16 PM",
+      "dateFinished": "Apr 26, 2016 11:14:52 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val parquetFileClick \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypso_data_feb_march/calypso_data_feb_march/click/fr/2016/*/*\")\nval clicks \u003d parquetFileClick.filter(!($\"offerViewId\".isNull))\nval parquetFileOffer \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypso_data_feb_march/calypso_data_feb_march/offerView/fr/2016/*/*\")\nval ratings_positive_day \u003d clicks.groupBy(\"userId\").count\n val ratings_day \u003d parquetFileOffer.groupBy(\"userId\").count\n val ratings_positive_negative_day \u003d ratings_positive_day.join(ratings_day,ratings_positive_day(\"userId\")\u003c\u003d\u003eratings_day(\"userId\"))\n ratings_positive_negative_day.count",
+      "authenticationInfo": {},
+      "dateUpdated": "Apr 26, 2016 11:21:25 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1461705136473_473458456",
+      "id": "20160426-231216_864634613",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "parquetFileClick: org.apache.spark.sql.DataFrame \u003d [userId: string, ip: string, userAgent: struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e, geolocation: struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, offerViewId: string, clickId: string, earning: decimal(38,18)]\nclicks: org.apache.spark.sql.DataFrame \u003d [userId: string, ip: string, userAgent: struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e, geolocation: struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, offerViewId: string, clickId: string, earning: decimal(38,18)]\nparquetFileOffer: org.apache.spark.sql.DataFrame \u003d [eventType: string, userId: string, ip: string, userAgent: struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e, geolocation: struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, adType: string, offerRank: int, searchId: string, offerViewId: string, contentPageType: string, adPlacement: string, adViewability: string, adSize: string]\nratings_positive_day: org.apache.spark.sql.DataFrame \u003d [userId: string, count: bigint]\nratings_day: org.apache.spark.sql.DataFrame \u003d [userId: string, count: bigint]\nratings_positive_negative_day: org.apache.spark.sql.DataFrame \u003d [userId: string, count: bigint, userId: string, count: bigint]\nres5: Long \u003d 1099947\n"
+      },
+      "dateCreated": "Apr 26, 2016 11:12:16 PM",
+      "dateStarted": "Apr 26, 2016 11:21:25 PM",
+      "dateFinished": "Apr 26, 2016 11:23:57 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "ratings_positive_day.count\nratings_day.count",
+      "authenticationInfo": {},
+      "dateUpdated": "Apr 26, 2016 11:20:33 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1461705526416_-840512112",
+      "id": "20160426-231846_995541987",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "res2: Long \u003d 0\nres3: Long \u003d 0\n"
+      },
+      "dateCreated": "Apr 26, 2016 11:18:46 PM",
+      "dateStarted": "Apr 26, 2016 11:20:33 PM",
+      "dateFinished": "Apr 26, 2016 11:20:35 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val parquetFileClick \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypso_data_feb_march/calypso_data_feb_march/click/fr/2016/*/*\")\nval clicks \u003d parquetFileClick.filter(!($\"offerViewId\".isNull))\nval parquetFileOffer \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypso_data_feb_march/calypso_data_feb_march/offerView/fr/2016/*/*\")\n        val ratings_positive_day \u003d clicks.groupBy(\"userId\",\"offerViewId\").count\n        \n        val ratings_day \u003d parquetFileOffer.groupBy(\"userId\",\"offerViewId\").count\n val ratings_positive_negative_day \u003d ratings_positive_day.join(ratings_day,ratings_positive_day(\"userId\")\u003c\u003d\u003eratings_day(\"userId\") \u0026\u0026 ratings_positive_day(\"offerViewId\")\u003c\u003d\u003eratings_day(\"offerViewId\"))\n print(ratings_positive_negative_day.count)",
+      "authenticationInfo": {},
+      "dateUpdated": "Apr 27, 2016 11:20:07 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1461705633016_-14871621",
+      "id": "20160426-232033_766404294",
+      "result": {
+        "code": "ERROR",
+        "type": "TEXT",
+        "msg": "parquetFileClick: org.apache.spark.sql.DataFrame \u003d [userId: string, ip: string, userAgent: struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e, geolocation: struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, offerViewId: string, clickId: string, earning: decimal(38,18)]\nclicks: org.apache.spark.sql.DataFrame \u003d [userId: string, ip: string, userAgent: struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e, geolocation: struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, offerViewId: string, clickId: string, earning: decimal(38,18)]\nparquetFileOffer: org.apache.spark.sql.DataFrame \u003d [eventType: string, userId: string, ip: string, userAgent: struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e, geolocation: struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, adType: string, offerRank: int, searchId: string, offerViewId: string, contentPageType: string, adPlacement: string, adViewability: string, adSize: string]\nratings_positive_day: org.apache.spark.sql.DataFrame \u003d [userId: string, offerViewId: string, count: bigint]\nratings_day: org.apache.spark.sql.DataFrame \u003d [userId: string, offerViewId: string, count: bigint]\nratings_positive_negative_day: org.apache.spark.sql.DataFrame \u003d [userId: string, offerViewId: string, count: bigint, userId: string, offerViewId: string, count: bigint]\norg.apache.spark.SparkException: Job aborted due to stage failure: Task 1092 in stage 6.0 failed 4 times, most recent failure: Lost task 1092.3 in stage 6.0 (TID 1655, victory.imag.fr): java.io.IOException: Aucun espace disponible sur le périphérique\n\tat java.io.FileOutputStream.writeBytes(Native Method)\n\tat java.io.FileOutputStream.write(FileOutputStream.java:345)\n\tat org.apache.spark.storage.TimeTrackingOutputStream.write(TimeTrackingOutputStream.java:58)\n\tat java.io.BufferedOutputStream.flushBuffer(BufferedOutputStream.java:82)\n\tat java.io.BufferedOutputStream.write(BufferedOutputStream.java:126)\n\tat org.xerial.snappy.SnappyOutputStream.dumpOutput(SnappyOutputStream.java:343)\n\tat org.xerial.snappy.SnappyOutputStream.compressInput(SnappyOutputStream.java:357)\n\tat org.xerial.snappy.SnappyOutputStream.rawWrite(SnappyOutputStream.java:280)\n\tat org.xerial.snappy.SnappyOutputStream.write(SnappyOutputStream.java:115)\n\tat org.apache.spark.io.SnappyOutputStreamWrapper.write(CompressionCodec.scala:202)\n\tat java.io.BufferedOutputStream.flushBuffer(BufferedOutputStream.java:82)\n\tat java.io.BufferedOutputStream.write(BufferedOutputStream.java:126)\n\tat java.io.DataOutputStream.write(DataOutputStream.java:107)\n\tat org.apache.spark.sql.catalyst.expressions.UnsafeRow.writeToStream(UnsafeRow.java:586)\n\tat org.apache.spark.sql.execution.UnsafeRowSerializerInstance$$anon$2.writeValue(UnsafeRowSerializer.scala:61)\n\tat org.apache.spark.storage.DiskBlockObjectWriter.write(DiskBlockObjectWriter.scala:185)\n\tat org.apache.spark.shuffle.sort.BypassMergeSortShuffleWriter.write(BypassMergeSortShuffleWriter.java:151)\n\tat org.apache.spark.scheduler.ShuffleMapTask.runTask(ShuffleMapTask.scala:73)\n\tat org.apache.spark.scheduler.ShuffleMapTask.runTask(ShuffleMapTask.scala:41)\n\tat org.apache.spark.scheduler.Task.run(Task.scala:89)\n\tat org.apache.spark.executor.Executor$TaskRunner.run(Executor.scala:214)\n\tat java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)\n\tat java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:615)\n\tat java.lang.Thread.run(Thread.java:745)\n\nDriver stacktrace:\n\tat org.apache.spark.scheduler.DAGScheduler.org$apache$spark$scheduler$DAGScheduler$$failJobAndIndependentStages(DAGScheduler.scala:1431)\n\tat org.apache.spark.scheduler.DAGScheduler$$anonfun$abortStage$1.apply(DAGScheduler.scala:1419)\n\tat org.apache.spark.scheduler.DAGScheduler$$anonfun$abortStage$1.apply(DAGScheduler.scala:1418)\n\tat scala.collection.mutable.ResizableArray$class.foreach(ResizableArray.scala:59)\n\tat scala.collection.mutable.ArrayBuffer.foreach(ArrayBuffer.scala:47)\n\tat org.apache.spark.scheduler.DAGScheduler.abortStage(DAGScheduler.scala:1418)\n\tat org.apache.spark.scheduler.DAGScheduler$$anonfun$handleTaskSetFailed$1.apply(DAGScheduler.scala:799)\n\tat org.apache.spark.scheduler.DAGScheduler$$anonfun$handleTaskSetFailed$1.apply(DAGScheduler.scala:799)\n\tat scala.Option.foreach(Option.scala:236)\n\tat org.apache.spark.scheduler.DAGScheduler.handleTaskSetFailed(DAGScheduler.scala:799)\n\tat org.apache.spark.scheduler.DAGSchedulerEventProcessLoop.doOnReceive(DAGScheduler.scala:1640)\n\tat org.apache.spark.scheduler.DAGSchedulerEventProcessLoop.onReceive(DAGScheduler.scala:1599)\n\tat org.apache.spark.scheduler.DAGSchedulerEventProcessLoop.onReceive(DAGScheduler.scala:1588)\n\tat org.apache.spark.util.EventLoop$$anon$1.run(EventLoop.scala:48)\n\tat org.apache.spark.scheduler.DAGScheduler.runJob(DAGScheduler.scala:620)\n\tat org.apache.spark.SparkContext.runJob(SparkContext.scala:1832)\n\tat org.apache.spark.SparkContext.runJob(SparkContext.scala:1845)\n\tat org.apache.spark.SparkContext.runJob(SparkContext.scala:1858)\n\tat org.apache.spark.SparkContext.runJob(SparkContext.scala:1929)\n\tat org.apache.spark.rdd.RDD$$anonfun$collect$1.apply(RDD.scala:927)\n\tat org.apache.spark.rdd.RDDOperationScope$.withScope(RDDOperationScope.scala:150)\n\tat org.apache.spark.rdd.RDDOperationScope$.withScope(RDDOperationScope.scala:111)\n\tat org.apache.spark.rdd.RDD.withScope(RDD.scala:316)\n\tat org.apache.spark.rdd.RDD.collect(RDD.scala:926)\n\tat org.apache.spark.sql.execution.SparkPlan.executeCollect(SparkPlan.scala:166)\n\tat org.apache.spark.sql.execution.SparkPlan.executeCollectPublic(SparkPlan.scala:174)\n\tat org.apache.spark.sql.DataFrame$$anonfun$org$apache$spark$sql$DataFrame$$execute$1$1.apply(DataFrame.scala:1499)\n\tat org.apache.spark.sql.DataFrame$$anonfun$org$apache$spark$sql$DataFrame$$execute$1$1.apply(DataFrame.scala:1499)\n\tat org.apache.spark.sql.execution.SQLExecution$.withNewExecutionId(SQLExecution.scala:56)\n\tat org.apache.spark.sql.DataFrame.withNewExecutionId(DataFrame.scala:2086)\n\tat org.apache.spark.sql.DataFrame.org$apache$spark$sql$DataFrame$$execute$1(DataFrame.scala:1498)\n\tat org.apache.spark.sql.DataFrame.org$apache$spark$sql$DataFrame$$collect(DataFrame.scala:1505)\n\tat org.apache.spark.sql.DataFrame$$anonfun$count$1.apply(DataFrame.scala:1515)\n\tat org.apache.spark.sql.DataFrame$$anonfun$count$1.apply(DataFrame.scala:1514)\n\tat org.apache.spark.sql.DataFrame.withCallback(DataFrame.scala:2099)\n\tat org.apache.spark.sql.DataFrame.count(DataFrame.scala:1514)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:40)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:45)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:47)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:49)\n\tat $iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:51)\n\tat $iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:53)\n\tat $iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:55)\n\tat $iwC.\u003cinit\u003e(\u003cconsole\u003e:57)\n\tat \u003cinit\u003e(\u003cconsole\u003e:59)\n\tat .\u003cinit\u003e(\u003cconsole\u003e:63)\n\tat .\u003cclinit\u003e(\u003cconsole\u003e)\n\tat .\u003cinit\u003e(\u003cconsole\u003e:7)\n\tat .\u003cclinit\u003e(\u003cconsole\u003e)\n\tat $print(\u003cconsole\u003e)\n\tat sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)\n\tat sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)\n\tat sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\n\tat java.lang.reflect.Method.invoke(Method.java:606)\n\tat org.apache.spark.repl.SparkIMain$ReadEvalPrint.call(SparkIMain.scala:1065)\n\tat org.apache.spark.repl.SparkIMain$Request.loadAndRun(SparkIMain.scala:1346)\n\tat org.apache.spark.repl.SparkIMain.loadAndRunReq$1(SparkIMain.scala:840)\n\tat org.apache.spark.repl.SparkIMain.interpret(SparkIMain.scala:871)\n\tat org.apache.spark.repl.SparkIMain.interpret(SparkIMain.scala:819)\n\tat org.apache.zeppelin.spark.SparkInterpreter.interpretInput(SparkInterpreter.java:812)\n\tat org.apache.zeppelin.spark.SparkInterpreter.interpret(SparkInterpreter.java:755)\n\tat org.apache.zeppelin.spark.SparkInterpreter.interpret(SparkInterpreter.java:748)\n\tat org.apache.zeppelin.interpreter.ClassloaderInterpreter.interpret(ClassloaderInterpreter.java:57)\n\tat org.apache.zeppelin.interpreter.LazyOpenInterpreter.interpret(LazyOpenInterpreter.java:93)\n\tat org.apache.zeppelin.interpreter.remote.RemoteInterpreterServer$InterpretJob.jobRun(RemoteInterpreterServer.java:331)\n\tat org.apache.zeppelin.scheduler.Job.run(Job.java:171)\n\tat org.apache.zeppelin.scheduler.FIFOScheduler$1.run(FIFOScheduler.java:139)\n\tat java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:471)\n\tat java.util.concurrent.FutureTask.run(FutureTask.java:262)\n\tat java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:178)\n\tat java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:292)\n\tat java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)\n\tat java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:615)\n\tat java.lang.Thread.run(Thread.java:745)\nCaused by: java.io.IOException: Aucun espace disponible sur le périphérique\n\tat java.io.FileOutputStream.writeBytes(Native Method)\n\tat java.io.FileOutputStream.write(FileOutputStream.java:345)\n\tat org.apache.spark.storage.TimeTrackingOutputStream.write(TimeTrackingOutputStream.java:58)\n\tat java.io.BufferedOutputStream.flushBuffer(BufferedOutputStream.java:82)\n\tat java.io.BufferedOutputStream.write(BufferedOutputStream.java:126)\n\tat org.xerial.snappy.SnappyOutputStream.dumpOutput(SnappyOutputStream.java:343)\n\tat org.xerial.snappy.SnappyOutputStream.compressInput(SnappyOutputStream.java:357)\n\tat org.xerial.snappy.SnappyOutputStream.rawWrite(SnappyOutputStream.java:280)\n\tat org.xerial.snappy.SnappyOutputStream.write(SnappyOutputStream.java:115)\n\tat org.apache.spark.io.SnappyOutputStreamWrapper.write(CompressionCodec.scala:202)\n\tat java.io.BufferedOutputStream.flushBuffer(BufferedOutputStream.java:82)\n\tat java.io.BufferedOutputStream.write(BufferedOutputStream.java:126)\n\tat java.io.DataOutputStream.write(DataOutputStream.java:107)\n\tat org.apache.spark.sql.catalyst.expressions.UnsafeRow.writeToStream(UnsafeRow.java:586)\n\tat org.apache.spark.sql.execution.UnsafeRowSerializerInstance$$anon$2.writeValue(UnsafeRowSerializer.scala:61)\n\tat org.apache.spark.storage.DiskBlockObjectWriter.write(DiskBlockObjectWriter.scala:185)\n\tat org.apache.spark.shuffle.sort.BypassMergeSortShuffleWriter.write(BypassMergeSortShuffleWriter.java:151)\n\tat org.apache.spark.scheduler.ShuffleMapTask.runTask(ShuffleMapTask.scala:73)\n\tat org.apache.spark.scheduler.ShuffleMapTask.runTask(ShuffleMapTask.scala:41)\n\tat org.apache.spark.scheduler.Task.run(Task.scala:89)\n\tat org.apache.spark.executor.Executor$TaskRunner.run(Executor.scala:214)\n\t... 3 more\n\n"
+      },
+      "dateCreated": "Apr 26, 2016 11:20:33 PM",
+      "dateStarted": "Apr 26, 2016 11:27:18 PM",
+      "dateFinished": "Apr 26, 2016 11:39:24 PM",
+      "status": "ERROR",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1461706038295_-1456959760",
+      "id": "20160426-232718_1905312795",
+      "dateCreated": "Apr 26, 2016 11:27:18 PM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "offerandClicks",
+  "id": "2BK78A3W7",
+  "angularObjects": {
+    "2BGHSKCA7": [],
+    "2BFMBPKAB": [],
+    "2BHKKP27G": [],
+    "2BJHJDBK6": [],
+    "2BJAQG5W4": [],
+    "2BJGSXM37": [],
+    "2BFXEV5XZ": [],
+    "2BG77RV7M": [],
+    "2BF969NNB": [],
+    "2BG8QQJNC": [],
+    "2BGVG5JP4": [],
+    "2BJ5FCP57": [],
+    "2BFEDXCTE": [],
+    "2BJ8AEWCT": [],
+    "2BH9AVVKH": [],
+    "2BJ7KKX85": [],
+    "2BHKAE8WK": [],
+    "2BJ6HN5AY": []
+  },
+  "config": {},
+  "info": {}
+}

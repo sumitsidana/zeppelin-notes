@@ -1,0 +1,75 @@
+{
+  "paragraphs": [
+    {
+      "text": "val test \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/data/sidana/nnmf_ranking/netflix/dat.nf.headers\")\nval data \u003d test.select(\"userid\",\"movieid\",\"rating\",\"timestamp\")\ndata.rdd.saveAsTextFile(\"/data/sidana/nnmf_ranking/netflix/temp/dat.nf\")",
+      "authenticationInfo": {},
+      "dateUpdated": "Jan 21, 2017 1:43:28 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1484958065037_-1919436309",
+      "id": "20170121-012105_1185847502",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "test: org.apache.spark.sql.DataFrame \u003d [movieid: int, userid: int, rating: int, timestamp: bigint]\ndata: org.apache.spark.sql.DataFrame \u003d [userid: int, movieid: int, rating: int, timestamp: bigint]\n"
+      },
+      "dateCreated": "Jan 21, 2017 1:21:05 AM",
+      "dateStarted": "Jan 21, 2017 1:30:52 AM",
+      "dateFinished": "Jan 21, 2017 1:32:14 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1484958392306_350073215",
+      "id": "20170121-012632_519216183",
+      "dateCreated": "Jan 21, 2017 1:26:32 AM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "nnmf_ranking: netflixClassicSwap",
+  "id": "2C7BSPMJH",
+  "angularObjects": {
+    "2BGHSKCA7": [],
+    "2BFMBPKAB": [],
+    "2BHKKP27G": [],
+    "2BJHJDBK6": [],
+    "2BJAQG5W4": [],
+    "2BJGSXM37": [],
+    "2BFXEV5XZ": [],
+    "2BG77RV7M": [],
+    "2BF969NNB": [],
+    "2BG8QQJNC": [],
+    "2BGVG5JP4": [],
+    "2BJ5FCP57": [],
+    "2BFEDXCTE": [],
+    "2BJ8AEWCT": [],
+    "2BH9AVVKH": [],
+    "2BJ7KKX85": [],
+    "2BHKAE8WK": [],
+    "2BJ6HN5AY": []
+  },
+  "config": {},
+  "info": {}
+}

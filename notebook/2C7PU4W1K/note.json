@@ -1,0 +1,201 @@
+{
+  "paragraphs": [
+    {
+      "text": "val test \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/data/sidana/nnmf_ranking/rschallenge2016/dat.inputrschallenge.bak\")\nval baduser \u003d test.filter($\"userid\"\u003d\u003d\u003d\"1475506\")\nz.show(baduser)\n",
+      "authenticationInfo": {},
+      "dateUpdated": "Jan 18, 2017 1:37:47 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [
+            {
+              "name": "userid",
+              "index": 0.0,
+              "aggr": "sum"
+            }
+          ],
+          "values": [
+            {
+              "name": "itemid",
+              "index": 1.0,
+              "aggr": "sum"
+            }
+          ],
+          "groups": [],
+          "scatter": {
+            "xAxis": {
+              "name": "userid",
+              "index": 0.0,
+              "aggr": "sum"
+            },
+            "yAxis": {
+              "name": "itemid",
+              "index": 1.0,
+              "aggr": "sum"
+            }
+          }
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1484742500265_1472746025",
+      "id": "20170118-132820_1421547403",
+      "result": {
+        "code": "ERROR",
+        "type": "TABLE",
+        "msg": "userid\titemid\tclicked\ttimestamp\n1475506\t2272598\t1\t12345\n1475506\t1755144\t1\t12345\n1475506\t673117\t1\t12345\n1475506\t2585290\t1\t12345\n1475506\t1775463\t1\t12345\n1475506\t610036\t1\t12345\n1475506\t474609\t1\t12345\n1475506\t969155\t1\t12345\n1475506\t2187501\t1\t12345\n1475506\t1827739\t1\t12345\n1475506\t901685\t1\t12345\n1475506\t147804\t1\t12345\n1475506\t2578804\t1\t12345\n1475506\t120177\t1\t12345\n1475506\t425177\t1\t12345\n1475506\t742923\t1\t12345\n1475506\t1007923\t1\t12345\n1475506\t2760123\t1\t12345\n1475506\t1942442\t1\t12345\n1475506\t565188\t1\t12345\n1475506\t1552680\t1\t12345\n1475506\t2006907\t2\t12345\n1475506\t2673026\t1\t12345\n1475506\t330799\t1\t12345\n1475506\t2423199\t1\t12345\n1475506\t564172\t1\t12345\n1475506\t1338972\t1\t12345\n1475506\t2039464\t1\t12345\n1475506\t2362237\t1\t12345\n1475506\t325983\t1\t12345\n1475506\t1190129\t1\t12345\n1475506\t2167329\t1\t12345\n1475506\t174421\t1\t12345\n1475506\t892367\t1\t12345\n1475506\t1322805\t1\t12345\n1475506\t2373324\t1\t12345\n1475506\t2028497\t1\t12345\n1475506\t640243\t1\t12345\n1475506\t1339843\t1\t12345\n1475506\t1732843\t1\t12345\n1475506\t2005216\t1\t12345\n1475506\t1254189\t1\t12345\n1475506\t1585589\t1\t12345\n1475506\t211935\t1\t12345\n1475506\t507254\t1\t12345\n1475506\t330827\t1\t12345\n1475506\t2241227\t1\t12345\n1475506\t305719\t1\t12345\n1475506\t193184\t1\t12345\n1475506\t1204157\t1\t12345\n1475506\t1645157\t1\t12345\n1475506\t41303\t1\t12345\n1475506\t2723449\t1\t12345\n1475506\t675222\t1\t12345\n1475506\t862768\t1\t12345\n1475506\t291514\t1\t12345\n1475506\t1305887\t1\t12345\n1475506\t428460\t1\t12345\n1475506\t2306379\t1\t12345\n1475506\t1997925\t1\t12345\n1475506\t222098\t1\t12345\n1475506\t1859498\t1\t12345\n1475506\t2295790\t1\t12345\n1475506\t2578536\t1\t12345\n1475506\t2779909\t1\t12345\n1475506\t2117028\t1\t12345\n1475506\t962174\t1\t12345\n1475506\t2347920\t1\t12345\n1475506\t1489039\t1\t12345\n1475506\t2401985\t1\t12345\n1475506\t471904\t1\t12345\n1475506\t2164477\t1\t12345\n1475506\t2292996\t1\t12345\n1475506\t1856942\t1\t12345\n1475506\t2018007\t1\t12345\n1475506\t1742926\t1\t12345\n1475506\t1514018\t1\t12345\n1475506\t1703618\t1\t12345\n1475506\t551164\t1\t12345\n1475506\t1171937\t1\t12345\n1475506\t1266510\t1\t12345\n1475506\t1582510\t1\t12345\n1475506\t1056\t1\t12345\n1475506\t1015602\t1\t12345\n1475506\t1398202\t1\t12345\n1475506\t2426202\t1\t12345\n1475506\t659894\t1\t12345\n1475506\t1493694\t1\t12345\n1475506\t2382013\t1\t12345\n1475506\t1846186\t1\t12345\n1475506\t35932\t1\t12345\n1475506\t1417505\t1\t12345\n1475506\t2313851\t1\t12345\n1475506\t1759370\t1\t12345\n1475506\t280516\t1\t12345\n1475506\t1323316\t1\t12345\n1475506\t2690235\t1\t12345\n1475506\t1274208\t1\t12345\n1475506\t1573327\t1\t12345\n1475506\t727100\t1\t12345\n1475506\t1466819\t1\t12345\n1475506\t476392\t1\t12345\n1475506\t1857165\t1\t12345\n1475506\t2152365\t1\t12345\n1475506\t530538\t1\t12345\n1475506\t1069538\t1\t12345\n1475506\t2442511\t1\t12345\n1475506\t1969776\t1\t12345\n1475506\t250149\t1\t12345\n1475506\t2085922\t1\t12345\n1475506\t2268722\t1\t12345\n1475506\t791814\t1\t12345\n1475506\t57160\t1\t12345\n1475506\t343760\t1\t12345\n1475506\t1499879\t1\t12345\n\u003cconsole\u003e:32: error: value saveasTextFile is not a member of org.apache.spark.rdd.RDD[org.apache.spark.sql.Row]\n              baduser.rdd.coalesce(1,false).saveasTextFile(\"/data/sidana/nnmf_ranking/rschallenge2016/userinq\")\n                                            ^\n"
+      },
+      "dateCreated": "Jan 18, 2017 1:28:20 PM",
+      "dateStarted": "Jan 18, 2017 1:36:10 PM",
+      "dateFinished": "Jan 18, 2017 1:36:41 PM",
+      "status": "ERROR",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "baduser.rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/nnmf_ranking/rschallenge2016/userinq\")",
+      "authenticationInfo": {},
+      "dateUpdated": "Jan 18, 2017 1:37:38 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1484742874380_-909653625",
+      "id": "20170118-133434_1161263809",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": ""
+      },
+      "dateCreated": "Jan 18, 2017 1:34:34 PM",
+      "dateStarted": "Jan 18, 2017 1:37:38 PM",
+      "dateFinished": "Jan 18, 2017 1:39:27 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "    val clicksTempTemp \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \"\\t\")\n    .load(\"/home/ama/sidana/recommendersystemchallenge/data/data/interactions.csv\")\n    \n    val clicksTemp \u003d clicksTempTemp.filter(clicksTempTemp(\"interaction_type\")\u003d\u003d\u003d\"1\")\n    \n    \n    val userClicksTemp \u003d clicksTemp.select(clicksTemp(\"user_id\"),clicksTemp(\"item_id\")).withColumnRenamed(\"item_id\",\"offerIdClicks\").withColumnRenamed(\"user_id\",\"userIdClicks\")\n    \n    val groupByUsersOffers \u003d userClicksTemp.select(\"userIdClicks\",\"offerIdClicks\").distinct\n    \n    val groupByUsers \u003d groupByUsersOffers.groupBy(\"userIdClicks\").count\n    \n    val goodUsers \u003d groupByUsers.filter($\"count\"\u003e\u003d5)\n    val userClicks \u003d userClicksTemp.join(goodUsers,userClicksTemp(\"userIdClicks\")\u003d\u003d\u003dgoodUsers(\"userIdClicks\"))\n    userClicks.rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/nnmf_ranking/rschallenge2016/debug/userClicks\")\n    ",
+      "authenticationInfo": {},
+      "dateUpdated": "Jan 18, 2017 3:46:41 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1484743058603_-913826211",
+      "id": "20170118-133738_664647966",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "clicksTempTemp: org.apache.spark.sql.DataFrame \u003d [user_id: int, item_id: int, interaction_type: int, created_at: int]\nclicksTemp: org.apache.spark.sql.DataFrame \u003d [user_id: int, item_id: int, interaction_type: int, created_at: int]\nuserClicksTemp: org.apache.spark.sql.DataFrame \u003d [userIdClicks: int, offerIdClicks: int]\ngroupByUsersOffers: org.apache.spark.sql.DataFrame \u003d [userIdClicks: int, offerIdClicks: int]\ngroupByUsers: org.apache.spark.sql.DataFrame \u003d [userIdClicks: int, count: bigint]\ngoodUsers: org.apache.spark.sql.DataFrame \u003d [userIdClicks: int, count: bigint]\nuserClicks: org.apache.spark.sql.DataFrame \u003d [userIdClicks: int, offerIdClicks: int, userIdClicks: int, count: bigint]\n"
+      },
+      "dateCreated": "Jan 18, 2017 1:37:38 PM",
+      "dateStarted": "Jan 18, 2017 3:46:41 PM",
+      "dateFinished": "Jan 18, 2017 3:47:41 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "    val userClicks \u003d userClicksTemp.join(goodUsers,userClicksTemp(\"userIdClicks\")\u003d\u003d\u003dgoodUsers(\"userIdClicks\")).drop(goodUsers(\"userIdClicks\")).drop(goodUsers(\"count\"))\n    \n        val offersTempTemp \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \"\\t\")\n    .load(\"/home/ama/sidana/recommendersystemchallenge/output/oneimpressionperline\")\n    \n    val userOffers \u003d offersTempTemp.select(offersTempTemp(\"user_id\"),offersTempTemp(\"items\")).withColumnRenamed(\"items\",\"offerIdOfferView\").withColumnRenamed(\"user_id\",\"userIdOfferView\")\n    \n    //inner join\n    val userOfferCommon \u003d userClicks.join(userOffers,userClicks(\"userIdClicks\")\u003c\u003d\u003euserOffers(\"userIdOfferView\")).drop(userClicks(\"userIdClicks\")).drop(userClicks(\"offerIdClicks\"))\n    \n    userOfferCommon.rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/nnmf_ranking/rschallenge2016/debug/userOfferCommon\")\n    ",
+      "authenticationInfo": {},
+      "dateUpdated": "Jan 18, 2017 4:20:57 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1484750204014_261668846",
+      "id": "20170118-153644_91307903",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "userClicks: org.apache.spark.sql.DataFrame \u003d [offerIdClicks: int, userIdClicks: int]\noffersTempTemp: org.apache.spark.sql.DataFrame \u003d [user_id: int, items: int]\nuserOffers: org.apache.spark.sql.DataFrame \u003d [userIdOfferView: int, offerIdOfferView: int]\nuserOfferCommon: org.apache.spark.sql.DataFrame \u003d [userIdOfferView: int, offerIdOfferView: int]\n"
+      },
+      "dateCreated": "Jan 18, 2017 3:36:44 PM",
+      "dateStarted": "Jan 18, 2017 4:20:57 PM",
+      "dateFinished": "Jan 18, 2017 7:22:13 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1484751528374_-28334946",
+      "id": "20170118-155848_1246935589",
+      "dateCreated": "Jan 18, 2017 3:58:48 PM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "nnmf_ranking: tempClutter",
+  "id": "2C7PU4W1K",
+  "angularObjects": {
+    "2BGHSKCA7": [],
+    "2BFMBPKAB": [],
+    "2BHKKP27G": [],
+    "2BJHJDBK6": [],
+    "2BJAQG5W4": [],
+    "2BJGSXM37": [],
+    "2BFXEV5XZ": [],
+    "2BG77RV7M": [],
+    "2BF969NNB": [],
+    "2BG8QQJNC": [],
+    "2BGVG5JP4": [],
+    "2BJ5FCP57": [],
+    "2BFEDXCTE": [],
+    "2BJ8AEWCT": [],
+    "2BH9AVVKH": [],
+    "2BJ7KKX85": [],
+    "2BHKAE8WK": [],
+    "2BJ6HN5AY": []
+  },
+  "config": {},
+  "info": {}
+}

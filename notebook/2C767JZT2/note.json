@@ -1,0 +1,213 @@
+{
+  "paragraphs": [
+    {
+      "text": "val original \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/data/sidana/nnmf_ranking/outbrainchallenge/dat.outbrainchallenge.withindexedusers.withreplacedrating.withheaders\")\nval numUsersOriginal \u003d original.select(\"userId\").distinct.count\nval numItemsOriginal \u003d original.select(\"movieId\").distinct.count\n\n\n    \n//test.agg(max(\"itemId\")).show\n//test.agg(max(\"userId\")).show\n    ",
+      "authenticationInfo": {},
+      "dateUpdated": "Jan 24, 2017 7:05:16 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1485216571526_-2066721394",
+      "id": "20170124-010931_1594954582",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "original: org.apache.spark.sql.DataFrame \u003d [userId: int, movieId: int, rating: int, timestamp: int]\nnumUsersOriginal: Long \u003d 49615\nnumItemsOriginal: Long \u003d 105176\n"
+      },
+      "dateCreated": "Jan 24, 2017 1:09:31 AM",
+      "dateStarted": "Jan 24, 2017 7:05:16 PM",
+      "dateFinished": "Jan 24, 2017 7:05:29 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val interactions \u003d original.count",
+      "authenticationInfo": {},
+      "dateUpdated": "Jan 24, 2017 7:07:07 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1485281213812_1802146559",
+      "id": "20170124-190653_945124006",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "interactions: Long \u003d 1597426\n"
+      },
+      "dateCreated": "Jan 24, 2017 7:06:53 PM",
+      "dateStarted": "Jan 24, 2017 7:07:07 PM",
+      "dateFinished": "Jan 24, 2017 7:07:11 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val test \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/data/sidana/nnmf_ranking/outbrainchallenge/dat.outbrainchallenge.withindexedusers.withheaders\")\n    \ntest.agg(max(\"itemId\")).show\ntest.agg(max(\"userId\")).show",
+      "authenticationInfo": {},
+      "dateUpdated": "Jan 24, 2017 2:01:13 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1485217176162_171049373",
+      "id": "20170124-011936_179554402",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "test: org.apache.spark.sql.DataFrame \u003d [userId: int, itemId: int, rating: int, timestamp: int]\n+-----------+\n|max(itemId)|\n+-----------+\n|     547864|\n+-----------+\n\n+-----------+\n|max(userId)|\n+-----------+\n|      49615|\n+-----------+\n\n"
+      },
+      "dateCreated": "Jan 24, 2017 1:19:36 AM",
+      "dateStarted": "Jan 24, 2017 2:01:13 AM",
+      "dateFinished": "Jan 24, 2017 2:01:24 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val numUsersOriginal \u003d original.select(\"userId\").distinct.count\nval numUsersIndexed \u003d test.select(\"userId\").distinct.count",
+      "authenticationInfo": {},
+      "dateUpdated": "Jan 24, 2017 2:01:57 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1485219463273_1351336929",
+      "id": "20170124-015743_1933144032",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "numUsersOriginal: Long \u003d 49615\nnumUsersIndexed: Long \u003d 49615\n"
+      },
+      "dateCreated": "Jan 24, 2017 1:57:43 AM",
+      "dateStarted": "Jan 24, 2017 2:01:57 AM",
+      "dateFinished": "Jan 24, 2017 2:02:06 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "\n\nval numItemsIndexed \u003d test.select(\"itemId\").distinct.count\nval numRatingsOriginal \u003d original.count\nval numRatingsIndexed \u003d test.count\n\n",
+      "authenticationInfo": {},
+      "dateUpdated": "Jan 24, 2017 7:04:03 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1485219717710_-2052199459",
+      "id": "20170124-020157_1773304599",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "numItemsOriginal: Long \u003d 105176\nnumItemsIndexed: Long \u003d 105176\nnumRatingsOriginal: Long \u003d 1597426\nnumRatingsIndexed: Long \u003d 1597426\n"
+      },
+      "dateCreated": "Jan 24, 2017 2:01:57 AM",
+      "dateStarted": "Jan 24, 2017 2:17:04 AM",
+      "dateFinished": "Jan 24, 2017 2:17:21 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1485220624360_-404182894",
+      "id": "20170124-021704_2085611702",
+      "dateCreated": "Jan 24, 2017 2:17:04 AM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "nnmf_ranking: nusersitemsOutbrainChallenge",
+  "id": "2C767JZT2",
+  "angularObjects": {
+    "2BGHSKCA7": [],
+    "2BFMBPKAB": [],
+    "2BHKKP27G": [],
+    "2BJHJDBK6": [],
+    "2BJAQG5W4": [],
+    "2BJGSXM37": [],
+    "2BFXEV5XZ": [],
+    "2BG77RV7M": [],
+    "2BF969NNB": [],
+    "2BG8QQJNC": [],
+    "2BGVG5JP4": [],
+    "2BJ5FCP57": [],
+    "2BFEDXCTE": [],
+    "2BJ8AEWCT": [],
+    "2BH9AVVKH": [],
+    "2BJ7KKX85": [],
+    "2BHKAE8WK": [],
+    "2BJ6HN5AY": []
+  },
+  "config": {},
+  "info": {}
+}

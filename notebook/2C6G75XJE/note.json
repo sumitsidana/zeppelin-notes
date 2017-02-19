@@ -1,0 +1,75 @@
+{
+  "paragraphs": [
+    {
+      "text": "val test \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/home/ama/spark/outbrain/Data/clicks_test.csv\")  \nval testsdisplays \u003d test.select(\"display_id\").distinct\ntestsdisplays.rdd.saveAsTextFile(\"/data/sidana/outbrain/displays.test\")",
+      "authenticationInfo": {},
+      "dateUpdated": "Jan 12, 2017 7:10:38 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1483999718228_1086433136",
+      "id": "20170109-230838_2126617580",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "test: org.apache.spark.sql.DataFrame \u003d [display_id: int, ad_id: int]\ntestsdisplays: org.apache.spark.sql.DataFrame \u003d [display_id: int]\n"
+      },
+      "dateCreated": "Jan 9, 2017 11:08:38 PM",
+      "dateStarted": "Jan 9, 2017 11:25:23 PM",
+      "dateFinished": "Jan 9, 2017 11:26:05 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1483999936786_1321436448",
+      "id": "20170109-231216_1852961047",
+      "dateCreated": "Jan 9, 2017 11:12:16 PM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "outbrain: stats",
+  "id": "2C6G75XJE",
+  "angularObjects": {
+    "2BGHSKCA7": [],
+    "2BFMBPKAB": [],
+    "2BHKKP27G": [],
+    "2BJHJDBK6": [],
+    "2BJAQG5W4": [],
+    "2BJGSXM37": [],
+    "2BFXEV5XZ": [],
+    "2BG77RV7M": [],
+    "2BF969NNB": [],
+    "2BG8QQJNC": [],
+    "2BGVG5JP4": [],
+    "2BJ5FCP57": [],
+    "2BFEDXCTE": [],
+    "2BJ8AEWCT": [],
+    "2BH9AVVKH": [],
+    "2BJ7KKX85": [],
+    "2BHKAE8WK": [],
+    "2BJ6HN5AY": []
+  },
+  "config": {},
+  "info": {}
+}

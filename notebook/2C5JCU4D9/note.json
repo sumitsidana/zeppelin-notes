@@ -1,0 +1,108 @@
+{
+  "paragraphs": [
+    {
+      "text": "val dfEvents \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/home/ama/spark/outbrain/Data/events.csv\")\n\nval train \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/home/ama/spark/outbrain/Data/clicks_train.csv\")\n    \nval test \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/home/ama/spark/outbrain/Data/clicks_test.csv\")\n\n\n    \nval train_event_join \u003d dfEvents.join(train,dfEvents(\"display_id\")\u003d\u003d\u003dtrain(\"display_id\")).drop(train(\"display_id\"))\nval test_event_join \u003d dfEvents.join(test,dfEvents(\"display_id\")\u003d\u003d\u003dtest(\"display_id\")).drop(test(\"display_id\"))\n\nval train_write \u003d train_event_join.select(train_event_join(\"uuid\"),train_event_join(\"ad_id\"),train_event_join(\"clicked\"))\nval test_write \u003d test_event_join.select(test_event_join(\"uuid\"),test_event_join(\"ad_id\"))\ntrain_write.rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/outbrain/trainfiletemp\")\ntest_write.rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/outbrain/testfiletemp\")\n",
+      "authenticationInfo": {},
+      "dateUpdated": "Jan 10, 2017 2:22:06 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala",
+        "editorHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1484004661839_-219744529",
+      "id": "20170110-003101_1881842182",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "dfEvents: org.apache.spark.sql.DataFrame \u003d [display_id: int, uuid: string, document_id: int, timestamp: int, platform: string, geo_location: string]\ntrain: org.apache.spark.sql.DataFrame \u003d [display_id: int, ad_id: int, clicked: int]\ntest: org.apache.spark.sql.DataFrame \u003d [display_id: int, ad_id: int]\ntrain_event_join: org.apache.spark.sql.DataFrame \u003d [display_id: int, uuid: string, document_id: int, timestamp: int, platform: string, geo_location: string, ad_id: int, clicked: int]\ntest_event_join: org.apache.spark.sql.DataFrame \u003d [display_id: int, uuid: string, document_id: int, timestamp: int, platform: string, geo_location: string, ad_id: int]\ntrain_write: org.apache.spark.sql.DataFrame \u003d [uuid: string, ad_id: int, clicked: int]\ntest_write: org.apache.spark.sql.DataFrame \u003d [uuid: string, ad_id: int]\n"
+      },
+      "dateCreated": "Jan 10, 2017 12:31:01 AM",
+      "dateStarted": "Jan 10, 2017 2:22:06 AM",
+      "dateFinished": "Jan 10, 2017 2:28:49 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "    val dfEvents \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/home/ama/spark/outbrain/Data/events.csv\")\n    \n    val test \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/home/ama/spark/outbrain/Data/clicks_test.csv\")\n    \n    val test_event_join \u003d dfEvents.join(test,dfEvents(\"display_id\")\u003d\u003d\u003dtest(\"display_id\")).drop(test(\"display_id\"))\n    \n    test_event_join.count\n    \n    ",
+      "authenticationInfo": {},
+      "dateUpdated": "Jan 10, 2017 1:00:12 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1484005535020_-938967750",
+      "id": "20170110-004535_797093666",
+      "dateCreated": "Jan 10, 2017 12:45:35 AM",
+      "dateStarted": "Jan 10, 2017 1:00:12 AM",
+      "dateFinished": "Jan 10, 2017 1:02:03 AM",
+      "status": "FINISHED",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1484006412481_1850087941",
+      "id": "20170110-010012_1748783965",
+      "dateCreated": "Jan 10, 2017 1:00:12 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "outbrain: display_id-\u003euser_id",
+  "id": "2C5JCU4D9",
+  "angularObjects": {
+    "2BGHSKCA7": [],
+    "2BFMBPKAB": [],
+    "2BHKKP27G": [],
+    "2BJHJDBK6": [],
+    "2BJAQG5W4": [],
+    "2BJGSXM37": [],
+    "2BFXEV5XZ": [],
+    "2BG77RV7M": [],
+    "2BF969NNB": [],
+    "2BG8QQJNC": [],
+    "2BGVG5JP4": [],
+    "2BJ5FCP57": [],
+    "2BFEDXCTE": [],
+    "2BJ8AEWCT": [],
+    "2BH9AVVKH": [],
+    "2BJ7KKX85": [],
+    "2BHKAE8WK": [],
+    "2BJ6HN5AY": []
+  },
+  "config": {},
+  "info": {}
+}
