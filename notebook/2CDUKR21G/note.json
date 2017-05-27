@@ -1,0 +1,75 @@
+{
+  "paragraphs": [
+    {
+      "text": "val parquetFile \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypso_purch_feb_march_data/*.parquet\")\nval dataTemp \u003d parquetFile.filter(!($\"userId\"\u003d\u003d\u003d\"${VISITOR_ID}\"))\nval data \u003d dataTemp.orderBy(\"utcDate\")\nval totalItems \u003d data.count\nval cnt \u003d totalItems * 0.7\n\nval trainDF \u003d sqlContext.createDataFrame(data.rdd.zipWithIndex.filter {\ncase (_, i) \u003d\u003e i \u003c\u003d cnt \n}.map(_._1), data.schema)\n\nval testDF \u003d sqlContext.createDataFrame(data.rdd.zipWithIndex.filter {\ncase (_, i) \u003d\u003e i \u003e cnt \n}.map(_._1), data.schema)\n\nval train \u003d trainDF.select(\"userId\",\"offerId\",\"wasClicked\")\nval test \u003d testDF.select(\"userId\",\"offerId\",\"wasClicked\")\n\ntrain.rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/purch/train.csv\")\ntest.rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/purch/test.csv\")",
+      "authenticationInfo": {},
+      "dateUpdated": "Apr 16, 2017 11:25:30 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1492375748364_21097217",
+      "id": "20170416-224908_1898750804",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "parquetFile: org.apache.spark.sql.DataFrame \u003d [utcDate: timestamp, userId: string, offerViewId: string, offerId: string, wasClicked: boolean]\ndataTemp: org.apache.spark.sql.DataFrame \u003d [utcDate: timestamp, userId: string, offerViewId: string, offerId: string, wasClicked: boolean]\ndata: org.apache.spark.sql.DataFrame \u003d [utcDate: timestamp, userId: string, offerViewId: string, offerId: string, wasClicked: boolean]\ntotalItems: Long \u003d 11342044\ncnt: Double \u003d 7939430.8\ntrainDF: org.apache.spark.sql.DataFrame \u003d [utcDate: timestamp, userId: string, offerViewId: string, offerId: string, wasClicked: boolean]\ntestDF: org.apache.spark.sql.DataFrame \u003d [utcDate: timestamp, userId: string, offerViewId: string, offerId: string, wasClicked: boolean]\ntrain: org.apache.spark.sql.DataFrame \u003d [userId: string, offerId: string, wasClicked: boolean]\ntest: org.apache.spark.sql.DataFrame \u003d [userId: string, offerId: string, wasClicked: boolean]\n"
+      },
+      "dateCreated": "Apr 16, 2017 10:49:08 PM",
+      "dateStarted": "Apr 16, 2017 11:25:30 PM",
+      "dateFinished": "Apr 16, 2017 11:28:23 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1492377487358_1749285819",
+      "id": "20170416-231807_1374701958",
+      "dateCreated": "Apr 16, 2017 11:18:07 PM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "purchBaselines: writeFMInput",
+  "id": "2CDUKR21G",
+  "angularObjects": {
+    "2BGHSKCA7": [],
+    "2BFMBPKAB": [],
+    "2BHKKP27G": [],
+    "2BJHJDBK6": [],
+    "2BJAQG5W4": [],
+    "2BJGSXM37": [],
+    "2BFXEV5XZ": [],
+    "2BG77RV7M": [],
+    "2BF969NNB": [],
+    "2BG8QQJNC": [],
+    "2BGVG5JP4": [],
+    "2BJ5FCP57": [],
+    "2BFEDXCTE": [],
+    "2BJ8AEWCT": [],
+    "2BH9AVVKH": [],
+    "2BJ7KKX85": [],
+    "2BHKAE8WK": [],
+    "2BJ6HN5AY": []
+  },
+  "config": {},
+  "info": {}
+}

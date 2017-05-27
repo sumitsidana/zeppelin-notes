@@ -86,7 +86,7 @@
       "progressUpdateIntervalMs": 500
     }
   ],
-  "name": "Initialize",
+  "name": "kelkooBaselines: Initialize",
   "id": "2BJDCW2RT",
   "angularObjects": {
     "2BGHSKCA7": [],
@@ -108,6 +108,8 @@
     "2BHKAE8WK": [],
     "2BJ6HN5AY": []
   },
-  "config": {},
+  "config": {
+    "looknfeel": "default"
+  },
   "info": {}
 }

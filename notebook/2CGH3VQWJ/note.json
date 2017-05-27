@@ -1,0 +1,112 @@
+{
+  "paragraphs": [
+    {
+      "text": "val parquetFile \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypso_purch_feb_march_data/*.parquet\")\nval dataTempTemp \u003d parquetFile.filter(!($\"userId\"\u003d\u003d\u003d\"${VISITOR_ID}\"))\n\nval goodData \u003d dataTempTemp.filter(dataTempTemp(\"wasClicked\"))\nval groupByUsersOffers \u003d goodData.select(\"userId\",\"offerId\").distinct\nval groupByUsers \u003d groupByUsersOffers.groupBy(\"userId\").count\nval goodUsers \u003d groupByUsers.filter($\"count\"\u003e\u003d2)\n\nval dataTemp \u003d dataTempTemp.join(goodUsers, dataTempTemp(\"userId\")\u003d\u003d\u003dgoodUsers(\"userId\")).drop(goodUsers(\"userId\"))\nval data \u003d dataTemp.orderBy(\"utcDate\")\nval totalItems \u003d data.count\nval cnt \u003d totalItems * 0.7\n\nval trainDF \u003d sqlContext.createDataFrame(data.rdd.zipWithIndex.filter {\ncase (_, i) \u003d\u003e i \u003c\u003d cnt \n}.map(_._1), data.schema)\n\nval testDF \u003d sqlContext.createDataFrame(data.rdd.zipWithIndex.filter {\ncase (_, i) \u003d\u003e i \u003e cnt \n}.map(_._1), data.schema)\n\nval train \u003d trainDF.select(trainDF(\"userId\"),trainDF(\"offerId\"),trainDF(\"wasClicked\"),unix_timestamp(trainDF(\"utcdate\")))\nval test \u003d testDF.select(testDF(\"userId\"),testDF(\"offerId\"),testDF(\"wasClicked\"),unix_timestamp(testDF(\"utcdate\")))\n\ntrain.rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/purch/lightfm/train.csv\")\ntest.rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/purch/lightfm/test.csv\")",
+      "authenticationInfo": {},
+      "dateUpdated": "May 4, 2017 11:14:02 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1493736514001_1522967474",
+      "id": "20170502-164834_1412262058",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "parquetFile: org.apache.spark.sql.DataFrame \u003d [utcDate: timestamp, userId: string, offerViewId: string, offerId: string, wasClicked: boolean]\ndataTempTemp: org.apache.spark.sql.DataFrame \u003d [utcDate: timestamp, userId: string, offerViewId: string, offerId: string, wasClicked: boolean]\ngoodData: org.apache.spark.sql.DataFrame \u003d [utcDate: timestamp, userId: string, offerViewId: string, offerId: string, wasClicked: boolean]\ngroupByUsersOffers: org.apache.spark.sql.DataFrame \u003d [userId: string, offerId: string]\ngroupByUsers: org.apache.spark.sql.DataFrame \u003d [userId: string, count: bigint]\ngoodUsers: org.apache.spark.sql.DataFrame \u003d [userId: string, count: bigint]\ndataTemp: org.apache.spark.sql.DataFrame \u003d [utcDate: timestamp, offerViewId: string, offerId: string, wasClicked: boolean, userId: string, count: bigint]\ndata: org.apache.spark.sql.DataFrame \u003d [utcDate: timestamp, offerViewId: string, offerId: string, wasClicked: boolean, userId: string, count: bigint]\ntotalItems: Long \u003d 797478\ncnt: Double \u003d 558234.6\ntrainDF: org.apache.spark.sql.DataFrame \u003d [utcDate: timestamp, offerViewId: string, offerId: string, wasClicked: boolean, userId: string, count: bigint]\ntestDF: org.apache.spark.sql.DataFrame \u003d [utcDate: timestamp, offerViewId: string, offerId: string, wasClicked: boolean, userId: string, count: bigint]\ntrain: org.apache.spark.sql.DataFrame \u003d [userId: string, offerId: string, wasClicked: boolean, unixtimestamp(utcdate,yyyy-MM-dd HH:mm:ss): bigint]\ntest: org.apache.spark.sql.DataFrame \u003d [userId: string, offerId: string, wasClicked: boolean, unixtimestamp(utcdate,yyyy-MM-dd HH:mm:ss): bigint]\n"
+      },
+      "dateCreated": "May 2, 2017 4:48:34 PM",
+      "dateStarted": "May 4, 2017 11:14:02 AM",
+      "dateFinished": "May 4, 2017 11:19:07 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val parquetFile \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypso_purch_feb_march_data/*.parquet\")\nval dataTempTemp \u003d parquetFile.filter(!($\"userId\"\u003d\u003d\u003d\"${VISITOR_ID}\"))\n\n//val goodData \u003d dataTempTemp.filter(dataTempTemp(\"wasClicked\"))\n//val groupByUsersOffers \u003d goodData.select(\"userId\",\"offerId\").distinct\n//val groupByUsers \u003d groupByUsersOffers.groupBy(\"userId\").count\n//val goodUsers \u003d groupByUsers.filter($\"count\"\u003e\u003d2)\n\n//val dataTemp \u003d dataTempTemp.join(goodUsers, dataTempTemp(\"userId\")\u003d\u003d\u003dgoodUsers(\"userId\")).drop(goodUsers(\"userId\"))\nval data \u003d dataTempTemp.orderBy(\"utcDate\")\nval totalItems \u003d data.count\nval cnt \u003d totalItems * 0.7\n\nval trainDF \u003d sqlContext.createDataFrame(data.rdd.zipWithIndex.filter {\ncase (_, i) \u003d\u003e i \u003c\u003d cnt \n}.map(_._1), data.schema)\n\nval testDF \u003d sqlContext.createDataFrame(data.rdd.zipWithIndex.filter {\ncase (_, i) \u003d\u003e i \u003e cnt\n}.map(_._1), data.schema)\n\nval train \u003d trainDF.select(trainDF(\"userId\"),trainDF(\"offerId\"),trainDF(\"wasClicked\"),unix_timestamp(trainDF(\"utcdate\")))\nval test \u003d testDF.select(testDF(\"userId\"),testDF(\"offerId\"),testDF(\"wasClicked\"),unix_timestamp(testDF(\"utcdate\")))\n\ntrain.rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/purch/init/lightfm/train.csv\")\ntest.rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/purch/init/lightfm/test.csv\")",
+      "authenticationInfo": {},
+      "dateUpdated": "May 4, 2017 2:47:21 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1493901652571_-1922973272",
+      "id": "20170504-144052_343873045",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "parquetFile: org.apache.spark.sql.DataFrame \u003d [utcDate: timestamp, userId: string, offerViewId: string, offerId: string, wasClicked: boolean]\ndataTempTemp: org.apache.spark.sql.DataFrame \u003d [utcDate: timestamp, userId: string, offerViewId: string, offerId: string, wasClicked: boolean]\ndata: org.apache.spark.sql.DataFrame \u003d [utcDate: timestamp, userId: string, offerViewId: string, offerId: string, wasClicked: boolean]\ntotalItems: Long \u003d 11342044\ncnt: Double \u003d 7939430.8\ntrainDF: org.apache.spark.sql.DataFrame \u003d [utcDate: timestamp, userId: string, offerViewId: string, offerId: string, wasClicked: boolean]\ntestDF: org.apache.spark.sql.DataFrame \u003d [utcDate: timestamp, userId: string, offerViewId: string, offerId: string, wasClicked: boolean]\ntrain: org.apache.spark.sql.DataFrame \u003d [userId: string, offerId: string, wasClicked: boolean, unixtimestamp(utcdate,yyyy-MM-dd HH:mm:ss): bigint]\ntest: org.apache.spark.sql.DataFrame \u003d [userId: string, offerId: string, wasClicked: boolean, unixtimestamp(utcdate,yyyy-MM-dd HH:mm:ss): bigint]\n"
+      },
+      "dateCreated": "May 4, 2017 2:40:52 PM",
+      "dateStarted": "May 4, 2017 2:47:21 PM",
+      "dateFinished": "May 4, 2017 2:50:36 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1493737433945_-1412014796",
+      "id": "20170502-170353_595563002",
+      "dateCreated": "May 2, 2017 5:03:53 PM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "purchBaselines: lightFMInput",
+  "id": "2CGH3VQWJ",
+  "angularObjects": {
+    "2BGHSKCA7": [],
+    "2BFMBPKAB": [],
+    "2BHKKP27G": [],
+    "2BJHJDBK6": [],
+    "2BJAQG5W4": [],
+    "2BJGSXM37": [],
+    "2BFXEV5XZ": [],
+    "2BG77RV7M": [],
+    "2BF969NNB": [],
+    "2BG8QQJNC": [],
+    "2BGVG5JP4": [],
+    "2BJ5FCP57": [],
+    "2BFEDXCTE": [],
+    "2BJ8AEWCT": [],
+    "2BH9AVVKH": [],
+    "2BJ7KKX85": [],
+    "2BHKAE8WK": [],
+    "2BJ6HN5AY": []
+  },
+  "config": {
+    "looknfeel": "default"
+  },
+  "info": {}
+}

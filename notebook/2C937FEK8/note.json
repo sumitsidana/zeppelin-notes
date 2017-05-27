@@ -83,7 +83,7 @@
       "progressUpdateIntervalMs": 500
     }
   ],
-  "name": "newModel: nUsersKelkooFrance",
+  "name": "kelkooBaselines: newModel_nUsersKelkooFrance",
   "id": "2C937FEK8",
   "angularObjects": {
     "2BGHSKCA7": [],
@@ -105,6 +105,8 @@
     "2BHKAE8WK": [],
     "2BJ6HN5AY": []
   },
-  "config": {},
+  "config": {
+    "looknfeel": "default"
+  },
   "info": {}
 }

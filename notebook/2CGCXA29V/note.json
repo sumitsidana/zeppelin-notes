@@ -1,0 +1,215 @@
+{
+  "paragraphs": [
+    {
+      "text": "val train \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/data/sidana/purch/fm/train.headers\")\n\nval test \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/data/sidana/purch/fm/test.headers\")",
+      "authenticationInfo": {},
+      "dateUpdated": "May 4, 2017 11:31:36 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1493731351898_2010672622",
+      "id": "20170502-152231_1070101854",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "train: org.apache.spark.sql.DataFrame \u003d [userid: string, itemid: bigint, rating: int, timestamp: int]\ntest: org.apache.spark.sql.DataFrame \u003d [userid: string, itemid: bigint, rating: int, timestamp: int]\n"
+      },
+      "dateCreated": "May 2, 2017 3:22:31 PM",
+      "dateStarted": "May 4, 2017 11:31:37 AM",
+      "dateFinished": "May 4, 2017 11:31:41 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val train_user_id \u003d train.select(\"userid\").distinct\nval test_user_id \u003d test.select(\"userid\").distinct\nval num_common_users \u003d train_user_id.join(test_user_id,train_user_id(\"userid\")\u003d\u003d\u003dtest_user_id(\"userid\")).count\ntrain.select(\"userid\").distinct.count\ntest.select(\"userid\").distinct.count\n",
+      "authenticationInfo": {},
+      "dateUpdated": "May 4, 2017 11:31:48 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1493731546138_-371632915",
+      "id": "20170502-152546_1557848054",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "train_user_id: org.apache.spark.sql.DataFrame \u003d [userid: string]\ntest_user_id: org.apache.spark.sql.DataFrame \u003d [userid: string]\nnum_common_users: Long \u003d 3382\nres21: Long \u003d 22608\nres22: Long \u003d 10711\n"
+      },
+      "dateCreated": "May 2, 2017 3:25:46 PM",
+      "dateStarted": "May 4, 2017 11:31:48 AM",
+      "dateFinished": "May 4, 2017 11:32:01 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "test.select(\"userid\").distinct.except(train.select(\"userid\").distinct).count",
+      "authenticationInfo": {},
+      "dateUpdated": "May 4, 2017 11:31:52 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1493731628745_1179998103",
+      "id": "20170502-152708_221161424",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "res24: Long \u003d 7329\n"
+      },
+      "dateCreated": "May 2, 2017 3:27:08 PM",
+      "dateStarted": "May 4, 2017 11:31:52 AM",
+      "dateFinished": "May 4, 2017 11:32:40 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "train.select(\"itemid\").distinct.count\ntest.select(\"itemid\").distinct.count\nval train_item_id \u003d train.select(\"itemid\").distinct\nval test_item_id \u003d test.select(\"itemid\").distinct\nval num_common_items \u003d train_item_id.join(test_item_id,train_item_id(\"itemid\")\u003d\u003d\u003dtest_item_id(\"itemid\")).count",
+      "authenticationInfo": {},
+      "dateUpdated": "May 4, 2017 11:31:54 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1493847589988_1526623694",
+      "id": "20170503-233949_1017229710",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "res26: Long \u003d 2028\nres27: Long \u003d 1755\ntrain_item_id: org.apache.spark.sql.DataFrame \u003d [itemid: bigint]\ntest_item_id: org.apache.spark.sql.DataFrame \u003d [itemid: bigint]\nnum_common_items: Long \u003d 1540\n"
+      },
+      "dateCreated": "May 3, 2017 11:39:49 PM",
+      "dateStarted": "May 4, 2017 11:32:01 AM",
+      "dateFinished": "May 4, 2017 11:32:52 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val train \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/data/sidana/purch/lightfm/train.headers\")\n\nval test \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/data/sidana/purch/lightfm/test.headers\")\n    \nval train_user_id \u003d train.select(\"userid\").distinct\nval test_user_id \u003d test.select(\"userid\").distinct\nval num_common_users \u003d train_user_id.join(test_user_id,train_user_id(\"userid\")\u003d\u003d\u003dtest_user_id(\"userid\")).count\ntrain.select(\"userid\").distinct.count\ntest.select(\"userid\").distinct.count\ntest.select(\"userid\").distinct.except(train.select(\"userid\").distinct).count\n\ntrain.select(\"itemid\").distinct.count\ntest.select(\"itemid\").distinct.count\nval train_item_id \u003d train.select(\"itemid\").distinct\nval test_item_id \u003d test.select(\"itemid\").distinct\nval num_common_items \u003d train_item_id.join(test_item_id,train_item_id(\"itemid\")\u003d\u003d\u003dtest_item_id(\"itemid\")).count",
+      "authenticationInfo": {},
+      "dateUpdated": "May 4, 2017 1:10:48 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1493847718748_1948494023",
+      "id": "20170503-234158_1360722166",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "train: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, rating: int, timestamp: int]\ntest: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, rating: int, timestamp: int]\ntrain_user_id: org.apache.spark.sql.DataFrame \u003d [userid: int]\ntest_user_id: org.apache.spark.sql.DataFrame \u003d [userid: int]\nnum_common_users: Long \u003d 3382\nres0: Long \u003d 22608\nres1: Long \u003d 10711\nres2: Long \u003d 7329\nres3: Long \u003d 2028\nres4: Long \u003d 1755\ntrain_item_id: org.apache.spark.sql.DataFrame \u003d [itemid: int]\ntest_item_id: org.apache.spark.sql.DataFrame \u003d [itemid: int]\nnum_common_items: Long \u003d 1540\n"
+      },
+      "dateCreated": "May 3, 2017 11:41:58 PM",
+      "dateStarted": "May 4, 2017 1:10:48 PM",
+      "dateFinished": "May 4, 2017 1:12:52 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1493896248653_-309439244",
+      "id": "20170504-131048_341378378",
+      "dateCreated": "May 4, 2017 1:10:48 PM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "purchBaselines: intersectionTrainAndTest",
+  "id": "2CGCXA29V",
+  "angularObjects": {
+    "2BGHSKCA7": [],
+    "2BFMBPKAB": [],
+    "2BHKKP27G": [],
+    "2BJHJDBK6": [],
+    "2BJAQG5W4": [],
+    "2BJGSXM37": [],
+    "2BFXEV5XZ": [],
+    "2BG77RV7M": [],
+    "2BF969NNB": [],
+    "2BG8QQJNC": [],
+    "2BGVG5JP4": [],
+    "2BJ5FCP57": [],
+    "2BFEDXCTE": [],
+    "2BJ8AEWCT": [],
+    "2BH9AVVKH": [],
+    "2BJ7KKX85": [],
+    "2BHKAE8WK": [],
+    "2BJ6HN5AY": []
+  },
+  "config": {},
+  "info": {}
+}

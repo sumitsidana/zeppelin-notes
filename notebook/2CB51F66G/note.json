@@ -1,0 +1,112 @@
+{
+  "paragraphs": [
+    {
+      "text": "val clicks \u003d sqlContext.read\n\t\t\t\t\t\t\t.format(\"com.databricks.spark.csv\")\n\t\t\t\t\t\t\t.option(\"header\", \"true\") // Use first line of all files as header\n\t\t\t\t\t\t\t.option(\"inferSchema\", \"true\") // Automatically infer data types\n\t\t\t\t\t\t\t.option(\"delimiter\", \"\\t\")\n\t\t\t\t\t\t\t.load(\"/data/sidana/recsysBaselines/experiments/tabseparatedinput/userofferclicks/train_\"+\"fr\"+\".csv\")\n//val clicksWithoutKFS \u003d parquetFileClick.filter(!($\"source\".contains(\"kfs\")))\nval uniqueUsers \u003d clicks.select(\"userid\").distinct\nval uniqueOfferViews \u003d clicks.select(\"offerid\").distinct\nval uniqueOfferCategories \u003d clicks.select(\"category\").distinct\nval observedNumberOfRatings \u003d clicks.groupBy(\"userid\",\"offerid\")\n\nval numClicks \u003d clicks.count\nval numUsers \u003d uniqueUsers.count\nval numOfferViews \u003d uniqueOfferViews.count\nval numOfferCategories \u003d uniqueOfferCategories.count\nval numInteractions \u003d observedNumberOfRatings.count.count",
+      "authenticationInfo": {},
+      "dateUpdated": "Feb 21, 2017 3:13:57 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1487685193579_1254968022",
+      "id": "20170221-145313_1948643000",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "clicks: org.apache.spark.sql.DataFrame \u003d [userid: string, offerid: string, countrycode: string, category: int, merchant: int, utcdate: timestamp, userclickcount: string, offerclickcount: string, rating: int]\nuniqueUsers: org.apache.spark.sql.DataFrame \u003d [userid: string]\nuniqueOfferViews: org.apache.spark.sql.DataFrame \u003d [offerid: string]\nuniqueOfferCategories: org.apache.spark.sql.DataFrame \u003d [category: int]\nobservedNumberOfRatings: org.apache.spark.sql.GroupedData \u003d org.apache.spark.sql.GroupedData@354264e5\nnumClicks: Long \u003d 127824034\nnumUsers: Long \u003d 982941\nnumOfferViews: Long \u003d 3632431\nnumOfferCategories: Long \u003d 311\nnumInteractions: Long \u003d 67931768\n"
+      },
+      "dateCreated": "Feb 21, 2017 2:53:13 PM",
+      "dateStarted": "Feb 21, 2017 3:13:57 PM",
+      "dateFinished": "Feb 21, 2017 3:25:36 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val numClicks \u003d clicks.filter($\"rating\"\u003d\u003d\u003d\"1\").count",
+      "authenticationInfo": {},
+      "dateUpdated": "Feb 21, 2017 3:19:08 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1487685753002_-1585450862",
+      "id": "20170221-150233_1392372335",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "numClicks: Long \u003d 2294248\n"
+      },
+      "dateCreated": "Feb 21, 2017 3:02:33 PM",
+      "dateStarted": "Feb 21, 2017 3:19:08 PM",
+      "dateFinished": "Feb 21, 2017 3:26:46 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1487686748428_-36519371",
+      "id": "20170221-151908_1162612896",
+      "dateCreated": "Feb 21, 2017 3:19:08 PM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "kelkooBaselines: kelkooDataStats_JuneOuterJoin",
+  "id": "2CB51F66G",
+  "angularObjects": {
+    "2BGHSKCA7": [],
+    "2BFMBPKAB": [],
+    "2BHKKP27G": [],
+    "2BJHJDBK6": [],
+    "2BJAQG5W4": [],
+    "2BJGSXM37": [],
+    "2BFXEV5XZ": [],
+    "2BG77RV7M": [],
+    "2BF969NNB": [],
+    "2BG8QQJNC": [],
+    "2BGVG5JP4": [],
+    "2BJ5FCP57": [],
+    "2BFEDXCTE": [],
+    "2BJ8AEWCT": [],
+    "2BH9AVVKH": [],
+    "2BJ7KKX85": [],
+    "2BHKAE8WK": [],
+    "2BJ6HN5AY": []
+  },
+  "config": {
+    "looknfeel": "default"
+  },
+  "info": {}
+}

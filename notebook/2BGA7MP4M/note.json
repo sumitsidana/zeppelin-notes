@@ -841,7 +841,7 @@
       "progressUpdateIntervalMs": 500
     }
   ],
-  "name": "statsTwoMonthsData",
+  "name": "kelkooBaselines: statsTwoMonthsData",
   "id": "2BGA7MP4M",
   "angularObjects": {
     "2BGHSKCA7": [],
@@ -863,6 +863,8 @@
     "2BHKAE8WK": [],
     "2BJ6HN5AY": []
   },
-  "config": {},
+  "config": {
+    "looknfeel": "default"
+  },
   "info": {}
 }

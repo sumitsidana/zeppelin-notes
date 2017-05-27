@@ -1,0 +1,111 @@
+{
+  "paragraphs": [
+    {
+      "text": "val clicksTempTemp \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \"\\t\")\n    .load(\"/home/ama/sidana/recommendersystemchallenge/data/data/interactions.csv\")\n    \n    val clicksTemp \u003d clicksTempTemp.filter(clicksTempTemp(\"interaction_type\")\u003d\u003d\u003d\"1\")\n    \n    \n    val userClicks \u003d clicksTemp.select(clicksTemp(\"user_id\"),clicksTemp(\"item_id\")).withColumnRenamed(\"item_id\",\"offerIdClicks\").withColumnRenamed(\"user_id\",\"userIdClicks\")\n    \n    \n    val offersTempTemp \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \"\\t\")\n    .load(\"/data/sidana/embColdStart/oneimpressionperline\").withColumn(\"utcdate\",unix_timestamp($\"utcdate\",\"yyyy-MM-dd HH:mm:ss\").cast(\"timestamp\")).withColumnRenamed(\"cast(unixtimestamp(utcdate,yyyy-MM-dd HH:mm:ss) as timestamp)\",\"utcdate\")\n    \n    val userOffers \u003d offersTempTemp.select(offersTempTemp(\"userid\"),offersTempTemp(\"itemid\"),offersTempTemp(\"utcdate\")).withColumnRenamed(\"itemid\",\"offerIdOfferView\").withColumnRenamed(\"userid\",\"userIdOfferView\")\n    \n    //inner join\n    val userOfferCommon \u003d userClicks.join(userOffers,userClicks(\"userIdClicks\")\u003c\u003d\u003euserOffers(\"userIdOfferView\")).drop(userClicks(\"userIdClicks\")).drop(userClicks(\"offerIdClicks\"))\n    \n    \n    //outerjoin\n    val cOOuterJoin \u003d userClicks.join(userOfferCommon,userClicks(\"userIdClicks\")\u003c\u003d\u003euserOfferCommon(\"userIdOfferView\") \u0026\u0026 userClicks(\"offerIdClicks\")\u003c\u003d\u003euserOfferCommon(\"offerIdOfferView\"),\"outer\")\n    cOOuterJoin.rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/embColdStart/recsys2016_click/cOOuterJoin.csv\")",
+      "dateUpdated": "Feb 28, 2017 8:55:23 AM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1488228169391_-1545002513",
+      "id": "20170227-214249_1765949606",
+      "dateCreated": "Feb 27, 2017 9:42:49 PM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val clicksTempTemp \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \"\\t\")\n    .load(\"/home/ama/sidana/recommendersystemchallenge/data/data/interactions.csv\")",
+      "dateUpdated": "Mar 4, 2017 2:10:31 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1488589815084_-610641583",
+      "id": "20170304-021015_936538875",
+      "dateCreated": "Mar 4, 2017 2:10:15 AM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val csvOuterJoin \u003d offers.orderBy(\"utcdate\")\n\tval totalItems \u003d csvOuterJoin.count\n    val cnt \u003d totalItems * 0.7\n    \n\tval trainDF \u003d sqlContext.createDataFrame(csvOuterJoin.rdd.zipWithIndex.filter {\n\t    case (_, i) \u003d\u003e i \u003c\u003d cnt\n\t}.map(_._1), csvOuterJoin.schema)\n\t\n\tval testDF \u003d sqlContext.createDataFrame(csvOuterJoin.rdd.zipWithIndex.filter {\n\t    case (_, i) \u003d\u003e i \u003e cnt\n\t}.map(_._1), csvOuterJoin.schema)\n\tval seq \u003d Seq(\"useridclicks\",\"offeridclicks\",\"useridoffers\",\"offeridoffers\")\n\tval inputTrain \u003d trainDF.select(\"useridclicks\",\"offeridclicks\",\"useridoffers\",\"offeridoffers\",\"utcdate\").dropDuplicates(seq)\n\tval inputTest \u003d testDF.select(\"useridclicks\",\"offeridclicks\",\"useridoffers\",\"offeridoffers\",\"utcdate\").dropDuplicates(seq)\n\tinputTrain.rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/embColdStart/recsys2016_click/train.csv\")\n\tinputTest.rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/embColdStart/recsys2016_click/test.csv\")",
+      "dateUpdated": "Feb 28, 2017 8:55:23 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1488228169394_-1533844795",
+      "id": "20170227-214249_603248355",
+      "dateCreated": "Feb 27, 2017 9:42:49 PM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "embColdStart: recsysChallengeSubsetCreation",
+  "id": "2CBTPYTEV",
+  "angularObjects": {
+    "2BGHSKCA7": [],
+    "2BFMBPKAB": [],
+    "2BHKKP27G": [],
+    "2BJHJDBK6": [],
+    "2BJAQG5W4": [],
+    "2BJGSXM37": [],
+    "2BFXEV5XZ": [],
+    "2BG77RV7M": [],
+    "2BF969NNB": [],
+    "2BG8QQJNC": [],
+    "2BGVG5JP4": [],
+    "2BJ5FCP57": [],
+    "2BFEDXCTE": [],
+    "2BJ8AEWCT": [],
+    "2BH9AVVKH": [],
+    "2BJ7KKX85": [],
+    "2BHKAE8WK": [],
+    "2BJ6HN5AY": []
+  },
+  "config": {},
+  "info": {}
+}

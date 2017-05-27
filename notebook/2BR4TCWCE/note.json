@@ -738,7 +738,7 @@
       "progressUpdateIntervalMs": 500
     }
   ],
-  "name": "Purch: Init_Analysis",
+  "name": "purchBaselines: Init_Analysis",
   "id": "2BR4TCWCE",
   "angularObjects": {
     "2BGHSKCA7": [],
@@ -760,6 +760,8 @@
     "2BHKAE8WK": [],
     "2BJ6HN5AY": []
   },
-  "config": {},
+  "config": {
+    "looknfeel": "default"
+  },
   "info": {}
 }

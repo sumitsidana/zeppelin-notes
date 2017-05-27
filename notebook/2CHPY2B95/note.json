@@ -1,0 +1,110 @@
+{
+  "paragraphs": [
+    {
+      "text": "    import java.nio.file.{ Files, Paths }\n    import scala.collection.mutable.ListBuffer\n    import java.io.FileWriter\n    \n    \n\nval t1 \u003d System.currentTimeMillis\n\nval csvFileClick \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/data/sidana/purch/experiments/atleast_one/cold_start_setting/usercoldstart/train.headers\")\n    \nval clickTemp \u003d csvFileClick.filter(csvFileClick(\"rating\") \u003d\u003d\u003d\"1\")\n\nval groupedByUsersandOffers \u003d clickTemp.select(clickTemp(\"userid\"),clickTemp(\"offerid\")).distinct\nval groupedByOffers \u003d groupedByUsersandOffers.groupBy(\"offerid\").count.sort(desc(\"count\"))\nval topItems \u003d groupedByOffers.select(\"offerid\").rdd.map(r \u003d\u003e r(0)).take(100)\n//groupedByOffers.rdd.coalesce(1, false).saveAsTextFile(\"/tmp/sidana/popularOfferCountsTrain.csv\")\nimport java.nio.file.{ Files, Paths }\nimport scala.collection.mutable.ListBuffer\nimport java.io.FileWriter\nvar items \u003d new ListBuffer[String]()\nval fw \u003d new FileWriter(\"/data/sidana/purch/experiments/atleast_one/cold_start_setting/usercoldstart/pop/mostpopularitems.txt\", true)\nfor( a \u003c- 1 to 100){\nval firstval \u003d topItems(a-1)\nitems +\u003d firstval.toString.toString\nfw.write(firstval.toString.toString+\" \")\n}\nfw.close()",
+      "authenticationInfo": {},
+      "dateUpdated": "May 19, 2017 9:09:35 AM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1495176634866_810570612",
+      "id": "20170519-085034_612029074",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "import java.nio.file.{Files, Paths}\nimport scala.collection.mutable.ListBuffer\nimport java.io.FileWriter\nt1: Long \u003d 1495177776376\ncsvFileClick: org.apache.spark.sql.DataFrame \u003d [userId: int, offerId: int, rating: int, timestamp: int]\nclickTemp: org.apache.spark.sql.DataFrame \u003d [userId: int, offerId: int, rating: int, timestamp: int]\ngroupedByUsersandOffers: org.apache.spark.sql.DataFrame \u003d [userid: int, offerid: int]\ngroupedByOffers: org.apache.spark.sql.DataFrame \u003d [offerid: int, count: bigint]\ntopItems: Array[Any] \u003d Array(2763, 155, 21, 147, 150, 85, 17, 311, 57, 56, 151, 145, 146, 2784, 118, 268, 265, 87, 93, 264, 174, 95, 96, 53, 164, 179, 187, 69, 276, 65, 329, 70, 1431, 242, 331, 319, 157, 63, 323, 325, 330, 334, 66, 202, 75, 189, 261, 2406, 173, 74, 178, 176, 175, 2587, 67, 554, 3027, 558, 817, 203, 439, 385, 1213, 128, 438, 433, 201, 440, 436, 29, 444, 181, 434, 185, 443, 194, 293, 132, 280, 9, 102, 106, 133, 101, 11, 131, 281, 290, 294, 8, 289, 285, 509, 287, 288, 48, 50, 236, 51, 262)\nimport java.nio.file.{Files, Paths}\nimport scala.collection.mutable.ListBuffer\nimport java.io.FileWriter\nitems: scala.collection.mutable.ListBuffer[String] \u003d ListBuffer()\nfw: java.io.FileWriter \u003d java.io.FileWriter@5d1ae3f9\n"
+      },
+      "dateCreated": "May 19, 2017 8:50:34 AM",
+      "dateStarted": "May 19, 2017 9:09:35 AM",
+      "dateFinished": "May 19, 2017 9:10:31 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val test \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/data/sidana/purch/experiments/atleast_one/cold_start_setting/usercoldstart/test.headers\")\n    \nval distinctusers \u003d test.select(\"userid\").distinct\n\nval goodusers \u003d  sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/data/sidana/purch/experiments/atleast_one/cold_start_setting/usercoldstart/pop/goodusers\")\nval badusers \u003d distinctusers.select(\"userid\").except(goodusers.select(\"userId\")).rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/purch/experiments/atleast_one/cold_start_setting/usercoldstart/pop/badUsers.temp\")",
+      "authenticationInfo": {},
+      "dateUpdated": "May 19, 2017 10:01:28 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1495176634866_810570612",
+      "id": "20170519-085034_2073461235",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "test: org.apache.spark.sql.DataFrame \u003d [userId: int, offerId: int, rating: int, timestamp: int]\ndistinctusers: org.apache.spark.sql.DataFrame \u003d [userid: int]\ngoodusers: org.apache.spark.sql.DataFrame \u003d [userId: int]\nbadusers: Unit \u003d ()\n"
+      },
+      "dateCreated": "May 19, 2017 8:50:34 AM",
+      "dateStarted": "May 19, 2017 10:01:28 AM",
+      "dateFinished": "May 19, 2017 10:02:05 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1495179558451_850355682",
+      "id": "20170519-093918_128543854",
+      "dateCreated": "May 19, 2017 9:39:18 AM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "purchBaselines: userColdStartPopularity",
+  "id": "2CHPY2B95",
+  "angularObjects": {
+    "2BGHSKCA7": [],
+    "2BFMBPKAB": [],
+    "2BHKKP27G": [],
+    "2BJHJDBK6": [],
+    "2BJAQG5W4": [],
+    "2BJGSXM37": [],
+    "2BFXEV5XZ": [],
+    "2BG77RV7M": [],
+    "2BF969NNB": [],
+    "2BG8QQJNC": [],
+    "2BGVG5JP4": [],
+    "2BJ5FCP57": [],
+    "2BFEDXCTE": [],
+    "2BJ8AEWCT": [],
+    "2BH9AVVKH": [],
+    "2BJ7KKX85": [],
+    "2BHKAE8WK": [],
+    "2BJ6HN5AY": []
+  },
+  "config": {},
+  "info": {}
+}

@@ -1,0 +1,112 @@
+{
+  "paragraphs": [
+    {
+      "text": "val train \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/data/sidana/recsysBaselines/experiments/debug_ffm/fr.output\")\n    train.agg(max(\"scores\")).show",
+      "authenticationInfo": {},
+      "dateUpdated": "May 15, 2017 4:59:01 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1494859968023_319190909",
+      "id": "20170515-165248_2092985845",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "train: org.apache.spark.sql.DataFrame \u003d [scores: double]\n+-----------+\n|max(scores)|\n+-----------+\n|   0.999672|\n+-----------+\n\n"
+      },
+      "dateCreated": "May 15, 2017 4:52:48 PM",
+      "dateStarted": "May 15, 2017 4:59:01 PM",
+      "dateFinished": "May 15, 2017 5:00:37 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "train.agg(min(\"scores\")).show\ntrain.agg(avg(\"scores\")).show",
+      "authenticationInfo": {},
+      "dateUpdated": "May 15, 2017 5:01:39 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1494860292573_1906171208",
+      "id": "20170515-165812_812531486",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "+-----------+\n|min(scores)|\n+-----------+\n| 1.33246E-6|\n+-----------+\n\n+--------------------+\n|         avg(scores)|\n+--------------------+\n|0.039181701118169585|\n+--------------------+\n\n"
+      },
+      "dateCreated": "May 15, 2017 4:58:12 PM",
+      "dateStarted": "May 15, 2017 5:01:39 PM",
+      "dateFinished": "May 15, 2017 5:03:09 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1494860388531_1658917227",
+      "id": "20170515-165948_1073360231",
+      "dateCreated": "May 15, 2017 4:59:48 PM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "kelkooBaselines: debug_ffm_maxScore",
+  "id": "2CJRVA1F2",
+  "angularObjects": {
+    "2BGHSKCA7": [],
+    "2BFMBPKAB": [],
+    "2BHKKP27G": [],
+    "2BJHJDBK6": [],
+    "2BJAQG5W4": [],
+    "2BJGSXM37": [],
+    "2BFXEV5XZ": [],
+    "2BG77RV7M": [],
+    "2BF969NNB": [],
+    "2BG8QQJNC": [],
+    "2BGVG5JP4": [],
+    "2BJ5FCP57": [],
+    "2BFEDXCTE": [],
+    "2BJ8AEWCT": [],
+    "2BH9AVVKH": [],
+    "2BJ7KKX85": [],
+    "2BHKAE8WK": [],
+    "2BJ6HN5AY": []
+  },
+  "config": {
+    "looknfeel": "default"
+  },
+  "info": {}
+}

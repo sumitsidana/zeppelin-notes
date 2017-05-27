@@ -188,7 +188,7 @@
       "progressUpdateIntervalMs": 500
     }
   ],
-  "name": "KelkooData: offerViewId-\u003eofferId",
+  "name": "KelkooBaselines: offerViewId-\u003eofferId",
   "id": "2BQSZXT4V",
   "angularObjects": {
     "2BGHSKCA7": [],
@@ -210,6 +210,8 @@
     "2BHKAE8WK": [],
     "2BJ6HN5AY": []
   },
-  "config": {},
+  "config": {
+    "looknfeel": "default"
+  },
   "info": {}
 }

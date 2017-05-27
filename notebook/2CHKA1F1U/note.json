@@ -1,0 +1,246 @@
+{
+  "paragraphs": [
+    {
+      "text": "val test \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/data/sidana/purch/experiments/atleast_one/cold_start_setting/usercoldstart/test.headers\")\n    \nval distinctusers \u003d test.select(\"userid\").distinct\n\nval goodusers \u003d  sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/data/sidana/purch/experiments/atleast_one/cold_start_setting/usercoldstart/pop/goodusers\")\nval badusers \u003d distinctusers.select(\"userid\").except(goodusers.select(\"userId\")).rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/purch/experiments/atleast_one/cold_start_setting/usercoldstart/pop/badUsers.temp\")",
+      "dateUpdated": "May 19, 2017 11:30:05 AM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1495186205173_971532823",
+      "id": "20170519-113005_1543853992",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "test: org.apache.spark.sql.DataFrame \u003d [userId: int, offerId: int, rating: int, timestamp: int]\ndistinctusers: org.apache.spark.sql.DataFrame \u003d [userid: int]\ngoodusers: org.apache.spark.sql.DataFrame \u003d [userId: int]\nbadusers: Unit \u003d ()\n"
+      },
+      "dateCreated": "May 19, 2017 11:30:05 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val test \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/data/sidana/purch/experiments/atleast_one/cold_start_setting/usercoldstart/random/all.headers\")\nval offerid \u003d test.select(\"offerId\").distinct.rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/purch/experiments/atleast_one/cold_start_setting/usercoldstart/random/alloffers.temp\")",
+      "authenticationInfo": {},
+      "dateUpdated": "May 19, 2017 11:31:43 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1495186205173_971532823",
+      "id": "20170519-113005_1656620490",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "test: org.apache.spark.sql.DataFrame \u003d [userid: int, offerid: int, rating: int, timestamp: int]\nofferid: Unit \u003d ()\n"
+      },
+      "dateCreated": "May 19, 2017 11:30:05 AM",
+      "dateStarted": "May 19, 2017 11:31:43 AM",
+      "dateFinished": "May 19, 2017 11:32:02 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val test \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/data/sidana/purch/experiments/atleast_one/cold_start_setting/itemcoldstart/test.headers\")\n    \nval distinctusers \u003d test.select(\"userid\").distinct\n\nval goodusers \u003d  sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/data/sidana/purch/experiments/atleast_one/cold_start_setting/itemcoldstart/random/goodusers\")\nval badusers \u003d distinctusers.select(\"userid\").except(goodusers.select(\"userId\")).rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/purch/experiments/atleast_one/cold_start_setting/itemcoldstart/random/badUsers.temp\")",
+      "authenticationInfo": {},
+      "dateUpdated": "May 19, 2017 2:43:34 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1495186303916_-452701981",
+      "id": "20170519-113143_674650731",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "test: org.apache.spark.sql.DataFrame \u003d [userid: int, offerid: int, rating: int, timestamp: int]\ndistinctusers: org.apache.spark.sql.DataFrame \u003d [userid: int]\ngoodusers: org.apache.spark.sql.DataFrame \u003d [userid: int]\nbadusers: Unit \u003d ()\n"
+      },
+      "dateCreated": "May 19, 2017 11:31:43 AM",
+      "dateStarted": "May 19, 2017 2:43:34 PM",
+      "dateFinished": "May 19, 2017 2:44:15 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val test \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/data/sidana/purch/experiments/atleast_one/cold_start_setting/itemcoldstart/random/all.headers\")\nval offerid \u003d test.select(\"offerId\").distinct.rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/purch/experiments/atleast_one/cold_start_setting/itemcoldstart/random/alloffers.temp\")",
+      "authenticationInfo": {},
+      "dateUpdated": "May 19, 2017 3:06:26 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1495197814623_-1734848498",
+      "id": "20170519-144334_1652844142",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "test: org.apache.spark.sql.DataFrame \u003d [userId: int, offerId: int, rating: int, timestamp: int]\nofferid: Unit \u003d ()\n"
+      },
+      "dateCreated": "May 19, 2017 2:43:34 PM",
+      "dateStarted": "May 19, 2017 3:06:26 PM",
+      "dateFinished": "May 19, 2017 3:06:43 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val test \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/data/sidana/purch/experiments/atleast_one/cold_start_setting/useritemcoldstart/test.headers\")\n    \nval distinctusers \u003d test.select(\"userid\").distinct\n\nval goodusers \u003d  sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/data/sidana/purch/experiments/atleast_one/cold_start_setting/useritemcoldstart/random/goodusers\")\nval badusers \u003d distinctusers.select(\"userid\").except(goodusers.select(\"userId\")).rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/purch/experiments/atleast_one/cold_start_setting/useritemcoldstart/random/badUsers.temp\")",
+      "authenticationInfo": {},
+      "dateUpdated": "May 19, 2017 3:33:12 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1495199186069_1935617138",
+      "id": "20170519-150626_1053549126",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "test: org.apache.spark.sql.DataFrame \u003d [userid: int, offerid: int, rating: int, timestamp: int]\ndistinctusers: org.apache.spark.sql.DataFrame \u003d [userid: int]\ngoodusers: org.apache.spark.sql.DataFrame \u003d [userid: int]\nbadusers: Unit \u003d ()\n"
+      },
+      "dateCreated": "May 19, 2017 3:06:26 PM",
+      "dateStarted": "May 19, 2017 3:33:12 PM",
+      "dateFinished": "May 19, 2017 3:33:48 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val test \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/data/sidana/purch/experiments/atleast_one/cold_start_setting/useritemcoldstart/random/all.headers\")\nval offerid \u003d test.select(\"offerId\").distinct.rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/purch/experiments/atleast_one/cold_start_setting/useritemcoldstart/random/alloffers.temp\")",
+      "authenticationInfo": {},
+      "dateUpdated": "May 19, 2017 4:08:26 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1495200641992_267835160",
+      "id": "20170519-153041_850233312",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "test: org.apache.spark.sql.DataFrame \u003d [userId: int, offerId: int, rating: int, timestamp: int]\nofferid: Unit \u003d ()\n"
+      },
+      "dateCreated": "May 19, 2017 3:30:41 PM",
+      "dateStarted": "May 19, 2017 4:08:26 PM",
+      "dateFinished": "May 19, 2017 4:08:45 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1495202906397_-740470464",
+      "id": "20170519-160826_1856415930",
+      "dateCreated": "May 19, 2017 4:08:26 PM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "purchBaselines: ColdStartRandom",
+  "id": "2CHKA1F1U",
+  "angularObjects": {
+    "2BGHSKCA7": [],
+    "2BFMBPKAB": [],
+    "2BHKKP27G": [],
+    "2BJHJDBK6": [],
+    "2BJAQG5W4": [],
+    "2BJGSXM37": [],
+    "2BFXEV5XZ": [],
+    "2BG77RV7M": [],
+    "2BF969NNB": [],
+    "2BG8QQJNC": [],
+    "2BGVG5JP4": [],
+    "2BJ5FCP57": [],
+    "2BFEDXCTE": [],
+    "2BJ8AEWCT": [],
+    "2BH9AVVKH": [],
+    "2BJ7KKX85": [],
+    "2BHKAE8WK": [],
+    "2BJ6HN5AY": []
+  },
+  "config": {
+    "looknfeel": "default"
+  },
+  "info": {}
+}

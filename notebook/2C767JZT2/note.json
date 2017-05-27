@@ -1,9 +1,9 @@
 {
   "paragraphs": [
     {
-      "text": "val original \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/data/sidana/nnmf_ranking/outbrainchallenge/dat.outbrainchallenge.withindexedusers.withreplacedrating.withheaders\")\nval numUsersOriginal \u003d original.select(\"userId\").distinct.count\nval numItemsOriginal \u003d original.select(\"movieId\").distinct.count\n\n\n    \n//test.agg(max(\"itemId\")).show\n//test.agg(max(\"userId\")).show\n    ",
+      "text": "val original \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/data/sidana/nnmf_ranking/archive_version/outbrain_challenge/ratings.headers.csv\")\n\nval numUsersOriginal \u003d original.select(\"userId\").distinct.count\nval numItemsOriginal \u003d original.select(\"movieId\").distinct.count\n\noriginal.agg(max(\"movieId\")).show\noriginal.agg(max(\"userId\")).show\n    ",
       "authenticationInfo": {},
-      "dateUpdated": "Jan 24, 2017 7:05:16 PM",
+      "dateUpdated": "Apr 10, 2017 4:40:48 PM",
       "config": {
         "colWidth": 12.0,
         "graph": {
@@ -16,7 +16,8 @@
           "scatter": {}
         },
         "enabled": true,
-        "editorMode": "ace/mode/scala"
+        "editorMode": "ace/mode/scala",
+        "tableHide": false
       },
       "settings": {
         "params": {},
@@ -27,18 +28,18 @@
       "result": {
         "code": "SUCCESS",
         "type": "TEXT",
-        "msg": "original: org.apache.spark.sql.DataFrame \u003d [userId: int, movieId: int, rating: int, timestamp: int]\nnumUsersOriginal: Long \u003d 49615\nnumItemsOriginal: Long \u003d 105176\n"
+        "msg": "original: org.apache.spark.sql.DataFrame \u003d [userId: int, movieId: int, rating: int, timestamp: int]\nnumUsersOriginal: Long \u003d 49615\nnumItemsOriginal: Long \u003d 105176\n+------------+\n|max(movieId)|\n+------------+\n|      105176|\n+------------+\n\n+-----------+\n|max(userId)|\n+-----------+\n|      49615|\n+-----------+\n\n"
       },
       "dateCreated": "Jan 24, 2017 1:09:31 AM",
-      "dateStarted": "Jan 24, 2017 7:05:16 PM",
-      "dateFinished": "Jan 24, 2017 7:05:29 PM",
+      "dateStarted": "Apr 10, 2017 4:40:48 PM",
+      "dateFinished": "Apr 10, 2017 4:42:44 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
     {
       "text": "val interactions \u003d original.count",
       "authenticationInfo": {},
-      "dateUpdated": "Jan 24, 2017 7:07:07 PM",
+      "dateUpdated": "Mar 28, 2017 4:59:42 PM",
       "config": {
         "colWidth": 12.0,
         "graph": {
@@ -51,7 +52,8 @@
           "scatter": {}
         },
         "enabled": true,
-        "editorMode": "ace/mode/scala"
+        "editorMode": "ace/mode/scala",
+        "tableHide": false
       },
       "settings": {
         "params": {},
@@ -73,7 +75,7 @@
     {
       "text": "val test \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/data/sidana/nnmf_ranking/outbrainchallenge/dat.outbrainchallenge.withindexedusers.withheaders\")\n    \ntest.agg(max(\"itemId\")).show\ntest.agg(max(\"userId\")).show",
       "authenticationInfo": {},
-      "dateUpdated": "Jan 24, 2017 2:01:13 AM",
+      "dateUpdated": "Mar 28, 2017 4:59:42 PM",
       "config": {
         "colWidth": 12.0,
         "graph": {
@@ -85,7 +87,9 @@
           "groups": [],
           "scatter": {}
         },
-        "enabled": true
+        "enabled": true,
+        "editorMode": "ace/mode/scala",
+        "tableHide": false
       },
       "settings": {
         "params": {},
@@ -107,7 +111,7 @@
     {
       "text": "val numUsersOriginal \u003d original.select(\"userId\").distinct.count\nval numUsersIndexed \u003d test.select(\"userId\").distinct.count",
       "authenticationInfo": {},
-      "dateUpdated": "Jan 24, 2017 2:01:57 AM",
+      "dateUpdated": "Mar 28, 2017 4:59:42 PM",
       "config": {
         "colWidth": 12.0,
         "graph": {
@@ -119,7 +123,9 @@
           "groups": [],
           "scatter": {}
         },
-        "enabled": true
+        "enabled": true,
+        "editorMode": "ace/mode/scala",
+        "tableHide": false
       },
       "settings": {
         "params": {},
@@ -141,7 +147,7 @@
     {
       "text": "\n\nval numItemsIndexed \u003d test.select(\"itemId\").distinct.count\nval numRatingsOriginal \u003d original.count\nval numRatingsIndexed \u003d test.count\n\n",
       "authenticationInfo": {},
-      "dateUpdated": "Jan 24, 2017 7:04:03 PM",
+      "dateUpdated": "Mar 28, 2017 4:59:42 PM",
       "config": {
         "colWidth": 12.0,
         "graph": {
@@ -154,7 +160,8 @@
           "scatter": {}
         },
         "enabled": true,
-        "editorMode": "ace/mode/scala"
+        "editorMode": "ace/mode/scala",
+        "tableHide": false
       },
       "settings": {
         "params": {},
@@ -174,7 +181,22 @@
       "progressUpdateIntervalMs": 500
     },
     {
-      "config": {},
+      "dateUpdated": "Mar 28, 2017 4:59:42 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala",
+        "tableHide": false
+      },
       "settings": {
         "params": {},
         "forms": {}

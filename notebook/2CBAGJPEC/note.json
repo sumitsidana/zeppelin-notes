@@ -1,0 +1,112 @@
+{
+  "paragraphs": [
+    {
+      "text": "val clicksTempTemp \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \"\\t\")\n    .load(\"/home/ama/sidana/recommendersystemchallenge/data/data/interactions.csv\")",
+      "authenticationInfo": {},
+      "dateUpdated": "Feb 27, 2017 11:19:53 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1488233979882_1360292198",
+      "id": "20170227-231939_1192472520",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "clicksTempTemp: org.apache.spark.sql.DataFrame \u003d [user_id: int, item_id: int, interaction_type: int, created_at: int]\n"
+      },
+      "dateCreated": "Feb 27, 2017 11:19:39 PM",
+      "dateStarted": "Feb 27, 2017 11:19:53 PM",
+      "dateFinished": "Feb 27, 2017 11:20:04 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val seq \u003d Seq(\"user_id\",\"item_id\")\nval dDuplicates \u003d clicksTempTemp.select(\"user_id\",\"item_id\",\"interaction_type\",\"created_at\").dropDuplicates(seq)",
+      "authenticationInfo": {},
+      "dateUpdated": "Feb 27, 2017 11:23:20 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1488233993282_-1371794418",
+      "id": "20170227-231953_1498530076",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "seq: Seq[String] \u003d List(user_id, item_id)\ndDuplicates: org.apache.spark.sql.DataFrame \u003d [user_id: int, item_id: int, interaction_type: int, created_at: int]\n"
+      },
+      "dateCreated": "Feb 27, 2017 11:19:53 PM",
+      "dateStarted": "Feb 27, 2017 11:23:20 PM",
+      "dateFinished": "Feb 27, 2017 11:23:20 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1488234101090_-347807384",
+      "id": "20170227-232141_71278045",
+      "dateCreated": "Feb 27, 2017 11:21:41 PM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "recsys_challenge: dropDuplicatesExample",
+  "id": "2CBAGJPEC",
+  "angularObjects": {
+    "2BGHSKCA7": [],
+    "2BFMBPKAB": [],
+    "2BHKKP27G": [],
+    "2BJHJDBK6": [],
+    "2BJAQG5W4": [],
+    "2BJGSXM37": [],
+    "2BFXEV5XZ": [],
+    "2BG77RV7M": [],
+    "2BF969NNB": [],
+    "2BG8QQJNC": [],
+    "2BGVG5JP4": [],
+    "2BJ5FCP57": [],
+    "2BFEDXCTE": [],
+    "2BJ8AEWCT": [],
+    "2BH9AVVKH": [],
+    "2BJ7KKX85": [],
+    "2BHKAE8WK": [],
+    "2BJ6HN5AY": []
+  },
+  "config": {
+    "looknfeel": "default"
+  },
+  "info": {}
+}

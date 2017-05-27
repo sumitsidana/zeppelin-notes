@@ -298,7 +298,7 @@
       "progressUpdateIntervalMs": 500
     }
   ],
-  "name": "nnmf: nusersitems_ml_100k",
+  "name": "nnmf_ranking: nusersitems_ml_100k",
   "id": "2C5YJBBGJ",
   "angularObjects": {
     "2BGHSKCA7": [],

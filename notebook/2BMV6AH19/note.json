@@ -83,7 +83,7 @@
       "progressUpdateIntervalMs": 500
     }
   ],
-  "name": "ranking_data_1",
+  "name": "recsys_challenge: ranking_data_1",
   "id": "2BMV6AH19",
   "angularObjects": {
     "2BGHSKCA7": [],

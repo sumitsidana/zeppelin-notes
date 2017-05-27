@@ -1,0 +1,252 @@
+{
+  "paragraphs": [
+    {
+      "text": "val data \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/data/sidana/adaptivity/outbrain/experiments/input_data/dat.outbrain.headers\")\n\nval users \u003d data.select(\"userid\").distinct\n\nusers.rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/adaptivity/outbrain/experiments/outbrain_users\")",
+      "authenticationInfo": {},
+      "dateUpdated": "Apr 1, 2017 1:20:26 AM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1490962230966_109854480",
+      "id": "20170331-141030_1541341176",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "data: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, rating: int, timestamp: int]\nusers: org.apache.spark.sql.DataFrame \u003d [userid: int]\n"
+      },
+      "dateCreated": "Mar 31, 2017 2:10:30 PM",
+      "dateStarted": "Apr 1, 2017 1:20:26 AM",
+      "dateFinished": "Apr 1, 2017 1:20:35 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val outbrain_users \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \"\\t\")\n    .load(\"/data/sidana/adaptivity/outbrain/outbrain_users.headers\")\n\nval outbrain_10_users \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \"\\t\")\n    .load(\"/data/sidana/adaptivity/outbrain/outbrain_10_users.headers\")\n\nval outbrain_remaining_90_users \u003d outbrain_users.select(\"userid\").except(outbrain_10_users.select(\"userid\")).distinct\n\noutbrain_remaining_90_users.rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/adaptivity/outbrain/outbrain_remaining_90_users\")",
+      "authenticationInfo": {},
+      "dateUpdated": "Mar 31, 2017 3:32:40 PM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1490962230967_109469731",
+      "id": "20170331-141030_225911271",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "outbrain_users: org.apache.spark.sql.DataFrame \u003d [userid: int]\noutbrain_10_users: org.apache.spark.sql.DataFrame \u003d [userid: int]\noutbrain_remaining_90_users: org.apache.spark.sql.DataFrame \u003d [userid: int]\n"
+      },
+      "dateCreated": "Mar 31, 2017 2:10:30 PM",
+      "dateStarted": "Mar 31, 2017 3:32:40 PM",
+      "dateFinished": "Mar 31, 2017 3:32:53 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val outbrain_users \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \"\\t\")\n    .load(\"/data/sidana/adaptivity/outbrain/outbrain_users.headers\")\n\nval outbrain_20_users \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \"\\t\")\n    .load(\"/data/sidana/adaptivity/outbrain/outbrain_20_users.headers\")\n\nval outbrain_remaining_80_users \u003d outbrain_users.select(\"userid\").except(outbrain_20_users.select(\"userid\")).distinct\n\noutbrain_remaining_80_users.rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/adaptivity/outbrain/outbrain_remaining_80_users\")",
+      "authenticationInfo": {},
+      "dateUpdated": "Mar 31, 2017 4:01:03 PM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1490962230967_109469731",
+      "id": "20170331-141030_139643801",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "outbrain_users: org.apache.spark.sql.DataFrame \u003d [userid: int]\noutbrain_20_users: org.apache.spark.sql.DataFrame \u003d [userid: int]\noutbrain_remaining_80_users: org.apache.spark.sql.DataFrame \u003d [userid: int]\n"
+      },
+      "dateCreated": "Mar 31, 2017 2:10:30 PM",
+      "dateStarted": "Mar 31, 2017 3:36:21 PM",
+      "dateFinished": "Mar 31, 2017 3:36:28 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val outbrain_users \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \"\\t\")\n    .load(\"/data/sidana/adaptivity/outbrain/outbrain_users.headers\")\n\n\nval outbrain_30_users \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \"\\t\")\n    .load(\"/data/sidana/adaptivity/outbrain/outbrain_30_users.headers\")\n\nval outbrain_remaining_70_users \u003d outbrain_users.select(\"userid\").except(outbrain_30_users.select(\"userid\")).distinct\n\noutbrain_remaining_70_users.rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/adaptivity/outbrain/outbrain_remaining_70_users\")",
+      "authenticationInfo": {},
+      "dateUpdated": "Mar 31, 2017 4:11:41 PM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1490962230968_107545986",
+      "id": "20170331-141030_1941220883",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "outbrain_users: org.apache.spark.sql.DataFrame \u003d [userid: int]\noutbrain_30_users: org.apache.spark.sql.DataFrame \u003d [userid: int]\noutbrain_remaining_70_users: org.apache.spark.sql.DataFrame \u003d [userid: int]\n"
+      },
+      "dateCreated": "Mar 31, 2017 2:10:30 PM",
+      "dateStarted": "Mar 31, 2017 4:11:41 PM",
+      "dateFinished": "Mar 31, 2017 4:12:16 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val outbrain_users \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \"\\t\")\n    .load(\"/data/sidana/adaptivity/outbrain/outbrain_users.headers\")\n\n\nval outbrain_50_users \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \"\\t\")\n    .load(\"/data/sidana/adaptivity/outbrain/outbrain_50_users.headers\")\n\nval outbrain_remaining_50_users \u003d outbrain_users.select(\"userid\").except(outbrain_50_users.select(\"userid\")).distinct\n\noutbrain_remaining_50_users.rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/adaptivity/outbrain/outbrain_remaining_50_users\")",
+      "authenticationInfo": {},
+      "dateUpdated": "Mar 31, 2017 4:27:31 PM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1490962230968_107545986",
+      "id": "20170331-141030_1527815357",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "outbrain_users: org.apache.spark.sql.DataFrame \u003d [userid: int]\noutbrain_50_users: org.apache.spark.sql.DataFrame \u003d [userid: int]\noutbrain_remaining_50_users: org.apache.spark.sql.DataFrame \u003d [userid: int]\n"
+      },
+      "dateCreated": "Mar 31, 2017 2:10:30 PM",
+      "dateStarted": "Mar 31, 2017 4:27:32 PM",
+      "dateFinished": "Mar 31, 2017 4:28:06 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val outbrain_users \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \"\\t\")\n    .load(\"/data/sidana/adaptivity/outbrain/outbrain_users.headers\")\n\n\nval outbrain_75_users \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \"\\t\")\n    .load(\"/data/sidana/adaptivity/outbrain/outbrain_75_users.headers\")\n\nval outbrain_remaining_25_users \u003d outbrain_users.select(\"userid\").except(outbrain_75_users.select(\"userid\")).distinct\n\noutbrain_remaining_25_users.rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/adaptivity/outbrain/outbrain_remaining_25_users\")",
+      "authenticationInfo": {},
+      "dateUpdated": "Mar 31, 2017 4:34:13 PM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1490962230969_107161237",
+      "id": "20170331-141030_530737920",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "outbrain_users: org.apache.spark.sql.DataFrame \u003d [userid: int]\noutbrain_75_users: org.apache.spark.sql.DataFrame \u003d [userid: int]\noutbrain_remaining_25_users: org.apache.spark.sql.DataFrame \u003d [userid: int]\n"
+      },
+      "dateCreated": "Mar 31, 2017 2:10:30 PM",
+      "dateStarted": "Mar 31, 2017 4:34:13 PM",
+      "dateFinished": "Mar 31, 2017 4:34:19 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "dateUpdated": "Mar 31, 2017 2:10:30 PM",
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1490962230969_107161237",
+      "id": "20170331-141030_1612635449",
+      "dateCreated": "Mar 31, 2017 2:10:30 PM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "embAdaptivity: outbrain_data_creation-users",
+  "id": "2CDY7NPY1",
+  "angularObjects": {
+    "2BGHSKCA7": [],
+    "2BFMBPKAB": [],
+    "2BHKKP27G": [],
+    "2BJHJDBK6": [],
+    "2BJAQG5W4": [],
+    "2BJGSXM37": [],
+    "2BFXEV5XZ": [],
+    "2BG77RV7M": [],
+    "2BF969NNB": [],
+    "2BG8QQJNC": [],
+    "2BGVG5JP4": [],
+    "2BJ5FCP57": [],
+    "2BFEDXCTE": [],
+    "2BJ8AEWCT": [],
+    "2BH9AVVKH": [],
+    "2BJ7KKX85": [],
+    "2BHKAE8WK": [],
+    "2BJ6HN5AY": []
+  },
+  "config": {
+    "looknfeel": "default"
+  },
+  "info": {}
+}

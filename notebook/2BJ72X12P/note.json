@@ -48,7 +48,7 @@
       "progressUpdateIntervalMs": 500
     }
   ],
-  "name": "recsys_challenge_6: writeActiveItems",
+  "name": "recsys_challenge: 6. writeActiveItems",
   "id": "2BJ72X12P",
   "angularObjects": {
     "2BGHSKCA7": [],
@@ -70,6 +70,8 @@
     "2BHKAE8WK": [],
     "2BJ6HN5AY": []
   },
-  "config": {},
+  "config": {
+    "looknfeel": "default"
+  },
   "info": {}
 }

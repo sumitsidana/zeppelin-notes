@@ -1,0 +1,275 @@
+{
+  "paragraphs": [
+    {
+      "text": "val parquetFileClick \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypso_purch_feb_march_data/*.parquet\")\nval userClicks \u003d parquetFileClick.filter(\"wasClicked\").groupBy(\"userId\").count.withColumnRenamed(\"count\", \"numClicks\")\nval groupByCount \u003d userClicks.groupBy(\"numClicks\").count.sort(\"numClicks\")\ngroupByCount.rdd.coalesce(1, false).saveAsTextFile(\"/data/sidana/purch/experiments/stats/clickVsCount\")",
+      "authenticationInfo": {},
+      "dateUpdated": "May 17, 2017 1:39:21 AM",
+      "config": {
+        "enabled": true,
+        "tableHide": false,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1494951509620_1139709476",
+      "id": "20170516-181829_1259300276",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "parquetFileClick: org.apache.spark.sql.DataFrame \u003d [utcDate: timestamp, userId: string, offerViewId: string, offerId: string, wasClicked: boolean]\nuserClicks: org.apache.spark.sql.DataFrame \u003d [userId: string, numClicks: bigint]\ngroupByCount: org.apache.spark.sql.DataFrame \u003d [numClicks: bigint, count: bigint]\n"
+      },
+      "dateCreated": "May 16, 2017 6:18:29 PM",
+      "dateStarted": "May 17, 2017 1:39:21 AM",
+      "dateFinished": "May 17, 2017 1:40:24 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val parquetFileOffer \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypso_purch_feb_march_data/*.parquet\")\nval userOfferViews \u003d parquetFileOffer.groupBy(\"userId\",\"offerViewId\").count.withColumnRenamed(\"count\", \"numOfferImpressions\")\nval uniqeUsersOfferViews \u003d userOfferViews.groupBy(\"userId\").count.withColumnRenamed(\"count\", \"numImpressions\")\nval groupByCount \u003d uniqeUsersOfferViews.groupBy(\"numImpressions\").count.sort(\"numImpressions\")\ngroupByCount.rdd.coalesce(1, false).saveAsTextFile(\"/data/sidana/purch/experiments/stats/impressionsVsCount\")",
+      "authenticationInfo": {},
+      "dateUpdated": "May 17, 2017 1:27:07 AM",
+      "config": {
+        "enabled": true,
+        "tableHide": false,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1494951509621_1139324728",
+      "id": "20170516-181829_1608397547",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "parquetFileOffer: org.apache.spark.sql.DataFrame \u003d [utcDate: timestamp, userId: string, offerViewId: string, offerId: string, wasClicked: boolean]\nuserOfferViews: org.apache.spark.sql.DataFrame \u003d [userId: string, offerViewId: string, numOfferImpressions: bigint]\nuniqeUsersOfferViews: org.apache.spark.sql.DataFrame \u003d [userId: string, numImpressions: bigint]\ngroupByCount: org.apache.spark.sql.DataFrame \u003d [numImpressions: bigint, count: bigint]\n"
+      },
+      "dateCreated": "May 16, 2017 6:18:29 PM",
+      "dateStarted": "May 17, 2017 1:27:07 AM",
+      "dateFinished": "May 17, 2017 1:29:14 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "//#clicks per week\n\nval parquetFileClick \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypso_purch_feb_march_data/*.parquet\")\nval data \u003d parquetFileClick.filter(to_date(parquetFileClick(\"utcDate\"))\u003e\u003d\"2017-02-04\"\u0026\u0026to_date(parquetFileClick(\"utcDate\"))\u003c\u003d\"2017-03-05\")\nval clicks \u003d data.filter(\"wasClicked\")\nval groupByWeek \u003d clicks.groupBy(weekofyear(parquetFileClick(\"utcDate\"))).count\nz.show(groupByWeek)",
+      "authenticationInfo": {},
+      "dateUpdated": "May 17, 2017 1:51:31 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1494951509622_1140478974",
+      "id": "20170516-181829_1690658618",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TABLE",
+        "msg": "weekofyear(utcDate)\tcount\n5\t16342\n6\t64883\n7\t61025\n8\t36608\n9\t14640\n"
+      },
+      "dateCreated": "May 16, 2017 6:18:29 PM",
+      "dateStarted": "May 17, 2017 1:51:31 AM",
+      "dateFinished": "May 17, 2017 1:52:16 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "//#Users who did at least one click per week\nval parquetFileClick \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypso_purch_feb_march_data/*.parquet\")\nval data \u003d parquetFileClick.filter(to_date(parquetFileClick(\"utcDate\"))\u003e\u003d\"2017-02-04\"\u0026\u0026to_date(parquetFileClick(\"utcDate\"))\u003c\u003d\"2017-03-05\")\nval clicks \u003d data.filter(\"wasClicked\")\nval distinctUserWeek \u003d clicks.select(parquetFileClick(\"userId\"),weekofyear(parquetFileClick(\"utcDate\"))).distinct\nval groupByWeek \u003d distinctUserWeek.groupBy(\"weekofyear(utcDate)\").count\nz.show(groupByWeek)",
+      "authenticationInfo": {},
+      "dateUpdated": "May 17, 2017 1:51:28 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [
+            {
+              "name": "weekofyear(utcDate)",
+              "index": 0.0,
+              "aggr": "sum"
+            }
+          ],
+          "values": [
+            {
+              "name": "count",
+              "index": 1.0,
+              "aggr": "sum"
+            }
+          ],
+          "groups": [],
+          "scatter": {
+            "xAxis": {
+              "name": "weekofyear(utcDate)",
+              "index": 0.0,
+              "aggr": "sum"
+            },
+            "yAxis": {
+              "name": "count",
+              "index": 1.0,
+              "aggr": "sum"
+            }
+          }
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1494978058057_1243033505",
+      "id": "20170517-014058_2019648367",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TABLE",
+        "msg": "weekofyear(utcDate)\tcount\n5\t12569\n6\t48058\n7\t45785\n8\t27330\n9\t10214\n"
+      },
+      "dateCreated": "May 17, 2017 1:40:58 AM",
+      "dateStarted": "May 17, 2017 1:51:28 AM",
+      "dateFinished": "May 17, 2017 1:52:01 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "//new users per week\nval parquetFileClick \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypso_purch_feb_march_data/*.parquet\")\nval data \u003d parquetFileClick.filter(to_date(parquetFileClick(\"utcDate\"))\u003e\u003d\"2017-02-04\"\u0026\u0026to_date(parquetFileClick(\"utcDate\"))\u003c\u003d\"2017-03-05\")\nval distinctUserWeek \u003d data.select(parquetFileClick(\"userId\"),weekofyear(parquetFileClick(\"utcDate\"))).distinct\nval minWeek \u003d distinctUserWeek.select(min(distinctUserWeek(\"weekofyear(utcdate)\"))).head().getInt(0)\nval maxWeek \u003d distinctUserWeek.select(max(distinctUserWeek(\"weekofyear(utcdate)\"))).head().getInt(0)\nval start \u003d minWeek+1\nimport org.apache.spark.sql._\n      for(a\u003c-start to maxWeek){\n          val previous \u003d a-1\n          val dfPrevious \u003d distinctUserWeek.filter(distinctUserWeek(\"weekofyear(utcdate)\")\u003d\u003d\u003dprevious)\n          val dfpresent \u003d distinctUserWeek.filter(distinctUserWeek(\"weekofyear(utcdate)\")\u003d\u003d\u003da)\n          val setDifference \u003d dfpresent.select(\"userId\").except(dfPrevious.select(\"userId\"))\n          println(setDifference.count)\n      }",
+      "authenticationInfo": {},
+      "dateUpdated": "May 17, 2017 2:49:09 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1494978332932_173630777",
+      "id": "20170517-014532_1454389479",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "parquetFileClick: org.apache.spark.sql.DataFrame \u003d [utcDate: timestamp, userId: string, offerViewId: string, offerId: string, wasClicked: boolean]\ndata: org.apache.spark.sql.DataFrame \u003d [utcDate: timestamp, userId: string, offerViewId: string, offerId: string, wasClicked: boolean]\ndistinctUserWeek: org.apache.spark.sql.DataFrame \u003d [userId: string, weekofyear(utcDate): int]\nminWeek: Int \u003d 5\nmaxWeek: Int \u003d 9\nstart: Int \u003d 6\nimport org.apache.spark.sql._\n419290\n385249\n354915\n327490\n"
+      },
+      "dateCreated": "May 17, 2017 1:45:32 AM",
+      "dateStarted": "May 17, 2017 2:00:22 AM",
+      "dateFinished": "May 17, 2017 2:05:11 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val parquetFileClick \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypso_purch_feb_march_data/*.parquet\")\nval data \u003d parquetFileClick.filter(to_date(parquetFileClick(\"utcDate\"))\u003e\u003d\"2017-02-04\"\u0026\u0026to_date(parquetFileClick(\"utcDate\"))\u003c\u003d\"2017-03-05\")\nval clicks \u003d data.filter(\"wasClicked\")\nval distinctUserWeek \u003d clicks.select(parquetFileClick(\"userId\"),weekofyear(parquetFileClick(\"utcDate\"))).distinct\nval minWeek \u003d distinctUserWeek.select(min(distinctUserWeek(\"weekofyear(utcdate)\"))).head().getInt(0)\nval maxWeek \u003d distinctUserWeek.select(max(distinctUserWeek(\"weekofyear(utcdate)\"))).head().getInt(0)\nval start \u003d minWeek+1\nimport org.apache.spark.sql._\n      for(a\u003c-start to maxWeek){\n          val previous \u003d a-1\n          val dfPrevious \u003d distinctUserWeek.filter(distinctUserWeek(\"weekofyear(utcdate)\")\u003d\u003d\u003dprevious)\n          val dfpresent \u003d distinctUserWeek.filter(distinctUserWeek(\"weekofyear(utcdate)\")\u003d\u003d\u003da)\n          val previousUsers \u003d dfPrevious.select(\"userId\")\n          val presentUsers \u003d dfpresent.select(\"userId\")\n          val innerJoin \u003d previousUsers.join(presentUsers,previousUsers(\"userId\")\u003d\u003d\u003dpresentUsers(\"userId\"))\n          println(innerJoin.count)\n      }",
+      "authenticationInfo": {},
+      "dateUpdated": "May 17, 2017 2:00:57 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1494978995548_-1285022346",
+      "id": "20170517-015635_837569555",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "parquetFileClick: org.apache.spark.sql.DataFrame \u003d [utcDate: timestamp, userId: string, offerViewId: string, offerId: string, wasClicked: boolean]\ndata: org.apache.spark.sql.DataFrame \u003d [utcDate: timestamp, userId: string, offerViewId: string, offerId: string, wasClicked: boolean]\nclicks: org.apache.spark.sql.DataFrame \u003d [utcDate: timestamp, userId: string, offerViewId: string, offerId: string, wasClicked: boolean]\ndistinctUserWeek: org.apache.spark.sql.DataFrame \u003d [userId: string, weekofyear(utcDate): int]\nminWeek: Int \u003d 5\nmaxWeek: Int \u003d 9\nstart: Int \u003d 6\nimport org.apache.spark.sql._\n200\n1012\n676\n306\n"
+      },
+      "dateCreated": "May 17, 2017 1:56:35 AM",
+      "dateStarted": "May 17, 2017 2:00:57 AM",
+      "dateFinished": "May 17, 2017 2:09:26 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1494979257034_1078473178",
+      "id": "20170517-020057_988630659",
+      "dateCreated": "May 17, 2017 2:00:57 AM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "purchBaselines: KASANDRTypeDataAnalysis",
+  "id": "2CH4A93M2",
+  "angularObjects": {
+    "2BGHSKCA7": [],
+    "2BFMBPKAB": [],
+    "2BHKKP27G": [],
+    "2BJHJDBK6": [],
+    "2BJAQG5W4": [],
+    "2BJGSXM37": [],
+    "2BFXEV5XZ": [],
+    "2BG77RV7M": [],
+    "2BF969NNB": [],
+    "2BG8QQJNC": [],
+    "2BGVG5JP4": [],
+    "2BJ5FCP57": [],
+    "2BFEDXCTE": [],
+    "2BJ8AEWCT": [],
+    "2BH9AVVKH": [],
+    "2BJ7KKX85": [],
+    "2BHKAE8WK": [],
+    "2BJ6HN5AY": []
+  },
+  "config": {},
+  "info": {}
+}

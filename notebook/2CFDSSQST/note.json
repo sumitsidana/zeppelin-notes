@@ -1,0 +1,521 @@
+{
+  "paragraphs": [
+    {
+      "text": "%angular\n\u003ccenter ng-if\u003d\"running\"\u003e\u003ch1\u003eRunning...\u003c/h1\u003e\u003c/center\u003e\n\u003cdiv\u003e\n    \u003ccode\u003ebasePath\u003d{{basePath}}\u003c/code\u003e\n\u003c/div\u003e\n\u003cdiv style\u003d\"display:inline-block; min-width: 10%; margin: 10px; padding: 10px; border: solid gray 1px; vertical-align: top;\" \n    ng-repeat\u003d\"eventType in [\u0027OfferView\u0027, \u0027Click\u0027]\"\u003e\n\u003ch3\u003e{{eventType}}s\u003c/h3\u003e\n\u003cul\u003e\n    {{ distinctCount\u003dthis[\u0027distinct\u0027+eventType+\u0027Count\u0027];\"\" }}\n    \u003cli\u003e\u003cb\u003etotal{{eventType}}Count\u003c/b\u003e \u003d {{this[\u0027total\u0027+eventType+\u0027Count\u0027]|number}}\n    \u003cli\u003e\u003cb\u003edistinct{{eventType}}Count\u003c/b\u003e \u003d {{distinctCount|number}} (duplicates\u003d{{(this[\u0027total\u0027+eventType+\u0027Count\u0027]-this[\u0027distinct\u0027+eventType+\u0027Count\u0027])*100.0/this[\u0027total\u0027+eventType+\u0027Count\u0027] | number:2}}%)\n    \u003cli ng-repeat\u003d\"source in eventSources\"\u003e\u003cb\u003eSource: {{source}}\u003c/b\u003e ({{this[source + \u0027_\u0027+eventType+\u0027_count\u0027] | number}} \u0026mdash; {{this[source + \u0027_\u0027+eventType+\u0027_count\u0027]*100/distinctCount | number:2}}%)\n        \u003cul ng-repeat\u003d\"column in [\u0027overall\u0027, \u0027visitorId\u0027, \u0027eventId\u0027, \u0027offerId\u0027]\"\u003e\n            {{prefix\u003dsource + \u0027_\u0027+eventType+\u0027_\u0027+column;\"\"}}\n            \u003cli ng-if\u003d\"this[source + \u0027_\u0027+eventType+\u0027_\u0027+column+\u0027Type_badValues\u0027].length || column\u003d\u003d\u003d\u0027overall\u0027\"\u003e\u003cb\u003ebad {{column}}\u003c/b\u003e: {{ this[prefix+\u0027Status_BAD_count\u0027] | number }}  ({{ this[prefix+\u0027Status_BAD_ratio\u0027]*100  | number:2}}%)\n                \u003cul ng-repeat\u003d\"entry in this[source + \u0027_\u0027+eventType+\u0027_\u0027+column+\u0027Type_badValues\u0027]\"\u003e\n                    \u003cli\u003e\u003ccode\u003e{{ entry.value }}\u003c/code\u003e: {{ entry.count | number }} ({{ entry.ratio*100 | number:2 }}%)\n                \u003c/ul\u003e\n            \u003c/li\u003e\n        \u003c/ul\u003e\n\u003c/ul\u003e\n\u003c/div\u003e\u003cdiv style\u003d\"display:inline-block; min-width: 10%; margin: 10px; padding: 10px; border: solid gray 1px; vertical-align: top;\"\u003e\n\u003ch3\u003eOfferViewId Join\u003c/h3\u003e\n\u003cdiv ng-repeat\u003d\"(index, source) in eventSources\"\u003e\n    \u003cbr ng-if\u003d\"index\"/\u003e\n    \u003cb\u003e{{source}}\u003c/b\u003e\n    \u003ctable class\u003d\"table table-hover table-condensed\"\u003e\n        \u003ctr style\u003d\"background-color: #F6F6F6; font-weight: bold;\"\u003e\n            \u003cth\u003eofferCount\u003c/th\u003e\n            \u003cth\u003eclickCount\u003c/th\u003e\n            \u003cth\u003ecount\u003c/th\u003e\n            \u003cth\u003eratio\u003c/th\u003e\n            \u003cth\u003estatus\u003c/th\u003e\n        \u003c/tr\u003e\n        \u003ctr ng-repeat\u003d\"row in this[source + \u0027_joinTable\u0027]\"\u003e\n            \u003ctd\u003e{{row.offerCount}}\u003c/td\u003e\n            \u003ctd\u003e{{row.clickCount}}\u003c/td\u003e\n            \u003ctd\u003e{{row.count | number}}\u003c/td\u003e\n            \u003ctd\u003e{{row.ratio*100 | number:2}}%\u003c/td\u003e\n            \u003ctd\u003e{{row.status}}\u003c/td\u003e\n        \u003c/tr\u003e\n    \u003c/table\u003e\n\u003c/div\u003e\n\u003c/div\u003e\n",
+      "authenticationInfo": {},
+      "dateUpdated": "Apr 13, 2017 11:31:54 AM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 162.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "editorHide": true,
+        "colWidth": 12.0,
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1492075766337_-400128868",
+      "id": "20170413-112926_1962055013",
+      "result": {
+        "code": "SUCCESS",
+        "type": "ANGULAR",
+        "msg": "\u003ccenter ng-if\u003d\"running\"\u003e\u003ch1\u003eRunning...\u003c/h1\u003e\u003c/center\u003e\n\u003cdiv\u003e\n    \u003ccode\u003ebasePath\u003d{{basePath}}\u003c/code\u003e\n\u003c/div\u003e\n\u003cdiv style\u003d\"display:inline-block; min-width: 10%; margin: 10px; padding: 10px; border: solid gray 1px; vertical-align: top;\" \n    ng-repeat\u003d\"eventType in [\u0027OfferView\u0027, \u0027Click\u0027]\"\u003e\n\u003ch3\u003e{{eventType}}s\u003c/h3\u003e\n\u003cul\u003e\n    {{ distinctCount\u003dthis[\u0027distinct\u0027+eventType+\u0027Count\u0027];\"\" }}\n    \u003cli\u003e\u003cb\u003etotal{{eventType}}Count\u003c/b\u003e \u003d {{this[\u0027total\u0027+eventType+\u0027Count\u0027]|number}}\n    \u003cli\u003e\u003cb\u003edistinct{{eventType}}Count\u003c/b\u003e \u003d {{distinctCount|number}} (duplicates\u003d{{(this[\u0027total\u0027+eventType+\u0027Count\u0027]-this[\u0027distinct\u0027+eventType+\u0027Count\u0027])*100.0/this[\u0027total\u0027+eventType+\u0027Count\u0027] | number:2}}%)\n    \u003cli ng-repeat\u003d\"source in eventSources\"\u003e\u003cb\u003eSource: {{source}}\u003c/b\u003e ({{this[source + \u0027_\u0027+eventType+\u0027_count\u0027] | number}} \u0026mdash; {{this[source + \u0027_\u0027+eventType+\u0027_count\u0027]*100/distinctCount | number:2}}%)\n        \u003cul ng-repeat\u003d\"column in [\u0027overall\u0027, \u0027visitorId\u0027, \u0027eventId\u0027, \u0027offerId\u0027]\"\u003e\n            {{prefix\u003dsource + \u0027_\u0027+eventType+\u0027_\u0027+column;\"\"}}\n            \u003cli ng-if\u003d\"this[source + \u0027_\u0027+eventType+\u0027_\u0027+column+\u0027Type_badValues\u0027].length || column\u003d\u003d\u003d\u0027overall\u0027\"\u003e\u003cb\u003ebad {{column}}\u003c/b\u003e: {{ this[prefix+\u0027Status_BAD_count\u0027] | number }}  ({{ this[prefix+\u0027Status_BAD_ratio\u0027]*100  | number:2}}%)\n                \u003cul ng-repeat\u003d\"entry in this[source + \u0027_\u0027+eventType+\u0027_\u0027+column+\u0027Type_badValues\u0027]\"\u003e\n                    \u003cli\u003e\u003ccode\u003e{{ entry.value }}\u003c/code\u003e: {{ entry.count | number }} ({{ entry.ratio*100 | number:2 }}%)\n                \u003c/ul\u003e\n            \u003c/li\u003e\n        \u003c/ul\u003e\n\u003c/ul\u003e\n\u003c/div\u003e\u003cdiv style\u003d\"display:inline-block; min-width: 10%; margin: 10px; padding: 10px; border: solid gray 1px; vertical-align: top;\"\u003e\n\u003ch3\u003eOfferViewId Join\u003c/h3\u003e\n\u003cdiv ng-repeat\u003d\"(index, source) in eventSources\"\u003e\n    \u003cbr ng-if\u003d\"index\"/\u003e\n    \u003cb\u003e{{source}}\u003c/b\u003e\n    \u003ctable class\u003d\"table table-hover table-condensed\"\u003e\n        \u003ctr style\u003d\"background-color: #F6F6F6; font-weight: bold;\"\u003e\n            \u003cth\u003eofferCount\u003c/th\u003e\n            \u003cth\u003eclickCount\u003c/th\u003e\n            \u003cth\u003ecount\u003c/th\u003e\n            \u003cth\u003eratio\u003c/th\u003e\n            \u003cth\u003estatus\u003c/th\u003e\n        \u003c/tr\u003e\n        \u003ctr ng-repeat\u003d\"row in this[source + \u0027_joinTable\u0027]\"\u003e\n            \u003ctd\u003e{{row.offerCount}}\u003c/td\u003e\n            \u003ctd\u003e{{row.clickCount}}\u003c/td\u003e\n            \u003ctd\u003e{{row.count | number}}\u003c/td\u003e\n            \u003ctd\u003e{{row.ratio*100 | number:2}}%\u003c/td\u003e\n            \u003ctd\u003e{{row.status}}\u003c/td\u003e\n        \u003c/tr\u003e\n    \u003c/table\u003e\n\u003c/div\u003e\n\u003c/div\u003e"
+      },
+      "dateCreated": "Apr 13, 2017 11:29:26 AM",
+      "dateStarted": "Apr 13, 2017 11:31:17 AM",
+      "dateFinished": "Apr 13, 2017 11:31:17 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "import org.apache.spark.sql.Row\nimport org.apache.spark.sql.DataFrame\n\nval ScopedId \u003d \"^([^:]+):(.*)$\".r(\"scope\", \"id\")\nval getIdType \u003d {\n    val lazyVisitorId \u003d \"^visitor-[0-9]*$\".r()\n    val gaVisitorId \u003d \"^ga-[0-9\\\\.]*$\".r()\n    val uuidVisitorId \u003d \"^[0-9A-F]{32}$\".r\n    val macroMapVar \u003d \"\"\"^\\$\\{.*\\}$\"\"\".r\n    val mustachVar \u003d \"\"\"^\\{\\{.*\\}\\}$\"\"\".r\n    val ones \u003d \"\"\"^(\\w+-)?1+$\"\"\".r\n    val numeric \u003d \"\"\"^\\d+$\"\"\".r\n    val hexa \u003d \"\"\"^[0-9a-fA-F]+$\"\"\".r\n    val base64 \u003d \"\"\"^[\\d\\w]+$\"\"\".r\n    def getIdTypeFn(id: String): String \u003d {\n        val subId \u003d id match {\n            case ScopedId(_, sub) \u003d\u003e sub\n            case _ \u003d\u003e id\n        }\n        subId match {\n            case \"ga--.-\" \u003d\u003e \"BAD:bad Google Analytics VisitorId\"\n            case macroMapVar() \u003d\u003e s\"BAD:$subId\"\n            case mustachVar() \u003d\u003e s\"BAD:$subId\"\n            case \"\" \u003d\u003e \"BAD:emptyId\"\n            case \"0\" \u003d\u003e \"BAD:0\"\n            case null \u003d\u003e \"BAD:null\"\n            case ones() \u003d\u003e s\"BAD:$subId\"\n            case lazyVisitorId() \u003d\u003e \"BAD:Event Stream Fallback VisitorId\"\n            case gaVisitorId() \u003d\u003e \"GOOD:Google Analytics VisitorId\"\n            case uuidVisitorId() \u003d\u003e \"GOOD:UUID\"\n            case numeric() \u003d\u003e s\"GOOD:numeric(${subId.length})\"\n            case hexa() \u003d\u003e s\"GOOD:hexa(${subId.length})\"\n            case base64() \u003d\u003e s\"GOOD:base64(${subId.length})\"\n            case _ \u003d\u003e \"BAD:other\"\n        }\n    }\n    udf(getIdTypeFn _)\n}\n\nval getEventSource \u003d {\n    def getEventSourceFn(id: String): String \u003d id match {\n        case ScopedId(source, subId) \u003d\u003e source\n        case \"\" \u003d\u003e \"empty\"\n        case null \u003d\u003e \"null\"\n        case _:String \u003d\u003e \"notScoped\"\n        case _ \u003d\u003e \"Unknown\"\n    }\n    udf(getEventSourceFn _)\n}\nclass PimpDataFrameWithRatio(val df: DataFrame) {\n    import sqlContext.implicits._\n    def withRatio(): DataFrame \u003d {\n        val total \u003d df.select(sum($\"count\")).as[Long].take(1).head\n        df.withColumn(\"ratio\", $\"count\"/total.toDouble)\n    }\n}\nimplicit def pimpDataFrameWithRatio( df: DataFrame) \u003d new PimpDataFrameWithRatio(df)\n\ncase class ValueStats(value: String, count: Long, ratio: Double)\ncase class JoinEntry(offerCount: String, clickCount: String, count: Long, ratio: Double, status: String)",
+      "authenticationInfo": {},
+      "dateUpdated": "Apr 13, 2017 11:31:54 AM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "editorHide": true,
+        "colWidth": 12.0,
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1492075766337_-400128868",
+      "id": "20170413-112926_1647203806",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "import org.apache.spark.sql.Row\nimport org.apache.spark.sql.DataFrame\nScopedId: scala.util.matching.Regex \u003d ^([^:]+):(.*)$\ngetIdType: org.apache.spark.sql.UserDefinedFunction \u003d UserDefinedFunction(\u003cfunction1\u003e,StringType,List(StringType))\ngetEventSource: org.apache.spark.sql.UserDefinedFunction \u003d UserDefinedFunction(\u003cfunction1\u003e,StringType,List(StringType))\ndefined class PimpDataFrameWithRatio\nwarning: there were 1 feature warning(s); re-run with -feature for details\npimpDataFrameWithRatio: (df: org.apache.spark.sql.DataFrame)PimpDataFrameWithRatio\ndefined class ValueStats\ndefined class JoinEntry\n"
+      },
+      "dateCreated": "Apr 13, 2017 11:29:26 AM",
+      "dateStarted": "Apr 13, 2017 11:31:19 AM",
+      "dateFinished": "Apr 13, 2017 11:31:23 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "//val basePath \u003d \"s3a://purch-calypso-us-east-1/shared-with-LIG/2017-02-10/%s/*/*/*/*/*.parquet\"\n//val basePath \u003d \"s3a://purch-calypso-us-east-1/shared-with-LIG/2017-02-10_2/%s/*/*/*/*/*.parquet\"\n//val basePath \u003d \"s3a://purch-calypso-us-east-1/shared-with-LIG/2017-03-06-7days/%s/*/*/*/*/*.parquet\"\n//val basePath \u003d \"s3a://purch-calypso-us-east-1/shared-with-LIG/2017-03-06_30days/%s/*/*/*/20170305*/*.parquet\"\nval basePath \u003d \"s3a://purch-calypso-us-east-1/shared-with-LIG/2017-03-06_30days/%s/*/*/*/*/*.parquet\"\n//val basePath \u003d \"s3a://purch-calypso-us-east-1/batch-dmp/continuous/%s/*/*/*/20170305*/*.parquet\"",
+      "authenticationInfo": {},
+      "dateUpdated": "Apr 13, 2017 11:32:29 AM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0,
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1492075766338_-398974621",
+      "id": "20170413-112926_1342673965",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "basePath: String \u003d s3a://purch-calypso-us-east-1/shared-with-LIG/2017-03-06_30days/%s/*/*/*/*/*.parquet\n"
+      },
+      "dateCreated": "Apr 13, 2017 11:29:26 AM",
+      "dateStarted": "Apr 13, 2017 11:32:29 AM",
+      "dateFinished": "Apr 13, 2017 11:32:30 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val parquetFileOffer \u003d {\n    val df \u003d sqlContext.read\n        .parquet(basePath.format(\"offerview\"))\n        .withColumn(\"eventSource\", getEventSource($\"offerViewId\"))\n        .withColumn(\"eventIdType\", getIdType($\"offerViewId\"))\n        .withColumn(\"visitorIdType\", getIdType($\"userInfo.userId\"))\n        .withColumn(\"offerIdType\", getIdType($\"offerId\"))\n    val res \u003d df\n        .groupBy(df.columns.map(col(_)):_*)\n        .count\n        .withColumnRenamed(\"count\", \"duplicateCount\")\n        .withColumn(\"status\", when(\n                $\"eventIdType\".startsWith(\"GOOD:\") \u0026\u0026\n                $\"visitorIdType\".startsWith(\"GOOD:\") \u0026\u0026\n                $\"offerIdType\".startsWith(\"GOOD:\"),\n                \"GOOD\"\n            )\n            .otherwise(\"BAD\")\n        )\n        .cache\n    res\n}\n                            \nval parquetFileClick \u003d {\n    val df \u003d sqlContext.read\n        .parquet(basePath.format(\"click\"))\n        .withColumn(\"eventSource\", getEventSource($\"clickId\"))\n        .withColumn(\"eventIdType\", getIdType($\"clickId\"))\n        .withColumn(\"visitorIdType\", getIdType($\"userInfo.userId\"))\n        .withColumn(\"offerViewIdType\", getIdType($\"offerViewId\"))\n    val res \u003d df\n        .groupBy(df.columns.map(col(_)):_*)\n        .count\n        .withColumnRenamed(\"count\", \"duplicateCount\")\n        .withColumn(\"status\", when(\n                $\"eventIdType\".startsWith(\"GOOD:\") \u0026\u0026\n                $\"visitorIdType\".startsWith(\"GOOD:\") \u0026\u0026\n                $\"offerViewIdType\".startsWith(\"GOOD:\"),\n                \"GOOD\"\n            )\n            .otherwise(\"BAD\")\n        )\n        .cache\n    res\n}",
+      "authenticationInfo": {},
+      "dateUpdated": "Apr 13, 2017 11:32:22 AM",
+      "config": {
+        "enabled": true,
+        "tableHide": false,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "editorHide": true,
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1492075766338_-398974621",
+      "id": "20170413-112926_563167079",
+      "result": {
+        "code": "ERROR",
+        "type": "TEXT",
+        "msg": "java.lang.RuntimeException: java.lang.ClassNotFoundException: Class org.apache.hadoop.fs.s3a.S3AFileSystem not found\n\tat org.apache.hadoop.conf.Configuration.getClass(Configuration.java:2074)\n\tat org.apache.hadoop.fs.FileSystem.getFileSystemClass(FileSystem.java:2578)\n\tat org.apache.hadoop.fs.FileSystem.createFileSystem(FileSystem.java:2591)\n\tat org.apache.hadoop.fs.FileSystem.access$200(FileSystem.java:91)\n\tat org.apache.hadoop.fs.FileSystem$Cache.getInternal(FileSystem.java:2630)\n\tat org.apache.hadoop.fs.FileSystem$Cache.get(FileSystem.java:2612)\n\tat org.apache.hadoop.fs.FileSystem.get(FileSystem.java:370)\n\tat org.apache.hadoop.fs.Path.getFileSystem(Path.java:296)\n\tat org.apache.spark.sql.DataFrameReader$$anonfun$2.apply(DataFrameReader.scala:311)\n\tat org.apache.spark.sql.DataFrameReader$$anonfun$2.apply(DataFrameReader.scala:309)\n\tat scala.collection.TraversableLike$$anonfun$flatMap$1.apply(TraversableLike.scala:251)\n\tat scala.collection.TraversableLike$$anonfun$flatMap$1.apply(TraversableLike.scala:251)\n\tat scala.collection.IndexedSeqOptimized$class.foreach(IndexedSeqOptimized.scala:33)\n\tat scala.collection.mutable.WrappedArray.foreach(WrappedArray.scala:34)\n\tat scala.collection.TraversableLike$class.flatMap(TraversableLike.scala:251)\n\tat scala.collection.AbstractTraversable.flatMap(Traversable.scala:105)\n\tat org.apache.spark.sql.DataFrameReader.parquet(DataFrameReader.scala:309)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:42)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:67)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:69)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:71)\n\tat $iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:73)\n\tat $iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:75)\n\tat $iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:77)\n\tat $iwC.\u003cinit\u003e(\u003cconsole\u003e:79)\n\tat \u003cinit\u003e(\u003cconsole\u003e:81)\n\tat .\u003cinit\u003e(\u003cconsole\u003e:85)\n\tat .\u003cclinit\u003e(\u003cconsole\u003e)\n\tat .\u003cinit\u003e(\u003cconsole\u003e:7)\n\tat .\u003cclinit\u003e(\u003cconsole\u003e)\n\tat $print(\u003cconsole\u003e)\n\tat sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)\n\tat sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)\n\tat sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\n\tat java.lang.reflect.Method.invoke(Method.java:606)\n\tat org.apache.spark.repl.SparkIMain$ReadEvalPrint.call(SparkIMain.scala:1065)\n\tat org.apache.spark.repl.SparkIMain$Request.loadAndRun(SparkIMain.scala:1346)\n\tat org.apache.spark.repl.SparkIMain.loadAndRunReq$1(SparkIMain.scala:840)\n\tat org.apache.spark.repl.SparkIMain.interpret(SparkIMain.scala:871)\n\tat org.apache.spark.repl.SparkIMain.interpret(SparkIMain.scala:819)\n\tat org.apache.zeppelin.spark.SparkInterpreter.interpretInput(SparkInterpreter.java:812)\n\tat org.apache.zeppelin.spark.SparkInterpreter.interpret(SparkInterpreter.java:755)\n\tat org.apache.zeppelin.spark.SparkInterpreter.interpret(SparkInterpreter.java:748)\n\tat org.apache.zeppelin.interpreter.ClassloaderInterpreter.interpret(ClassloaderInterpreter.java:57)\n\tat org.apache.zeppelin.interpreter.LazyOpenInterpreter.interpret(LazyOpenInterpreter.java:93)\n\tat org.apache.zeppelin.interpreter.remote.RemoteInterpreterServer$InterpretJob.jobRun(RemoteInterpreterServer.java:331)\n\tat org.apache.zeppelin.scheduler.Job.run(Job.java:171)\n\tat org.apache.zeppelin.scheduler.FIFOScheduler$1.run(FIFOScheduler.java:139)\n\tat java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:471)\n\tat java.util.concurrent.FutureTask.run(FutureTask.java:262)\n\tat java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:178)\n\tat java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:292)\n\tat java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)\n\tat java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:615)\n\tat java.lang.Thread.run(Thread.java:745)\nCaused by: java.lang.ClassNotFoundException: Class org.apache.hadoop.fs.s3a.S3AFileSystem not found\n\tat org.apache.hadoop.conf.Configuration.getClassByName(Configuration.java:1980)\n\tat org.apache.hadoop.conf.Configuration.getClass(Configuration.java:2072)\n\t... 54 more\n\n"
+      },
+      "dateCreated": "Apr 13, 2017 11:29:26 AM",
+      "dateStarted": "Apr 13, 2017 11:32:22 AM",
+      "dateFinished": "Apr 13, 2017 11:32:22 AM",
+      "status": "ERROR",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "parquetFileOffer.printSchema",
+      "authenticationInfo": {},
+      "dateUpdated": "Apr 13, 2017 11:31:54 AM",
+      "config": {
+        "enabled": true,
+        "tableHide": false,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1492075766339_-399359370",
+      "id": "20170413-112926_1188664424",
+      "result": {
+        "code": "ERROR",
+        "type": "TEXT",
+        "msg": "\u003cconsole\u003e:33: error: not found: value parquetFileOffer\n              parquetFileOffer.printSchema\n              ^\n"
+      },
+      "dateCreated": "Apr 13, 2017 11:29:26 AM",
+      "dateStarted": "Apr 13, 2017 11:31:28 AM",
+      "dateFinished": "Apr 13, 2017 11:31:28 AM",
+      "status": "ERROR",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "parquetFileClick.printSchema",
+      "dateUpdated": "Apr 13, 2017 11:31:54 AM",
+      "config": {
+        "enabled": true,
+        "tableHide": false,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "editorHide": false,
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1492075766339_-399359370",
+      "id": "20170413-112926_1990089774",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "root\n |-- userInfo: struct (nullable \u003d true)\n |    |-- userId: string (nullable \u003d true)\n |    |-- ip: string (nullable \u003d true)\n |    |-- userAgent: struct (nullable \u003d true)\n |    |    |-- deviceType: string (nullable \u003d true)\n |    |    |-- operatingSystem: string (nullable \u003d true)\n |    |    |-- browser: string (nullable \u003d true)\n |    |    |-- rawUserAgent: string (nullable \u003d true)\n |    |-- userGeolocation: struct (nullable \u003d true)\n |    |    |-- country: string (nullable \u003d true)\n |    |    |-- countryCode: string (nullable \u003d true)\n |    |    |-- state: string (nullable \u003d true)\n |    |    |-- city: string (nullable \u003d true)\n |    |    |-- timeZone: string (nullable \u003d true)\n |    |-- adBlocked: boolean (nullable \u003d true)\n |-- siteDomain: struct (nullable \u003d true)\n |    |-- countryCode: string (nullable \u003d true)\n |    |-- domainName: string (nullable \u003d true)\n |-- dataCenter: string (nullable \u003d true)\n |-- utcDate: timestamp (nullable \u003d true)\n |-- offerTitle: string (nullable \u003d true)\n |-- category: array (nullable \u003d true)\n |    |-- element: string (containsNull \u003d true)\n |-- price: decimal(38,18) (nullable \u003d true)\n |-- merchant: string (nullable \u003d true)\n |-- source: string (nullable \u003d true)\n |-- keywords: array (nullable \u003d true)\n |    |-- element: string (containsNull \u003d true)\n |-- offerViewId: string (nullable \u003d true)\n |-- clickId: string (nullable \u003d true)\n |-- earning: decimal(38,18) (nullable \u003d true)\n |-- searchId: string (nullable \u003d true)\n |-- eventSource: string (nullable \u003d true)\n |-- eventIdType: string (nullable \u003d true)\n |-- visitorIdType: string (nullable \u003d true)\n |-- offerViewIdType: string (nullable \u003d true)\n |-- duplicateCount: long (nullable \u003d false)\n |-- status: string (nullable \u003d false)\n\n"
+      },
+      "dateCreated": "Apr 13, 2017 11:29:26 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md\n### Generate stats",
+      "dateUpdated": "Apr 13, 2017 11:31:54 AM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "editorHide": true,
+        "colWidth": 12.0,
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1492075766339_-399359370",
+      "id": "20170413-112926_381029593",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\u003ch3\u003eGenerate stats\u003c/h3\u003e\n"
+      },
+      "dateCreated": "Apr 13, 2017 11:29:26 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "z.angularBind( \"running\", true )\nz.angularBind( \"basePath\", basePath )\nval totalOfferCount \u003d parquetFileOffer.select(sum($\"duplicateCount\")).as[Long].first\nz.angularBind( \"totalOfferViewCount\", totalOfferCount )\nval distinctOfferCount \u003d parquetFileOffer.count\nz.angularBind( \"distinctOfferViewCount\", distinctOfferCount )\n\nval totalClickCount \u003d parquetFileClick.select(sum($\"duplicateCount\")).as[Long].first\nz.angularBind( \"totalClickCount\", totalClickCount )\nval distinctClickCount \u003d parquetFileClick.count\nz.angularBind( \"distinctClickCount\", distinctClickCount )\n\nval eventSources \u003d (parquetFileOffer.select($\"eventSource\").distinct.as[String].collect.toSet ++ parquetFileClick.select($\"eventSource\").distinct.as[String].collect.toSet).toSeq.sorted\nz.angularBind( \"eventSources\", eventSources.toArray )\nval eventTypes \u003d {\n    val offerStatuses \u003d parquetFileOffer\n        .select(lit(\"offerView\").as(\"eventType\"), $\"eventSource\", $\"eventIdType\", $\"visitorIdType\", $\"offerIdType\", $\"duplicateCount\", $\"status\")\n        .groupBy($\"eventType\", $\"eventSource\", $\"eventIdType\", $\"visitorIdType\", $\"offerIdType\", $\"duplicateCount\", $\"status\")\n        .count\n        .orderBy($\"count\".desc)\n        .cache\n\n    val clickStatuses \u003d parquetFileClick\n        .select(lit(\"click\").as(\"eventType\"), $\"eventSource\", $\"eventIdType\", $\"visitorIdType\", $\"offerViewIdType\", $\"duplicateCount\", $\"status\")\n        .groupBy($\"eventType\", $\"eventSource\", $\"eventIdType\", $\"visitorIdType\", $\"offerViewIdType\", $\"duplicateCount\", $\"status\")\n        .count\n        .orderBy($\"count\".desc)\n        .cache\n\n    Seq(\n        (\"OfferView\", offerStatuses, Seq(\"status\", \"visitorIdType\", \"eventIdType\", \"offerIdType\",     \"duplicateCount\")),\n        (\"Click\",     clickStatuses, Seq(\"status\", \"visitorIdType\", \"eventIdType\", \"offerViewIdType\", \"duplicateCount\"))\n    )\n}\n\nfor(eventSource \u003c- eventSources) {\n    println(s\"### $eventSource\")\n    for((eventType, df, columns) \u003c- eventTypes) {\n        println(s\"#### $eventSource, $eventType\")\n            println(s\"##### $eventSource, $eventType, top combinations\")\n        df\n            .where($\"eventSource\" \u003d\u003d\u003d eventSource)\n            .withRatio\n            .orderBy($\"count\".desc)\n            .show(false)\n        val count \u003d df\n                .where($\"eventSource\" \u003d\u003d\u003d eventSource)\n                .select(sum($\"count\"))\n                .as[Long]\n                .first\n        z.angularBind(s\"${eventSource}_${eventType}_count\", count)\n        val badCount \u003d df\n                .where($\"eventSource\" \u003d\u003d\u003d eventSource \u0026\u0026 $\"status\"\u003d\u003d\u003d\"BAD\")\n                .select(sum($\"count\"))\n                .as[Long]\n                .first\n        z.angularBind(s\"${eventSource}_${eventType}_overallStatus_BAD_count\", badCount)\n        z.angularBind(s\"${eventSource}_${eventType}_overallStatus_BAD_ratio\", badCount/count.toDouble)\n        for(columnName \u003c- columns) {\n            println(s\"##### $eventSource, $eventType, $columnName\")\n            val valuesDf \u003d df\n                .where($\"eventSource\" \u003d\u003d\u003d eventSource)\n                .groupBy($\"eventType\", $\"eventSource\", col(columnName))\n                .sum(\"count\")\n                .withColumnRenamed(\"sum(count)\", \"count\")\n                .withRatio\n                .orderBy($\"count\".desc)\n                .cache\n            valuesDf.show(false)\n            val badValues \u003d valuesDf.where(col(columnName).startsWith(\"BAD\")).take(5).map({ case Row(_: String, _: String, value: String, count: Long, ratio:Double) \u003d\u003e ValueStats(value, count, ratio)}).toArray\n            //println(s\"${eventSource}_${eventType}_${columnName}_badValues -\u003e ${badValues.toSeq}\")\n            z.angularBind(s\"${eventSource}_${eventType}_${columnName}_badValues\", badValues)\n            if(columnName.endsWith(\"Type\")) {\n                val statusCol \u003d columnName.replaceAll(\"Type$\", \"Status\")\n                val statusDf \u003d df\n                .where($\"eventSource\" \u003d\u003d\u003d eventSource)\n                .groupBy($\"eventType\", $\"eventSource\", when(col(columnName).startsWith(\"BAD\"), \"BAD\").otherwise(\"GOOD\").as(statusCol))\n                .sum(\"count\")\n                .withColumnRenamed(\"sum(count)\", \"count\")\n                .withRatio\n                .orderBy($\"count\".desc)\n                .cache\n                statusDf.show(false)\n                statusDf.take(2).foreach {\n                    case Row(_: String, _: String, status: String, count: Long, ratio:Double) \u003d\u003e\n                        //println(s\"${eventSource}_${eventType}_${statusCol}_${status}_count -\u003e $count\")\n                        //println(s\"${eventSource}_${eventType}_${statusCol}_${status}_ratio -\u003e $ratio\")\n                        z.angularBind(s\"${eventSource}_${eventType}_${statusCol}_${status}_count\", count)\n                        z.angularBind(s\"${eventSource}_${eventType}_${statusCol}_${status}_ratio\", ratio)\n                }\n            }\n        }\n    }\n}\n\nfor(eventSource \u003c- eventSources) {\n    println($\"### Jointure analysis on \u0027GOOD\u0027 events from $eventSource. \")\n    val clicks \u003d parquetFileClick.where($\"status\"\u003d\u003d\u003d\"GOOD\" \u0026\u0026 $\"eventSource\"\u003d\u003d\u003deventSource).distinct.select($\"offerViewId\").groupBy(\"offerViewId\").count.withColumnRenamed(\"count\", \"clickCount\")\n    val offers \u003d parquetFileOffer.where($\"status\"\u003d\u003d\u003d\"GOOD\" \u0026\u0026 $\"eventSource\"\u003d\u003d\u003deventSource).distinct.select($\"offerViewId\").groupBy(\"offerViewId\").count.withColumnRenamed(\"count\", \"offerCount\")\n    val join \u003d clicks\n        .join(offers, Seq(\"offerViewId\"), \"outer\")\n        .select(\n            $\"offerViewId\",\n            when($\"offerCount\".isNull, \"0\").when($\"offerCount\"\u003d\u003d\u003d1, \"1\").otherwise(\"+\").as(\"offerCount\"),\n            when($\"clickCount\".isNull, \"0\").when($\"clickCount\"\u003d\u003d\u003d1, \"1\").otherwise(\"+\").as(\"clickCount\")\n        )\n    println($\"#### OfferView and Click counts per offerViewId. \")\n    val aggregatedJoin \u003d join\n        .groupBy(\"offerCount\", \"clickCount\")\n        .count\n        .withRatio\n        .withColumn(\"status\", when($\"offerCount\"\u003d\u003d\u003d1, \"GOOD\").otherwise(\"BAD\"))\n        .orderBy(when($\"offerCount\"\u003d\u003d\u003d1, Int.MaxValue).otherwise($\"offerCount\").desc, $\"count\".desc)\n    aggregatedJoin.show(false)\n    z.angularBind(s\"${eventSource}_joinTable\", aggregatedJoin.as[JoinEntry].collect.toArray)\n/*\n    val sample \u003d join.where($\"offerCount\"\u003d\u003d\u003d1 \u0026\u0026 $\"clickCount\"\u003d\u003d\u003d0).limit(10).select($\"offerViewId\").as[String].collect\n    println($\"#### Sample of orphan clicks. \")\n    parquetFileClick.where($\"status\"\u003d\u003d\u003d\"GOOD\" \u0026\u0026 $\"eventSource\"\u003d\u003d\u003deventSource).distinct.where($\"offerViewId\".isin(sample:_*)).show(false)\n    println($\"#### Sample of \u0027BAD\u0027 offers related to orphan clicks. \")\n    parquetFileOffer.distinct.where($\"offerViewId\".isin(sample:_*)).show(false)\n*/\n}\nz.angularBind( \"running\", false )",
+      "dateUpdated": "Apr 13, 2017 11:31:54 AM",
+      "config": {
+        "enabled": true,
+        "tableHide": false,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "editorHide": true,
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1492075766340_-401283114",
+      "id": "20170413-112926_168134197",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "totalOfferCount: Long \u003d 38302096\ndistinctOfferCount: Long \u003d 33169337\ntotalClickCount: Long \u003d 574112\ndistinctClickCount: Long \u003d 530750\neventSources: Seq[String] \u003d ArrayBuffer(POM, RaaS)\neventTypes: Seq[(String, org.apache.spark.sql.DataFrame, Seq[String])] \u003d List((OfferView,[eventType: string, eventSource: string, eventIdType: string, visitorIdType: string, offerIdType: string, duplicateCount: bigint, status: string, count: bigint],List(status, visitorIdType, eventIdType, offerIdType, duplicateCount)), (Click,[eventType: string, eventSource: string, eventIdType: string, visitorIdType: string, offerViewIdType: string, duplicateCount: bigint, status: string, count: bigint],List(status, visitorIdType, eventIdType, offerViewIdType, duplicateCount)))\n### POM\n#### POM, OfferView\n##### POM, OfferView, top combinations\n+---------+-----------+----------------+-----------------------------------+----------------+--------------+------+-------+--------------------+\n|eventType|eventSource|eventIdType     |visitorIdType                      |offerIdType     |duplicateCount|status|count  |ratio               |\n+---------+-----------+----------------+-----------------------------------+----------------+--------------+------+-------+--------------------+\n|offerView|POM        |GOOD:numeric(15)|BAD:Event Stream Fallback VisitorId|GOOD:numeric(12)|1             |BAD   |4101940|0.17412869852727925 |\n|offerView|POM        |GOOD:numeric(15)|BAD:Event Stream Fallback VisitorId|GOOD:numeric(16)|1             |BAD   |3609824|0.15323821290231873 |\n|offerView|POM        |GOOD:numeric(15)|GOOD:Google Analytics VisitorId    |GOOD:numeric(12)|1             |GOOD  |3261362|0.1384458866990557  |\n|offerView|POM        |GOOD:numeric(15)|GOOD:Google Analytics VisitorId    |GOOD:numeric(16)|1             |GOOD  |2701583|0.11468308452913077 |\n|offerView|POM        |GOOD:numeric(17)|BAD:Event Stream Fallback VisitorId|GOOD:numeric(12)|1             |BAD   |1322648|0.05614684145787331 |\n|offerView|POM        |GOOD:numeric(15)|GOOD:Google Analytics VisitorId    |GOOD:numeric(12)|2             |GOOD  |801724 |0.03403344678324998 |\n|offerView|POM        |GOOD:numeric(17)|GOOD:Google Analytics VisitorId    |GOOD:numeric(12)|1             |GOOD  |793561 |0.033686924755604974|\n|offerView|POM        |GOOD:numeric(15)|GOOD:Google Analytics VisitorId    |GOOD:numeric(15)|1             |GOOD  |759737 |0.03225108486058294 |\n|offerView|POM        |GOOD:numeric(15)|BAD:Event Stream Fallback VisitorId|GOOD:numeric(15)|1             |BAD   |732551 |0.031097030242972095|\n|offerView|POM        |GOOD:numeric(15)|GOOD:Google Analytics VisitorId    |GOOD:numeric(16)|2             |GOOD  |616041 |0.02615114252510852 |\n|offerView|POM        |GOOD:numeric(15)|BAD:Event Stream Fallback VisitorId|GOOD:numeric(11)|1             |BAD   |446778 |0.018965872653091166|\n|offerView|POM        |GOOD:numeric(17)|BAD:Event Stream Fallback VisitorId|GOOD:numeric(16)|1             |BAD   |402388 |0.01708150259218683 |\n|offerView|POM        |GOOD:numeric(15)|GOOD:Google Analytics VisitorId    |GOOD:numeric(11)|1             |GOOD  |361304 |0.015337473315723806|\n|offerView|POM        |GOOD:numeric(15)|BAD:Event Stream Fallback VisitorId|GOOD:numeric(12)|2             |BAD   |284356 |0.012071005475073508|\n|offerView|POM        |GOOD:numeric(17)|GOOD:Google Analytics VisitorId    |GOOD:numeric(16)|1             |GOOD  |263011 |0.011164903223440189|\n|offerView|POM        |GOOD:numeric(17)|BAD:Event Stream Fallback VisitorId|GOOD:numeric(11)|1             |BAD   |262814 |0.011156540508819819|\n|offerView|POM        |GOOD:numeric(15)|GOOD:UUID                          |GOOD:numeric(12)|1             |GOOD  |210212 |0.008923568354197386|\n|offerView|POM        |GOOD:numeric(15)|GOOD:Google Analytics VisitorId    |GOOD:numeric(15)|2             |GOOD  |209883 |0.008909602196278092|\n|offerView|POM        |GOOD:numeric(15)|BAD:Event Stream Fallback VisitorId|GOOD:numeric(16)|2             |BAD   |202519 |0.008596997980722797|\n|offerView|POM        |GOOD:numeric(17)|GOOD:Google Analytics VisitorId    |GOOD:numeric(11)|1             |GOOD  |179826 |0.007633672686915586|\n+---------+-----------+----------------+-----------------------------------+----------------+--------------+------+-------+--------------------+\nonly showing top 20 rows\n\n##### POM, OfferView, status\n+---------+-----------+------+--------+------------------+\n|eventType|eventSource|status|count   |ratio             |\n+---------+-----------+------+--------+------------------+\n|offerView|POM        |BAD   |12147244|0.5156544923653934|\n|offerView|POM        |GOOD  |11409700|0.4843455076346066|\n+---------+-----------+------+--------+------------------+\n\n##### POM, OfferView, visitorIdType\n+---------+-----------+-----------------------------------+--------+---------------------+\n|eventType|eventSource|visitorIdType                      |count   |ratio                |\n+---------+-----------+-----------------------------------+--------+---------------------+\n|offerView|POM        |BAD:Event Stream Fallback VisitorId|12062477|0.5120561054099377   |\n|offerView|POM        |GOOD:Google Analytics VisitorId    |10800884|0.4585010687294583   |\n|offerView|POM        |GOOD:UUID                          |608816  |0.025844438905148308 |\n|offerView|POM        |BAD:${VISITOR_ID}                  |73702   |0.0031286740758903193|\n|offerView|POM        |BAD:emptyId                        |10988   |4.6644420430765553E-4|\n|offerView|POM        |BAD:bad Google Analytics VisitorId |77      |3.2686752577074513E-6|\n+---------+-----------+-----------------------------------+--------+---------------------+\n\n+---------+-----------+---------------+--------+------------------+\n|eventType|eventSource|visitorIdStatus|count   |ratio             |\n+---------+-----------+---------------+--------+------------------+\n|offerView|POM        |BAD            |12147244|0.5156544923653934|\n|offerView|POM        |GOOD           |11409700|0.4843455076346066|\n+---------+-----------+---------------+--------+------------------+\n\n##### POM, OfferView, eventIdType\n+---------+-----------+----------------+--------+---------------------+\n|eventType|eventSource|eventIdType     |count   |ratio                |\n+---------+-----------+----------------+--------+---------------------+\n|offerView|POM        |GOOD:numeric(15)|19790224|0.8401015004323141   |\n|offerView|POM        |GOOD:numeric(17)|3412310 |0.14485367881334693  |\n|offerView|POM        |GOOD:numeric(16)|340117  |0.01443807821591799  |\n|offerView|POM        |GOOD:numeric(14)|13138   |5.577124095553311E-4 |\n|offerView|POM        |GOOD:numeric(13)|1070    |4.5421850983726924E-5|\n|offerView|POM        |GOOD:numeric(12)|77      |3.2686752577074513E-6|\n|offerView|POM        |GOOD:numeric(11)|8       |3.3960262417739754E-7|\n+---------+-----------+----------------+--------+---------------------+\n\n+---------+-----------+-------------+--------+-----+\n|eventType|eventSource|eventIdStatus|count   |ratio|\n+---------+-----------+-------------+--------+-----+\n|offerView|POM        |GOOD         |23556944|1.0  |\n+---------+-----------+-------------+--------+-----+\n\n##### POM, OfferView, offerIdType\n+---------+-----------+----------------+--------+---------------------+\n|eventType|eventSource|offerIdType     |count   |ratio                |\n+---------+-----------+----------------+--------+---------------------+\n|offerView|POM        |GOOD:numeric(12)|11358767|0.4821833850774532   |\n|offerView|POM        |GOOD:numeric(16)|8290634 |0.35194013281179426  |\n|offerView|POM        |GOOD:numeric(15)|2012809 |0.08544440229598542  |\n|offerView|POM        |GOOD:numeric(11)|1550121 |0.06580314492406146  |\n|offerView|POM        |GOOD:numeric(13)|342762  |0.014550359333536642 |\n|offerView|POM        |GOOD:numeric(10)|1843    |7.823595454486797E-5 |\n|offerView|POM        |GOOD:numeric(4) |8       |3.3960262417739754E-7|\n+---------+-----------+----------------+--------+---------------------+\n\n+---------+-----------+-------------+--------+-----+\n|eventType|eventSource|offerIdStatus|count   |ratio|\n+---------+-----------+-------------+--------+-----+\n|offerView|POM        |GOOD         |23556944|1.0  |\n+---------+-----------+-------------+--------+-----+\n\n##### POM, OfferView, duplicateCount\n+---------+-----------+--------------+--------+---------------------+\n|eventType|eventSource|duplicateCount|count   |ratio                |\n+---------+-----------+--------------+--------+---------------------+\n|offerView|POM        |1             |20447042|0.8679836399831828   |\n|offerView|POM        |2             |2546379 |0.10809462381877717  |\n|offerView|POM        |3             |389144  |0.01651929044786115  |\n|offerView|POM        |4             |44039   |0.0018694699957685513|\n|offerView|POM        |5             |22368   |9.495289372000035E-4 |\n|offerView|POM        |6             |16112   |6.839596850932787E-4 |\n|offerView|POM        |7             |12768   |5.420057881871265E-4 |\n|offerView|POM        |8             |10399   |4.414409611025946E-4 |\n|offerView|POM        |9             |8408    |3.569223580104448E-4 |\n|offerView|POM        |10            |7341    |3.116278580107844E-4 |\n|offerView|POM        |11            |6197    |2.6306468275341655E-4|\n|offerView|POM        |12            |5364    |2.2770355951094506E-4|\n|offerView|POM        |13            |4618    |1.9603561480640273E-4|\n|offerView|POM        |14            |3979    |1.689098552002331E-4 |\n|offerView|POM        |15            |3398    |1.442462146193496E-4 |\n|offerView|POM        |16            |2975    |1.262897258659697E-4 |\n|offerView|POM        |17            |2599    |1.1032840252963203E-4|\n|offerView|POM        |18            |2318    |9.839986035540094E-5 |\n|offerView|POM        |19            |1971    |8.366959653170632E-5 |\n|offerView|POM        |20            |1839    |7.806615323277926E-5 |\n+---------+-----------+--------------+--------+---------------------+\nonly showing top 20 rows\n\n#### POM, Click\n##### POM, Click, top combinations\n+---------+-----------+---------------+-----------------------------------+----------------+--------------+------+------+---------------------+\n|eventType|eventSource|eventIdType    |visitorIdType                      |offerViewIdType |duplicateCount|status|count |ratio                |\n+---------+-----------+---------------+-----------------------------------+----------------+--------------+------+------+---------------------+\n|click    |POM        |GOOD:base64(11)|BAD:Event Stream Fallback VisitorId|GOOD:numeric(15)|1             |BAD   |179758|0.3441892525825012   |\n|click    |POM        |GOOD:base64(11)|GOOD:Google Analytics VisitorId    |GOOD:numeric(15)|1             |GOOD  |174196|0.33353948665907157  |\n|click    |POM        |GOOD:base64(10)|BAD:Event Stream Fallback VisitorId|GOOD:numeric(15)|1             |BAD   |37795 |0.07236747628119825  |\n|click    |POM        |GOOD:base64(10)|GOOD:Google Analytics VisitorId    |GOOD:numeric(15)|1             |GOOD  |36504 |0.06989555110911128  |\n|click    |POM        |GOOD:base64(11)|BAD:emptyId                        |GOOD:numeric(15)|1             |BAD   |16437 |0.03147252831417001  |\n|click    |POM        |GOOD:base64(11)|GOOD:UUID                          |GOOD:numeric(15)|1             |GOOD  |10653 |0.020397690827453494 |\n|click    |POM        |GOOD:base64(11)|GOOD:Google Analytics VisitorId    |GOOD:numeric(15)|2             |GOOD  |10612 |0.020319186619819442 |\n|click    |POM        |GOOD:base64(11)|BAD:Event Stream Fallback VisitorId|GOOD:numeric(15)|2             |BAD   |9347  |0.017897044603793093 |\n|click    |POM        |GOOD:base64(11)|GOOD:Google Analytics VisitorId    |GOOD:numeric(14)|1             |GOOD  |4957  |0.009491350176634467 |\n|click    |POM        |GOOD:base64(11)|GOOD:Google Analytics VisitorId    |GOOD:numeric(13)|1             |GOOD  |4531  |0.008675672311948915 |\n|click    |POM        |GOOD:base64(11)|BAD:Event Stream Fallback VisitorId|GOOD:numeric(14)|1             |BAD   |3947  |0.007557466037356514 |\n|click    |POM        |GOOD:base64(10)|BAD:emptyId                        |GOOD:numeric(15)|1             |BAD   |3413  |0.006534996601342231 |\n|click    |POM        |GOOD:base64(11)|BAD:Event Stream Fallback VisitorId|GOOD:numeric(13)|1             |BAD   |2813  |0.005386154538404833 |\n|click    |POM        |GOOD:base64(10)|GOOD:Google Analytics VisitorId    |GOOD:numeric(15)|2             |GOOD  |2248  |0.004304328262472117 |\n|click    |POM        |GOOD:base64(10)|GOOD:UUID                          |GOOD:numeric(15)|1             |GOOD  |2195  |0.004202847213579313 |\n|click    |POM        |GOOD:base64(10)|BAD:Event Stream Fallback VisitorId|GOOD:numeric(15)|2             |BAD   |1968  |0.0037682019664346646|\n|click    |POM        |GOOD:base64(11)|BAD:emptyId                        |BAD:emptyId     |1             |BAD   |1945  |0.0037241630206887306|\n|click    |POM        |GOOD:base64(11)|BAD:emptyId                        |GOOD:numeric(15)|2             |BAD   |1362  |0.0026078714828678927|\n|click    |POM        |GOOD:base64(9) |GOOD:Google Analytics VisitorId    |GOOD:numeric(15)|1             |GOOD  |1274  |0.0024393746469704076|\n|click    |POM        |GOOD:base64(9) |BAD:Event Stream Fallback VisitorId|GOOD:numeric(15)|1             |BAD   |1212  |0.0023206609671335434|\n+---------+-----------+---------------+-----------------------------------+----------------+--------------+------+------+---------------------+\nonly showing top 20 rows\n\n##### POM, Click, status\n+---------+-----------+------+------+------------------+\n|eventType|eventSource|status|count |ratio             |\n+---------+-----------+------+------+------------------+\n|click    |POM        |BAD   |267605|0.5123931337539371|\n|click    |POM        |GOOD  |254660|0.4876068662460628|\n+---------+-----------+------+------+------------------+\n\n##### POM, Click, visitorIdType\n+---------+-----------+-----------------------------------+------+---------------------+\n|eventType|eventSource|visitorIdType                      |count |ratio                |\n+---------+-----------+-----------------------------------+------+---------------------+\n|click    |POM        |BAD:Event Stream Fallback VisitorId|241819|0.46301973136243096  |\n|click    |POM        |GOOD:Google Analytics VisitorId    |240357|0.46022038620240685  |\n|click    |POM        |BAD:emptyId                        |24665 |0.047226982470584856 |\n|click    |POM        |GOOD:UUID                          |14303 |0.027386480043655997 |\n|click    |POM        |BAD:${VISITOR_ID}                  |1121  |0.0021464199209213714|\n+---------+-----------+-----------------------------------+------+---------------------+\n\n+---------+-----------+---------------+------+------------------+\n|eventType|eventSource|visitorIdStatus|count |ratio             |\n+---------+-----------+---------------+------+------------------+\n|click    |POM        |BAD            |267605|0.5123931337539371|\n|click    |POM        |GOOD           |254660|0.4876068662460628|\n+---------+-----------+---------------+------+------------------+\n\n##### POM, Click, eventIdType\n+---------+-----------+----------------+------+---------------------+\n|eventType|eventSource|eventIdType     |count |ratio                |\n+---------+-----------+----------------+------+---------------------+\n|click    |POM        |GOOD:base64(11) |428602|0.8206600097651575   |\n|click    |POM        |GOOD:base64(10) |89978 |0.17228418523163527  |\n|click    |POM        |GOOD:base64(9)  |3000  |0.005744210314686989 |\n|click    |POM        |GOOD:hexa(11)   |488   |9.343915445224168E-4 |\n|click    |POM        |GOOD:hexa(10)   |89    |1.7041157266904733E-4|\n|click    |POM        |GOOD:base64(8)  |77    |1.4743473141029938E-4|\n|click    |POM        |GOOD:hexa(9)    |13    |2.489157803031028E-5 |\n|click    |POM        |GOOD:numeric(11)|10    |1.9147367715623296E-5|\n|click    |POM        |GOOD:base64(7)  |4     |7.658947086249319E-6 |\n|click    |POM        |GOOD:numeric(10)|3     |5.7442103146869885E-6|\n|click    |POM        |GOOD:numeric(9) |1     |1.9147367715623297E-6|\n+---------+-----------+----------------+------+---------------------+\n\n+---------+-----------+-------------+------+-----+\n|eventType|eventSource|eventIdStatus|count |ratio|\n+---------+-----------+-------------+------+-----+\n|click    |POM        |GOOD         |522265|1.0  |\n+---------+-----------+-------------+------+-----+\n\n##### POM, Click, offerViewIdType\n+---------+-----------+----------------+------+---------------------+\n|eventType|eventSource|offerViewIdType |count |ratio                |\n+---------+-----------+----------------+------+---------------------+\n|click    |POM        |GOOD:numeric(15)|496406|0.9504868218241698   |\n|click    |POM        |GOOD:numeric(14)|11980 |0.022938546523316707 |\n|click    |POM        |GOOD:numeric(13)|9865  |0.01888887825146238  |\n|click    |POM        |BAD:emptyId     |2589  |0.004957253501574871 |\n|click    |POM        |GOOD:numeric(17)|1165  |0.0022306683388701137|\n|click    |POM        |GOOD:numeric(12)|134   |2.565747273893522E-4 |\n|click    |POM        |GOOD:numeric(16)|107   |2.0487683455716924E-4|\n|click    |POM        |GOOD:numeric(11)|12    |2.2976841258747954E-5|\n|click    |POM        |BAD:other       |7     |1.3403157400936306E-5|\n+---------+-----------+----------------+------+---------------------+\n\n+---------+-----------+-----------------+------+---------------------+\n|eventType|eventSource|offerViewIdStatus|count |ratio                |\n+---------+-----------+-----------------+------+---------------------+\n|click    |POM        |GOOD             |519669|0.9950293433410242   |\n|click    |POM        |BAD              |2596  |0.0049706566589758075|\n+---------+-----------+-----------------+------+---------------------+\n\n##### POM, Click, duplicateCount\n+---------+-----------+--------------+------+---------------------+\n|eventType|eventSource|duplicateCount|count |ratio                |\n+---------+-----------+--------------+------+---------------------+\n|click    |POM        |1             |489163|0.9366183833877437   |\n|click    |POM        |2             |28371 |0.05432299694599485  |\n|click    |POM        |3             |3280  |0.006280336610724441 |\n|click    |POM        |4             |816   |0.001562425205594861 |\n|click    |POM        |5             |212   |4.0592419557121384E-4|\n|click    |POM        |6             |127   |2.4317156998841585E-4|\n|click    |POM        |7             |60    |1.1488420629373977E-4|\n|click    |POM        |8             |58    |1.110547327506151E-4 |\n|click    |POM        |9             |31    |5.9356839918432215E-5|\n|click    |POM        |10            |20    |3.829473543124659E-5 |\n|click    |POM        |12            |18    |3.446526188812193E-5 |\n|click    |POM        |11            |13    |2.489157803031028E-5 |\n|click    |POM        |17            |10    |1.9147367715623296E-5|\n|click    |POM        |16            |10    |1.9147367715623296E-5|\n|click    |POM        |14            |8     |1.5317894172498637E-5|\n|click    |POM        |13            |8     |1.5317894172498637E-5|\n|click    |POM        |19            |7     |1.3403157400936306E-5|\n|click    |POM        |21            |7     |1.3403157400936306E-5|\n|click    |POM        |15            |6     |1.1488420629373977E-5|\n|click    |POM        |20            |5     |9.573683857811648E-6 |\n+---------+-----------+--------------+------+---------------------+\nonly showing top 20 rows\n\n### RaaS\n#### RaaS, OfferView\n##### RaaS, OfferView, top combinations\n+---------+-----------+----------------+-------------+----------------+--------------+------+-------+---------------------+\n|eventType|eventSource|eventIdType     |visitorIdType|offerIdType     |duplicateCount|status|count  |ratio                |\n+---------+-----------+----------------+-------------+----------------+--------------+------+-------+---------------------+\n|offerView|RaaS       |GOOD:numeric(16)|BAD:emptyId  |GOOD:numeric(15)|1             |BAD   |6895173|0.7173211707011979   |\n|offerView|RaaS       |GOOD:numeric(16)|BAD:emptyId  |GOOD:numeric(16)|1             |BAD   |1781653|0.18534957944395325  |\n|offerView|RaaS       |GOOD:numeric(16)|BAD:emptyId  |GOOD:numeric(12)|1             |BAD   |824451 |0.0857695893207862   |\n|offerView|RaaS       |GOOD:numeric(16)|BAD:emptyId  |GOOD:numeric(15)|2             |BAD   |110635 |0.011509620965351708 |\n|offerView|RaaS       |GOOD:numeric(16)|BAD:emptyId  |GOOD:base64(10) |1             |BAD   |155    |1.6125016944271838E-5|\n|offerView|RaaS       |GOOD:numeric(16)|BAD:emptyId  |GOOD:numeric(16)|2             |BAD   |121    |1.2587916453270273E-5|\n|offerView|RaaS       |GOOD:numeric(16)|BAD:emptyId  |GOOD:numeric(12)|2             |BAD   |90     |9.362913064415906E-6 |\n|offerView|RaaS       |GOOD:numeric(16)|BAD:emptyId  |GOOD:numeric(15)|3             |BAD   |64     |6.658071512473533E-6 |\n|offerView|RaaS       |GOOD:numeric(16)|GOOD:UUID    |GOOD:numeric(15)|1             |GOOD  |15     |1.5604855107359843E-6|\n|offerView|RaaS       |GOOD:numeric(16)|BAD:emptyId  |GOOD:numeric(15)|4             |BAD   |9      |9.362913064415905E-7 |\n|offerView|RaaS       |GOOD:numeric(16)|GOOD:UUID    |GOOD:numeric(16)|1             |GOOD  |6      |6.241942042943937E-7 |\n|offerView|RaaS       |BAD:0           |BAD:emptyId  |GOOD:base64(10) |1             |BAD   |6      |6.241942042943937E-7 |\n|offerView|RaaS       |GOOD:numeric(16)|BAD:emptyId  |GOOD:numeric(16)|3             |BAD   |4      |4.161294695295958E-7 |\n|offerView|RaaS       |GOOD:numeric(16)|BAD:emptyId  |GOOD:numeric(15)|5             |BAD   |3      |3.120971021471969E-7 |\n|offerView|RaaS       |GOOD:numeric(16)|BAD:emptyId  |BAD:other       |1             |BAD   |2      |2.080647347647979E-7 |\n|offerView|RaaS       |GOOD:numeric(16)|BAD:emptyId  |GOOD:numeric(10)|1             |BAD   |2      |2.080647347647979E-7 |\n|offerView|RaaS       |GOOD:numeric(16)|BAD:emptyId  |GOOD:numeric(12)|3             |BAD   |2      |2.080647347647979E-7 |\n|offerView|RaaS       |GOOD:numeric(16)|GOOD:UUID    |GOOD:numeric(12)|1             |GOOD  |1      |1.0403236738239895E-7|\n|offerView|RaaS       |GOOD:numeric(16)|BAD:emptyId  |GOOD:numeric(12)|4             |BAD   |1      |1.0403236738239895E-7|\n+---------+-----------+----------------+-------------+----------------+--------------+------+-------+---------------------+\n\n##### RaaS, OfferView, status\n+---------+-----------+------+-------+---------------------+\n|eventType|eventSource|status|count  |ratio                |\n+---------+-----------+------+-------+---------------------+\n|offerView|RaaS       |BAD   |9612371|0.9999977112879176   |\n|offerView|RaaS       |GOOD  |22     |2.2887120824127767E-6|\n+---------+-----------+------+-------+---------------------+\n\n##### RaaS, OfferView, visitorIdType\n+---------+-----------+-------------+-------+---------------------+\n|eventType|eventSource|visitorIdType|count  |ratio                |\n+---------+-----------+-------------+-------+---------------------+\n|offerView|RaaS       |BAD:emptyId  |9612371|0.9999977112879176   |\n|offerView|RaaS       |GOOD:UUID    |22     |2.2887120824127767E-6|\n+---------+-----------+-------------+-------+---------------------+\n\n+---------+-----------+---------------+-------+---------------------+\n|eventType|eventSource|visitorIdStatus|count  |ratio                |\n+---------+-----------+---------------+-------+---------------------+\n|offerView|RaaS       |BAD            |9612371|0.9999977112879176   |\n|offerView|RaaS       |GOOD           |22     |2.2887120824127767E-6|\n+---------+-----------+---------------+-------+---------------------+\n\n##### RaaS, OfferView, eventIdType\n+---------+-----------+----------------+-------+--------------------+\n|eventType|eventSource|eventIdType     |count  |ratio               |\n+---------+-----------+----------------+-------+--------------------+\n|offerView|RaaS       |GOOD:numeric(16)|9612387|0.9999993758057957  |\n|offerView|RaaS       |BAD:0           |6      |6.241942042943937E-7|\n+---------+-----------+----------------+-------+--------------------+\n\n+---------+-----------+-------------+-------+--------------------+\n|eventType|eventSource|eventIdStatus|count  |ratio               |\n+---------+-----------+-------------+-------+--------------------+\n|offerView|RaaS       |GOOD         |9612387|0.9999993758057957  |\n|offerView|RaaS       |BAD          |6      |6.241942042943937E-7|\n+---------+-----------+-------------+-------+--------------------+\n\n##### RaaS, OfferView, offerIdType\n+---------+-----------+----------------+-------+--------------------+\n|eventType|eventSource|offerIdType     |count  |ratio               |\n+---------+-----------+----------------+-------+--------------------+\n|offerView|RaaS       |GOOD:numeric(15)|7005899|0.7288402586119814  |\n|offerView|RaaS       |GOOD:numeric(16)|1781784|0.18536320768408032 |\n|offerView|RaaS       |GOOD:numeric(12)|824545 |0.08577936836332015 |\n|offerView|RaaS       |GOOD:base64(10) |161    |1.674921114856623E-5|\n|offerView|RaaS       |GOOD:numeric(10)|2      |2.080647347647979E-7|\n|offerView|RaaS       |BAD:other       |2      |2.080647347647979E-7|\n+---------+-----------+----------------+-------+--------------------+\n\n+---------+-----------+-------------+-------+--------------------+\n|eventType|eventSource|offerIdStatus|count  |ratio               |\n+---------+-----------+-------------+-------+--------------------+\n|offerView|RaaS       |GOOD         |9612391|0.9999997919352652  |\n|offerView|RaaS       |BAD          |2      |2.080647347647979E-7|\n+---------+-----------+-------------+-------+--------------------+\n\n##### RaaS, OfferView, duplicateCount\n+---------+-----------+--------------+-------+---------------------+\n|eventType|eventSource|duplicateCount|count  |ratio                |\n+---------+-----------+--------------+-------+---------------------+\n|offerView|RaaS       |1             |9501464|0.9884597935186379   |\n|offerView|RaaS       |2             |110846 |0.011531571794869393 |\n|offerView|RaaS       |3             |70     |7.282265716767926E-6 |\n|offerView|RaaS       |4             |10     |1.0403236738239894E-6|\n|offerView|RaaS       |5             |3      |3.120971021471969E-7 |\n+---------+-----------+--------------+-------+---------------------+\n\n#### RaaS, Click\n##### RaaS, Click, top combinations\n+---------+-----------+----------------+-------------+---------------+--------------+------+-----+---------------------+\n|eventType|eventSource|eventIdType     |visitorIdType|offerViewIdType|duplicateCount|status|count|ratio                |\n+---------+-----------+----------------+-------------+---------------+--------------+------+-----+---------------------+\n|click    |RaaS       |BAD:0           |BAD:emptyId  |BAD:null       |1             |BAD   |5426 |0.6394814378314673   |\n|click    |RaaS       |GOOD:numeric(16)|BAD:emptyId  |BAD:null       |1             |BAD   |2931 |0.3454331172657631   |\n|click    |RaaS       |BAD:emptyId     |BAD:emptyId  |BAD:null       |1             |BAD   |86   |0.01013553329404832  |\n|click    |RaaS       |BAD:0           |BAD:emptyId  |BAD:null       |2             |BAD   |24   |0.002828520919269299 |\n|click    |RaaS       |GOOD:numeric(16)|BAD:emptyId  |BAD:null       |2             |BAD   |11   |0.0012964054213317618|\n|click    |RaaS       |BAD:0           |BAD:emptyId  |BAD:null       |3             |BAD   |5    |5.892751915144372E-4 |\n|click    |RaaS       |BAD:0           |BAD:emptyId  |BAD:null       |4             |BAD   |2    |2.357100766057749E-4 |\n+---------+-----------+----------------+-------------+---------------+--------------+------+-----+---------------------+\n\n##### RaaS, Click, status\n+---------+-----------+------+-----+-----+\n|eventType|eventSource|status|count|ratio|\n+---------+-----------+------+-----+-----+\n|click    |RaaS       |BAD   |8485 |1.0  |\n+---------+-----------+------+-----+-----+\n\n##### RaaS, Click, visitorIdType\n+---------+-----------+-------------+-----+-----+\n|eventType|eventSource|visitorIdType|count|ratio|\n+---------+-----------+-------------+-----+-----+\n|click    |RaaS       |BAD:emptyId  |8485 |1.0  |\n+---------+-----------+-------------+-----+-----+\n\n+---------+-----------+---------------+-----+-----+\n|eventType|eventSource|visitorIdStatus|count|ratio|\n+---------+-----------+---------------+-----+-----+\n|click    |RaaS       |BAD            |8485 |1.0  |\n+---------+-----------+---------------+-----+-----+\n\n##### RaaS, Click, eventIdType\n+---------+-----------+----------------+-----+-------------------+\n|eventType|eventSource|eventIdType     |count|ratio              |\n+---------+-----------+----------------+-----+-------------------+\n|click    |RaaS       |BAD:0           |5457 |0.6431349440188568 |\n|click    |RaaS       |GOOD:numeric(16)|2942 |0.3467295226870949 |\n|click    |RaaS       |BAD:emptyId     |86   |0.01013553329404832|\n+---------+-----------+----------------+-----+-------------------+\n\n+---------+-----------+-------------+-----+------------------+\n|eventType|eventSource|eventIdStatus|count|ratio             |\n+---------+-----------+-------------+-----+------------------+\n|click    |RaaS       |BAD          |5543 |0.6532704773129051|\n|click    |RaaS       |GOOD         |2942 |0.3467295226870949|\n+---------+-----------+-------------+-----+------------------+\n\n##### RaaS, Click, offerViewIdType\n+---------+-----------+---------------+-----+-----+\n|eventType|eventSource|offerViewIdType|count|ratio|\n+---------+-----------+---------------+-----+-----+\n|click    |RaaS       |BAD:null       |8485 |1.0  |\n+---------+-----------+---------------+-----+-----+\n\n+---------+-----------+-----------------+-----+-----+\n|eventType|eventSource|offerViewIdStatus|count|ratio|\n+---------+-----------+-----------------+-----+-----+\n|click    |RaaS       |BAD              |8485 |1.0  |\n+---------+-----------+-----------------+-----+-----+\n\n##### RaaS, Click, duplicateCount\n+---------+-----------+--------------+-----+---------------------+\n|eventType|eventSource|duplicateCount|count|ratio                |\n+---------+-----------+--------------+-----+---------------------+\n|click    |RaaS       |1             |8443 |0.9950500883912787   |\n|click    |RaaS       |2             |35   |0.0041249263406010605|\n|click    |RaaS       |3             |5    |5.892751915144372E-4 |\n|click    |RaaS       |4             |2    |2.357100766057749E-4 |\n+---------+-----------+--------------+-----+---------------------+\n\n### Jointure analysis on \u0027GOOD\u0027 events from POM. \n#### OfferView and Click counts per offerViewId. \n+----------+----------+--------+---------------------+------+\n|offerCount|clickCount|count   |ratio                |status|\n+----------+----------+--------+---------------------+------+\n|1         |0         |10896858|0.9640969407373027   |GOOD  |\n|1         |1         |188434  |0.016671653694201843 |GOOD  |\n|1         |+         |760     |6.724082069898956E-5 |GOOD  |\n|0         |1         |56250   |0.004976705479366004 |BAD   |\n|0         |+         |463     |4.096381576793706E-5 |BAD   |\n|+         |0         |153843  |0.013611223129992963 |BAD   |\n|+         |1         |5756    |5.092607420307683E-4 |BAD   |\n|+         |+         |294     |2.6011580638819647E-5|BAD   |\n+----------+----------+--------+---------------------+------+\n\n### Jointure analysis on \u0027GOOD\u0027 events from RaaS. \n#### OfferView and Click counts per offerViewId. \n+----------+----------+-----+-----+------+\n|offerCount|clickCount|count|ratio|status|\n+----------+----------+-----+-----+------+\n|+         |0         |4    |1.0  |BAD   |\n+----------+----------+-----+-----+------+\n\n"
+      },
+      "dateCreated": "Apr 13, 2017 11:29:26 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md\n### Generate a sanityzed dump",
+      "dateUpdated": "Apr 13, 2017 11:31:54 AM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true,
+        "colWidth": 12.0,
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1492075766341_-401667863",
+      "id": "20170413-112926_1890453174",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\u003ch3\u003eGenerate a sanityzed dump\u003c/h3\u003e\n"
+      },
+      "dateCreated": "Apr 13, 2017 11:29:26 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "for(eventSource \u003c- Seq(\"POM\")) {\n    val offers \u003d parquetFileOffer.where($\"status\"\u003d\u003d\u003d\"GOOD\" \u0026\u0026 $\"eventSource\"\u003d\u003d\u003deventSource).distinct.select($\"offerViewId\").groupBy(\"offerViewId\").count.where($\"count\"\u003d\u003d\u003d1).select(\"offerViewId\")\n    val offersWithContext \u003d parquetFileOffer.select($\"utcDate\", $\"userInfo.userId\".as(\"userId\"), $\"offerId\", $\"offerViewId\").join(offers, Seq(\"offerViewId\"), \"inner\").distinct\n    val clicks \u003d parquetFileClick.where($\"status\"\u003d\u003d\u003d\"GOOD\" \u0026\u0026 $\"eventSource\"\u003d\u003d\u003deventSource).select($\"offerViewId\", lit(1).as(\"click\")).distinct\n    val join \u003d clicks\n        .join(offersWithContext, Seq(\"offerViewId\"), \"right\")\n        .select(\n            $\"utcDate\", \n            $\"userId\",\n            $\"offerViewId\",\n            $\"offerId\",\n            when($\"click\".isNull, false).when($\"click\"\u003d\u003d\u003d1, true).otherwise(null).as(\"wasClicked\")\n        )\n        .cache\n    val impressionCount \u003d join.count()\n    val userCount \u003d join.select(\"userId\").distinct.count\n    val productCount \u003d join.select(\"offerId\").distinct.count\n    val clickCount \u003d join.where($\"wasClicked\"\u003d\u003d\u003dtrue).count\n    val offerViewCount \u003d join.select(\"offerViewId\").distinct.count\n    println(s\"impressionCount\u003d$impressionCount, userCount\u003d$userCount, productCount\u003d$productCount, clickCount\u003d$clickCount, offerViewCount\u003d$offerViewCount\")\n    join.select(\"wasClicked\").distinct.show\n    join.show\n    join.printSchema\n    val path \u003d s\"sanitized_dump_$eventSource.parquet\"\n    join.write.mode(org.apache.spark.sql.SaveMode.Overwrite).parquet(path)\n    println(s\"Sanitized dump saved in $path\")\n\n}",
+      "dateUpdated": "Apr 13, 2017 11:31:55 AM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0,
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1492075766341_-401667863",
+      "id": "20170413-112926_825938053",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "impressionCount\u003d11344986, userCount\u003d1596938, productCount\u003d3074, clickCount\u003d193644, offerViewCount\u003d11086052\n+----------+\n|wasClicked|\n+----------+\n|      true|\n|     false|\n+----------+\n\n+--------------------+--------------------+--------------------+----------------+----------+\n|             utcDate|              userId|         offerViewId|         offerId|wasClicked|\n+--------------------+--------------------+--------------------+----------------+----------+\n|2017-03-03 23:14:...|ga-265948780.1488...|  POM:01488582876753|    817752016094|     false|\n|2017-03-04 21:17:...|ga-1303525923.148...|POM:1001488662275895|    702679465677|     false|\n|2017-02-25 03:10:...|ga-1287296078.148...|POM:1003148799226...|    490300413257|     false|\n|2017-02-27 16:25:...|ga-922573110.1488...|POM:1003148821271...|     75020030801|     false|\n|2017-03-05 19:53:...|ga-1792405161.148...|POM:1005148874365...|3157016065928305|     false|\n|2017-03-01 17:32:...|ga-161892192.1488...|POM:1006148838957...|    781420059440|     false|\n|2017-03-02 18:16:...|ga-1429783281.148...|POM:1007148847859...|3157016064412929|     false|\n|2017-03-02 21:31:...|ga-1625887187.147...|POM:1008148849027...|    606449105582|     false|\n|2017-02-24 15:12:...|ga-1282664057.148...|POM:1009148794914...|    813682022327|     false|\n|2017-03-02 08:45:...|ga-1723414889.148...|POM:1009148844430...|     27242879744|     false|\n|2017-02-27 13:10:...|ga-1344965628.148...|POM:1011148820101...|     27242878822|     false|\n|2017-02-26 03:47:...|ga-2132889431.148...|POM:1012148808085...|    810351025030|     false|\n|2017-03-01 15:37:...|ga-1400955935.148...|POM:1013148838263...|    852535005001|     false|\n|2017-02-23 19:17:...|ga-1602161785.148...|POM:1015148787746...|    887276145914|     false|\n|2017-02-26 22:10:...|ga-726715071.1488...|POM:1017148814706...|    707708012259|     false|\n|2017-02-27 02:35:...|ga-218290269.1488...|POM:1017148816291...|3157016065879780|     false|\n|2017-03-01 22:27:...|ga-396030403.1488...|POM:1017148840729...| 200000010709272|     false|\n|2017-03-02 18:39:...|ga-1598297131.148...|POM:1017148848000...|    856418004495|     false|\n|2017-03-02 18:58:...|ga-533190019.1488...|POM:1018148848115...|    612572204009|     false|\n|2017-02-24 21:48:...|ga-164205910.1487...|POM:1019148797294...|3157016064405079|     false|\n+--------------------+--------------------+--------------------+----------------+----------+\nonly showing top 20 rows\n\nroot\n |-- utcDate: timestamp (nullable \u003d true)\n |-- userId: string (nullable \u003d true)\n |-- offerViewId: string (nullable \u003d true)\n |-- offerId: string (nullable \u003d true)\n |-- wasClicked: boolean (nullable \u003d true)\n\nSanitized dump saved in sanitized_dump_POM.parquet\n"
+      },
+      "dateCreated": "Apr 13, 2017 11:29:26 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md\n### Copy sanityzed dump to S3",
+      "dateUpdated": "Apr 13, 2017 11:31:55 AM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "editorHide": true,
+        "colWidth": 12.0,
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1492075766341_-401667863",
+      "id": "20170413-112926_206562563",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\u003ch3\u003eCopy sanityzed dump to S3\u003c/h3\u003e\n"
+      },
+      "dateCreated": "Apr 13, 2017 11:29:26 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%sh\n\nhadoop fs -ls /user/zeppelin/\n\n#s3-dist-cp --src hdfs:///user/zeppelin/sanitized_dump_POM.parquet --dest s3a://purch-calypso-us-east-1/shared-with-LIG/2017-03-06_30days_sanitized_POM.parquet",
+      "dateUpdated": "Apr 13, 2017 11:31:55 AM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/sh",
+        "colWidth": 12.0,
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1492075766342_-400513617",
+      "id": "20170413-112926_1363422789",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "OpenJDK 64-Bit Server VM warning: ignoring option MaxPermSize\u003d128m; support was removed in 8.0\nFound 2 items\ndrwxr-xr-x   - zeppelin hadoop          0 2017-03-10 16:55 /user/zeppelin/.sparkStaging\ndrwxr-xr-x   - zeppelin hadoop          0 2017-03-10 17:37 /user/zeppelin/sanitized_dump_POM.parquet\n"
+      },
+      "dateCreated": "Apr 13, 2017 11:29:26 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md\n# Deprecated: Result from old dump, kept for reference. \n### Offers\n* Total: 68985912\n* Problem #1: 32.8 % **duplicate events**. \n* FIX: `.distinct`. Needs further investigation. \n* 46355158 unique events remain\n* Problem #2: 16.3 % of unique events have **no userId**. (about all events from RaaS, and few from ClickStream). \n  SHORT TERM FIX: `.where($\"userInfo.userId\" !\u003d\u003d \"\")`\n  LONG TERM FIX: fix userId in RaaS\n* Problem #3: 12.4 % of unique events have **no offerViewId**. (only from ClickStream)\n  FIX: `.where($\"offerViewId\" !\u003d\u003d \"\")`\n* Problem #4: 18.4 % of unique events have **no offerId**. (only from ClickStream)\n  FIX: `.where($\"offerId\" !\u003d\u003d \"\")`\n* 30228439 unique events with userId, offerViewId and offerId remain. (65.2% of unique events)\n* Problem #5: For 40.8 % (12334518) of those good events, the **offerViewId** is not unique. \n  From a sample:\n   * some offerId are ASIN \u003d\u003e not from POM.\n   * offerId, utcDate and ip are usually the same (for UPS offers). \n   * userId is often different and always of the form: `visitor-1486319597793`.\n   \n### Clicks\n* Total: 1376757\n* Problem #1: 6.1 % **duplicate events**. \n* FIX: `.distinct`. Needs further investigation. \n* 1291841 unique events remain\n* Problem #2: 17.8 % of unique events have **no offerViewId** (mainly `null`, 0.2 % empty).\n  FIX: `.where(\"offerViewId !\u003d \u0027\u0027 AND offerViewId IS NOT NULL\")`\n* Problem #3: 22.8 % of unique events have **no userId**. (not necessarilly critical as long as click can be mapped to a proper offer). \n  SHORT TERM FIX: `.where($\"userInfo.userId\" !\u003d\u003d \"\")`\n  LONG TERM FIX: fix userId in RaaS\n",
+      "dateUpdated": "Apr 13, 2017 11:31:55 AM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true,
+        "colWidth": 12.0,
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1492075766342_-400513617",
+      "id": "20170413-112926_1396301233",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\u003ch1\u003eDeprecated: Result from old dump, kept for reference.\u003c/h1\u003e\n\u003ch3\u003eOffers\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003eTotal: 68985912\u003c/li\u003e\n\u003cli\u003eProblem #1: 32.8 % \u003cstrong\u003eduplicate events\u003c/strong\u003e.\u003c/li\u003e\n\u003cli\u003eFIX: \u003ccode\u003e.distinct\u003c/code\u003e. Needs further investigation.\u003c/li\u003e\n\u003cli\u003e46355158 unique events remain\u003c/li\u003e\n\u003cli\u003eProblem #2: 16.3 % of unique events have \u003cstrong\u003eno userId\u003c/strong\u003e. (about all events from RaaS, and few from ClickStream).\n\u003cbr  /\u003eSHORT TERM FIX: \u003ccode\u003e.where($\"userInfo.userId\" !\u003d\u003d \"\")\u003c/code\u003e\n\u003cbr  /\u003eLONG TERM FIX: fix userId in RaaS\u003c/li\u003e\n\u003cli\u003eProblem #3: 12.4 % of unique events have \u003cstrong\u003eno offerViewId\u003c/strong\u003e. (only from ClickStream)\n\u003cbr  /\u003eFIX: \u003ccode\u003e.where($\"offerViewId\" !\u003d\u003d \"\")\u003c/code\u003e\u003c/li\u003e\n\u003cli\u003eProblem #4: 18.4 % of unique events have \u003cstrong\u003eno offerId\u003c/strong\u003e. (only from ClickStream)\n\u003cbr  /\u003eFIX: \u003ccode\u003e.where($\"offerId\" !\u003d\u003d \"\")\u003c/code\u003e\u003c/li\u003e\n\u003cli\u003e30228439 unique events with userId, offerViewId and offerId remain. (65.2% of unique events)\u003c/li\u003e\n\u003cli\u003eProblem #5: For 40.8 % (12334518) of those good events, the \u003cstrong\u003eofferViewId\u003c/strong\u003e is not unique.\n\u003cbr  /\u003eFrom a sample:\u003c/li\u003e\n\u003cli\u003esome offerId are ASIN \u003d\u003e not from POM.\u003c/li\u003e\n\u003cli\u003eofferId, utcDate and ip are usually the same (for UPS offers).\u003c/li\u003e\n\u003cli\u003euserId is often different and always of the form: \u003ccode\u003evisitor-1486319597793\u003c/code\u003e.\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3\u003eClicks\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003eTotal: 1376757\u003c/li\u003e\n\u003cli\u003eProblem #1: 6.1 % \u003cstrong\u003eduplicate events\u003c/strong\u003e.\u003c/li\u003e\n\u003cli\u003eFIX: \u003ccode\u003e.distinct\u003c/code\u003e. Needs further investigation.\u003c/li\u003e\n\u003cli\u003e1291841 unique events remain\u003c/li\u003e\n\u003cli\u003eProblem #2: 17.8 % of unique events have \u003cstrong\u003eno offerViewId\u003c/strong\u003e (mainly \u003ccode\u003enull\u003c/code\u003e, 0.2 % empty).\n\u003cbr  /\u003eFIX: \u003ccode\u003e.where(\"offerViewId !\u003d \u0027\u0027 AND offerViewId IS NOT NULL\")\u003c/code\u003e\u003c/li\u003e\n\u003cli\u003eProblem #3: 22.8 % of unique events have \u003cstrong\u003eno userId\u003c/strong\u003e. (not necessarilly critical as long as click can be mapped to a proper offer).\n\u003cbr  /\u003eSHORT TERM FIX: \u003ccode\u003e.where($\"userInfo.userId\" !\u003d\u003d \"\")\u003c/code\u003e\n\u003cbr  /\u003eLONG TERM FIX: fix userId in RaaS\u003c/li\u003e\n\u003c/ul\u003e\n"
+      },
+      "dateCreated": "Apr 13, 2017 11:29:26 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "dateUpdated": "Apr 13, 2017 11:31:55 AM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0,
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1492075766343_-400898365",
+      "id": "20170413-112926_2081012262",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT"
+      },
+      "dateCreated": "Apr 13, 2017 11:29:26 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "purchBaselines: ReproduceCalypsoStatistics",
+  "id": "2CFDSSQST",
+  "angularObjects": {
+    "2BGHSKCA7": [],
+    "2BFMBPKAB": [],
+    "2BHKKP27G": [],
+    "2BJHJDBK6": [],
+    "2BJAQG5W4": [],
+    "2BJGSXM37": [],
+    "2BFXEV5XZ": [],
+    "2BG77RV7M": [],
+    "2BF969NNB": [],
+    "2BG8QQJNC": [],
+    "2BGVG5JP4": [],
+    "2BJ5FCP57": [],
+    "2BFEDXCTE": [],
+    "2BJ8AEWCT": [],
+    "2BH9AVVKH": [],
+    "2BJ7KKX85": [],
+    "2BHKAE8WK": [],
+    "2BJ6HN5AY": []
+  },
+  "config": {},
+  "info": {}
+}

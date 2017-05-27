@@ -1,0 +1,234 @@
+{
+  "paragraphs": [
+    {
+      "text": "//write distinct users\n\nval test \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/data/sidana/embColdStart/outbrainchallenge/dat.outbrainchallenge.indexedusers.replacedrating\")\nval users \u003d test.select(\"userid\").distinct\nusers.rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/embColdStart/outbrainchallenge/dat.outbrainchallenge.users\")",
+      "authenticationInfo": {},
+      "dateUpdated": "Mar 3, 2017 4:21:20 PM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1488270185047_1900755718",
+      "id": "20170228-092305_477280138",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "test: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, rating: int, timestamp: int]\nusers: org.apache.spark.sql.DataFrame \u003d [userid: int]\n"
+      },
+      "dateCreated": "Feb 28, 2017 9:23:05 AM",
+      "dateStarted": "Mar 3, 2017 4:21:20 PM",
+      "dateFinished": "Mar 3, 2017 4:22:43 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "//take sample users",
+      "dateUpdated": "Feb 28, 2017 9:23:05 AM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1488270185047_1900755718",
+      "id": "20170228-092305_795857821",
+      "dateCreated": "Feb 28, 2017 9:23:05 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "//do join with sample users\nval test \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/data/sidana/embColdStart/outbrainchallenge/dat.outbrainchallenge\")\n\nval sampleusers \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/data/sidana/embColdStart/outbrainchallenge/dat.outbrainchallenge.users.sample\")\n    \nval testsample \u003d test.join(sampleusers,test(\"userid\")\u003d\u003d\u003dsampleusers(\"userid\")).drop(sampleusers(\"userid\"))\nval offers \u003d testsample.select(\"itemid\").distinct\noffers.rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/embColdStart/outbrainchallenge/dat.obchallenge.offers\")",
+      "authenticationInfo": {},
+      "dateUpdated": "Mar 1, 2017 9:42:00 PM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1488270185047_1900755718",
+      "id": "20170228-092305_1454244031",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "test: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, timestamp: int, rating: int]\nsampleusers: org.apache.spark.sql.DataFrame \u003d [userid: int]\ntestsample: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, timestamp: int, rating: int]\noffers: org.apache.spark.sql.DataFrame \u003d [itemid: int]\n"
+      },
+      "dateCreated": "Feb 28, 2017 9:23:05 AM",
+      "dateStarted": "Mar 1, 2017 9:42:00 PM",
+      "dateFinished": "Mar 1, 2017 9:43:41 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "test.count\ntestsample.count\nsampleusers.count",
+      "authenticationInfo": {},
+      "dateUpdated": "Mar 1, 2017 9:43:38 PM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1488270185048_1898831973",
+      "id": "20170228-092305_968042510",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "res6: Long \u003d 87141731\nres7: Long \u003d 17429556\nres8: Long \u003d 2962868\n"
+      },
+      "dateCreated": "Feb 28, 2017 9:23:05 AM",
+      "dateStarted": "Mar 1, 2017 9:43:38 PM",
+      "dateFinished": "Mar 1, 2017 9:44:42 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "//take sample offers",
+      "dateUpdated": "Feb 28, 2017 9:23:05 AM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1488270185048_1898831973",
+      "id": "20170228-092305_1275517000",
+      "dateCreated": "Feb 28, 2017 9:23:05 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "//do join with sample offers\nval samplemovies \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/data/sidana/embColdStart/outbrainchallenge/dat.outbrainchallenge.offers.sample\")\n\nval sample \u003d testsample.join(samplemovies,testsample(\"itemid\")\u003d\u003d\u003dsamplemovies(\"itemid\")).drop(samplemovies(\"itemid\"))\nval orderedByTime \u003d testsample.orderBy(\"timestamp\").select(\"userid\",\"itemid\",\"rating\",\"timestamp\")\norderedByTime.rdd.saveAsTextFile(\"/data/sidana/embColdStart/outbrainchallenge/dat.outbrainchallenge.sample\")",
+      "authenticationInfo": {},
+      "dateUpdated": "Mar 1, 2017 9:55:12 PM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1488270185048_1898831973",
+      "id": "20170228-092305_1432454646",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "samplemovies: org.apache.spark.sql.DataFrame \u003d [itemid: int]\nsample: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, timestamp: int, rating: int]\norderedByTime: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, rating: int, timestamp: int]\n"
+      },
+      "dateCreated": "Feb 28, 2017 9:23:05 AM",
+      "dateStarted": "Mar 1, 2017 9:55:12 PM",
+      "dateFinished": "Mar 1, 2017 9:56:38 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "dateUpdated": "Feb 28, 2017 9:23:05 AM",
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1488270185049_1898447224",
+      "id": "20170228-092305_1973552452",
+      "dateCreated": "Feb 28, 2017 9:23:05 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "embColdStart: outbrainsamplecreation",
+  "id": "2CBPAV3VH",
+  "angularObjects": {
+    "2BGHSKCA7": [],
+    "2BFMBPKAB": [],
+    "2BHKKP27G": [],
+    "2BJHJDBK6": [],
+    "2BJAQG5W4": [],
+    "2BJGSXM37": [],
+    "2BFXEV5XZ": [],
+    "2BG77RV7M": [],
+    "2BF969NNB": [],
+    "2BG8QQJNC": [],
+    "2BGVG5JP4": [],
+    "2BJ5FCP57": [],
+    "2BFEDXCTE": [],
+    "2BJ8AEWCT": [],
+    "2BH9AVVKH": [],
+    "2BJ7KKX85": [],
+    "2BHKAE8WK": [],
+    "2BJ6HN5AY": []
+  },
+  "config": {},
+  "info": {}
+}

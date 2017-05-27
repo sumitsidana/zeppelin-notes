@@ -1,0 +1,250 @@
+{
+  "paragraphs": [
+    {
+      "text": "val data \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/data/sidana/adaptivity/nf/input_data/dat.nf.sample.headers\")\n\nval users \u003d data.select(\"userid\").distinct\n\nusers.rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/adaptivity/nf/nf_users\")",
+      "authenticationInfo": {},
+      "dateUpdated": "Apr 1, 2017 4:00:57 PM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1491055180749_2017577452",
+      "id": "20170401-155940_719411377",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "data: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, rating: int, timestamp: bigint]\nusers: org.apache.spark.sql.DataFrame \u003d [userid: int]\n"
+      },
+      "dateCreated": "Apr 1, 2017 3:59:40 PM",
+      "dateStarted": "Apr 1, 2017 4:00:57 PM",
+      "dateFinished": "Apr 1, 2017 4:01:10 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val nf_users \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/data/sidana/adaptivity/nf/nf_users.headers\")\n\nval nf_10_users \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \"\\t\")\n    .load(\"/data/sidana/adaptivity/nf/nf_10_users.headers\")\n\nval nf_remaining_90_users \u003d nf_users.select(\"userid\").except(nf_10_users.select(\"userid\")).distinct\n\nnf_remaining_90_users.rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/adaptivity/nf/nf_remaining_90_users\")",
+      "authenticationInfo": {},
+      "dateUpdated": "Apr 1, 2017 4:10:26 PM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1491055180749_2017577452",
+      "id": "20170401-155940_814080629",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "nf_users: org.apache.spark.sql.DataFrame \u003d [userid: int]\nnf_10_users: org.apache.spark.sql.DataFrame \u003d [userid: int]\nnf_remaining_90_users: org.apache.spark.sql.DataFrame \u003d [userid: int]\n"
+      },
+      "dateCreated": "Apr 1, 2017 3:59:40 PM",
+      "dateStarted": "Apr 1, 2017 4:10:26 PM",
+      "dateFinished": "Apr 1, 2017 4:10:40 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val nf_users \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \"\\t\")\n    .load(\"/data/sidana/adaptivity/nf/nf_users.headers\")\n\nval nf_20_users \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \"\\t\")\n    .load(\"/data/sidana/adaptivity/nf/nf_20_users.headers\")\n\nval nf_remaining_80_users \u003d nf_users.select(\"userid\").except(nf_20_users.select(\"userid\")).distinct\n\nnf_remaining_80_users.rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/adaptivity/nf/nf_remaining_80_users\")",
+      "authenticationInfo": {},
+      "dateUpdated": "Apr 1, 2017 4:15:25 PM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1491055180749_2017577452",
+      "id": "20170401-155940_634816566",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "nf_users: org.apache.spark.sql.DataFrame \u003d [userid: int]\nnf_20_users: org.apache.spark.sql.DataFrame \u003d [userid: int]\nnf_remaining_80_users: org.apache.spark.sql.DataFrame \u003d [userid: int]\n"
+      },
+      "dateCreated": "Apr 1, 2017 3:59:40 PM",
+      "dateStarted": "Apr 1, 2017 4:15:25 PM",
+      "dateFinished": "Apr 1, 2017 4:15:32 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val nf_users \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \"\\t\")\n    .load(\"/data/sidana/adaptivity/nf/nf_users.headers\")\n\n\nval nf_30_users \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \"\\t\")\n    .load(\"/data/sidana/adaptivity/nf/nf_30_users.headers\")\n\nval nf_remaining_70_users \u003d nf_users.select(\"userid\").except(nf_30_users.select(\"userid\")).distinct\n\nnf_remaining_70_users.rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/adaptivity/nf/nf_remaining_70_users\")\n\n",
+      "authenticationInfo": {},
+      "dateUpdated": "Apr 1, 2017 4:19:18 PM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1491055180750_2018731699",
+      "id": "20170401-155940_663266466",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "nf_users: org.apache.spark.sql.DataFrame \u003d [userid: int]\nnf_30_users: org.apache.spark.sql.DataFrame \u003d [userid: int]\nnf_remaining_70_users: org.apache.spark.sql.DataFrame \u003d [userid: int]\n"
+      },
+      "dateCreated": "Apr 1, 2017 3:59:40 PM",
+      "dateStarted": "Apr 1, 2017 4:19:18 PM",
+      "dateFinished": "Apr 1, 2017 4:19:23 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val nf_users \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \"\\t\")\n    .load(\"/data/sidana/adaptivity/nf/nf_users.headers\")\n\n\nval nf_50_users \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \"\\t\")\n    .load(\"/data/sidana/adaptivity/nf/nf_50_users.headers\")\n\nval nf_remaining_50_users \u003d nf_users.select(\"userid\").except(nf_50_users.select(\"userid\")).distinct\n\nnf_remaining_50_users.rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/adaptivity/nf/nf_remaining_50_users\")",
+      "authenticationInfo": {},
+      "dateUpdated": "Apr 1, 2017 4:22:55 PM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1491055180750_2018731699",
+      "id": "20170401-155940_2079366132",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "nf_users: org.apache.spark.sql.DataFrame \u003d [userid: int]\nnf_50_users: org.apache.spark.sql.DataFrame \u003d [userid: int]\nnf_remaining_50_users: org.apache.spark.sql.DataFrame \u003d [userid: int]\n"
+      },
+      "dateCreated": "Apr 1, 2017 3:59:40 PM",
+      "dateStarted": "Apr 1, 2017 4:22:55 PM",
+      "dateFinished": "Apr 1, 2017 4:23:08 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val nf_users \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \"\\t\")\n    .load(\"/data/sidana/adaptivity/nf/nf_users.headers\")\n\n\nval nf_75_users \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \"\\t\")\n    .load(\"/data/sidana/adaptivity/nf/nf_75_users.headers\")\n\nval nf_remaining_25_users \u003d nf_users.select(\"userid\").except(nf_75_users.select(\"userid\")).distinct\n\nnf_remaining_25_users.rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/adaptivity/nf/nf_remaining_25_users\")",
+      "authenticationInfo": {},
+      "dateUpdated": "Apr 1, 2017 4:27:33 PM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1491055180751_2018346950",
+      "id": "20170401-155940_281964584",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "nf_users: org.apache.spark.sql.DataFrame \u003d [userid: int]\nnf_75_users: org.apache.spark.sql.DataFrame \u003d [userid: int]\nnf_remaining_25_users: org.apache.spark.sql.DataFrame \u003d [userid: int]\n"
+      },
+      "dateCreated": "Apr 1, 2017 3:59:40 PM",
+      "dateStarted": "Apr 1, 2017 4:27:33 PM",
+      "dateFinished": "Apr 1, 2017 4:27:38 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "dateUpdated": "Apr 1, 2017 3:59:40 PM",
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1491055180751_2018346950",
+      "id": "20170401-155940_1629838006",
+      "dateCreated": "Apr 1, 2017 3:59:40 PM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "embAdaptivity: nf_data_creation-users",
+  "id": "2CD473BVG",
+  "angularObjects": {
+    "2BGHSKCA7": [],
+    "2BFMBPKAB": [],
+    "2BHKKP27G": [],
+    "2BJHJDBK6": [],
+    "2BJAQG5W4": [],
+    "2BJGSXM37": [],
+    "2BFXEV5XZ": [],
+    "2BG77RV7M": [],
+    "2BF969NNB": [],
+    "2BG8QQJNC": [],
+    "2BGVG5JP4": [],
+    "2BJ5FCP57": [],
+    "2BFEDXCTE": [],
+    "2BJ8AEWCT": [],
+    "2BH9AVVKH": [],
+    "2BJ7KKX85": [],
+    "2BHKAE8WK": [],
+    "2BJ6HN5AY": []
+  },
+  "config": {},
+  "info": {}
+}

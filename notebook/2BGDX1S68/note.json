@@ -378,7 +378,7 @@
       "progressUpdateIntervalMs": 500
     }
   ],
-  "name": "implementRMSE2Months_1",
+  "name": "kelkooBaselines: implementRMSE2Months_1",
   "id": "2BGDX1S68",
   "angularObjects": {
     "2BGHSKCA7": [],
@@ -400,6 +400,8 @@
     "2BHKAE8WK": [],
     "2BJ6HN5AY": []
   },
-  "config": {},
+  "config": {
+    "looknfeel": "default"
+  },
   "info": {}
 }

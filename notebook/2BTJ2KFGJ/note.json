@@ -98,7 +98,7 @@
       "progressUpdateIntervalMs": 500
     }
   ],
-  "name": "writingKelkooLogsJune",
+  "name": "kelkooBaselines: writingKelkooLogsJune",
   "id": "2BTJ2KFGJ",
   "angularObjects": {
     "2BGHSKCA7": [],
@@ -120,6 +120,8 @@
     "2BHKAE8WK": [],
     "2BJ6HN5AY": []
   },
-  "config": {},
+  "config": {
+    "looknfeel": "default"
+  },
   "info": {}
 }

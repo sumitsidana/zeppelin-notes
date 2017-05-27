@@ -83,7 +83,7 @@
       "progressUpdateIntervalMs": 500
     }
   ],
-  "name": "ranking_regression_input_data_1",
+  "name": "kelkooBaselines: ranking_regression_input_data_1",
   "id": "2BGD8TZN4",
   "angularObjects": {
     "2BGHSKCA7": [],
@@ -105,6 +105,8 @@
     "2BHKAE8WK": [],
     "2BJ6HN5AY": []
   },
-  "config": {},
+  "config": {
+    "looknfeel": "default"
+  },
   "info": {}
 }

@@ -1,0 +1,175 @@
+{
+  "paragraphs": [
+    {
+      "text": "val parquetFileClick \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypso_kk_dec_data/logs/click/fr/2016/*/*/*.parquet\")\nval clicksWithoutKFS \u003d parquetFileClick.filter(!($\"source\".contains(\"kfs\")))\nval uniqueUsers \u003d clicksWithoutKFS.select($\"userInfo\".getItem(\"userId\")).distinct\nval uniqueOfferViews \u003d clicksWithoutKFS.select(\"offerViewId\").distinct\nval uniqueOfferCategories \u003d clicksWithoutKFS.select(\"category\").distinct\nval observedNumberOfRatings \u003d clicksWithoutKFS.groupBy($\"userInfo\".getItem(\"userId\"),$\"offerViewId\").count\n\nval numClicks \u003d clicksWithoutKFS.count\nval numUsers \u003d uniqueUsers.count\nval numOfferViews \u003d uniqueOfferViews.count\nval numOfferCategories \u003d uniqueOfferCategories.count\nval numInteractions \u003d observedNumberOfRatings.count\n\n\nval offerId \u003d clicksWithoutKFS.select(substring_index(clicksWithoutKFS(\"offerViewId\"),\"-\",1))\nval uniqueOfferId \u003d offerId.select(\"substring_index(offerViewId,-,1)\").distinct\nval numOffers \u003d uniqueOfferId.count\n\nval groupedClicks \u003d clicksWithoutKFS.groupBy($\"userInfo\".getItem(\"userId\")).count.sort(desc(\"count\"))\nval clickAvg \u003d groupedClicks.select(avg($\"count\"))\nclickAvg.show",
+      "dateUpdated": "May 16, 2017 5:11:47 PM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1494947507476_299035142",
+      "id": "20170516-171147_519766935",
+      "result": {
+        "code": "ERROR",
+        "type": "TEXT",
+        "msg": "parquetFileClick: org.apache.spark.sql.DataFrame \u003d [userInfo: struct\u003cuserId:string,ip:string,userAgent:struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e,userGeolocation:struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e,adBlocked:boolean\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, offerViewId: string, clickId: string, earning: decimal(38,18), searchId: string]\nclicksWithoutKFS: org.apache.spark.sql.DataFrame \u003d [userInfo: struct\u003cuserId:string,ip:string,userAgent:struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e,userGeolocation:struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e,adBlocked:boolean\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, offerViewId: string, clickId: string, earning: decimal(38,18), searchId: string]\nuniqueUsers: org.apache.spark.sql.DataFrame \u003d [userInfo[userId]: string]\nuniqueOfferViews: org.apache.spark.sql.DataFrame \u003d [offerViewId: string]\nuniqueOfferCategories: org.apache.spark.sql.DataFrame \u003d [category: array\u003cstring\u003e]\nobservedNumberOfRatings: org.apache.spark.sql.DataFrame \u003d [userInfo[userId]: string, offerViewId: string, count: bigint]\nnumClicks: Long \u003d 3444213\nnumUsers: Long \u003d 1973726\nnumOfferViews: Long \u003d 3094712\nnumOfferCategories: Long \u003d 330\nnumInteractions: Long \u003d 3294155\nofferId: org.apache.spark.sql.DataFrame \u003d [substring_index(offerViewId,-,1): string]\nuniqueOfferId: org.apache.spark.sql.DataFrame \u003d [substring_index(offerViewId,-,1): string]\nnumOffers: Long \u003d 921572\norg.apache.spark.sql.AnalysisException: Cannot resolve column name \"userId\" among (userInfo, siteDomain, dataCenter, utcDate, offerTitle, category, price, merchant, source, keywords, offerViewId, clickId, earning, searchId);\n\tat org.apache.spark.sql.DataFrame$$anonfun$resolve$1.apply(DataFrame.scala:152)\n\tat org.apache.spark.sql.DataFrame$$anonfun$resolve$1.apply(DataFrame.scala:152)\n\tat scala.Option.getOrElse(Option.scala:120)\n\tat org.apache.spark.sql.DataFrame.resolve(DataFrame.scala:151)\n\tat org.apache.spark.sql.DataFrame$$anonfun$groupBy$2.apply(DataFrame.scala:884)\n\tat org.apache.spark.sql.DataFrame$$anonfun$groupBy$2.apply(DataFrame.scala:884)\n\tat scala.collection.TraversableLike$$anonfun$map$1.apply(TraversableLike.scala:244)\n\tat scala.collection.TraversableLike$$anonfun$map$1.apply(TraversableLike.scala:244)\n\tat scala.collection.mutable.ResizableArray$class.foreach(ResizableArray.scala:59)\n\tat scala.collection.mutable.ArrayBuffer.foreach(ArrayBuffer.scala:47)\n\tat scala.collection.TraversableLike$class.map(TraversableLike.scala:244)\n\tat scala.collection.AbstractTraversable.map(Traversable.scala:105)\n\tat org.apache.spark.sql.DataFrame.groupBy(DataFrame.scala:884)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:50)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:55)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:57)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:59)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:61)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:63)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:65)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:67)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:69)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:71)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:73)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:75)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:77)\n\tat $iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:79)\n\tat $iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:81)\n\tat $iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:83)\n\tat $iwC.\u003cinit\u003e(\u003cconsole\u003e:85)\n\tat \u003cinit\u003e(\u003cconsole\u003e:87)\n\tat .\u003cinit\u003e(\u003cconsole\u003e:91)\n\tat .\u003cclinit\u003e(\u003cconsole\u003e)\n\tat .\u003cinit\u003e(\u003cconsole\u003e:7)\n\tat .\u003cclinit\u003e(\u003cconsole\u003e)\n\tat $print(\u003cconsole\u003e)\n\tat sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)\n\tat sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)\n\tat sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\n\tat java.lang.reflect.Method.invoke(Method.java:606)\n\tat org.apache.spark.repl.SparkIMain$ReadEvalPrint.call(SparkIMain.scala:1065)\n\tat org.apache.spark.repl.SparkIMain$Request.loadAndRun(SparkIMain.scala:1346)\n\tat org.apache.spark.repl.SparkIMain.loadAndRunReq$1(SparkIMain.scala:840)\n\tat org.apache.spark.repl.SparkIMain.interpret(SparkIMain.scala:871)\n\tat org.apache.spark.repl.SparkIMain.interpret(SparkIMain.scala:819)\n\tat org.apache.zeppelin.spark.SparkInterpreter.interpretInput(SparkInterpreter.java:812)\n\tat org.apache.zeppelin.spark.SparkInterpreter.interpret(SparkInterpreter.java:755)\n\tat org.apache.zeppelin.spark.SparkInterpreter.interpret(SparkInterpreter.java:748)\n\tat org.apache.zeppelin.interpreter.ClassloaderInterpreter.interpret(ClassloaderInterpreter.java:57)\n\tat org.apache.zeppelin.interpreter.LazyOpenInterpreter.interpret(LazyOpenInterpreter.java:93)\n\tat org.apache.zeppelin.interpreter.remote.RemoteInterpreterServer$InterpretJob.jobRun(RemoteInterpreterServer.java:331)\n\tat org.apache.zeppelin.scheduler.Job.run(Job.java:171)\n\tat org.apache.zeppelin.scheduler.FIFOScheduler$1.run(FIFOScheduler.java:139)\n\tat java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:471)\n\tat java.util.concurrent.FutureTask.run(FutureTask.java:262)\n\tat java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:178)\n\tat java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:292)\n\tat java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)\n\tat java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:615)\n\tat java.lang.Thread.run(Thread.java:745)\n\n"
+      },
+      "dateCreated": "May 16, 2017 5:11:47 PM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val parquetFileClick \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypso_kk_june_data/click/fr/2016/*/*/*.parquet\")\nval clicksWithoutKFS \u003d parquetFileClick.filter(!($\"source\".contains(\"kfs\")))\nval uniqueUsers \u003d clicksWithoutKFS.groupBy($\"userInfo\".getItem(\"userId\")).count.sort(desc(\"count\"))\nz.show(uniqueUsers)",
+      "dateUpdated": "May 16, 2017 5:11:47 PM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1494947507477_298650393",
+      "id": "20170516-171147_1906884196",
+      "result": {
+        "code": "ERROR",
+        "type": "TEXT",
+        "msg": "parquetFileClick: org.apache.spark.sql.DataFrame \u003d [userId: string, ip: string, userAgent: struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e, geolocation: struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, offerViewId: string, clickId: string, earning: decimal(38,18)]\nclicksWithoutKFS: org.apache.spark.sql.DataFrame \u003d [userId: string, ip: string, userAgent: struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e, geolocation: struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, offerViewId: string, clickId: string, earning: decimal(38,18)]\norg.apache.spark.sql.AnalysisException: cannot resolve \u0027userInfo\u0027 given input columns: [userId, merchant, clickId, source, price, utcDate, geolocation, keywords, siteDomain, ip, earning, dataCenter, offerViewId, userAgent, offerTitle, category];\n\tat org.apache.spark.sql.catalyst.analysis.package$AnalysisErrorAt.failAnalysis(package.scala:42)\n\tat org.apache.spark.sql.catalyst.analysis.CheckAnalysis$$anonfun$checkAnalysis$1$$anonfun$apply$2.applyOrElse(CheckAnalysis.scala:60)\n\tat org.apache.spark.sql.catalyst.analysis.CheckAnalysis$$anonfun$checkAnalysis$1$$anonfun$apply$2.applyOrElse(CheckAnalysis.scala:57)\n\tat org.apache.spark.sql.catalyst.trees.TreeNode$$anonfun$transformUp$1.apply(TreeNode.scala:335)\n\tat org.apache.spark.sql.catalyst.trees.TreeNode$$anonfun$transformUp$1.apply(TreeNode.scala:335)\n\tat org.apache.spark.sql.catalyst.trees.CurrentOrigin$.withOrigin(TreeNode.scala:69)\n\tat org.apache.spark.sql.catalyst.trees.TreeNode.transformUp(TreeNode.scala:334)\n\tat org.apache.spark.sql.catalyst.trees.TreeNode$$anonfun$5.apply(TreeNode.scala:332)\n\tat org.apache.spark.sql.catalyst.trees.TreeNode$$anonfun$5.apply(TreeNode.scala:332)\n\tat org.apache.spark.sql.catalyst.trees.TreeNode$$anonfun$4.apply(TreeNode.scala:281)\n\tat scala.collection.Iterator$$anon$11.next(Iterator.scala:328)\n\tat scala.collection.Iterator$class.foreach(Iterator.scala:727)\n\tat scala.collection.AbstractIterator.foreach(Iterator.scala:1157)\n\tat scala.collection.generic.Growable$class.$plus$plus$eq(Growable.scala:48)\n\tat scala.collection.mutable.ArrayBuffer.$plus$plus$eq(ArrayBuffer.scala:103)\n\tat scala.collection.mutable.ArrayBuffer.$plus$plus$eq(ArrayBuffer.scala:47)\n\tat scala.collection.TraversableOnce$class.to(TraversableOnce.scala:273)\n\tat scala.collection.AbstractIterator.to(Iterator.scala:1157)\n\tat scala.collection.TraversableOnce$class.toBuffer(TraversableOnce.scala:265)\n\tat scala.collection.AbstractIterator.toBuffer(Iterator.scala:1157)\n\tat scala.collection.TraversableOnce$class.toArray(TraversableOnce.scala:252)\n\tat scala.collection.AbstractIterator.toArray(Iterator.scala:1157)\n\tat org.apache.spark.sql.catalyst.trees.TreeNode.transformChildren(TreeNode.scala:321)\n\tat org.apache.spark.sql.catalyst.trees.TreeNode.transformUp(TreeNode.scala:332)\n\tat org.apache.spark.sql.catalyst.plans.QueryPlan.transformExpressionUp$1(QueryPlan.scala:108)\n\tat org.apache.spark.sql.catalyst.plans.QueryPlan.org$apache$spark$sql$catalyst$plans$QueryPlan$$recursiveTransform$2(QueryPlan.scala:118)\n\tat org.apache.spark.sql.catalyst.plans.QueryPlan$$anonfun$org$apache$spark$sql$catalyst$plans$QueryPlan$$recursiveTransform$2$1.apply(QueryPlan.scala:122)\n\tat scala.collection.TraversableLike$$anonfun$map$1.apply(TraversableLike.scala:244)\n\tat scala.collection.TraversableLike$$anonfun$map$1.apply(TraversableLike.scala:244)\n\tat scala.collection.mutable.ResizableArray$class.foreach(ResizableArray.scala:59)\n\tat scala.collection.mutable.ArrayBuffer.foreach(ArrayBuffer.scala:47)\n\tat scala.collection.TraversableLike$class.map(TraversableLike.scala:244)\n\tat scala.collection.AbstractTraversable.map(Traversable.scala:105)\n\tat org.apache.spark.sql.catalyst.plans.QueryPlan.org$apache$spark$sql$catalyst$plans$QueryPlan$$recursiveTransform$2(QueryPlan.scala:122)\n\tat org.apache.spark.sql.catalyst.plans.QueryPlan$$anonfun$2.apply(QueryPlan.scala:127)\n\tat scala.collection.Iterator$$anon$11.next(Iterator.scala:328)\n\tat scala.collection.Iterator$class.foreach(Iterator.scala:727)\n\tat scala.collection.AbstractIterator.foreach(Iterator.scala:1157)\n\tat scala.collection.generic.Growable$class.$plus$plus$eq(Growable.scala:48)\n\tat scala.collection.mutable.ArrayBuffer.$plus$plus$eq(ArrayBuffer.scala:103)\n\tat scala.collection.mutable.ArrayBuffer.$plus$plus$eq(ArrayBuffer.scala:47)\n\tat scala.collection.TraversableOnce$class.to(TraversableOnce.scala:273)\n\tat scala.collection.AbstractIterator.to(Iterator.scala:1157)\n\tat scala.collection.TraversableOnce$class.toBuffer(TraversableOnce.scala:265)\n\tat scala.collection.AbstractIterator.toBuffer(Iterator.scala:1157)\n\tat scala.collection.TraversableOnce$class.toArray(TraversableOnce.scala:252)\n\tat scala.collection.AbstractIterator.toArray(Iterator.scala:1157)\n\tat org.apache.spark.sql.catalyst.plans.QueryPlan.transformExpressionsUp(QueryPlan.scala:127)\n\tat org.apache.spark.sql.catalyst.analysis.CheckAnalysis$$anonfun$checkAnalysis$1.apply(CheckAnalysis.scala:57)\n\tat org.apache.spark.sql.catalyst.analysis.CheckAnalysis$$anonfun$checkAnalysis$1.apply(CheckAnalysis.scala:50)\n\tat org.apache.spark.sql.catalyst.trees.TreeNode.foreachUp(TreeNode.scala:121)\n\tat org.apache.spark.sql.catalyst.analysis.CheckAnalysis$class.checkAnalysis(CheckAnalysis.scala:50)\n\tat org.apache.spark.sql.catalyst.analysis.Analyzer.checkAnalysis(Analyzer.scala:44)\n\tat org.apache.spark.sql.execution.QueryExecution.assertAnalyzed(QueryExecution.scala:34)\n\tat org.apache.spark.sql.DataFrame.\u003cinit\u003e(DataFrame.scala:133)\n\tat org.apache.spark.sql.DataFrame$.apply(DataFrame.scala:52)\n\tat org.apache.spark.sql.GroupedData.toDF(GroupedData.scala:57)\n\tat org.apache.spark.sql.GroupedData.count(GroupedData.scala:222)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:50)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:55)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:57)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:59)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:61)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:63)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:65)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:67)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:69)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:71)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:73)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:75)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:77)\n\tat $iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:79)\n\tat $iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:81)\n\tat $iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:83)\n\tat $iwC.\u003cinit\u003e(\u003cconsole\u003e:85)\n\tat \u003cinit\u003e(\u003cconsole\u003e:87)\n\tat .\u003cinit\u003e(\u003cconsole\u003e:91)\n\tat .\u003cclinit\u003e(\u003cconsole\u003e)\n\tat .\u003cinit\u003e(\u003cconsole\u003e:7)\n\tat .\u003cclinit\u003e(\u003cconsole\u003e)\n\tat $print(\u003cconsole\u003e)\n\tat sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)\n\tat sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)\n\tat sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\n\tat java.lang.reflect.Method.invoke(Method.java:606)\n\tat org.apache.spark.repl.SparkIMain$ReadEvalPrint.call(SparkIMain.scala:1065)\n\tat org.apache.spark.repl.SparkIMain$Request.loadAndRun(SparkIMain.scala:1346)\n\tat org.apache.spark.repl.SparkIMain.loadAndRunReq$1(SparkIMain.scala:840)\n\tat org.apache.spark.repl.SparkIMain.interpret(SparkIMain.scala:871)\n\tat org.apache.spark.repl.SparkIMain.interpret(SparkIMain.scala:819)\n\tat org.apache.zeppelin.spark.SparkInterpreter.interpretInput(SparkInterpreter.java:812)\n\tat org.apache.zeppelin.spark.SparkInterpreter.interpret(SparkInterpreter.java:755)\n\tat org.apache.zeppelin.spark.SparkInterpreter.interpret(SparkInterpreter.java:748)\n\tat org.apache.zeppelin.interpreter.ClassloaderInterpreter.interpret(ClassloaderInterpreter.java:57)\n\tat org.apache.zeppelin.interpreter.LazyOpenInterpreter.interpret(LazyOpenInterpreter.java:93)\n\tat org.apache.zeppelin.interpreter.remote.RemoteInterpreterServer$InterpretJob.jobRun(RemoteInterpreterServer.java:331)\n\tat org.apache.zeppelin.scheduler.Job.run(Job.java:171)\n\tat org.apache.zeppelin.scheduler.FIFOScheduler$1.run(FIFOScheduler.java:139)\n\tat java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:471)\n\tat java.util.concurrent.FutureTask.run(FutureTask.java:262)\n\tat java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:178)\n\tat java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:292)\n\tat java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)\n\tat java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:615)\n\tat java.lang.Thread.run(Thread.java:745)\n\n"
+      },
+      "dateCreated": "May 16, 2017 5:11:47 PM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val groupedClicks \u003d clicksWithoutKFS.groupBy($\"userInfo\".getItem(\"userId\")).count.sort(desc(\"count\"))\nval clickAvg \u003d groupedClicks.select(avg($\"count\"))\nclickAvg.show",
+      "dateUpdated": "May 16, 2017 5:11:47 PM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1494947507478_299804640",
+      "id": "20170516-171147_2104217991",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "groupedClicks: org.apache.spark.sql.DataFrame \u003d [userInfo[userId]: string, count: bigint]\nclickAvg: org.apache.spark.sql.DataFrame \u003d [avg(count): double]\n+------------------+\n|        avg(count)|\n+------------------+\n|1.7450309718775554|\n+------------------+\n\n"
+      },
+      "dateCreated": "May 16, 2017 5:11:47 PM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val clicksTrain \u003d sqlContext.read\n\t\t\t\t\t\t\t.format(\"com.databricks.spark.csv\")\n\t\t\t\t\t\t\t.option(\"header\", \"true\") // Use first line of all files as header\n\t\t\t\t\t\t\t.option(\"inferSchema\", \"true\") // Automatically infer data types\n\t\t\t\t\t\t\t.option(\"delimiter\", \"\\t\")\n\t\t\t\t\t\t\t.load(\"/data/sidana/recsysBaselines/experiments/debug_ffm/offersWithFeaturesBeforeJavaTransformation/fr\")\n\t\t\t\t\t\t\t\n//val clicksTest \u003d sqlContext.read\n\t\t\t\t\t\t//\t.format(\"com.databricks.spark.csv\")\n\t\t\t\t\t\t//\t.option(\"header\", \"true\") // Use first line of all files as header\n\t\t\t\t\t\t//\t.option(\"inferSchema\", \"true\") // Automatically infer data types\n\t\t\t\t\t\t//\t.option(\"delimiter\", \"\\t\")\n\t\t\t\t\t\t//\t.load(\"/data/sidana/recsysBaselines/bug_december/tabseparatedinput/userofferclicks/test_\"+\"fr\"+\".csv\")\n\t\t\t\t\t\t\t\nval offerIdTrain \u003d  clicksTrain.select(\"offerid\").distinct\n\nval offerIdTest \u003d clicksTrain.select(\"userid\").distinct\n\n//val commonOfferId \u003d offerIdTrain.join(offerIdTest,offerIdTrain(\"offerId\")\u003d\u003d\u003dofferIdTest(\"offerId\")).count",
+      "authenticationInfo": {},
+      "dateUpdated": "May 16, 2017 5:14:05 PM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1494947507478_299804640",
+      "id": "20170516-171147_831075941",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "clicksTrain: org.apache.spark.sql.DataFrame \u003d [userid: string, offerid: string, countrycode: string, category: int, merchant: int, utcdate: string, userclickcount: int, offerclickcount: int]\nofferIdTrain: org.apache.spark.sql.DataFrame \u003d [offerid: string]\nofferIdTest: org.apache.spark.sql.DataFrame \u003d [userid: string]\n"
+      },
+      "dateCreated": "May 16, 2017 5:11:47 PM",
+      "dateStarted": "May 16, 2017 5:14:05 PM",
+      "dateFinished": "May 16, 2017 5:17:32 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "dateUpdated": "May 16, 2017 5:11:47 PM",
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1494947507478_299804640",
+      "id": "20170516-171147_659700299",
+      "dateCreated": "May 16, 2017 5:11:47 PM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "kelkooBaselines: debug_ffm_dataStats",
+  "id": "2CFA94SXK",
+  "angularObjects": {
+    "2BGHSKCA7": [],
+    "2BFMBPKAB": [],
+    "2BHKKP27G": [],
+    "2BJHJDBK6": [],
+    "2BJAQG5W4": [],
+    "2BJGSXM37": [],
+    "2BFXEV5XZ": [],
+    "2BG77RV7M": [],
+    "2BF969NNB": [],
+    "2BG8QQJNC": [],
+    "2BGVG5JP4": [],
+    "2BJ5FCP57": [],
+    "2BFEDXCTE": [],
+    "2BJ8AEWCT": [],
+    "2BH9AVVKH": [],
+    "2BJ7KKX85": [],
+    "2BHKAE8WK": [],
+    "2BJ6HN5AY": []
+  },
+  "config": {},
+  "info": {}
+}

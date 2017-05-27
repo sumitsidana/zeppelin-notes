@@ -1,0 +1,110 @@
+{
+  "paragraphs": [
+    {
+      "text": "//light fm format\n\nval dataTemp  \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/data/sidana/purch/experiments/atleast_one/warm_start_setting/inputData\")\n\nval data \u003d dataTemp.orderBy(\"utcDate\")\nval totalItems \u003d data.count\nval cnt \u003d totalItems * 0.5\n\nval trainDF \u003d sqlContext.createDataFrame(data.rdd.zipWithIndex.filter {\ncase (_, i) \u003d\u003e i \u003c\u003d cnt \n}.map(_._1), data.schema)\n\nval testDF \u003d sqlContext.createDataFrame(data.rdd.zipWithIndex.filter {\ncase (_, i) \u003d\u003e i \u003e cnt \n}.map(_._1), data.schema)\n\nval train \u003d trainDF.select(trainDF(\"userId\"),trainDF(\"offerId\"),trainDF(\"wasClicked\"),unix_timestamp(trainDF(\"utcdate\")))\nval test \u003d testDF.select(testDF(\"userId\"),testDF(\"offerId\"),testDF(\"wasClicked\"),unix_timestamp(testDF(\"utcdate\")))\n\ntrain.rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/purch/experiments/atleast_one/warm_start_setting/train.csv\")\ntest.rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/purch/experiments/atleast_one/warm_start_setting/test.csv\")",
+      "authenticationInfo": {},
+      "dateUpdated": "May 16, 2017 10:27:53 PM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1494964243533_-292928056",
+      "id": "20170516-215043_1330525738",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "dataTemp: org.apache.spark.sql.DataFrame \u003d [userId: string, offerId: bigint, utcDate: timestamp, wasClicked: boolean]\ndata: org.apache.spark.sql.DataFrame \u003d [userId: string, offerId: bigint, utcDate: timestamp, wasClicked: boolean]\ntotalItems: Long \u003d 11324440\ncnt: Double \u003d 5662220.0\ntrainDF: org.apache.spark.sql.DataFrame \u003d [userId: string, offerId: bigint, utcDate: timestamp, wasClicked: boolean]\ntestDF: org.apache.spark.sql.DataFrame \u003d [userId: string, offerId: bigint, utcDate: timestamp, wasClicked: boolean]\ntrain: org.apache.spark.sql.DataFrame \u003d [userId: string, offerId: bigint, wasClicked: boolean, unixtimestamp(utcdate,yyyy-MM-dd HH:mm:ss): bigint]\ntest: org.apache.spark.sql.DataFrame \u003d [userId: string, offerId: bigint, wasClicked: boolean, unixtimestamp(utcdate,yyyy-MM-dd HH:mm:ss): bigint]\n"
+      },
+      "dateCreated": "May 16, 2017 9:50:43 PM",
+      "dateStarted": "May 16, 2017 10:27:53 PM",
+      "dateFinished": "May 16, 2017 10:30:57 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val dataTemp  \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/data/sidana/purch/experiments/atleast_one/warm_start_setting/train.csv\")\n\nval old_users \u003d dataTemp.select(\"userId\").distinct\nval old_items \u003d dataTemp.select(\"offerId\").distinct\n\nval test \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/data/sidana/purch/experiments/atleast_one/warm_start_setting/test.csv\")\n\nval validTestTemp \u003d test.join(old_users,test(\"userId\")\u003d\u003d\u003dold_users(\"userId\")).drop(old_users(\"userId\"))\nval validTest \u003d validTestTemp.join(old_items,validTestTemp(\"offerId\")\u003d\u003d\u003dold_items(\"offerId\")).drop(old_items(\"offerId\"))\n\nvalidTest.rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/purch/experiments/atleast_one/warm_start_setting/testTemp.csv\")\n",
+      "authenticationInfo": {},
+      "dateUpdated": "May 16, 2017 10:48:46 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1494964243534_-291773809",
+      "id": "20170516-215043_1383138198",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "dataTemp: org.apache.spark.sql.DataFrame \u003d [userId: string, offerId: bigint, rating: boolean, timestamp: int]\nold_users: org.apache.spark.sql.DataFrame \u003d [userId: string]\nold_items: org.apache.spark.sql.DataFrame \u003d [offerId: bigint]\ntest: org.apache.spark.sql.DataFrame \u003d [userId: string, offerId: bigint, rating: boolean, timestamp: int]\nvalidTestTemp: org.apache.spark.sql.DataFrame \u003d [userId: string, offerId: bigint, rating: boolean, timestamp: int]\nvalidTest: org.apache.spark.sql.DataFrame \u003d [userId: string, offerId: bigint, rating: boolean, timestamp: int]\n"
+      },
+      "dateCreated": "May 16, 2017 9:50:43 PM",
+      "dateStarted": "May 16, 2017 10:48:46 PM",
+      "dateFinished": "May 16, 2017 10:50:17 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1494967537375_1544092229",
+      "id": "20170516-224537_456907085",
+      "dateCreated": "May 16, 2017 10:45:37 PM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "purchBaselines: warmStartDataWrite",
+  "id": "2CK66PYN5",
+  "angularObjects": {
+    "2BGHSKCA7": [],
+    "2BFMBPKAB": [],
+    "2BHKKP27G": [],
+    "2BJHJDBK6": [],
+    "2BJAQG5W4": [],
+    "2BJGSXM37": [],
+    "2BFXEV5XZ": [],
+    "2BG77RV7M": [],
+    "2BF969NNB": [],
+    "2BG8QQJNC": [],
+    "2BGVG5JP4": [],
+    "2BJ5FCP57": [],
+    "2BFEDXCTE": [],
+    "2BJ8AEWCT": [],
+    "2BH9AVVKH": [],
+    "2BJ7KKX85": [],
+    "2BHKAE8WK": [],
+    "2BJ6HN5AY": []
+  },
+  "config": {},
+  "info": {}
+}

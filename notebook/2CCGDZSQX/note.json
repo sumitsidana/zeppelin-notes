@@ -1,0 +1,295 @@
+{
+  "paragraphs": [
+    {
+      "text": "val data \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/data/sidana/adaptivity/nf/input_data/dat.nf.sample.headers\")\n\nval nf_10_users \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \"\\t\")\n    .load(\"/data/sidana/adaptivity/nf/nf_10_users.headers\")\n\nval nf_10_data_join \u003d data.join(nf_10_users,data(\"userid\")\u003d\u003d\u003dnf_10_users(\"userid\")).drop(nf_10_users(\"userid\"))\n\nval nf_10_data \u003d nf_10_data_join.select(\"userid\",\"itemid\",\"rating\",\"timestamp\").orderBy(\"timestamp\")\n\nnf_10_data.rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/adaptivity/nf/nf_10_data.temp\")",
+      "authenticationInfo": {},
+      "dateUpdated": "Apr 1, 2017 4:32:42 PM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1491057034695_1824102353",
+      "id": "20170401-163034_2030113431",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "data: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, rating: int, timestamp: bigint]\nnf_10_users: org.apache.spark.sql.DataFrame \u003d [userid: int]\nnf_10_data_join: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, rating: int, timestamp: bigint]\nnf_10_data: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, rating: int, timestamp: bigint]\n"
+      },
+      "dateCreated": "Apr 1, 2017 4:30:34 PM",
+      "dateStarted": "Apr 1, 2017 4:32:42 PM",
+      "dateFinished": "Apr 1, 2017 4:33:21 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val data \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/data/sidana/adaptivity/nf/input_data/dat.nf.sample.headers\")\n\nval nf_20_users \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \"\\t\")\n    .load(\"/data/sidana/adaptivity/nf/nf_20_users.headers\")\n\nval nf_20_data_join \u003d data.join(nf_20_users,data(\"userid\")\u003d\u003d\u003dnf_20_users(\"userid\")).drop(nf_20_users(\"userid\"))\n\nval nf_20_data \u003d nf_20_data_join.select(\"userid\",\"itemid\",\"rating\",\"timestamp\").orderBy(\"timestamp\")\n\nnf_20_data.rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/adaptivity/nf/nf_20_data.temp\")",
+      "authenticationInfo": {},
+      "dateUpdated": "Apr 1, 2017 4:35:59 PM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1491057034695_1824102353",
+      "id": "20170401-163034_896251281",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "data: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, rating: int, timestamp: bigint]\nnf_20_users: org.apache.spark.sql.DataFrame \u003d [userid: int]\nnf_20_data_join: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, rating: int, timestamp: bigint]\nnf_20_data: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, rating: int, timestamp: bigint]\n"
+      },
+      "dateCreated": "Apr 1, 2017 4:30:34 PM",
+      "dateStarted": "Apr 1, 2017 4:35:59 PM",
+      "dateFinished": "Apr 1, 2017 4:36:36 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val data \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/data/sidana/adaptivity/nf/input_data/dat.nf.sample.headers\")\n\nval nf_30_users \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \"\\t\")\n    .load(\"/data/sidana/adaptivity/nf/nf_30_users.headers\")\n\nval nf_30_data_join \u003d data.join(nf_30_users,data(\"userid\")\u003d\u003d\u003dnf_30_users(\"userid\")).drop(nf_30_users(\"userid\"))\n\nval nf_30_data \u003d nf_30_data_join.select(\"userid\",\"itemid\",\"rating\",\"timestamp\").orderBy(\"timestamp\")\n\nnf_30_data.rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/adaptivity/nf/nf_30_data.temp\")",
+      "authenticationInfo": {},
+      "dateUpdated": "Apr 1, 2017 4:36:59 PM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1491057034695_1824102353",
+      "id": "20170401-163034_844979709",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "data: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, rating: int, timestamp: bigint]\nnf_30_users: org.apache.spark.sql.DataFrame \u003d [userid: int]\nnf_30_data_join: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, rating: int, timestamp: bigint]\nnf_30_data: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, rating: int, timestamp: bigint]\n"
+      },
+      "dateCreated": "Apr 1, 2017 4:30:34 PM",
+      "dateStarted": "Apr 1, 2017 4:36:59 PM",
+      "dateFinished": "Apr 1, 2017 4:37:35 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val data \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/data/sidana/adaptivity/nf/input_data/dat.nf.sample.headers\")\n\nval nf_50_users \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \"\\t\")\n    .load(\"/data/sidana/adaptivity/nf/nf_50_users.headers\")\n\nval nf_50_data_join \u003d data.join(nf_50_users,data(\"userid\")\u003d\u003d\u003dnf_50_users(\"userid\")).drop(nf_50_users(\"userid\"))\n\nval nf_50_data \u003d nf_50_data_join.select(\"userid\",\"itemid\",\"rating\",\"timestamp\").orderBy(\"timestamp\")\n\nnf_50_data.rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/adaptivity/nf/nf_50_data.temp\")",
+      "authenticationInfo": {},
+      "dateUpdated": "Apr 1, 2017 4:37:40 PM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1491057034696_1822178609",
+      "id": "20170401-163034_264611552",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "data: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, rating: int, timestamp: bigint]\nnf_50_users: org.apache.spark.sql.DataFrame \u003d [userid: int]\nnf_50_data_join: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, rating: int, timestamp: bigint]\nnf_50_data: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, rating: int, timestamp: bigint]\n"
+      },
+      "dateCreated": "Apr 1, 2017 4:30:34 PM",
+      "dateStarted": "Apr 1, 2017 4:37:41 PM",
+      "dateFinished": "Apr 1, 2017 4:38:19 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val data \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/data/sidana/adaptivity/ml_1m/input_data/dat.nf.sample.headers\")\n\nval ml_50_users \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \"\\t\")\n    .load(\"/data/sidana/adaptivity/ml_1m/ml_50_users.headers\")\n\nval ml_50_data_join \u003d data.join(ml_50_users,data(\"userid\")\u003d\u003d\u003dml_50_users(\"userid\")).drop(ml_50_users(\"userid\"))\n\nval ml_50_data \u003d ml_50_data_join.select(\"userid\",\"itemid\",\"rating\",\"timestamp\").orderBy(\"timestamp\")\n\nml_50_data.rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/adaptivity/ml_1m/ml_50_data.temp\")",
+      "dateUpdated": "Apr 1, 2017 4:35:44 PM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1491057034696_1822178609",
+      "id": "20170401-163034_2035205174",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "data: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, rating: int, timestamp: int]\nml_50_users: org.apache.spark.sql.DataFrame \u003d [userid: int]\nml_50_data_join: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, rating: int, timestamp: int]\nml_50_data: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, rating: int, timestamp: int]\n"
+      },
+      "dateCreated": "Apr 1, 2017 4:30:34 PM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val data \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/data/sidana/adaptivity/nf/input_data/dat.nf.sample.headers\")\n\nval nf_100_users \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \"\\t\")\n    .load(\"/data/sidana/adaptivity/nf/nf_100_users.headers\")\n\nval nf_100_data_join \u003d data.join(nf_100_users,data(\"userid\")\u003d\u003d\u003dnf_100_users(\"userid\")).drop(nf_100_users(\"userid\"))\n\nval nf_100_data \u003d nf_100_data_join.select(\"userid\",\"itemid\",\"rating\",\"timestamp\").orderBy(\"timestamp\")\n\nnf_100_data.rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/adaptivity/nf/m_100_data.temp\")",
+      "authenticationInfo": {},
+      "dateUpdated": "Apr 1, 2017 4:38:23 PM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1491057034696_1822178609",
+      "id": "20170401-163034_573830002",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "data: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, rating: int, timestamp: bigint]\nnf_100_users: org.apache.spark.sql.DataFrame \u003d [userid: int]\nnf_100_data_join: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, rating: int, timestamp: bigint]\nnf_100_data: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, rating: int, timestamp: bigint]\n"
+      },
+      "dateCreated": "Apr 1, 2017 4:30:34 PM",
+      "dateStarted": "Apr 1, 2017 4:38:23 PM",
+      "dateFinished": "Apr 1, 2017 4:39:06 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val data \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/data/sidana/adaptivity/nf/input_data/dat.nf.sample.headers\")\n\nval nf_75_users \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \"\\t\")\n    .load(\"/data/sidana/adaptivity/nf/nf_75_users.headers\")\n\nval nf_75_data_join \u003d data.join(nf_75_users,data(\"userid\")\u003d\u003d\u003dnf_75_users(\"userid\")).drop(nf_75_users(\"userid\"))\n\nval nf_75_data \u003d nf_75_data_join.select(\"userid\",\"itemid\",\"rating\",\"timestamp\").orderBy(\"timestamp\")\n\nnf_75_data.rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/adaptivity/nf/nf_75_data.temp\")",
+      "authenticationInfo": {},
+      "dateUpdated": "Apr 1, 2017 4:38:54 PM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1491057034696_1822178609",
+      "id": "20170401-163034_11784937",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "data: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, rating: int, timestamp: bigint]\nnf_75_users: org.apache.spark.sql.DataFrame \u003d [userid: int]\nnf_75_data_join: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, rating: int, timestamp: bigint]\nnf_75_data: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, rating: int, timestamp: bigint]\n"
+      },
+      "dateCreated": "Apr 1, 2017 4:30:34 PM",
+      "dateStarted": "Apr 1, 2017 4:38:54 PM",
+      "dateFinished": "Apr 1, 2017 4:39:50 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "    ",
+      "dateUpdated": "Apr 1, 2017 4:42:57 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1491057034697_1821793860",
+      "id": "20170401-163034_500940635",
+      "dateCreated": "Apr 1, 2017 4:30:34 PM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "embAdaptivity: nf_data_creation - joins",
+  "id": "2CCGDZSQX",
+  "angularObjects": {
+    "2BGHSKCA7": [],
+    "2BFMBPKAB": [],
+    "2BHKKP27G": [],
+    "2BJHJDBK6": [],
+    "2BJAQG5W4": [],
+    "2BJGSXM37": [],
+    "2BFXEV5XZ": [],
+    "2BG77RV7M": [],
+    "2BF969NNB": [],
+    "2BG8QQJNC": [],
+    "2BGVG5JP4": [],
+    "2BJ5FCP57": [],
+    "2BFEDXCTE": [],
+    "2BJ8AEWCT": [],
+    "2BH9AVVKH": [],
+    "2BJ7KKX85": [],
+    "2BHKAE8WK": [],
+    "2BJ6HN5AY": []
+  },
+  "config": {},
+  "info": {}
+}

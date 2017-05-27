@@ -269,7 +269,7 @@
       "progressUpdateIntervalMs": 500
     }
   ],
-  "name": "temporalAnalysis",
+  "name": "kelkooBaselines: temporalAnalysis",
   "id": "2C4RG44A6",
   "angularObjects": {
     "2BGHSKCA7": [],
@@ -291,6 +291,8 @@
     "2BHKAE8WK": [],
     "2BJ6HN5AY": []
   },
-  "config": {},
+  "config": {
+    "looknfeel": "default"
+  },
   "info": {}
 }

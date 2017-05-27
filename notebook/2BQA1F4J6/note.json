@@ -152,7 +152,7 @@
       "progressUpdateIntervalMs": 500
     }
   ],
-  "name": "Kelkoo: removeKFS",
+  "name": "kelkooBaselines: removeKFS",
   "id": "2BQA1F4J6",
   "angularObjects": {
     "2BGHSKCA7": [],

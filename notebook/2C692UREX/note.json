@@ -63,7 +63,7 @@
       "progressUpdateIntervalMs": 500
     }
   ],
-  "name": "uniqueOfferId",
+  "name": "kelkooBaselines: uniqueOfferId",
   "id": "2C692UREX",
   "angularObjects": {
     "2BGHSKCA7": [],
@@ -85,6 +85,8 @@
     "2BHKAE8WK": [],
     "2BJ6HN5AY": []
   },
-  "config": {},
+  "config": {
+    "looknfeel": "default"
+  },
   "info": {}
 }

@@ -1,0 +1,253 @@
+{
+  "paragraphs": [
+    {
+      "text": "val data \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/data/sidana/purch/experiments/atleast_one/annolina/input\")\n\nval users \u003d data.select(\"userid\").distinct\n\nusers.rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/purch/experiments/atleast_one/annolina/purch_users\")",
+      "authenticationInfo": {},
+      "dateUpdated": "May 14, 2017 10:40:56 PM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1494791617232_-1452925233",
+      "id": "20170514-215337_588786591",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "data: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, timestamp: timestamp, rating: int]\nusers: org.apache.spark.sql.DataFrame \u003d [userid: int]\n"
+      },
+      "dateCreated": "May 14, 2017 9:53:37 PM",
+      "dateStarted": "May 14, 2017 10:40:56 PM",
+      "dateFinished": "May 14, 2017 10:41:56 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val purch_users \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \"\\t\")\n    .load(\"/data/sidana/purch/experiments/atleast_one/annolina/purch_users.headers\")\n\nval purch_10_users \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \"\\t\")\n    .load(\"/data/sidana/purch/experiments/atleast_one/annolina/purch_10_users.headers\")\n\nval purch_remaining_90_users \u003d purch_users.select(\"userid\").except(purch_10_users.select(\"userid\")).distinct\n\npurch_remaining_90_users.rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/purch/experiments/atleast_one/annolina/purch_remaining_90_users\")",
+      "authenticationInfo": {},
+      "dateUpdated": "May 14, 2017 10:53:19 PM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1494791617232_-1452925233",
+      "id": "20170514-215337_131589561",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "purch_users: org.apache.spark.sql.DataFrame \u003d [userid: int]\npurch_10_users: org.apache.spark.sql.DataFrame \u003d [userid: int]\npurch_remaining_90_users: org.apache.spark.sql.DataFrame \u003d [userid: int]\n"
+      },
+      "dateCreated": "May 14, 2017 9:53:37 PM",
+      "dateStarted": "May 14, 2017 10:53:19 PM",
+      "dateFinished": "May 14, 2017 10:54:18 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val purch_users \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \"\\t\")\n    .load(\"/data/sidana/purch/experiments/atleast_one/annolina/purch_users.headers\")\n\nval purch_20_users \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \"\\t\")\n    .load(\"/data/sidana/purch/experiments/atleast_one/annolina/purch_20_users.headers\")\n\nval purch_remaining_80_users \u003d purch_users.select(\"userid\").except(purch_20_users.select(\"userid\")).distinct\n\npurch_remaining_80_users.rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/purch/experiments/atleast_one/annolina/purch_remaining_80_users\")",
+      "authenticationInfo": {},
+      "dateUpdated": "May 14, 2017 11:01:56 PM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1494791617233_-1453309982",
+      "id": "20170514-215337_1865078964",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "purch_users: org.apache.spark.sql.DataFrame \u003d [userid: int]\npurch_20_users: org.apache.spark.sql.DataFrame \u003d [userid: int]\npurch_remaining_80_users: org.apache.spark.sql.DataFrame \u003d [userid: int]\n"
+      },
+      "dateCreated": "May 14, 2017 9:53:37 PM",
+      "dateStarted": "May 14, 2017 11:01:56 PM",
+      "dateFinished": "May 14, 2017 11:03:01 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val purch_users \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \"\\t\")\n    .load(\"/data/sidana/purch/experiments/atleast_one/annolina/purch_users.headers\")\n\n\nval purch_30_users \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \"\\t\")\n    .load(\"/data/sidana/purch/experiments/atleast_one/annolina/purch_30_users.headers\")\n\nval purch_remaining_70_users \u003d purch_users.select(\"userid\").except(purch_30_users.select(\"userid\")).distinct\n\npurch_remaining_70_users.rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/purch/experiments/atleast_one/annolina/purch_remaining_70_users\")\n\n",
+      "authenticationInfo": {},
+      "dateUpdated": "May 14, 2017 11:05:22 PM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1494791617233_-1453309982",
+      "id": "20170514-215337_1710836336",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "purch_users: org.apache.spark.sql.DataFrame \u003d [userid: int]\npurch_30_users: org.apache.spark.sql.DataFrame \u003d [userid: int]\npurch_remaining_70_users: org.apache.spark.sql.DataFrame \u003d [userid: int]\n"
+      },
+      "dateCreated": "May 14, 2017 9:53:37 PM",
+      "dateStarted": "May 14, 2017 11:05:22 PM",
+      "dateFinished": "May 14, 2017 11:06:19 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val purch_users \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \"\\t\")\n    .load(\"/data/sidana/purch/experiments/atleast_one/annolina/purch_users.headers\")\n\n\nval purch_50_users \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \"\\t\")\n    .load(\"/data/sidana/purch/experiments/atleast_one/annolina/purch_50_users.headers\")\n\nval purch_remaining_50_users \u003d purch_users.select(\"userid\").except(purch_50_users.select(\"userid\")).distinct\n\npurch_remaining_50_users.rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/purch/experiments/atleast_one/annolina/purch_remaining_50_users\")",
+      "authenticationInfo": {},
+      "dateUpdated": "May 14, 2017 11:09:14 PM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1494791617233_-1453309982",
+      "id": "20170514-215337_1367749469",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "purch_users: org.apache.spark.sql.DataFrame \u003d [userid: int]\npurch_50_users: org.apache.spark.sql.DataFrame \u003d [userid: int]\npurch_remaining_50_users: org.apache.spark.sql.DataFrame \u003d [userid: int]\n"
+      },
+      "dateCreated": "May 14, 2017 9:53:37 PM",
+      "dateStarted": "May 14, 2017 11:09:14 PM",
+      "dateFinished": "May 14, 2017 11:10:09 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val purch_users \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \"\\t\")\n    .load(\"/data/sidana/purch/experiments/atleast_one/annolina/purch_users.headers\")\n\n\nval purch_75_users \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \"\\t\")\n    .load(\"/data/sidana/purch/experiments/atleast_one/annolina/purch_75_users.headers\")\n\nval purch_remaining_25_users \u003d purch_users.select(\"userid\").except(purch_75_users.select(\"userid\")).distinct\n\npurch_remaining_25_users.rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/purch/experiments/atleast_one/annolina/purch_remaining_25_users\")",
+      "authenticationInfo": {},
+      "dateUpdated": "May 14, 2017 11:12:42 PM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1494791617234_-1452155736",
+      "id": "20170514-215337_1100367995",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "purch_users: org.apache.spark.sql.DataFrame \u003d [userid: int]\npurch_75_users: org.apache.spark.sql.DataFrame \u003d [userid: int]\npurch_remaining_25_users: org.apache.spark.sql.DataFrame \u003d [userid: int]\n"
+      },
+      "dateCreated": "May 14, 2017 9:53:37 PM",
+      "dateStarted": "May 14, 2017 11:12:42 PM",
+      "dateFinished": "May 14, 2017 11:13:04 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "dateUpdated": "May 14, 2017 9:53:37 PM",
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1494791617234_-1452155736",
+      "id": "20170514-215337_1903207648",
+      "dateCreated": "May 14, 2017 9:53:37 PM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "purchBaselines: ANNOLINA_data_creation - users",
+  "id": "2CJA91KW6",
+  "angularObjects": {
+    "2BGHSKCA7": [],
+    "2BFMBPKAB": [],
+    "2BHKKP27G": [],
+    "2BJHJDBK6": [],
+    "2BJAQG5W4": [],
+    "2BJGSXM37": [],
+    "2BFXEV5XZ": [],
+    "2BG77RV7M": [],
+    "2BF969NNB": [],
+    "2BG8QQJNC": [],
+    "2BGVG5JP4": [],
+    "2BJ5FCP57": [],
+    "2BFEDXCTE": [],
+    "2BJ8AEWCT": [],
+    "2BH9AVVKH": [],
+    "2BJ7KKX85": [],
+    "2BHKAE8WK": [],
+    "2BJ6HN5AY": []
+  },
+  "config": {
+    "looknfeel": "default"
+  },
+  "info": {}
+}

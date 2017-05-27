@@ -1,0 +1,145 @@
+{
+  "paragraphs": [
+    {
+      "text": "val index \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/data/sidana/embColdStart/ml_1m/meta_info/input_data/dat.movieGenre.indexed.headers\")\n\nval trainUCS \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/data/sidana/embColdStart/ml_1m/usercoldstart/train.headers\")\n    \nval testUCS \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/data/sidana/embColdStart/ml_1m/usercoldstart/test.headers\")\n\nval trainICS \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/data/sidana/embColdStart/ml_1m/itemcoldstart/train.headers\")\n    \nval testICS \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/data/sidana/embColdStart/ml_1m/itemcoldstart/test.headers\")\n    \nval trainUICS \u003d  sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/data/sidana/embColdStart/ml_1m/useritemcoldstart/train.headers\")\n    \nval testUICS \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/data/sidana/embColdStart/ml_1m/useritemcoldstart/test.headers\")",
+      "authenticationInfo": {},
+      "dateUpdated": "Mar 17, 2017 8:53:48 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1489775905327_-1540323408",
+      "id": "20170317-193825_1287434617",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "index: org.apache.spark.sql.DataFrame \u003d [itemid: int, genre: int]\ntrainUCS: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, rating: int, timestamp: int]\ntestUCS: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, rating: int, timestamp: int]\ntrainICS: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, rating: int, timestamp: int]\ntestICS: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, rating: int, timestamp: int]\ntrainUICS: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, rating: int, timestamp: int]\ntestUICS: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, rating: int, timestamp: int]\n"
+      },
+      "dateCreated": "Mar 17, 2017 7:38:25 PM",
+      "dateStarted": "Mar 17, 2017 8:53:48 PM",
+      "dateFinished": "Mar 17, 2017 8:54:26 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val trainMetaUCS \u003d trainUCS.join(index,trainUCS(\"itemid\")\u003d\u003d\u003dindex(\"itemid\")).drop(index(\"itemid\"))\nval testMetaUCS \u003d testUCS.join(index,testUCS(\"itemid\")\u003d\u003d\u003dindex(\"itemid\")).drop(index(\"itemid\"))\nval trainMetaICS \u003d trainICS.join(index,trainICS(\"itemid\")\u003d\u003d\u003dindex(\"itemid\")).drop(index(\"itemid\"))\nval testMetaICS \u003d testICS.join(index,testICS(\"itemid\")\u003d\u003d\u003dindex(\"itemid\")).drop(index(\"itemid\"))\nval trainMetaUICS \u003d trainUICS.join(index,trainUICS(\"itemid\")\u003d\u003d\u003dindex(\"itemid\")).drop(index(\"itemid\"))\nval testMetaUICS \u003d testUICS.join(index,testUICS(\"itemid\")\u003d\u003d\u003dindex(\"itemid\")).drop(index(\"itemid\"))",
+      "authenticationInfo": {},
+      "dateUpdated": "Mar 17, 2017 8:53:51 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1489777693812_666006266",
+      "id": "20170317-200813_1043903061",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "trainMetaUCS: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, rating: int, timestamp: int, genre: int]\ntestMetaUCS: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, rating: int, timestamp: int, genre: int]\ntrainMetaICS: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, rating: int, timestamp: int, genre: int]\ntestMetaICS: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, rating: int, timestamp: int, genre: int]\ntrainMetaUICS: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, rating: int, timestamp: int, genre: int]\ntestMetaUICS: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, rating: int, timestamp: int, genre: int]\n"
+      },
+      "dateCreated": "Mar 17, 2017 8:08:13 PM",
+      "dateStarted": "Mar 17, 2017 8:53:52 PM",
+      "dateFinished": "Mar 17, 2017 8:54:27 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "//trainMetaUCS.rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/embColdStart/ml_1m/meta_info/usercoldstart/train\")\n//testMetaUCS.rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/embColdStart/ml_1m/meta_info/usercoldstart/test\")\n//trainMetaICS.rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/embColdStart/ml_1m/meta_info/itemcoldstart/train\")\n//testMetaICS.rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/embColdStart/ml_1m/meta_info/itemcoldstart/test\")\ntrainMetaUICS.rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/embColdStart/ml_1m/meta_info/useritemcoldstart/train\")\ntestMetaUICS.rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/embColdStart/ml_1m/meta_info/useritemcoldstart/test\")",
+      "authenticationInfo": {},
+      "dateUpdated": "Mar 17, 2017 9:06:25 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1489779027894_919667993",
+      "id": "20170317-203027_186644276",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": ""
+      },
+      "dateCreated": "Mar 17, 2017 8:30:27 PM",
+      "dateStarted": "Mar 17, 2017 9:06:25 PM",
+      "dateFinished": "Mar 17, 2017 9:06:32 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1489780130798_-773482221",
+      "id": "20170317-204850_232358126",
+      "dateCreated": "Mar 17, 2017 8:48:50 PM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "embColdStart: MetaFilesCreation",
+  "id": "2CD8A5NH9",
+  "angularObjects": {
+    "2BGHSKCA7": [],
+    "2BFMBPKAB": [],
+    "2BHKKP27G": [],
+    "2BJHJDBK6": [],
+    "2BJAQG5W4": [],
+    "2BJGSXM37": [],
+    "2BFXEV5XZ": [],
+    "2BG77RV7M": [],
+    "2BF969NNB": [],
+    "2BG8QQJNC": [],
+    "2BGVG5JP4": [],
+    "2BJ5FCP57": [],
+    "2BFEDXCTE": [],
+    "2BJ8AEWCT": [],
+    "2BH9AVVKH": [],
+    "2BJ7KKX85": [],
+    "2BHKAE8WK": [],
+    "2BJ6HN5AY": []
+  },
+  "config": {},
+  "info": {}
+}

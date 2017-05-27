@@ -1,9 +1,9 @@
 {
   "paragraphs": [
     {
-      "text": "import java.nio.file.{ Files, Paths }\nimport scala.collection.mutable.ListBuffer\nimport java.io.FileWriter\n//,(,\nval countryCodes \u003d Array(\"at\",\"be\",\"br\",\"ch\",\"cz\",\"de\",\"dk\",\"es\",\"fi\",\"ie\",\"nb\",\"nl\",\"no\",\"pl\",\"pt\",\"ru\",\"se\",\"uk\",\"it\",\"fr\")\nval fw \u003d new FileWriter(\"/home/ama/sidana/recsysBaselines/data/input/inputfile.txt\", true)\n\nfor (code \u003c- countryCodes){\n    \n    val t1 \u003d System.currentTimeMillis\n    val clicksTemp \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypso_kk_june_data/click/\"+code+\"/2016/*/*/\")\n    val userClicks \u003d clicksTemp.select(clicksTemp(\"userId\"),substring_index(clicksTemp(\"offerViewId\"),\"-\",1)).withColumnRenamed(\"substring_index(offerViewId,-,1)\",\"offerIdClicks\").withColumnRenamed(\"userId\",\"userIdClicks\")\n    \n    \n    val parquetFileOffers \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypso_kk_june_data/offerView/\"+code+\"/2016/*/*/\")\n    val userOffers \u003d parquetFileOffers.select(parquetFileOffers(\"userId\"),substring_index(parquetFileOffers(\"offerViewId\"),\"-\",1),$\"siteDomain\".getItem(\"countryCode\"),parquetFileOffers(\"category\")(0),parquetFileOffers(\"merchant\"),parquetFileOffers(\"utcDate\")).withColumnRenamed(\"substring_index(offerViewId,-,1)\",\"offerIdOfferView\").withColumnRenamed(\"userId\",\"userIdOfferView\")\n    \n    //inner join\n    val userOfferCommon \u003d userClicks.join(userOffers,userClicks(\"userIdClicks\")\u003c\u003d\u003euserOffers(\"userIdOfferView\")).drop(userClicks(\"userIdClicks\")).drop(userClicks(\"offerIdClicks\"))\n    \n    \n    //outerjoin\n    val cOOuterJoin \u003d userClicks.join(userOfferCommon,userClicks(\"userIdClicks\")\u003c\u003d\u003euserOfferCommon(\"userIdOfferView\") \u0026\u0026 userClicks(\"offerIdClicks\")\u003c\u003d\u003euserOfferCommon(\"offerIdOfferView\"),\"right_outer\")\n\n   cOOuterJoin.rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/recsysBaselines/december/atleastone/totalData_\"+code+\".csv\")\n}\nfw.close()",
+      "text": "import java.nio.file.{ Files, Paths }\nimport scala.collection.mutable.ListBuffer\nimport java.io.FileWriter\n//,(,\nval countryCodes \u003d Array(\"at\",\"be\",\"br\",\"ch\",\"cz\",\"de\",\"dk\",\"es\",\"fi\",\"ie\",\"nb\",\"nl\",\"no\",\"pl\",\"pt\",\"ru\",\"se\",\"uk\",\"it\",\"fr\")\nval fw \u003d new FileWriter(\"/home/ama/sidana/recsysBaselines/data/input/inputfile.txt\", true)\n\nfor (code \u003c- countryCodes){\n    \n    val t1 \u003d System.currentTimeMillis\n    val clicksTemp \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypso_kk_june_data/click/\"+code+\"/2016/*/*/\")\n    val userClicks \u003d clicksTemp.select(clicksTemp(\"userId\"),substring_index(clicksTemp(\"offerViewId\"),\"-\",1)).withColumnRenamed(\"substring_index(offerViewId,-,1)\",\"offerIdClicks\").withColumnRenamed(\"userId\",\"userIdClicks\")\n    \n    \n    val parquetFileOffers \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypso_kk_june_data/offerView/\"+code+\"/2016/*/*/\")\n    val userOffers \u003d parquetFileOffers.select(parquetFileOffers(\"userId\"),substring_index(parquetFileOffers(\"offerViewId\"),\"-\",1),$\"siteDomain\".getItem(\"countryCode\"),parquetFileOffers(\"category\")(0),parquetFileOffers(\"merchant\"),parquetFileOffers(\"utcDate\")).withColumnRenamed(\"substring_index(offerViewId,-,1)\",\"offerIdOfferView\").withColumnRenamed(\"userId\",\"userIdOfferView\")\n    \n    //inner join\n    val userOfferCommon \u003d userClicks.join(userOffers,userClicks(\"userIdClicks\")\u003c\u003d\u003euserOffers(\"userIdOfferView\")).drop(userClicks(\"userIdClicks\")).drop(userClicks(\"offerIdClicks\"))\n    \n    \n    //outerjoin\n    val cOOuterJoin \u003d userClicks.join(userOfferCommon,userClicks(\"userIdClicks\")\u003c\u003d\u003euserOfferCommon(\"userIdOfferView\") \u0026\u0026 userClicks(\"offerIdClicks\")\u003c\u003d\u003euserOfferCommon(\"offerIdOfferView\"),\"right_outer\")\n\n   cOOuterJoin.rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/recsysBaselines/experiments/atleastone/totalData_\"+code+\".csv\")\n}\nfw.close()",
       "authenticationInfo": {},
-      "dateUpdated": "Feb 7, 2017 10:27:48 PM",
+      "dateUpdated": "Feb 21, 2017 4:00:48 PM",
       "config": {
         "colWidth": 12.0,
         "graph": {
@@ -57,37 +57,6 @@
       "id": "20161128-204221_36094560",
       "dateCreated": "Nov 28, 2016 8:42:21 PM",
       "status": "READY",
-      "errorMessage": "",
-      "progressUpdateIntervalMs": 500
-    },
-    {
-      "text": "val clicksTemp \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypso_kk_dec_data/logs/offerView/\"+\"at\"+\"/2016/*/*/\")\nval userId \u003d clicksTemp.select(clicksTemp(\"userInfo\").getItem(\"userId\"))",
-      "authenticationInfo": {},
-      "dateUpdated": "Feb 7, 2017 10:24:15 PM",
-      "config": {
-        "colWidth": 12.0,
-        "graph": {
-          "mode": "table",
-          "height": 300.0,
-          "optionOpen": false,
-          "keys": [],
-          "values": [],
-          "groups": [],
-          "scatter": {}
-        },
-        "enabled": true,
-        "editorMode": "ace/mode/scala"
-      },
-      "settings": {
-        "params": {},
-        "forms": {}
-      },
-      "jobName": "paragraph_1486501997385_49118906",
-      "id": "20170207-221317_79198368",
-      "dateCreated": "Feb 7, 2017 10:13:17 PM",
-      "dateStarted": "Feb 7, 2017 10:24:15 PM",
-      "dateFinished": "Feb 7, 2017 10:24:16 PM",
-      "status": "FINISHED",
       "errorMessage": "",
       "progressUpdateIntervalMs": 500
     },

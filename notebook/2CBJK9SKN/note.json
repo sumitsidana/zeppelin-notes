@@ -1,0 +1,139 @@
+{
+  "paragraphs": [
+    {
+      "text": "val parquetFileClick \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypso_kk_june_data/click/fr/2016/*/*/*.parquet\")\nval clicksWithoutKFS \u003d parquetFileClick.filter(!($\"source\".contains(\"kfs\")))\nval uniqueUsers \u003d clicksWithoutKFS.select(\"userId\").distinct\nval uniqueOfferViews \u003d clicksWithoutKFS.select(\"offerViewId\").distinct\nval uniqueOfferCategories \u003d clicksWithoutKFS.select(\"category\").distinct\nval observedNumberOfRatings \u003d clicksWithoutKFS.groupBy(\"userId\",\"offerViewId\")\n\nval numClicks \u003d clicksWithoutKFS.count\nval numUsers \u003d uniqueUsers.count\nval numOfferViews \u003d uniqueOfferViews.count\nval numOfferCategories \u003d uniqueOfferCategories.count\nval numInteractions \u003d observedNumberOfRatings.count.count\n\n\nval offerId \u003d clicksWithoutKFS.select(substring_index(clicksWithoutKFS(\"offerViewId\"),\"-\",1))\nval uniqueOfferId \u003d offerId.select(\"substring_index(offerViewId,-,1)\").distinct\nval numOffers \u003d uniqueOfferId.count\n\nval groupedClicks \u003d clicksWithoutKFS.groupBy(\"userId\").count.sort(desc(\"count\"))\nval clickAvg \u003d groupedClicks.select(avg($\"count\"))\nclickAvg.show",
+      "authenticationInfo": {},
+      "dateUpdated": "Feb 21, 2017 2:34:21 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1487683794851_1032375197",
+      "id": "20170221-142954_1443746905",
+      "dateCreated": "Feb 21, 2017 2:29:54 PM",
+      "dateStarted": "Feb 21, 2017 2:34:21 PM",
+      "dateFinished": "Feb 21, 2017 2:35:49 PM",
+      "status": "FINISHED",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val parquetFileOffer \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypso_kk_june_data/offerView/fr/2016/*/*/*.parquet\")\nval uniqueUsers \u003d parquetFileOffer.select(\"userId\").distinct\nval uniqueOfferViews \u003d parquetFileOffer.select(\"offerViewId\").distinct\nval uniqueOfferCategories \u003d parquetFileOffer.select(\"category\").distinct\n\nparquetFileOffer.count\nuniqueUsers.count\nuniqueOfferViews.count\nuniqueOfferCategories.count\n\n\nval offerId \u003d parquetFileOffer.select(substring_index(parquetFileOffer(\"offerViewId\"),\"-\",1))\nval uniqueOfferId \u003d offerId.select(\"substring_index(offerViewId,-,1)\").distinct\n\nuniqueOfferId.count\nval groupedOffers \u003d parquetFileOffer.groupBy(\"userId\").count.sort(desc(\"count\"))\ngroupedOffers.select(avg($\"count\")).show",
+      "authenticationInfo": {},
+      "dateUpdated": "Feb 21, 2017 5:05:58 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1487684061789_123769029",
+      "id": "20170221-143421_1246166150",
+      "dateCreated": "Feb 21, 2017 2:34:21 PM",
+      "dateStarted": "Feb 21, 2017 5:05:58 PM",
+      "dateFinished": "Feb 21, 2017 5:45:24 PM",
+      "status": "ERROR",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "//intersect of offerId of train and test\n\nval clicksTrain \u003d sqlContext.read\n\t\t\t\t\t\t\t.format(\"com.databricks.spark.csv\")\n\t\t\t\t\t\t\t.option(\"header\", \"true\") // Use first line of all files as header\n\t\t\t\t\t\t\t.option(\"inferSchema\", \"true\") // Automatically infer data types\n\t\t\t\t\t\t\t.option(\"delimiter\", \"\\t\")\n\t\t\t\t\t\t\t.load(\"/data/sidana/recsysBaselines/experiments/tabseparatedinput/userofferclicks/train_\"+\"fr\"+\".csv\")\n\t\t\t\t\t\t\t\nval clicksTest \u003d sqlContext.read\n\t\t\t\t\t\t\t.format(\"com.databricks.spark.csv\")\n\t\t\t\t\t\t\t.option(\"header\", \"true\") // Use first line of all files as header\n\t\t\t\t\t\t\t.option(\"inferSchema\", \"true\") // Automatically infer data types\n\t\t\t\t\t\t\t.option(\"delimiter\", \"\\t\")\n\t\t\t\t\t\t\t.load(\"/data/sidana/recsysBaselines/experiments/tabseparatedinput/userofferclicks/test_\"+\"fr\"+\".csv\")\n\t\t\t\t\t\t\t\nval offerIdTrain \u003d  clicksTrain.select(\"offerid\").distinct\n\nval offerIdTest \u003d clicksTest.select(\"offerid\").distinct\n\nval commonOfferId \u003d offerIdTrain.join(offerIdTest,offerIdTrain(\"offerId\")\u003d\u003d\u003dofferIdTest(\"offerId\")).count\n\t\t\t\t\t\t\t\n",
+      "authenticationInfo": {},
+      "dateUpdated": "Feb 22, 2017 10:15:29 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1487693158775_-8902891",
+      "id": "20170221-170558_162334764",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "clicksTrain: org.apache.spark.sql.DataFrame \u003d [userid: string, offerid: string, countrycode: string, category: int, merchant: int, utcdate: timestamp, userclickcount: string, offerclickcount: string, rating: int]\nclicksTest: org.apache.spark.sql.DataFrame \u003d [userid: string, offerid: string, countrycode: string, category: int, merchant: int, utcdate: timestamp, userclickcount: string, offerclickcount: string, rating: int]\nofferIdTrain: org.apache.spark.sql.DataFrame \u003d [offerid: string]\nofferIdTest: org.apache.spark.sql.DataFrame \u003d [offerid: string]\ncommonOfferId: Long \u003d 1105632\n"
+      },
+      "dateCreated": "Feb 21, 2017 5:05:58 PM",
+      "dateStarted": "Feb 22, 2017 10:15:29 AM",
+      "dateFinished": "Feb 22, 2017 10:21:13 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1487754596780_-1891766597",
+      "id": "20170222-100956_646020357",
+      "dateCreated": "Feb 22, 2017 10:09:56 AM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "kelkooBaselines: kelkooDataStats_JuneOnlyFrance",
+  "id": "2CBJK9SKN",
+  "angularObjects": {
+    "2BGHSKCA7": [],
+    "2BFMBPKAB": [],
+    "2BHKKP27G": [],
+    "2BJHJDBK6": [],
+    "2BJAQG5W4": [],
+    "2BJGSXM37": [],
+    "2BFXEV5XZ": [],
+    "2BG77RV7M": [],
+    "2BF969NNB": [],
+    "2BG8QQJNC": [],
+    "2BGVG5JP4": [],
+    "2BJ5FCP57": [],
+    "2BFEDXCTE": [],
+    "2BJ8AEWCT": [],
+    "2BH9AVVKH": [],
+    "2BJ7KKX85": [],
+    "2BHKAE8WK": [],
+    "2BJ6HN5AY": []
+  },
+  "config": {
+    "looknfeel": "default"
+  },
+  "info": {}
+}

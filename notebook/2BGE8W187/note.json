@@ -118,7 +118,7 @@
       "progressUpdateIntervalMs": 500
     }
   ],
-  "name": "test",
+  "name": "kelkooBaselines: test",
   "id": "2BGE8W187",
   "angularObjects": {
     "2BGHSKCA7": [],
@@ -140,6 +140,8 @@
     "2BHKAE8WK": [],
     "2BJ6HN5AY": []
   },
-  "config": {},
+  "config": {
+    "looknfeel": "default"
+  },
   "info": {}
 }

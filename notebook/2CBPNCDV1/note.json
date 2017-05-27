@@ -1,0 +1,286 @@
+{
+  "paragraphs": [
+    {
+      "text": "val test \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/data/sidana/embAdaptivity/outbrainchallenge/dat.outbrainchallenge.headers\")\n\nval users \u003d test.select(\"userid\").distinct\n\nusers.rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/embAdaptivity/outbrainchallenge/dat.outbrainchallenge.users.temp\")",
+      "authenticationInfo": {},
+      "dateUpdated": "Mar 29, 2017 2:27:27 PM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1490722442799_-959048939",
+      "id": "20170328-193402_1302437769",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "test: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, rating: int, timestamp: int]\nusers: org.apache.spark.sql.DataFrame \u003d [userid: int]\n"
+      },
+      "dateCreated": "Mar 28, 2017 7:34:02 PM",
+      "dateStarted": "Mar 29, 2017 2:27:27 PM",
+      "dateFinished": "Mar 29, 2017 2:27:35 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val test \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/data/sidana/embAdaptivity/outbrainchallenge/dat.outbrainchallenge.headers\")\n    \nval sample \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/data/sidana/embAdaptivity/outbrainchallenge/dat.outbrainchallenge.users.train.headers\")\n    \nval trainTemp \u003d test.join(sample,test(\"userid\")\u003d\u003d\u003dsample(\"userid\")).drop(sample(\"userid\"))\n\nval train \u003d trainTemp.orderBy(\"timestamp\")\n\ntrain.rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/embAdaptivity/outbrainchallenge/dat.outbrainchallenge.train.temp\")\n",
+      "authenticationInfo": {},
+      "dateUpdated": "Mar 29, 2017 2:33:17 PM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1490722442800_-948660718",
+      "id": "20170328-193402_770769712",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "test: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, rating: int, timestamp: int]\nsample: org.apache.spark.sql.DataFrame \u003d [userid: int]\ntrainTemp: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, rating: int, timestamp: int]\ntrain: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, rating: int, timestamp: int]\n"
+      },
+      "dateCreated": "Mar 28, 2017 7:34:02 PM",
+      "dateStarted": "Mar 29, 2017 2:33:17 PM",
+      "dateFinished": "Mar 29, 2017 2:34:04 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val train \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/data/sidana/embAdaptivity/outbrainchallenge/dat.outbrainchallenge.train.headers\")\nval itemsTrain \u003d train.select(\"itemid\").distinct\nitemsTrain.rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/embAdaptivity/outbrainchallenge/dat.outbrainchallenge.train.items\")",
+      "authenticationInfo": {},
+      "dateUpdated": "Mar 29, 2017 2:36:22 PM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1490722442800_-948660718",
+      "id": "20170328-193402_705190880",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "train: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, rating: int, timestamp: int]\nitemsTrain: org.apache.spark.sql.DataFrame \u003d [itemid: int]\n"
+      },
+      "dateCreated": "Mar 28, 2017 7:34:02 PM",
+      "dateStarted": "Mar 29, 2017 2:36:22 PM",
+      "dateFinished": "Mar 29, 2017 2:36:25 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val test \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/data/sidana/embAdaptivity/outbrainchallenge/dat.outbrainchallenge.headers\")\n    \nval sample \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/data/sidana/embAdaptivity/outbrainchallenge/dat.outbrainchallenge.users.train.headers\")\n\nval newusers \u003d test.select(\"userid\").except(sample.select(\"userid\")).distinct\n\nnewusers.rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/embAdaptivity/outbrainchallenge/dat.outbrainchallenge.users.test.temp\")\n\n",
+      "authenticationInfo": {},
+      "dateUpdated": "Mar 29, 2017 2:38:05 PM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1490722442801_-949045467",
+      "id": "20170328-193402_180872367",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "test: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, rating: int, timestamp: int]\nsample: org.apache.spark.sql.DataFrame \u003d [userid: int]\nnewusers: org.apache.spark.sql.DataFrame \u003d [userid: int]\n"
+      },
+      "dateCreated": "Mar 28, 2017 7:34:02 PM",
+      "dateStarted": "Mar 29, 2017 2:38:05 PM",
+      "dateFinished": "Mar 29, 2017 2:38:17 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val test \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/data/sidana/embAdaptivity/outbrainchallenge/dat.outbrainchallenge.headers\")\n\nval trainItems \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/data/sidana/embAdaptivity/outbrainchallenge/dat.outbrainchallenge.train.items.headers\")\n    \nval testUsers \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/data/sidana/embAdaptivity/outbrainchallenge/dat.outbrainchallenge.users.test.headers\")\n    \nval testTempTemp \u003d test.join(testUsers,test(\"userid\")\u003d\u003d\u003dtestUsers(\"userid\")).drop(testUsers(\"userid\"))\n\nval testTemp \u003d testTempTemp.join(trainItems,testTempTemp(\"itemid\")\u003d\u003d\u003dtrainItems(\"itemid\")).drop(trainItems(\"itemid\"))\n\n\nval testToBeWritten \u003d testTemp.orderBy(\"timestamp\")\n\ntestToBeWritten.rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/embAdaptivity/outbrainchallenge/dat.outbrainchallenge.test.temp\")\n\n\n\n\n",
+      "authenticationInfo": {},
+      "dateUpdated": "Mar 29, 2017 4:54:02 PM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1490722442801_-949045467",
+      "id": "20170328-193402_1232511664",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "test: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, rating: int, timestamp: int]\ntrainItems: org.apache.spark.sql.DataFrame \u003d [itemid: int]\ntestUsers: org.apache.spark.sql.DataFrame \u003d [userid: int]\ntestTempTemp: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, rating: int, timestamp: int]\ntestTemp: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, rating: int, timestamp: int]\ntestToBeWritten: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, rating: int, timestamp: int]\n"
+      },
+      "dateCreated": "Mar 28, 2017 7:34:02 PM",
+      "dateStarted": "Mar 29, 2017 2:44:20 PM",
+      "dateFinished": "Mar 29, 2017 2:45:48 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val test \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/data/sidana/embAdaptivity/outbrainchallenge/dat.outbrainchallenge.headers\")\n\nval trainItems \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/data/sidana/embAdaptivity/outbrainchallenge/dat.outbrainchallenge.train.items.headers\")\n    \nval testUsers \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/data/sidana/embAdaptivity/outbrainchallenge/dat.outbrainchallenge.users.test.headers\")\n    \nval testTempTemp \u003d test.join(testUsers,test(\"userid\")\u003d\u003d\u003dtestUsers(\"userid\")).drop(testUsers(\"userid\"))\n\nval testTemp \u003d testTempTemp.join(trainItems,testTempTemp(\"itemid\")\u003d\u003d\u003dtrainItems(\"itemid\")).drop(trainItems(\"itemid\"))\n\nval positiveInteractions \u003d testTemp.filter($\"rating\"\u003d\u003d\u003d4)\nval groupByUsers \u003d positiveInteractions.groupBy(\"userid\").count.withColumnRenamed(\"count\",\"numberofpositiveinteractions\")\nval goodUsers \u003d groupByUsers.filter($\"numberofpositiveinteractions\"\u003e\u003d5).drop(groupByUsers(\"numberofpositiveinteractions\"))\nval testFinal \u003d testTemp.join(goodUsers,testTemp(\"userid\")\u003d\u003d\u003dgoodUsers(\"userid\")).drop(goodUsers(\"userid\"))\n\nval testToBeWritten \u003d testFinal.select(\"userid\",\"itemid\",\"rating\",\"timestamp\").orderBy(\"timestamp\")\n\ntestToBeWritten.rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/embAdaptivity/outbrainchallenge/goodtest/dat.outbrainchallenge.test.temp\")\n\n",
+      "authenticationInfo": {},
+      "dateUpdated": "Mar 29, 2017 8:06:21 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1490799236875_675440503",
+      "id": "20170329-165356_1091427017",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "test: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, rating: int, timestamp: int]\ntrainItems: org.apache.spark.sql.DataFrame \u003d [itemid: int]\ntestUsers: org.apache.spark.sql.DataFrame \u003d [userid: int]\ntestTempTemp: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, rating: int, timestamp: int]\ntestTemp: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, rating: int, timestamp: int]\npositiveInteractions: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, rating: int, timestamp: int]\ngroupByUsers: org.apache.spark.sql.DataFrame \u003d [userid: int, numberofpositiveinteractions: bigint]\ngoodUsers: org.apache.spark.sql.DataFrame \u003d [userid: int]\ntestFinal: org.apache.spark.sql.DataFrame \u003d [itemid: int, rating: int, timestamp: int, userid: int]\ntestToBeWritten: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, rating: int, timestamp: int]\n"
+      },
+      "dateCreated": "Mar 29, 2017 4:53:56 PM",
+      "dateStarted": "Mar 29, 2017 8:06:21 PM",
+      "dateFinished": "Mar 29, 2017 8:09:17 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "//tests\n\nval test \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/data/sidana/embAdaptivity/outbrainchallenge/dat.outbrainchallenge.sample.test.headers\")\n\n\nval train \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/data/sidana/embAdaptivity/outbrainchallenge/dat.outbrainchallenge.sample.train.headers\")\n    \n\ntrain.select(\"itemid\").distinct.count\ntest.select(\"itemid\").distinct.count\n\ntrain.select(\"userid\").distinct.count\ntest.select(\"userid\").distinct.count\n\ntest.select(\"userid\").except(train.select(\"userid\")).distinct.count\ntest.select(\"itemid\").except(train.select(\"itemid\")).distinct.count\n\n\n",
+      "authenticationInfo": {},
+      "dateUpdated": "Mar 28, 2017 8:25:00 PM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1490722442802_-947891220",
+      "id": "20170328-193402_196277886",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "test: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, rating: int, timestamp: int]\ntrain: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, rating: int, timestamp: int]\nres23: Long \u003d 79766\nres24: Long \u003d 62540\nres25: Long \u003d 148143\nres26: Long \u003d 592423\nres27: Long \u003d 592423\nres28: Long \u003d 0\n"
+      },
+      "dateCreated": "Mar 28, 2017 7:34:02 PM",
+      "dateStarted": "Mar 28, 2017 8:25:00 PM",
+      "dateFinished": "Mar 28, 2017 8:25:53 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "dateUpdated": "Mar 28, 2017 7:34:02 PM",
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1490722442802_-947891220",
+      "id": "20170328-193402_307548210",
+      "dateCreated": "Mar 28, 2017 7:34:02 PM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "embAdaptivity: outbrainSubsetCreation",
+  "id": "2CBPNCDV1",
+  "angularObjects": {
+    "2BGHSKCA7": [],
+    "2BFMBPKAB": [],
+    "2BHKKP27G": [],
+    "2BJHJDBK6": [],
+    "2BJAQG5W4": [],
+    "2BJGSXM37": [],
+    "2BFXEV5XZ": [],
+    "2BG77RV7M": [],
+    "2BF969NNB": [],
+    "2BG8QQJNC": [],
+    "2BGVG5JP4": [],
+    "2BJ5FCP57": [],
+    "2BFEDXCTE": [],
+    "2BJ8AEWCT": [],
+    "2BH9AVVKH": [],
+    "2BJ7KKX85": [],
+    "2BHKAE8WK": [],
+    "2BJ6HN5AY": []
+  },
+  "config": {},
+  "info": {}
+}

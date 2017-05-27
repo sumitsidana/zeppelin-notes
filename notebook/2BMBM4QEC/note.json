@@ -100,7 +100,7 @@
       "progressUpdateIntervalMs": 500
     }
   ],
-  "name": "ranking_similarity",
+  "name": "recsys_challenge: ranking_similarity",
   "id": "2BMBM4QEC",
   "angularObjects": {
     "2BGHSKCA7": [],
@@ -122,6 +122,8 @@
     "2BHKAE8WK": [],
     "2BJ6HN5AY": []
   },
-  "config": {},
+  "config": {
+    "looknfeel": "default"
+  },
   "info": {}
 }

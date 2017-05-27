@@ -48,7 +48,7 @@
       "progressUpdateIntervalMs": 500
     }
   ],
-  "name": "ranking_items_users",
+  "name": "recsys_challenge: ranking_items_users",
   "id": "2BP9DX76U",
   "angularObjects": {
     "2BGHSKCA7": [],
@@ -70,6 +70,8 @@
     "2BHKAE8WK": [],
     "2BJ6HN5AY": []
   },
-  "config": {},
+  "config": {
+    "looknfeel": "default"
+  },
   "info": {}
 }

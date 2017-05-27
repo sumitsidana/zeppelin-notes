@@ -1,0 +1,457 @@
+{
+  "paragraphs": [
+    {
+      "text": "val original \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/data/sidana/adaptivity/nf/input_data/dat.nf.sample.headers\")\n//val groubByUsers \u003d original.groupBy(\"userid\").count.sort(asc(\"count\"))\n//z.show(groubByUsers)\n\nval num_users \u003d original.select(\"userid\").distinct.count\nval num_items \u003d original.select(\"itemid\").distinct.count\n\n\n\noriginal.agg(max(\"itemid\")).show\noriginal.agg(max(\"userid\")).show\n\noriginal.agg(min(\"itemid\")).show\noriginal.agg(min(\"userid\")).show\n\nval interactions \u003d original.count\n    ",
+      "authenticationInfo": {},
+      "dateUpdated": "Apr 1, 2017 3:55:51 PM",
+      "config": {
+        "enabled": true,
+        "tableHide": false,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1491054510699_-248908275",
+      "id": "20170401-154830_1062660471",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "original: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, rating: int, timestamp: bigint]\nnum_users: Long \u003d 90137\nnum_items: Long \u003d 3560\n+-----------+\n|max(itemid)|\n+-----------+\n|       3560|\n+-----------+\n\n+-----------+\n|max(userid)|\n+-----------+\n|      90137|\n+-----------+\n\n+-----------+\n|min(itemid)|\n+-----------+\n|          1|\n+-----------+\n\n+-----------+\n|min(userid)|\n+-----------+\n|          1|\n+-----------+\n\ninteractions: Long \u003d 4188098\n"
+      },
+      "dateCreated": "Apr 1, 2017 3:48:30 PM",
+      "dateStarted": "Apr 1, 2017 3:55:51 PM",
+      "dateFinished": "Apr 1, 2017 3:56:38 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val original \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/data/sidana/adaptivity/outbrain/input_data/dat.outbrain.headers\")\n\nval users \u003d  sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/data/sidana/adaptivity/outbrain/experiments/input_data/dat.outbrain.users\")\n\nval data \u003d original.join(users,original(\"userid\")\u003d\u003d\u003dusers(\"userid\")).drop(users(\"userid\"))\ndata.rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/adaptivity/outbrain/experiments/input_data/dat.outbrain\")",
+      "dateUpdated": "Apr 1, 2017 3:48:30 PM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1491054510699_-248908275",
+      "id": "20170401-154830_1660527645",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "original: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, rating: int, timestamp: int]\nusers: org.apache.spark.sql.DataFrame \u003d [userid: int]\ndata: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, rating: int, timestamp: int]\n"
+      },
+      "dateCreated": "Apr 1, 2017 3:48:30 PM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "//create data set with minimum clicks \u003d 20 criteria\n\nval original \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/data/sidana/adaptivity/outbrain/input_data/dat.outbrain.headers\")\nval groupByUsers \u003d original.groupBy(\"userid\").count.withColumnRenamed(\"count\",\"numInteractions\")\nval goodUsers \u003d groupByUsers.filter($\"numInteractions\"\u003e\u003d20)\nval usersWrite \u003d goodUsers.select(\"userid\")\nusersWrite.rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/adaptivity/outbrain/experiments/input_data/dat.outbrain.headers\")\n\n",
+      "dateUpdated": "Apr 1, 2017 3:48:30 PM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1491054510700_-250832020",
+      "id": "20170401-154830_1938136750",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "original: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, rating: int, timestamp: int]\ngroupByUsers: org.apache.spark.sql.DataFrame \u003d [userid: int, numInteractions: bigint]\ngoodUsers: org.apache.spark.sql.DataFrame \u003d [userid: int, numInteractions: bigint]\nusersWrite: org.apache.spark.sql.DataFrame \u003d [userid: int]\n"
+      },
+      "dateCreated": "Apr 1, 2017 3:48:30 PM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val positiveInteractions \u003d original.filter($\"rating\"\u003e\u003d4)\nval groubByUsers \u003d positiveInteractions.groupBy(\"userid\").count.sort(asc(\"count\"))\nz.show(groubByUsers)",
+      "authenticationInfo": {},
+      "dateUpdated": "Apr 1, 2017 3:56:55 PM",
+      "config": {
+        "enabled": true,
+        "tableHide": false,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1491054510700_-250832020",
+      "id": "20170401-154830_1232399554",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TABLE",
+        "msg": "userid\tcount\n88436\t1\n88849\t1\n69836\t1\n89675\t1\n65849\t1\n12633\t1\n53636\t1\n88840\t1\n84075\t1\n89631\t1\n62049\t1\n54294\t1\n85633\t1\n38890\t1\n12048\t1\n84855\t1\n86040\t1\n89888\t1\n85675\t1\n73667\t1\n79631\t1\n74846\t1\n55249\t1\n86656\t1\n88494\t1\n40851\t1\n74833\t1\n90072\t1\n62290\t1\n55297\t1\n6848\t1\n87486\t1\n13055\t1\n87269\t1\n62040\t1\n86881\t1\n75088\t1\n89837\t1\n89475\t1\n73457\t1\n90067\t1\n60252\t1\n61831\t1\n89266\t1\n83246\t1\n86258\t1\n62849\t1\n85249\t1\n83856\t1\n62061\t1\n86494\t1\n29892\t1\n87851\t1\n62696\t1\n78033\t1\n1060\t1\n83672\t1\n61499\t1\n40290\t1\n63239\t1\n85097\t1\n88448\t1\n83448\t1\n69886\t1\n59086\t1\n80255\t1\n86855\t1\n53869\t1\n72269\t1\n86440\t1\n42640\t1\n85481\t1\n78481\t1\n88854\t1\n89688\t1\n68088\t1\n87237\t1\n81637\t1\n86075\t1\n84275\t1\n86057\t1\n54657\t1\n82267\t1\n57467\t1\n70252\t1\n80452\t1\n83631\t1\n83466\t1\n85066\t1\n70046\t1\n67246\t1\n87246\t1\n73458\t1\n84858\t1\n70058\t1\n85449\t1\n83849\t1\n69056\t1\n77456\t1\n80061\t1\n85061\t1\n90094\t1\n82894\t1\n89492\t1\n86292\t1\n81051\t1\n69451\t1\n87495\t1\n77695\t1\n58696\t1\n62033\t1\n82460\t1\n52660\t1\n77672\t1\n89272\t1\n88242\t1\n19099\t1\n54699\t1\n89890\t1\n56839\t1\n5839\t1\n68639\t1\n80897\t1\n75448\t1\n70048\t1\n77448\t1\n85448\t1\n53284\t1\n72886\t1\n86886\t1\n84086\t1\n53086\t1\n80855\t1\n86055\t1\n89455\t1\n42055\t1\n80469\t1\n85069\t1\n20469\t1\n83840\t1\n85240\t1\n65440\t1\n89240\t1\n71040\t1\n55881\t1\n86281\t1\n77681\t1\n90081\t1\n80654\t1\n86854\t1\n70654\t1\n86888\t1\n88488\t1\n89037\t1\n78237\t1\n76837\t1\n81037\t1\n83037\t1\n78875\t1\n88043\t1\n79275\t1\n89875\t1\n75857\t1\n84657\t1\n89657\t1\n71467\t1\n64667\t1\n84267\t1\n76467\t1\n89267\t1\n50252\t1\n87252\t1\n90052\t1\n74031\t1\n81431\t1\n88431\t1\n87866\t1\n74666\t1\n26466\t1\n59866\t1\n14466\t1\n52882\t1\n18246\t1\n85046\t1\n88846\t1\n87046\t1\n64446\t1\n88658\t1\n87858\t1\n59058\t1\n89658\t1\n88049\t1\n63249\t1\n79649\t1\n90049\t1\n25649\t1\n74056\t1\n38656\t1\n68056\t1\n89456\t1\n87461\t1\n65461\t1\n72461\t1\n75894\t1\n87894\t1\n88094\t1\n41894\t1\n85492\t1\n88692\t1\n89892\t1\n75492\t1\n63451\t1\n24851\t1\n87251\t1\n89451\t1\n82295\t1\n75495\t1\n72895\t1\n73095\t1\n79696\t1\n65296\t1\n87233\t1\n61233\t1\n87433\t1\n85060\t1\n87660\t1\n82860\t1\n78672\t1\n76872\t1\n71272\t1\n84472\t1\n89672\t1\n88442\t1\n77699\t1\n88499\t1\n84899\t1\n89299\t1\n70690\t1\n66290\t1\n84690\t1\n83239\t1\n79839\t1\n72839\t1\n50839\t1\n64839\t1\n75639\t1\n83897\t1\n86697\t1\n81048\t1\n62448\t1\n90063\t1\n84464\t1\n83848\t1\n89248\t1\n84048\t1\n81645\t1\n61473\t1\n62286\t1\n82886\t1\n80686\t1\n86086\t1\n78686\t1\n89886\t1\n69479\t1\n89845\t1\n5855\t1\n88855\t1\n83255\t1\n89055\t1\n69455\t1\n89655\t1\n42845\t1\n87655\t1\n73469\t1\n74869\t1\n80669\t1\n83269\t1\n89469\t1\n89669\t1\n86069\t1\n30669\t1\n88645\t1\n84440\t1\n90040\t1\n85440\t1\n20840\t1\n83640\t1\n68041\t1\n78873\t1\n73840\t1\n61078\t1\n63478\t1\n72081\t1\n56681\t1\n70081\t1\n70478\t1\n73281\t1\n83854\t1\n85054\t1\n10454\t1\n66054\t1\n65254\t1\n89454\t1\n77073\t1\n76888\t1\n70088\t1\n79488\t1\n88888\t1\n72277\t1\n83837\t1\n76673\t1\n86637\t1\n87437\t1\n53837\t1\n84837\t1\n79673\t1\n82437\t1\n80437\t1\n70275\t1\n69459\t1\n60843\t1\n33075\t1\n43875\t1\n18875\t1\n74675\t1\n74475\t1\n77257\t1\n88057\t1\n89257\t1\n83457\t1\n11457\t1\n74457\t1\n60867\t1\n71067\t1\n87073\t1\n87467\t1\n70267\t1\n46467\t1\n83467\t1\n81267\t1\n89667\t1\n88467\t1\n40467\t1\n87852\t1\n82852\t1\n14052\t1\n89052\t1\n89452\t1\n78652\t1\n69831\t1\n59631\t1\n82831\t1\n78031\t1\n87831\t1\n86077\t1\n65866\t1\n15066\t1\n74066\t1\n78266\t1\n87266\t1\n85266\t1\n44482\t1\n66866\t1\n72477\t1\n89282\t1\n33646\t1\n87846\t1\n88046\t1\n57446\t1\n75882\t1\n58846\t1\n68082\t1\n63846\t1\n77046\t1\n69082\t1\n87682\t1\n88058\t1\n62058\t1\n87458\t1\n66058\t1\n60858\t1\n89082\t1\n13058\t1\n65886\t1\n88449\t1\n75670\t1\n88649\t1\n74449\t1\n63649\t1\n82449\t1\n67849\t1\n64649\t1\n80849\t1\n82249\t1\n85856\t1\n90056\t1\n74856\t1\n70456\t1\n86256\t1\n86684\t1\n80084\t1\n82061\t1\n82861\t1\n61061\t1\n63261\t1\n89061\t1\n74661\t1\n33661\t1\n60294\t1\n88694\t1\n83094\t1\n73894\t1\n79694\t1\n86294\t1\n88894\t1\n44494\t1\n89894\t1\n70892\t1\n60292\t1\n39492\t1\n84692\t1\n27492\t1\n83492\t1\n64292\t1\n86492\t1\n82851\t1\n79651\t1\n89651\t1\n75851\t1\n89051\t1\n88051\t1\n89085\t1\n43695\t1\n74895\t1\n86695\t1\n89495\t1\n80895\t1\n1295\t1\n39095\t1\n84485\t1\n75496\t1\n40896\t1\n81096\t1\n84896\t1\n82633\t1\n89033\t1\n85833\t1\n90085\t1\n87686\t1\n86463\t1\n86433\t1\n86060\t1\n85460\t1\n86685\t1\n89460\t1\n76660\t1\n80660\t1\n64472\t1\n72472\t1\n77072\t1\n88872\t1\n89072\t1\n76272\t1\n68663\t1\n87472\t1\n88042\t1\n72442\t1\n89842\t1\n87442\t1\n90099\t1\n81499\t1\n87699\t1\n13499\t1\n89234\t1\n72499\t1\n69890\t1\n88490\t1\n81090\t1\n86290\t1\n66263\t1\n9490\t1\n89690\t1\n89239\t1\n72234\t1\n85264\t1\n82439\t1\n85239\t1\n76839\t1\n88239\t1\n58239\t1\n88639\t1\n90039\t1\n40039\t1\n88097\t1\n66297\t1\n80697\t1\n72897\t1\n27097\t1\n72297\t1\n69848\t1\n70664\t1\n17068\t1\n74680\t1\n51862\t1\n79064\t1\n88464\t1\n89064\t1\n54480\t1\n89471\t1\n32874\t1\n86474\t1\n89832\t1\n79077\t1\n89674\t1\n68678\t1\n84277\t1\n68286\t1\n48871\t1\n66679\t1\n87279\t1\n81845\t1\n51045\t1\n85445\t1\n25079\t1\n90045\t1\n81686\t1\n72245\t1\n70032\t1\n90080\t1\n82841\t1\n83845\t1\n44486\t1\n76055\t1\n74655\t1\n48445\t1\n82845\t1\n85245\t1\n88445\t1\n88055\t1\n80662\t1\n80241\t1\n89438\t1\n89862\t1\n86032\t1\n35441\t1\n89038\t1\n89445\t1\n67245\t1\n62855\t1\n65479\t1\n88069\t1\n87245\t1\n25069\t1\n83469\t1\n74641\t1\n67279\t1\n87845\t1\n89069\t1\n88869\t1\n89045\t1\n72479\t1\n72869\t1\n26869\t1\n35874\t1\n89074\t1\n60079\t1\n89440\t1\n53645\t1\n86878\t1\n84879\t1\n50841\t1\n82878\t1\n51278\t1\n85640\t1\n66262\t1\n81032\t1\n7871\t1\n65441\t1\n73878\t1\n84240\t1\n78640\t1\n54478\t1\n90071\t1\n86679\t1\n60479\t1\n89841\t1\n77081\t1\n90077\t1\n88878\t1\n63678\t1\n87081\t1\n83632\t1\n61874\t1\n86078\t1\n86241\t1\n82854\t1\n58477\t1\n73078\t1\n51478\t1\n48878\t1\n53874\t1\n62678\t1\n74654\t1\n69678\t1\n14478\t1\n85878\t1\n89678\t1\n29832\t1\n89459\t1\n85888\t1\n86288\t1\n66059\t1\n79873\t1\n89488\t1\n56659\t1\n89288\t1\n81677\t1\n69471\t1\n66241\t1\n77662\t1\n88468\t1\n83059\t1\n76273\t1\n60277\t1\n86873\t1\n84037\t1\n77459\t1\n76868\t1\n88459\t1\n64073\t1\n87873\t1\n88438\t1\n86859\t1\n79841\t1\n80237\t1\n86259\t1\n87473\t1\n82875\t1\n72859\t1\n68032\t1\n61638\t1\n90062\t1\n88473\t1\n56077\t1\n68073\t1\n82077\t1\n48438\t1\n86073\t1\n38062\t1\n77273\t1\n84659\t1\n90075\t1\n84673\t1\n88457\t1\n77077\t1\n69673\t1\n86657\t1\n90057\t1\n36657\t1\n86473\t1\n80673\t1\n31657\t1\n15659\t1\n65873\t1\n20257\t1\n73677\t1\n89073\t1\n87059\t1\n85873\t1\n72273\t1\n89253\t1\n77832\t1\n77643\t1\n48071\t1\n74467\t1\n86477\t1\n57067\t1\n71843\t1\n79453\t1\n80859\t1\n36843\t1\n59459\t1\n89043\t1\n74043\t1\n76871\t1\n86267\t1\n74853\t1\n84677\t1\n74652\t1\n89652\t1\n69852\t1\n33252\t1\n58052\t1\n74643\t1\n81652\t1\n86043\t1\n17043\t1\n82671\t1\n72043\t1\n85431\t1\n85676\t1\n90059\t1\n85053\t1\n51832\t1\n90043\t1\n56076\t1\n76053\t1\n87835\t1\n81631\t1\n88268\t1\n86853\t1\n88276\t1\n90082\t1\n72268\t1\n59643\t1\n82682\t1\n56466\t1\n14877\t1\n88853\t1\n87882\t1\n81877\t1\n88476\t1\n30266\t1\n89682\t1\n67071\t1\n89466\t1\n48666\t1\n86471\t1\n77841\t1\n62674\t1\n89076\t1\n90046\t1\n81846\t1\n50868\t1\n66253\t1\n68884\t1\n86046\t1\n70641\t1\n69646\t1\n89676\t1\n87841\t1\n71882\t1\n80253\t1\n61276\t1\n84682\t1\n82074\t1\n79041\t1\n40474\t1\n88471\t1\n64438\t1\n89453\t1\n88277\t1\n54482\t1\n77858\t1\n79858\t1\n64258\t1\n70476\t1\n62682\t1\n23682\t1\n62841\t1\n58476\t1\n76858\t1\n89258\t1\n90035\t1\n74038\t1\n87868\t1\n68853\t1\n89632\t1\n63285\t1\n79471\t1\n65449\t1\n88080\t1\n76676\t1\n71449\t1\n82453\t1\n87284\t1\n38884\t1\n90076\t1\n81049\t1\n87471\t1\n20435\t1\n49068\t1\n90053\t1\n84432\t1\n64035\t1\n70249\t1\n86649\t1\n81876\t1\n72249\t1\n88256\t1\n89856\t1\n71884\t1\n82071\t1\n69484\t1\n85656\t1\n68438\t1\n66856\t1\n74468\t1\n79053\t1\n80032\t1\n84270\t1\n89084\t1\n76080\t1\n85680\t1\n82076\t1\n67261\t1\n22853\t1\n88676\t1\n89884\t1\n84276\t1\n85476\t1\n35271\t1\n88671\t1\n75484\t1\n58253\t1\n77235\t1\n87487\t1\n46484\t1\n84061\t1\n80687\t1\n85294\t1\n80087\t1\n72494\t1\n80062\t1\n89687\t1\n81280\t1\n85494\t1\n89468\t1\n74094\t1\n88070\t1\n88453\t1\n63432\t1\n89087\t1\n69235\t1\n85270\t1\n86880\t1\n687\t1\n56035\t1\n74653\t1\n21887\t1\n61092\t1\n57487\t1\n81492\t1\n84892\t1\n86892\t1\n79670\t1\n84053\t1\n90070\t1\n89887\t1\n83670\t1\n87870\t1\n87051\t1\n80651\t1\n82451\t1\n76451\t1\n68287\t1\n86451\t1\n81835\t1\n89851\t1\n74662\t1\n74880\t1\n81070\t1\n80653\t1\n67287\t1\n86235\t1\n89070\t1\n81851\t1\n82895\t1\n86470\t1\n84862\t1\n62495\t1\n78235\t1\n85687\t1\n81487\t1\n89870\t1\n85462\t1\n64062\t1\n85871\t1\n71295\t1\n51670\t1\n81887\t1\n28080\t1\n82896\t1\n82662\t1\n87685\t1\n84887\t1\n60896\t1\n88885\t1\n84496\t1\n25270\t1\n86696\t1\n12285\t1\n85885\t1\n50233\t1\n80433\t1\n89432\t1\n76680\t1\n87235\t1\n72062\t1\n63280\t1\n89638\t1\n90068\t1\n70485\t1\n86885\t1\n76085\t1\n59468\t1\n85668\t1\n76470\t1\n78270\t1\n28260\t1\n89060\t1\n89485\t1\n72860\t1\n11485\t1\n69660\t1\n74863\t1\n74668\t1\n83870\t1\n81068\t1\n89285\t1\n88685\t1\n89641\t1\n88862\t1\n51485\t1\n84285\t1\n48872\t1\n89685\t1\n81832\t1\n72441\t1\n86663\t1\n61834\t1\n75872\t1\n68442\t1\n59642\t1\n80871\t1\n60834\t1\n67634\t1\n60042\t1\n85034\t1\n90034\t1\n48834\t1\n87234\t1\n1663\t1\n82435\t1\n89434\t1\n88880\t1\n79441\t1\n82871\t1\n45068\t1\n62462\t1\n88234\t1\n49434\t1\n56462\t1\n87480\t1\n87290\t1\n81863\t1\n56834\t1\n89834\t1\n79035\t1\n80432\t1\n73638\t1\n89645\t1\n61264\t1\n85434\t1\n53490\t1\n83035\t1\n88434\t1\n82862\t1\n88263\t1\n60034\t1\n89874\t1\n86864\t1\n68641\t1\n89274\t1\n56835\t1\n87879\t1\n39464\t1\n77468\t1\n86839\t1\n70464\t1\n84639\t1\n64238\t1\n85471\t1\n48863\t1\n89864\t1\n87479\t1\n69039\t1\n87697\t1\n84897\t1\n79464\t1\n89068\t1\n83464\t1\n85697\t1\n85663\t1\n47697\t1\n86897\t1\n90097\t1\n76879\t1\n78464\t1\n32674\t1\n\n\u003cfont color\u003dred\u003eResults are limited by 1000.\u003c/font\u003e"
+      },
+      "dateCreated": "Apr 1, 2017 3:48:30 PM",
+      "dateStarted": "Apr 1, 2017 3:56:55 PM",
+      "dateFinished": "Apr 1, 2017 3:57:01 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val negativeInteractions \u003d original.filter($\"rating\"\u003c4)\nval groubByUsers \u003d negativeInteractions.groupBy(\"userid\").count.sort(asc(\"count\"))\nz.show(groubByUsers)",
+      "authenticationInfo": {},
+      "dateUpdated": "Apr 1, 2017 3:57:14 PM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1491054510707_-239674302",
+      "id": "20170401-154830_1996054709",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TABLE",
+        "msg": "userid\tcount\n78243\t1\n17653\t1\n65043\t1\n88074\t1\n71253\t1\n82847\t1\n74843\t1\n15041\t1\n83274\t1\n40444\t1\n35453\t1\n55449\t1\n82073\t1\n84837\t1\n88443\t1\n88635\t1\n84841\t1\n85874\t1\n88674\t1\n88632\t1\n26644\t1\n78038\t1\n48053\t1\n85456\t1\n75249\t1\n86849\t1\n50473\t1\n85847\t1\n88437\t1\n56250\t1\n69443\t1\n861\t1\n82635\t1\n21835\t1\n64241\t1\n35441\t1\n57274\t1\n87674\t1\n89474\t1\n72432\t1\n52232\t1\n87644\t1\n87244\t1\n68044\t1\n89438\t1\n73038\t1\n70653\t1\n66253\t1\n89456\t1\n66056\t1\n57849\t1\n71449\t1\n83449\t1\n19673\t1\n11073\t1\n89247\t1\n47247\t1\n77437\t1\n25237\t1\n77050\t1\n70850\t1\n71450\t1\n88250\t1\n20861\t1\n86461\t1\n83635\t1\n75835\t1\n60035\t1\n46835\t1\n72441\t1\n47041\t1\n62241\t1\n84441\t1\n59841\t1\n68874\t1\n9274\t1\n89274\t1\n70274\t1\n38874\t1\n89632\t1\n82232\t1\n85632\t1\n83632\t1\n20244\t1\n64644\t1\n76244\t1\n77444\t1\n47444\t1\n16844\t1\n42438\t1\n88638\t1\n13638\t1\n83238\t1\n33238\t1\n33853\t1\n67453\t1\n62853\t1\n41453\t1\n83056\t1\n75056\t1\n60856\t1\n79056\t1\n69249\t1\n45849\t1\n21449\t1\n71249\t1\n83849\t1\n70449\t1\n85873\t1\n68073\t1\n50873\t1\n70647\t1\n32247\t1\n50647\t1\n53247\t1\n76237\t1\n67837\t1\n75437\t1\n43437\t1\n43037\t1\n56450\t1\n85050\t1\n89450\t1\n50850\t1\n67050\t1\n77450\t1\n82850\t1\n72852\t1\n56661\t1\n67061\t1\n87061\t1\n69235\t1\n74035\t1\n55635\t1\n68235\t1\n86235\t1\n14035\t1\n57235\t1\n73635\t1\n79252\t1\n14841\t1\n81041\t1\n15841\t1\n76441\t1\n9641\t1\n73441\t1\n72241\t1\n27041\t1\n88041\t1\n52474\t1\n85474\t1\n73274\t1\n88474\t1\n36452\t1\n75474\t1\n87874\t1\n67474\t1\n32874\t1\n54474\t1\n75674\t1\n54832\t1\n29832\t1\n58432\t1\n89832\t1\n80432\t1\n82832\t1\n60432\t1\n74444\t1\n73244\t1\n84444\t1\n89044\t1\n65044\t1\n66444\t1\n89444\t1\n61644\t1\n84264\t1\n45644\t1\n81844\t1\n6844\t1\n25638\t1\n77238\t1\n78638\t1\n59638\t1\n48464\t1\n65038\t1\n74438\t1\n43638\t1\n66838\t1\n62638\t1\n72253\t1\n86653\t1\n69870\t1\n86253\t1\n67253\t1\n22853\t1\n80453\t1\n88253\t1\n84256\t1\n84456\t1\n80656\t1\n78656\t1\n10656\t1\n60656\t1\n62856\t1\n82656\t1\n50049\t1\n77449\t1\n86049\t1\n41249\t1\n15049\t1\n75849\t1\n84249\t1\n69649\t1\n85249\t1\n81049\t1\n25270\t1\n88649\t1\n75473\t1\n69873\t1\n55873\t1\n77673\t1\n88273\t1\n86873\t1\n83661\t1\n73661\t1\n58247\t1\n44447\t1\n86247\t1\n33447\t1\n59047\t1\n77447\t1\n75037\t1\n85437\t1\n81037\t1\n89837\t1\n62437\t1\n89637\t1\n89237\t1\n87837\t1\n67637\t1\n70637\t1\n81650\t1\n41650\t1\n56050\t1\n77850\t1\n18061\t1\n55650\t1\n81450\t1\n74650\t1\n83650\t1\n85450\t1\n67450\t1\n43250\t1\n72850\t1\n54050\t1\n61855\t1\n35652\t1\n38670\t1\n65058\t1\n89279\t1\n87861\t1\n86261\t1\n34861\t1\n65452\t1\n39652\t1\n44435\t1\n76035\t1\n82252\t1\n90035\t1\n87835\t1\n54035\t1\n89052\t1\n84235\t1\n65835\t1\n75035\t1\n60058\t1\n86435\t1\n83435\t1\n47235\t1\n58\t1\n85052\t1\n89841\t1\n67241\t1\n77841\t1\n67641\t1\n86858\t1\n83041\t1\n57058\t1\n89252\t1\n52241\t1\n69041\t1\n58041\t1\n58441\t1\n60041\t1\n87441\t1\n86852\t1\n86841\t1\n85841\t1\n71041\t1\n59652\t1\n89641\t1\n88874\t1\n67274\t1\n23858\t1\n10052\t1\n79474\t1\n64055\t1\n81252\t1\n88252\t1\n83074\t1\n82674\t1\n88452\t1\n55074\t1\n88052\t1\n86074\t1\n87474\t1\n65474\t1\n74074\t1\n89074\t1\n49464\t1\n8474\t1\n89452\t1\n48232\t1\n76632\t1\n84032\t1\n42264\t1\n62632\t1\n68858\t1\n84432\t1\n68032\t1\n78632\t1\n20432\t1\n63632\t1\n73632\t1\n88032\t1\n79479\t1\n87264\t1\n41844\t1\n81044\t1\n47064\t1\n82444\t1\n50864\t1\n60044\t1\n60264\t1\n86644\t1\n85264\t1\n67664\t1\n72064\t1\n74244\t1\n61064\t1\n27844\t1\n85046\t1\n75264\t1\n83064\t1\n69044\t1\n43464\t1\n85444\t1\n47644\t1\n80844\t1\n73864\t1\n77638\t1\n64438\t1\n88038\t1\n84464\t1\n81038\t1\n71838\t1\n87238\t1\n81079\t1\n61264\t1\n86840\t1\n80040\t1\n71040\t1\n56479\t1\n76038\t1\n73838\t1\n76040\t1\n52638\t1\n69438\t1\n78438\t1\n83038\t1\n85438\t1\n60253\t1\n25253\t1\n85855\t1\n49870\t1\n71053\t1\n52053\t1\n81870\t1\n89053\t1\n70053\t1\n50653\t1\n70055\t1\n48270\t1\n64653\t1\n80053\t1\n76256\t1\n67056\t1\n74256\t1\n66456\t1\n82270\t1\n82870\t1\n71456\t1\n51656\t1\n84856\t1\n87456\t1\n82856\t1\n63256\t1\n61270\t1\n64070\t1\n43270\t1\n90056\t1\n78056\t1\n82056\t1\n78649\t1\n88870\t1\n74070\t1\n74849\t1\n90049\t1\n61049\t1\n89849\t1\n76849\t1\n80840\t1\n81849\t1\n84449\t1\n89249\t1\n71670\t1\n84649\t1\n70270\t1\n57655\t1\n50449\t1\n74049\t1\n75655\t1\n55670\t1\n65240\t1\n86649\t1\n71273\t1\n69273\t1\n82873\t1\n88073\t1\n58273\t1\n27673\t1\n88873\t1\n80270\t1\n48273\t1\n86473\t1\n66070\t1\n71073\t1\n70640\t1\n89070\t1\n89861\t1\n80461\t1\n61061\t1\n69647\t1\n79247\t1\n59447\t1\n87631\t1\n73247\t1\n48461\t1\n74447\t1\n65447\t1\n88247\t1\n40247\t1\n85647\t1\n72861\t1\n62647\t1\n71637\t1\n83837\t1\n86440\t1\n88637\t1\n56237\t1\n83637\t1\n64837\t1\n54837\t1\n87237\t1\n86237\t1\n76640\t1\n69837\t1\n82037\t1\n62261\t1\n84440\t1\n74661\t1\n71437\t1\n63237\t1\n70437\t1\n74850\t1\n87261\t1\n68250\t1\n78661\t1\n78450\t1\n80250\t1\n73650\t1\n87252\t1\n87661\t1\n88050\t1\n82650\t1\n42861\t1\n33661\t1\n18261\t1\n55452\t1\n74450\t1\n85667\t1\n29652\t1\n87879\t1\n65852\t1\n84631\t1\n87450\t1\n54850\t1\n89846\t1\n75258\t1\n72452\t1\n67652\t1\n68076\t1\n67279\t1\n87255\t1\n79852\t1\n84076\t1\n87658\t1\n88479\t1\n79667\t1\n7276\t1\n72067\t1\n87852\t1\n81667\t1\n90040\t1\n76231\t1\n64661\t1\n72467\t1\n65276\t1\n83846\t1\n74467\t1\n64279\t1\n72835\t1\n86635\t1\n70031\t1\n86458\t1\n50876\t1\n78858\t1\n85858\t1\n86835\t1\n72831\t1\n89235\t1\n74446\t1\n48058\t1\n88876\t1\n88655\t1\n73058\t1\n72879\t1\n22652\t1\n83835\t1\n88046\t1\n82235\t1\n67676\t1\n60231\t1\n23435\t1\n82435\t1\n86652\t1\n84658\t1\n59835\t1\n87858\t1\n78676\t1\n37055\t1\n71652\t1\n83458\t1\n77641\t1\n49631\t1\n75279\t1\n88058\t1\n83641\t1\n77041\t1\n78641\t1\n78655\t1\n90058\t1\n85055\t1\n70658\t1\n76252\t1\n89876\t1\n77031\t1\n88255\t1\n90052\t1\n84276\t1\n69655\t1\n84879\t1\n63458\t1\n81876\t1\n88055\t1\n68658\t1\n13641\t1\n72031\t1\n42241\t1\n78455\t1\n87041\t1\n81476\t1\n79655\t1\n89255\t1\n87467\t1\n70241\t1\n90041\t1\n72858\t1\n81458\t1\n75658\t1\n85655\t1\n81446\t1\n68855\t1\n34655\t1\n56274\t1\n89674\t1\n61074\t1\n61276\t1\n32679\t1\n39855\t1\n86055\t1\n85279\t1\n14052\t1\n74067\t1\n90067\t1\n90076\t1\n51846\t1\n58855\t1\n82279\t1\n78252\t1\n50252\t1\n77246\t1\n80055\t1\n65676\t1\n76479\t1\n86255\t1\n77674\t1\n28652\t1\n79458\t1\n59631\t1\n73067\t1\n53231\t1\n59052\t1\n86874\t1\n64674\t1\n7231\t1\n62458\t1\n61252\t1\n74655\t1\n79476\t1\n37458\t1\n70858\t1\n35274\t1\n28276\t1\n60846\t1\n89455\t1\n86032\t1\n56476\t1\n76664\t1\n80858\t1\n83864\t1\n88455\t1\n59034\t1\n73679\t1\n29234\t1\n59276\t1\n68834\t1\n46664\t1\n29432\t1\n39055\t1\n47834\t1\n82864\t1\n60032\t1\n86664\t1\n85232\t1\n67464\t1\n77264\t1\n86846\t1\n89834\t1\n49032\t1\n89232\t1\n87676\t1\n86634\t1\n71255\t1\n59858\t1\n77867\t1\n79234\t1\n84664\t1\n59844\t1\n71276\t1\n43446\t1\n63258\t1\n78679\t1\n66079\t1\n89034\t1\n87279\t1\n55034\t1\n13876\t1\n87834\t1\n78444\t1\n70844\t1\n76467\t1\n72434\t1\n58467\t1\n81879\t1\n85258\t1\n61434\t1\n73879\t1\n79464\t1\n81679\t1\n63834\t1\n80267\t1\n89644\t1\n57676\t1\n70034\t1\n54479\t1\n27079\t1\n41676\t1\n74234\t1\n78446\t1\n89864\t1\n85276\t1\n82858\t1\n78031\t1\n85864\t1\n78079\t1\n90034\t1\n81664\t1\n82234\t1\n74276\t1\n61634\t1\n70058\t1\n67864\t1\n15064\t1\n77634\t1\n86679\t1\n61664\t1\n75067\t1\n73064\t1\n89064\t1\n26864\t1\n85079\t1\n89634\t1\n14079\t1\n75638\t1\n88076\t1\n47234\t1\n83840\t1\n87040\t1\n81646\t1\n65234\t1\n82631\t1\n76240\t1\n57076\t1\n74031\t1\n89667\t1\n10279\t1\n83464\t1\n78034\t1\n46438\t1\n39034\t1\n80076\t1\n88634\t1\n81655\t1\n69238\t1\n82638\t1\n42234\t1\n47664\t1\n69638\t1\n63655\t1\n42664\t1\n74238\t1\n89464\t1\n87664\t1\n57634\t1\n88667\t1\n82253\t1\n44276\t1\n76234\t1\n24079\t1\n69270\t1\n57661\t1\n84834\t1\n79055\t1\n72040\t1\n80276\t1\n62855\t1\n89253\t1\n87652\t1\n16870\t1\n52234\t1\n84453\t1\n84853\t1\n1676\t1\n7634\t1\n79079\t1\n79040\t1\n40267\t1\n78834\t1\n68453\t1\n86453\t1\n64467\t1\n75656\t1\n88467\t1\n58256\t1\n70279\t1\n66634\t1\n72867\t1\n68440\t1\n63476\t1\n82479\t1\n76879\t1\n84446\t1\n68679\t1\n85656\t1\n85856\t1\n75031\t1\n76670\t1\n61656\t1\n64879\t1\n38840\t1\n13056\t1\n87234\t1\n89646\t1\n78070\t1\n46876\t1\n76434\t1\n63479\t1\n36040\t1\n88670\t1\n83234\t1\n51067\t1\n72256\t1\n11467\t1\n86656\t1\n84840\t1\n75256\t1\n56279\t1\n79034\t1\n84667\t1\n78470\t1\n89076\t1\n76440\t1\n9440\t1\n78846\t1\n88049\t1\n58634\t1\n21270\t1\n86870\t1\n84270\t1\n61279\t1\n40467\t1\n89479\t1\n74679\t1\n86034\t1\n76270\t1\n76049\t1\n74476\t1\n86270\t1\n74449\t1\n67649\t1\n69040\t1\n50434\t1\n44849\t1\n84870\t1\n88240\t1\n48070\t1\n75446\t1\n83279\t1\n13670\t1\n53634\t1\n8849\t1\n89679\t1\n76476\t1\n51479\t1\n69240\t1\n86470\t1\n50446\t1\n67240\t1\n89440\t1\n78849\t1\n81470\t1\n84873\t1\n69446\t1\n71067\t1\n86073\t1\n49073\t1\n76631\t1\n46473\t1\n56270\t1\n88231\t1\n80046\t1\n82240\t1\n90070\t1\n61273\t1\n49840\t1\n9667\t1\n89040\t1\n61431\t1\n71473\t1\n85073\t1\n86479\t1\n39031\t1\n81231\t1\n26846\t1\n55476\t1\n61631\t1\n69440\t1\n75879\t1\n70470\t1\n87446\t1\n52452\t1\n87458\t1\n75076\t1\n86040\t1\n41247\t1\n55467\t1\n78467\t1\n86431\t1\n44267\t1\n77461\t1\n55676\t1\n86467\t1\n42640\t1\n88047\t1\n60046\t1\n41667\t1\n42467\t1\n58846\t1\n16058\t1\n82647\t1\n72646\t1\n82661\t1\n65461\t1\n84447\t1\n85461\t1\n88431\t1\n82076\t1\n59046\t1\n39047\t1\n55447\t1\n87258\t1\n79261\t1\n86637\t1\n89231\t1\n83640\t1\n73458\t1\n72658\t1\n89261\t1\n44661\t1\n71631\t1\n76831\t1\n76861\t1\n63846\t1\n89631\t1\n88237\t1\n57879\t1\n67461\t1\n88840\t1\n51667\t1\n88061\t1\n68467\t1\n88846\t1\n61861\t1\n84661\t1\n42037\t1\n84037\t1\n61058\t1\n82061\t1\n84876\t1\n64255\t1\n88458\t1\n89652\t1\n29267\t1\n89037\t1\n78837\t1\n89437\t1\n53461\t1\n84846\t1\n12650\t1\n85479\t1\n89855\t1\n67446\t1\n89640\t1\n38850\t1\n25876\t1\n87846\t1\n17050\t1\n76650\t1\n52252\t1\n74061\t1\n68446\t1\n83246\t1\n84852\t1\n61858\t1\n28255\t1\n83461\t1\n23052\t1\n57646\t1\n83061\t1\n61850\t1\n89676\t1\n64061\t1\n76455\t1\n79831\t1\n35658\t1\n40858\t1\n89852\t1\n41031\t1\n86667\t1\n\n\u003cfont color\u003dred\u003eResults are limited by 1000.\u003c/font\u003e"
+      },
+      "dateCreated": "Apr 1, 2017 3:48:30 PM",
+      "dateStarted": "Apr 1, 2017 3:57:14 PM",
+      "dateFinished": "Apr 1, 2017 3:57:21 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val test \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/data/sidana/nnmf_ranking/outbrainchallenge/dat.outbrainchallenge.withindexedusers.withheaders\")\n    \ntest.agg(max(\"itemId\")).show\ntest.agg(max(\"userId\")).show",
+      "dateUpdated": "Apr 1, 2017 3:48:30 PM",
+      "config": {
+        "enabled": true,
+        "tableHide": false,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1491054510708_-241598046",
+      "id": "20170401-154830_1101354790",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "test: org.apache.spark.sql.DataFrame \u003d [userId: int, itemId: int, rating: int, timestamp: int]\n+-----------+\n|max(itemId)|\n+-----------+\n|     547864|\n+-----------+\n\n+-----------+\n|max(userId)|\n+-----------+\n|      49615|\n+-----------+\n\n"
+      },
+      "dateCreated": "Apr 1, 2017 3:48:30 PM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val numUsersOriginal \u003d original.select(\"userId\").distinct.count\nval numUsersIndexed \u003d test.select(\"userId\").distinct.count",
+      "dateUpdated": "Apr 1, 2017 3:48:30 PM",
+      "config": {
+        "enabled": true,
+        "tableHide": false,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1491054510710_-240828548",
+      "id": "20170401-154830_1563417027",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "numUsersOriginal: Long \u003d 49615\nnumUsersIndexed: Long \u003d 49615\n"
+      },
+      "dateCreated": "Apr 1, 2017 3:48:30 PM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "\n\nval numItemsIndexed \u003d test.select(\"itemId\").distinct.count\nval numRatingsOriginal \u003d original.count\nval numRatingsIndexed \u003d test.count\n\n",
+      "dateUpdated": "Apr 1, 2017 3:48:30 PM",
+      "config": {
+        "enabled": true,
+        "tableHide": false,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1491054510710_-240828548",
+      "id": "20170401-154830_1887551744",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "numItemsOriginal: Long \u003d 105176\nnumItemsIndexed: Long \u003d 105176\nnumRatingsOriginal: Long \u003d 1597426\nnumRatingsIndexed: Long \u003d 1597426\n"
+      },
+      "dateCreated": "Apr 1, 2017 3:48:30 PM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val train \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/data/sidana/embAdaptivity/outbrainchallenge/goodtest/dat.outbrainchallenge.train.headers\")\n    \nval positiveInteractions \u003d train.filter($\"rating\"\u003d\u003d\u003d4)\nval groubByUsers \u003d positiveInteractions.groupBy(\"userid\").count.sort(asc(\"count\"))\nz.show(groubByUsers)",
+      "dateUpdated": "Apr 1, 2017 3:48:30 PM",
+      "config": {
+        "enabled": true,
+        "tableHide": false,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [
+            {
+              "name": "userid",
+              "index": 0.0,
+              "aggr": "sum"
+            }
+          ],
+          "values": [
+            {
+              "name": "count",
+              "index": 1.0,
+              "aggr": "sum"
+            }
+          ],
+          "groups": [],
+          "scatter": {
+            "xAxis": {
+              "name": "userid",
+              "index": 0.0,
+              "aggr": "sum"
+            },
+            "yAxis": {
+              "name": "count",
+              "index": 1.0,
+              "aggr": "sum"
+            }
+          }
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1491054510710_-240828548",
+      "id": "20170401-154830_1453727924",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TABLE",
+        "msg": "userid\tcount\n48089\t5\n18481\t5\n34284\t5\n3683\t5\n30681\t5\n5290\t5\n43484\t5\n20877\t5\n29483\t5\n40678\t5\n24681\t5\n49080\t5\n47890\t5\n25685\t5\n15284\t5\n4877\t5\n45477\t5\n636\t5\n3883\t5\n49479\t5\n32278\t5\n31682\t5\n5481\t5\n19881\t5\n17680\t5\n41488\t5\n7090\t5\n32490\t5\n9685\t5\n35684\t5\n47684\t5\n21475\t5\n30877\t5\n18477\t5\n42277\t5\n47236\t5\n49036\t5\n4883\t5\n24883\t5\n15479\t5\n16079\t5\n30079\t5\n30678\t5\n4278\t5\n4682\t5\n12282\t5\n23482\t5\n275\t5\n34681\t5\n16281\t5\n13680\t5\n22080\t5\n2688\t5\n42688\t5\n20490\t5\n24890\t5\n42490\t5\n16485\t5\n37485\t5\n2285\t5\n9684\t5\n30684\t5\n11484\t5\n36475\t5\n38275\t5\n16475\t5\n277\t5\n27277\t5\n38077\t5\n9477\t5\n42877\t5\n11836\t5\n10836\t5\n36\t5\n19636\t5\n10883\t5\n28283\t5\n35683\t5\n2083\t5\n31879\t5\n17079\t5\n30879\t5\n33879\t5\n23279\t5\n42079\t5\n30278\t5\n46878\t5\n39278\t5\n278\t5\n14082\t5\n2482\t5\n46682\t5\n27282\t5\n43076\t5\n37882\t5\n46071\t5\n41071\t5\n25281\t5\n44481\t5\n40681\t5\n17481\t5\n8281\t5\n38680\t5\n46080\t5\n7680\t5\n22088\t5\n42488\t5\n45088\t5\n35088\t5\n21688\t5\n28290\t5\n37490\t5\n37290\t5\n90\t5\n18890\t5\n4090\t5\n33485\t5\n28085\t5\n15685\t5\n34673\t5\n49075\t5\n1485\t5\n43284\t5\n42884\t5\n28084\t5\n32884\t5\n5484\t5\n16275\t5\n18075\t5\n23675\t5\n9875\t5\n12665\t5\n32875\t5\n34477\t5\n33465\t5\n26477\t5\n37077\t5\n11467\t5\n24477\t5\n13277\t5\n40077\t5\n46877\t5\n16877\t5\n28065\t5\n39836\t5\n24636\t5\n38859\t5\n45436\t5\n65\t5\n12036\t5\n15836\t5\n9467\t5\n47436\t5\n38883\t5\n10083\t5\n10867\t5\n27083\t5\n19283\t5\n32483\t5\n31683\t5\n11683\t5\n4279\t5\n7879\t5\n43676\t5\n10247\t5\n46879\t5\n22479\t5\n31476\t5\n14679\t5\n32279\t5\n4679\t5\n27076\t5\n35478\t5\n35278\t5\n21278\t5\n34672\t5\n42471\t5\n6278\t5\n31078\t5\n14478\t5\n21082\t5\n5482\t5\n19682\t5\n20476\t5\n48082\t5\n33682\t5\n20082\t5\n46853\t5\n19851\t5\n18482\t5\n39882\t5\n15251\t5\n20672\t5\n33247\t5\n24872\t5\n35681\t5\n5281\t5\n20681\t5\n8471\t5\n9271\t5\n35071\t5\n42081\t5\n10681\t5\n34671\t5\n281\t5\n27081\t5\n10080\t5\n3080\t5\n7280\t5\n47080\t5\n8680\t5\n15080\t5\n28088\t5\n34873\t5\n43888\t5\n17672\t5\n22288\t5\n16688\t5\n9488\t5\n37288\t5\n29688\t5\n32888\t5\n22890\t5\n43673\t5\n2075\t5\n44273\t5\n42290\t5\n15890\t5\n8090\t5\n6890\t5\n2490\t5\n46490\t5\n11290\t5\n685\t5\n36685\t5\n44685\t5\n8285\t5\n42685\t5\n3085\t5\n14459\t5\n46865\t5\n22647\t5\n17267\t5\n21285\t5\n26885\t5\n3884\t5\n29684\t5\n24284\t5\n34484\t5\n27884\t5\n24684\t5\n2884\t5\n46284\t5\n4675\t5\n14284\t5\n40465\t5\n18471\t5\n18647\t5\n22275\t5\n42247\t5\n19672\t5\n11059\t5\n15475\t5\n28047\t5\n32067\t5\n5275\t5\n36875\t5\n3275\t5\n24075\t5\n44465\t5\n41865\t5\n4667\t5\n5865\t5\n39077\t5\n6077\t5\n21047\t5\n2441\t5\n35441\t5\n23659\t5\n31059\t5\n30047\t5\n31441\t5\n6859\t5\n859\t5\n16677\t5\n5841\t5\n42659\t5\n33870\t5\n41667\t5\n12666\t5\n11236\t5\n9867\t5\n27636\t5\n38841\t5\n8041\t5\n46465\t5\n38436\t5\n5067\t5\n15465\t5\n29265\t5\n11036\t5\n2659\t5\n5467\t5\n34659\t5\n17247\t5\n1659\t5\n28665\t5\n5667\t5\n12483\t5\n12259\t5\n30865\t5\n3261\t5\n5266\t5\n32267\t5\n27465\t5\n483\t5\n15483\t5\n44867\t5\n20883\t5\n10876\t5\n19883\t5\n17683\t5\n43683\t5\n23079\t5\n39679\t5\n19279\t5\n22661\t5\n21851\t5\n27261\t5\n4461\t5\n29061\t5\n13247\t5\n43061\t5\n15679\t5\n11661\t5\n40472\t5\n47851\t5\n35647\t5\n46279\t5\n1879\t5\n4079\t5\n2479\t5\n33279\t5\n21272\t5\n41851\t5\n1278\t5\n10478\t5\n3678\t5\n5478\t5\n21676\t5\n46061\t5\n39061\t5\n32251\t5\n46276\t5\n29476\t5\n36053\t5\n43876\t5\n1678\t5\n12878\t5\n11076\t5\n37278\t5\n4282\t5\n22282\t5\n21476\t5\n16082\t5\n3882\t5\n31082\t5\n2876\t5\n18253\t5\n49082\t5\n4482\t5\n3651\t5\n6676\t5\n45672\t5\n4276\t5\n40643\t5\n29843\t5\n48243\t5\n19843\t5\n31443\t5\n21253\t5\n31243\t5\n25282\t5\n28243\t5\n39253\t5\n44643\t5\n30453\t5\n39843\t5\n11053\t5\n15851\t5\n26070\t5\n44865\t5\n33271\t5\n13881\t5\n42481\t5\n1253\t5\n17081\t5\n43847\t5\n14271\t5\n14672\t5\n9671\t5\n9651\t5\n3072\t5\n27853\t5\n32872\t5\n25853\t5\n32881\t5\n35253\t5\n42871\t5\n17051\t5\n38281\t5\n3470\t5\n5671\t5\n23871\t5\n4281\t5\n9666\t5\n2271\t5\n43480\t5\n3680\t5\n19055\t5\n31071\t5\n23880\t5\n47880\t5\n26271\t5\n42480\t5\n26680\t5\n37655\t5\n20655\t5\n23055\t5\n11255\t5\n45488\t5\n1247\t5\n28655\t5\n11066\t5\n32655\t5\n12272\t5\n38055\t5\n34288\t5\n3631\t5\n18873\t5\n20088\t5\n13488\t5\n15688\t5\n8473\t5\n10088\t5\n13070\t5\n44490\t5\n29247\t5\n22873\t5\n47666\t5\n24473\t5\n11247\t5\n22670\t5\n29873\t5\n25090\t5\n44272\t5\n19473\t5\n9231\t5\n8690\t5\n1473\t5\n290\t5\n30873\t5\n45467\t5\n9873\t5\n3273\t5\n28690\t5\n32090\t5\n40473\t5\n19885\t5\n20285\t5\n85\t5\n38673\t5\n32085\t5\n46273\t5\n20073\t5\n39685\t5\n38885\t5\n46031\t5\n12235\t5\n37035\t5\n22831\t5\n4831\t5\n32635\t5\n13059\t5\n20435\t5\n14031\t5\n1435\t5\n20447\t5\n38031\t5\n27031\t5\n32270\t5\n34885\t5\n34085\t5\n16073\t5\n24666\t5\n10470\t5\n48684\t5\n39884\t5\n42084\t5\n8484\t5\n7484\t5\n9073\t5\n29673\t5\n5084\t5\n25884\t5\n884\t5\n22833\t5\n9859\t5\n20467\t5\n24070\t5\n39475\t5\n34647\t5\n11667\t5\n38065\t5\n1833\t5\n41033\t5\n19433\t5\n2470\t5\n633\t5\n3833\t5\n1233\t5\n39867\t5\n35633\t5\n9033\t5\n30033\t5\n19075\t5\n5833\t5\n11033\t5\n43233\t5\n12441\t5\n2033\t5\n21859\t5\n28270\t5\n1275\t5\n4475\t5\n44859\t5\n31065\t5\n14041\t5\n26275\t5\n33059\t5\n32266\t5\n7666\t5\n38049\t5\n12659\t5\n28847\t5\n22451\t5\n2849\t5\n25041\t5\n34259\t5\n22641\t5\n38477\t5\n29459\t5\n22249\t5\n41049\t5\n9449\t5\n31649\t5\n16449\t5\n43441\t5\n8449\t5\n8249\t5\n32649\t5\n45641\t5\n1449\t5\n1049\t5\n48249\t5\n48241\t5\n36649\t5\n12049\t5\n9249\t5\n14241\t5\n5449\t5\n3849\t5\n35849\t5\n6641\t5\n42649\t5\n37859\t5\n18451\t5\n3841\t5\n38866\t5\n47841\t5\n33459\t5\n47041\t5\n6665\t5\n29047\t5\n31870\t5\n39041\t5\n17270\t5\n14245\t5\n24245\t5\n12045\t5\n10045\t5\n32059\t5\n46647\t5\n4041\t5\n3645\t5\n8841\t5\n70\t5\n4259\t5\n3245\t5\n48267\t5\n8445\t5\n15245\t5\n2645\t5\n34245\t5\n46245\t5\n41845\t5\n19645\t5\n7845\t5\n46845\t5\n40845\t5\n1245\t5\n30045\t5\n17245\t5\n10065\t5\n4245\t5\n45245\t5\n32045\t5\n3665\t5\n39045\t5\n43445\t5\n32245\t5\n31270\t5\n26645\t5\n6645\t5\n24645\t5\n29261\t5\n40059\t5\n2061\t5\n10667\t5\n43059\t5\n22266\t5\n22267\t5\n27065\t5\n7083\t5\n10483\t5\n36061\t5\n32666\t5\n37465\t5\n29083\t5\n1851\t5\n42037\t5\n22083\t5\n41683\t5\n29661\t5\n12037\t5\n40647\t5\n11870\t5\n30251\t5\n4672\t5\n5472\t5\n4266\t5\n38461\t5\n21437\t5\n19237\t5\n38837\t5\n29461\t5\n6637\t5\n34037\t5\n22037\t5\n22237\t5\n46437\t5\n45237\t5\n5237\t5\n32861\t5\n40237\t5\n26637\t5\n23837\t5\n15861\t5\n25437\t5\n37437\t5\n46237\t5\n8461\t5\n47437\t5\n34637\t5\n41037\t5\n17261\t5\n8837\t5\n44261\t5\n20679\t5\n11261\t5\n16279\t5\n34051\t5\n11670\t5\n46461\t5\n3853\t5\n5861\t5\n2879\t5\n22061\t5\n40870\t5\n29663\t5\n41863\t5\n40261\t5\n26079\t5\n41663\t5\n47661\t5\n6861\t5\n45678\t5\n36463\t5\n10853\t5\n44661\t5\n30051\t5\n8263\t5\n6463\t5\n42263\t5\n30063\t5\n20863\t5\n36863\t5\n37863\t5\n43447\t5\n43663\t5\n39263\t5\n3663\t5\n27663\t5\n24463\t5\n2863\t5\n49463\t5\n14651\t5\n27063\t5\n40663\t5\n11863\t5\n28251\t5\n18263\t5\n16663\t5\n5663\t5\n17876\t5\n37676\t5\n24876\t5\n40843\t5\n49047\t5\n15843\t5\n37466\t5\n11453\t5\n41276\t5\n28476\t5\n16682\t5\n44843\t5\n49051\t5\n21039\t5\n6239\t5\n41639\t5\n16053\t5\n3647\t5\n48282\t5\n43639\t5\n41243\t5\n18453\t5\n45876\t5\n14839\t5\n25053\t5\n876\t5\n34676\t5\n5239\t5\n25639\t5\n28839\t5\n49439\t5\n44439\t5\n14639\t5\n30039\t5\n46639\t5\n45039\t5\n3039\t5\n13039\t5\n35643\t5\n8639\t5\n48239\t5\n17839\t5\n17653\t5\n21439\t5\n47639\t5\n1239\t5\n45643\t5\n28639\t5\n27439\t5\n38039\t5\n33443\t5\n15239\t5\n40639\t5\n43039\t5\n37043\t5\n15039\t5\n43843\t5\n49053\t5\n49466\t5\n7843\t5\n17253\t5\n43643\t5\n37671\t5\n34643\t5\n8847\t5\n39451\t5\n21071\t5\n25457\t5\n35443\t5\n44043\t5\n43271\t5\n18457\t5\n37843\t5\n39653\t5\n18071\t5\n23243\t5\n9847\t5\n2653\t5\n9872\t5\n26057\t5\n17657\t5\n5057\t5\n14267\t5\n4057\t5\n43457\t5\n36857\t5\n26251\t5\n1257\t5\n27057\t5\n40657\t5\n25472\t5\n3457\t5\n10657\t5\n38857\t5\n31272\t5\n25057\t5\n27457\t5\n7057\t5\n21671\t5\n22657\t5\n30053\t5\n8257\t5\n14047\t5\n40853\t5\n29666\t5\n15871\t5\n15081\t5\n17055\t5\n40869\t5\n1651\t5\n20872\t5\n47267\t5\n22680\t5\n44070\t5\n26480\t5\n7869\t5\n3469\t5\n6269\t5\n47447\t5\n24871\t5\n28680\t5\n9869\t5\n872\t5\n47247\t5\n11072\t5\n30269\t5\n34467\t5\n34455\t5\n13071\t5\n18269\t5\n39869\t5\n14669\t5\n11869\t5\n46869\t5\n39269\t5\n30069\t5\n45069\t5\n39469\t5\n29669\t5\n32469\t5\n24655\t5\n40069\t5\n24869\t5\n13469\t5\n1255\t5\n37669\t5\n25669\t5\n2469\t5\n42655\t5\n30869\t5\n22669\t5\n37869\t5\n31255\t5\n3669\t5\n6069\t5\n41669\t5\n13055\t5\n15255\t5\n288\t5\n6855\t5\n10272\t5\n40670\t5\n17688\t5\n1855\t5\n36073\t5\n55\t5\n39872\t5\n30855\t5\n468\t5\n20668\t5\n11090\t5\n27455\t5\n18468\t5\n36455\t5\n42273\t5\n36055\t5\n11668\t5\n33872\t5\n26865\t5\n29468\t5\n17468\t5\n38068\t5\n23068\t5\n33268\t5\n14668\t5\n35268\t5\n9468\t5\n46847\t5\n31668\t5\n7668\t5\n35068\t5\n25068\t5\n40868\t5\n17868\t5\n45468\t5\n43473\t5\n39068\t5\n4868\t5\n49268\t5\n9035\t5\n21868\t5\n18068\t5\n41631\t5\n34831\t5\n1272\t5\n24447\t5\n34667\t5\n20835\t5\n27872\t5\n36631\t5\n21090\t5\n39272\t5\n17473\t5\n45885\t5\n8885\t5\n7635\t5\n19873\t5\n5674\t5\n3231\t5\n41231\t5\n12673\t5\n44474\t5\n38435\t5\n27235\t5\n15831\t5\n31874\t5\n36635\t5\n34835\t5\n40073\t5\n3074\t5\n31074\t5\n40274\t5\n34235\t5\n9274\t5\n18874\t5\n48674\t5\n12474\t5\n46874\t5\n42674\t5\n40674\t5\n235\t5\n22474\t5\n20074\t5\n3874\t5\n10435\t5\n39274\t5\n5074\t5\n8874\t5\n33835\t5\n2074\t5\n26674\t5\n42074\t5\n20235\t5\n16674\t5\n6074\t5\n30674\t5\n11835\t5\n35235\t5\n29066\t5\n17235\t5\n18473\t5\n2459\t5\n24485\t5\n13035\t5\n21831\t5\n24435\t5\n6866\t5\n10047\t5\n16466\t5\n25484\t5\n27084\t5\n40631\t5\n48666\t5\n20867\t5\n25267\t5\n42270\t5\n\n\u003cfont color\u003dred\u003eResults are limited by 1000.\u003c/font\u003e"
+      },
+      "dateCreated": "Apr 1, 2017 3:48:30 PM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val test \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/data/sidana/embAdaptivity/outbrainchallenge/dat.outbrainchallenge.test.headers\")\nval positiveInteractions \u003d test.filter($\"rating\"\u003d\u003d\u003d4)\nval groupByUsers \u003d positiveInteractions.groupBy(\"userid\").count.withColumnRenamed(\"count\",\"numberofpositiveinteractions\")\nval groupByNPositiveInteractions \u003d groupByUsers.groupBy(\"numberofPositiveInteractions\").count.sort(asc(\"count\"))\nz.show(groupByNPositiveInteractions)",
+      "dateUpdated": "Apr 1, 2017 3:48:30 PM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [
+            {
+              "name": "numberofPositiveInteractions",
+              "index": 0.0,
+              "aggr": "sum"
+            }
+          ],
+          "values": [
+            {
+              "name": "count",
+              "index": 1.0,
+              "aggr": "sum"
+            }
+          ],
+          "groups": [],
+          "scatter": {
+            "yAxis": {
+              "name": "count",
+              "index": 1.0,
+              "aggr": "sum"
+            }
+          }
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1491054510711_-241213297",
+      "id": "20170401-154830_883766749",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TABLE",
+        "msg": "numberofPositiveInteractions\tcount\n35\t1\n25\t1\n29\t1\n24\t2\n27\t3\n23\t3\n21\t7\n20\t10\n19\t10\n18\t17\n17\t31\n1\t45\n16\t50\n15\t61\n14\t95\n13\t170\n2\t215\n12\t242\n11\t423\n10\t642\n9\t1097\n3\t1119\n8\t1903\n7\t3685\n4\t5226\n6\t7388\n5\t17237\n"
+      },
+      "dateCreated": "Apr 1, 2017 3:48:30 PM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val data \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/data/sidana/adaptivity/outbrain/experiments/embad/len1/test.headers\")\n\ndata.count\nval numPositiveInteractions \u003d data.filter($\"rating\"\u003e\u003d4).count\nval numNegativeInteractions \u003d data.filter($\"rating\"\u003c4).count",
+      "dateUpdated": "Apr 1, 2017 3:48:30 PM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1491054510711_-241213297",
+      "id": "20170401-154830_1470847791",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "data: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, rating: int, timestamp: int]\nres19: Long \u003d 152842\nnumPositiveInteractions: Long \u003d 28236\nnumNegativeInteractions: Long \u003d 124606\n"
+      },
+      "dateCreated": "Apr 1, 2017 3:48:30 PM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "dateUpdated": "Apr 1, 2017 3:48:30 PM",
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1491054510712_-243137042",
+      "id": "20170401-154830_854562720",
+      "dateCreated": "Apr 1, 2017 3:48:30 PM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "embAdaptivity: nfAnalyze",
+  "id": "2CD8AS8JN",
+  "angularObjects": {
+    "2BGHSKCA7": [],
+    "2BFMBPKAB": [],
+    "2BHKKP27G": [],
+    "2BJHJDBK6": [],
+    "2BJAQG5W4": [],
+    "2BJGSXM37": [],
+    "2BFXEV5XZ": [],
+    "2BG77RV7M": [],
+    "2BF969NNB": [],
+    "2BG8QQJNC": [],
+    "2BGVG5JP4": [],
+    "2BJ5FCP57": [],
+    "2BFEDXCTE": [],
+    "2BJ8AEWCT": [],
+    "2BH9AVVKH": [],
+    "2BJ7KKX85": [],
+    "2BHKAE8WK": [],
+    "2BJ6HN5AY": []
+  },
+  "config": {},
+  "info": {}
+}

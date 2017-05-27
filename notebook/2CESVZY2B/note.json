@@ -1,0 +1,433 @@
+{
+  "paragraphs": [
+    {
+      "text": "val train \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/data/adaptivity_datasets/ml_1m/headers/ml_100_train.headers\")\n    \nval test \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/data/adaptivity_datasets/ml_1m/headers/ml_100_test.headers\")",
+      "authenticationInfo": {},
+      "dateUpdated": "Apr 4, 2017 9:27:51 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1491290772390_-1226179792",
+      "id": "20170404-092612_524924975",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "train: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, rating: int, timestamp: int]\ntest: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, rating: int, timestamp: int]\n"
+      },
+      "dateCreated": "Apr 4, 2017 9:26:12 AM",
+      "dateStarted": "Apr 4, 2017 9:27:51 AM",
+      "dateFinished": "Apr 4, 2017 9:27:54 AM",
+      "status": "ABORT",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "train.count\ntrain.filter($\"rating\"\u003e\u003d4).count\ntrain.filter($\"rating\"\u003c4).count",
+      "authenticationInfo": {},
+      "dateUpdated": "Apr 4, 2017 9:38:21 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1491290848536_64142137",
+      "id": "20170404-092728_1860828019",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "res164: Long \u003d 203696\nres165: Long \u003d 126895\nres166: Long \u003d 76801\n"
+      },
+      "dateCreated": "Apr 4, 2017 9:27:28 AM",
+      "dateStarted": "Apr 4, 2017 9:38:21 AM",
+      "dateFinished": "Apr 4, 2017 9:38:23 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "test.count\ntest.filter($\"rating\"\u003e\u003d4).count\n\ntest.filter($\"rating\"\u003c4).count",
+      "authenticationInfo": {},
+      "dateUpdated": "Apr 4, 2017 9:40:47 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1491290966455_963116426",
+      "id": "20170404-092926_265880409",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "res172: Long \u003d 796513\nres173: Long \u003d 448386\nres174: Long \u003d 348127\n"
+      },
+      "dateCreated": "Apr 4, 2017 9:29:26 AM",
+      "dateStarted": "Apr 4, 2017 9:40:47 AM",
+      "dateFinished": "Apr 4, 2017 9:40:53 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val positiveTrain \u003d train.filter($\"rating\" \u003e\u003d 4)\nval negativeTrain \u003d train.filter($\"rating\" \u003c 4)\n\nval totalGroupedUsers \u003d train.groupBy(\"userid\").count\nval positiveGroupedUsers \u003d positiveTrain.groupBy(\"userid\").count\nval negativeGroupedUsers \u003d negativeTrain.groupBy(\"userId\").count\n\ntotalGroupedUsers.select(avg($\"count\")).show\npositiveGroupedUsers.select(avg($\"count\")).show\nnegativeGroupedUsers.select(avg($\"count\")).show\n",
+      "authenticationInfo": {},
+      "dateUpdated": "Apr 4, 2017 10:01:04 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1491291076623_-1034930585",
+      "id": "20170404-093116_484350032",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "positiveTrain: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, rating: int, timestamp: int]\nnegativeTrain: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, rating: int, timestamp: int]\ntotalGroupedUsers: org.apache.spark.sql.DataFrame \u003d [userid: int, count: bigint]\npositiveGroupedUsers: org.apache.spark.sql.DataFrame \u003d [userid: int, count: bigint]\nnegativeGroupedUsers: org.apache.spark.sql.DataFrame \u003d [userId: int, count: bigint]\n+------------------+\n|        avg(count)|\n+------------------+\n|33.724503311258275|\n+------------------+\n\n+------------------+\n|        avg(count)|\n+------------------+\n|21.117490431020137|\n+------------------+\n\n+------------------+\n|        avg(count)|\n+------------------+\n|12.935994610072427|\n+------------------+\n\n"
+      },
+      "dateCreated": "Apr 4, 2017 9:31:16 AM",
+      "dateStarted": "Apr 4, 2017 10:01:04 AM",
+      "dateFinished": "Apr 4, 2017 10:01:09 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val positiveTest \u003d test.filter($\"rating\" \u003e\u003d 4)\nval negativeTest \u003d test.filter($\"rating\" \u003c 4)\n\nval totalGroupedUsers \u003d test.groupBy(\"userid\").count\nval positiveGroupedUsers \u003d positiveTest.groupBy(\"userid\").count\nval negativeGroupedUsers \u003d negativeTest.groupBy(\"userid\").count\n\ntotalGroupedUsers.select(avg($\"count\")).show\npositiveGroupedUsers.select(avg($\"count\")).show\nnegativeGroupedUsers.select(avg($\"count\")).show",
+      "authenticationInfo": {},
+      "dateUpdated": "Apr 4, 2017 10:08:32 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1491291065495_205499869",
+      "id": "20170404-093105_616146161",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "positiveTest: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, rating: int, timestamp: int]\nnegativeTest: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, rating: int, timestamp: int]\ntotalGroupedUsers: org.apache.spark.sql.DataFrame \u003d [userid: int, count: bigint]\npositiveGroupedUsers: org.apache.spark.sql.DataFrame \u003d [userid: int, count: bigint]\nnegativeGroupedUsers: org.apache.spark.sql.DataFrame \u003d [userid: int, count: bigint]\n+------------------+\n|        avg(count)|\n+------------------+\n|131.87301324503312|\n+------------------+\n\n+-----------------+\n|       avg(count)|\n+-----------------+\n|74.28528827037773|\n+-----------------+\n\n+------------------+\n|        avg(count)|\n+------------------+\n|58.030838473078845|\n+------------------+\n\n"
+      },
+      "dateCreated": "Apr 4, 2017 9:31:05 AM",
+      "dateStarted": "Apr 4, 2017 10:08:32 AM",
+      "dateFinished": "Apr 4, 2017 10:08:40 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1491293922475_126784152",
+      "id": "20170404-101842_709946289",
+      "dateCreated": "Apr 4, 2017 10:18:42 AM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val train \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/data/adaptivity_datasets/outbrain/headers/outbrain_100_train.headers\")\n    \nval test \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/data/adaptivity_datasets/outbrain/headers/outbrain_100_test.headers\")\n    \n",
+      "authenticationInfo": {},
+      "dateUpdated": "Apr 4, 2017 10:43:15 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1491293312193_-1325932461",
+      "id": "20170404-100832_897632442",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "train: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, rating: int, timestamp: int]\ntest: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, rating: int, timestamp: int]\n"
+      },
+      "dateCreated": "Apr 4, 2017 10:08:32 AM",
+      "dateStarted": "Apr 4, 2017 10:18:47 AM",
+      "dateFinished": "Apr 4, 2017 10:18:51 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val positiveTrain \u003d train.filter($\"rating\" \u003e\u003d 4)\nval negativeTrain \u003d train.filter($\"rating\" \u003c 4)\n\nval totalGroupedUsers \u003d train.groupBy(\"userid\").count\nval positiveGroupedUsers \u003d positiveTrain.groupBy(\"userid\").count\nval negativeGroupedUsers \u003d negativeTrain.groupBy(\"userId\").count\n\ntotalGroupedUsers.select(avg($\"count\")).show\npositiveGroupedUsers.select(avg($\"count\")).show\nnegativeGroupedUsers.select(avg($\"count\")).show",
+      "authenticationInfo": {},
+      "dateUpdated": "Apr 4, 2017 10:18:50 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1491293907057_-1042883153",
+      "id": "20170404-101827_1026813772",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "positiveTrain: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, rating: int, timestamp: int]\nnegativeTrain: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, rating: int, timestamp: int]\ntotalGroupedUsers: org.apache.spark.sql.DataFrame \u003d [userid: int, count: bigint]\npositiveGroupedUsers: org.apache.spark.sql.DataFrame \u003d [userid: int, count: bigint]\nnegativeGroupedUsers: org.apache.spark.sql.DataFrame \u003d [userId: int, count: bigint]\n+----------------+\n|      avg(count)|\n+----------------+\n|7.07534011891565|\n+----------------+\n\n+------------------+\n|        avg(count)|\n+------------------+\n|1.4053462144626154|\n+------------------+\n\n+----------------+\n|      avg(count)|\n+----------------+\n|5.69146427491686|\n+----------------+\n\n"
+      },
+      "dateCreated": "Apr 4, 2017 10:18:27 AM",
+      "dateStarted": "Apr 4, 2017 10:18:50 AM",
+      "dateFinished": "Apr 4, 2017 10:18:57 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val positiveTest \u003d test.filter($\"rating\" \u003e\u003d 4)\nval negativeTest \u003d test.filter($\"rating\" \u003c 4)\n\nval totalGroupedUsers \u003d test.groupBy(\"userid\").count\nval positiveGroupedUsers \u003d positiveTest.groupBy(\"userid\").count\nval negativeGroupedUsers \u003d negativeTest.groupBy(\"userid\").count\n\ntotalGroupedUsers.select(avg($\"count\")).show\npositiveGroupedUsers.select(avg($\"count\")).show\nnegativeGroupedUsers.select(avg($\"count\")).show",
+      "authenticationInfo": {},
+      "dateUpdated": "Apr 4, 2017 10:18:53 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1491293918722_329146749",
+      "id": "20170404-101838_1333644647",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "positiveTest: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, rating: int, timestamp: int]\nnegativeTest: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, rating: int, timestamp: int]\ntotalGroupedUsers: org.apache.spark.sql.DataFrame \u003d [userid: int, count: bigint]\npositiveGroupedUsers: org.apache.spark.sql.DataFrame \u003d [userid: int, count: bigint]\nnegativeGroupedUsers: org.apache.spark.sql.DataFrame \u003d [userid: int, count: bigint]\n+------------------+\n|        avg(count)|\n+------------------+\n|25.121092411569084|\n+------------------+\n\n+-----------------+\n|       avg(count)|\n+-----------------+\n|4.774826161443112|\n+-----------------+\n\n+-----------------+\n|       avg(count)|\n+-----------------+\n|20.34626625012597|\n+-----------------+\n\n"
+      },
+      "dateCreated": "Apr 4, 2017 10:18:38 AM",
+      "dateStarted": "Apr 4, 2017 10:18:53 AM",
+      "dateFinished": "Apr 4, 2017 10:19:09 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "train.count\ntrain.filter($\"rating\"\u003e\u003d4).count\ntrain.filter($\"rating\"\u003c4).count\n\ntest.count\ntest.filter($\"rating\"\u003e\u003d4).count\n\ntest.filter($\"rating\"\u003c4).count",
+      "authenticationInfo": {},
+      "dateUpdated": "Apr 4, 2017 10:19:44 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1491293933610_-1104027579",
+      "id": "20170404-101853_1799291604",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "res193: Long \u003d 351043\nres194: Long \u003d 68661\nres195: Long \u003d 282382\nres196: Long \u003d 1246383\nres197: Long \u003d 236903\nres198: Long \u003d 1009480\n"
+      },
+      "dateCreated": "Apr 4, 2017 10:18:53 AM",
+      "dateStarted": "Apr 4, 2017 10:19:44 AM",
+      "dateFinished": "Apr 4, 2017 10:19:55 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val data \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/data/adaptivity_datasets/outbrain/headers/outbrain_100_data.headers\")\n    \nval positiveTest \u003d data.filter($\"rating\" \u003e\u003d 4)\nval negativeTest \u003d data.filter($\"rating\" \u003c 4)\n\nval totalGroupedUsers \u003d data.groupBy(\"userid\").count\nval positiveGroupedUsers \u003d positiveTest.groupBy(\"userid\").count\nval negativeGroupedUsers \u003d negativeTest.groupBy(\"userid\").count\n\ntotalGroupedUsers.select(avg($\"count\")).show\npositiveGroupedUsers.select(avg($\"count\")).show\nnegativeGroupedUsers.select(avg($\"count\")).show",
+      "authenticationInfo": {},
+      "dateUpdated": "Apr 4, 2017 10:44:26 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1491293984491_-72672309",
+      "id": "20170404-101944_604548025",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "data: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, rating: int, timestamp: int]\npositiveTest: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, rating: int, timestamp: int]\nnegativeTest: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, rating: int, timestamp: int]\ntotalGroupedUsers: org.apache.spark.sql.DataFrame \u003d [userid: int, count: bigint]\npositiveGroupedUsers: org.apache.spark.sql.DataFrame \u003d [userid: int, count: bigint]\nnegativeGroupedUsers: org.apache.spark.sql.DataFrame \u003d [userid: int, count: bigint]\n+------------------+\n|        avg(count)|\n+------------------+\n|32.196432530484735|\n+------------------+\n\n+-----------------+\n|       avg(count)|\n+-----------------+\n|6.158702005441903|\n+-----------------+\n\n+-----------------+\n|       avg(count)|\n+-----------------+\n|26.03773052504283|\n+-----------------+\n\n"
+      },
+      "dateCreated": "Apr 4, 2017 10:19:44 AM",
+      "dateStarted": "Apr 4, 2017 10:44:26 AM",
+      "dateFinished": "Apr 4, 2017 10:44:44 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val data \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/data/adaptivity_datasets/ml_1m/headers/ml_100_data.headers\")\n\nval positiveTest \u003d data.filter($\"rating\" \u003e\u003d 4)\nval negativeTest \u003d data.filter($\"rating\" \u003c 4)\n\nval totalGroupedUsers \u003d data.groupBy(\"userid\").count\nval positiveGroupedUsers \u003d positiveTest.groupBy(\"userid\").count\nval negativeGroupedUsers \u003d negativeTest.groupBy(\"userid\").count\n\ntotalGroupedUsers.select(avg($\"count\")).show\npositiveGroupedUsers.select(avg($\"count\")).show\nnegativeGroupedUsers.select(avg($\"count\")).show",
+      "authenticationInfo": {},
+      "dateUpdated": "Apr 4, 2017 10:51:27 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1491295466925_-1231019908",
+      "id": "20170404-104426_793513288",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "data: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, rating: int, timestamp: int]\npositiveTest: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, rating: int, timestamp: int]\nnegativeTest: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, rating: int, timestamp: int]\ntotalGroupedUsers: org.apache.spark.sql.DataFrame \u003d [userid: int, count: bigint]\npositiveGroupedUsers: org.apache.spark.sql.DataFrame \u003d [userid: int, count: bigint]\nnegativeGroupedUsers: org.apache.spark.sql.DataFrame \u003d [userid: int, count: bigint]\n+-----------------+\n|       avg(count)|\n+-----------------+\n|165.5975165562914|\n+-----------------+\n\n+-----------------+\n|       avg(count)|\n+-----------------+\n|95.27674726730706|\n+-----------------+\n\n+-----------------+\n|       avg(count)|\n+-----------------+\n|70.46898839137646|\n+-----------------+\n\n"
+      },
+      "dateCreated": "Apr 4, 2017 10:44:26 AM",
+      "dateStarted": "Apr 4, 2017 10:51:27 AM",
+      "dateFinished": "Apr 4, 2017 10:51:41 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1491295887046_-1468043843",
+      "id": "20170404-105127_1653488321",
+      "dateCreated": "Apr 4, 2017 10:51:27 AM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "embAdaptivity: computeStatsDataSets",
+  "id": "2CESVZY2B",
+  "angularObjects": {
+    "2BGHSKCA7": [],
+    "2BFMBPKAB": [],
+    "2BHKKP27G": [],
+    "2BJHJDBK6": [],
+    "2BJAQG5W4": [],
+    "2BJGSXM37": [],
+    "2BFXEV5XZ": [],
+    "2BG77RV7M": [],
+    "2BF969NNB": [],
+    "2BG8QQJNC": [],
+    "2BGVG5JP4": [],
+    "2BJ5FCP57": [],
+    "2BFEDXCTE": [],
+    "2BJ8AEWCT": [],
+    "2BH9AVVKH": [],
+    "2BJ7KKX85": [],
+    "2BHKAE8WK": [],
+    "2BJ6HN5AY": []
+  },
+  "config": {},
+  "info": {}
+}

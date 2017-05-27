@@ -63,7 +63,7 @@
       "progressUpdateIntervalMs": 500
     }
   ],
-  "name": "recsys_challenge_7: topdisciplineItems",
+  "name": "recsys_challenge: 7. topdisciplineItems",
   "id": "2BKEQ528H",
   "angularObjects": {
     "2BGHSKCA7": [],
@@ -85,6 +85,8 @@
     "2BHKAE8WK": [],
     "2BJ6HN5AY": []
   },
-  "config": {},
+  "config": {
+    "looknfeel": "default"
+  },
   "info": {}
 }

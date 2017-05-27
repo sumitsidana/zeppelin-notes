@@ -106,9 +106,9 @@
       "progressUpdateIntervalMs": 500
     },
     {
-      "text": " \n    import java.nio.file.{ Files, Paths }\n    import scala.collection.mutable.ListBuffer\n    import java.io.FileWriter\n    import org.apache.spark.sql.functions.{lit, to_date}\n    import sqlContext.implicits._\n    import org.apache.spark.sql.types._\n    import org.apache.spark.sql._\n    val countryCodes \u003d Array(\"at\",\"be\",\"br\",\"ch\",\"cz\",\"de\",\"dk\",\"es\",\"fi\",\"ie\",\"nb\",\"nl\",\"no\",\"pl\",\"pt\",\"ru\",\"se\",\"uk\",\"it\",\"fr\")\n val fwTime \u003d new FileWriter(\"/data/sidana/recsysBaselines/experiments/picountryfiles/tmp/user_past_preferences.txt\", true)\n    for (code \u003c- countryCodes){\n        val time1 \u003d java.lang.System.currentTimeMillis()\n        val csvFileClick \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \"\\t\")\n    .load(\"/data/sidana/recsysBaselines/experiments/tabseparatedinput/default/train_\"+code+\".csv\")\n    \n    val clickTemp \u003d csvFileClick.filter(csvFileClick(\"rating\") \u003d\u003d\u003d\"1\")\n    \n    val groupedInteractions \u003d clickTemp.groupBy(\"userid\",\"offerid\").count().sort(desc(\"count\"))\n    groupedInteractions.rdd.coalesce(1, false).saveAsTextFile(\"/data/sidana/recsysBaselines/experiments/picountryfiles/tmp/user_past_preference/user_past_preference_\"+code+\".csv\")\n    val time2 \u003d java.lang.System.currentTimeMillis()\n    val time \u003d time2 - time1\n    fwTime.write(code+\" \"+time)\n    }\n    fwTime.close()",
+      "text": " \n    import java.nio.file.{ Files, Paths }\n    import scala.collection.mutable.ListBuffer\n    import java.io.FileWriter\n    import org.apache.spark.sql.functions.{lit, to_date}\n    import sqlContext.implicits._\n    import org.apache.spark.sql.types._\n    import org.apache.spark.sql._\n    val countryCodes \u003d Array(\"36\",\"37\",\"38\",\"39\",\"40\",\"41\",\"42\",\"43\",\"44\",\"45\",\"46\",\"47\",\"48\",\"49\",\"50\",\"51\",\"52\",\"53\",\"54\",\"55\",\"56\",\"57\",\"58\",\"59\",\"60\",\"61\",\"62\",\"63\",\"64\")\n val fwTime \u003d new FileWriter(\"/data/sidana/purch/experiments/atleast_one/picountryfiles/output/user_past_preferences.txt\", true)\n    for (code \u003c- countryCodes){\n        val time1 \u003d java.lang.System.currentTimeMillis()\n        val csvFileClick \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \"\\t\")\n    .load(\"/data/sidana/purch/experiments/atleast_one/picountryfiles/input/train_\"+code+\".csv\")\n    \n    val clickTemp \u003d csvFileClick.filter(csvFileClick(\"rating\") \u003d\u003d\u003d\"1\")\n    \n    val groupedInteractions \u003d clickTemp.groupBy(\"userid\",\"offerid\").count().sort(desc(\"count\"))\n    groupedInteractions.rdd.coalesce(1, false).saveAsTextFile(\"/data/sidana/purch/experiments/atleast_one/picountryfiles/output/user_past_preference_\"+code+\".csv\")\n    val time2 \u003d java.lang.System.currentTimeMillis()\n    val time \u003d time2 - time1\n    fwTime.write(code+\" \"+time)\n    }\n    fwTime.close()",
       "authenticationInfo": {},
-      "dateUpdated": "Dec 15, 2016 4:40:45 PM",
+      "dateUpdated": "May 11, 2017 5:12:53 PM",
       "config": {
         "colWidth": 12.0,
         "graph": {
@@ -132,11 +132,11 @@
       "result": {
         "code": "SUCCESS",
         "type": "TEXT",
-        "msg": "import java.nio.file.{Files, Paths}\nimport scala.collection.mutable.ListBuffer\nimport java.io.FileWriter\nimport org.apache.spark.sql.functions.{lit, to_date}\nimport sqlContext.implicits._\nimport org.apache.spark.sql.types._\nimport org.apache.spark.sql._\ncountryCodes: Array[String] \u003d Array(at, be, br, ch, cz, de, dk, es, fi, ie, nb, nl, no, pl, pt, ru, se, uk, it, fr)\nfwTime: java.io.FileWriter \u003d java.io.FileWriter@6e0fc37e\n"
+        "msg": "import java.nio.file.{Files, Paths}\nimport scala.collection.mutable.ListBuffer\nimport java.io.FileWriter\nimport org.apache.spark.sql.functions.{lit, to_date}\nimport sqlContext.implicits._\nimport org.apache.spark.sql.types._\nimport org.apache.spark.sql._\ncountryCodes: Array[String] \u003d Array(36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64)\nfwTime: java.io.FileWriter \u003d java.io.FileWriter@29fc52fc\n"
       },
       "dateCreated": "Oct 29, 2016 4:19:02 PM",
-      "dateStarted": "Dec 15, 2016 4:40:45 PM",
-      "dateFinished": "Dec 15, 2016 4:48:44 PM",
+      "dateStarted": "May 11, 2017 5:12:53 PM",
+      "dateFinished": "May 11, 2017 5:14:18 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },

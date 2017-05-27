@@ -81,7 +81,7 @@
       "progressUpdateIntervalMs": 500
     }
   ],
-  "name": "recsys_challenge_9: groupbyTargetUserProfile",
+  "name": "recsys_challenge: 9. groupbyTargetUserProfile",
   "id": "2BMX7RF1M",
   "angularObjects": {
     "2BGHSKCA7": [],
@@ -103,6 +103,8 @@
     "2BHKAE8WK": [],
     "2BJ6HN5AY": []
   },
-  "config": {},
+  "config": {
+    "looknfeel": "default"
+  },
   "info": {}
 }

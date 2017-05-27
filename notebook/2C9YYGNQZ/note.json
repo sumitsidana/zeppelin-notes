@@ -1,0 +1,146 @@
+{
+  "paragraphs": [
+    {
+      "text": "val train \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \"\\t\")\n    .load(\"/data/sidana/embColdStart/ml-100k/ua.base.headers\")\n    \n\nval test \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \"\\t\")\n    .load(\"/data/sidana/embColdStart/ml-100k/ua.test.headers\")\n    \n",
+      "authenticationInfo": {},
+      "dateUpdated": "Feb 26, 2017 11:16:20 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1488135244339_1482734348",
+      "id": "20170226-195404_985857097",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "train: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, rating: int, timestamp: int]\ntest: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, rating: int, timestamp: int]\n"
+      },
+      "dateCreated": "Feb 26, 2017 7:54:04 PM",
+      "dateStarted": "Feb 26, 2017 11:16:20 PM",
+      "dateFinished": "Feb 26, 2017 11:16:21 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "train.select(\"userid\").distinct.count\ntest.select(\"userid\").distinct.count\ntrain.select(\"itemid\").distinct.count\ntest.select(\"itemid\").distinct.count\n\nval newUsers \u003d test.select(\"userid\").distinct.except(train.select(\"userid\").distinct)\nval newItems \u003d test.select(\"itemid\").distinct.except(train.select(\"itemid\").distinct)\nnewUsers.count\nnewItems.count",
+      "authenticationInfo": {},
+      "dateUpdated": "Feb 26, 2017 11:33:52 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1488145003625_925837568",
+      "id": "20170226-223643_332277302",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "res53: Long \u003d 943\nres54: Long \u003d 943\nnewUsers: org.apache.spark.sql.DataFrame \u003d [userid: int]\nnewItems: org.apache.spark.sql.DataFrame \u003d [itemid: int]\nres55: Long \u003d 0\nres56: Long \u003d 2\n"
+      },
+      "dateCreated": "Feb 26, 2017 10:36:43 PM",
+      "dateStarted": "Feb 26, 2017 11:16:49 PM",
+      "dateFinished": "Feb 26, 2017 11:18:06 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val positiveTrain \u003d train.filter(train(\"rating\")\u003e\u003d4)\nval positiveTest \u003d test.filter(test(\"rating\")\u003e\u003d4)\npositiveTrain.select(\"userid\").distinct.count\npositiveTest.select(\"userid\").distinct.count\nval newUsers \u003d positiveTest.select(\"userid\").distinct.except(positiveTrain.select(\"userid\").distinct)\nval newItems \u003d positiveTest.select(\"itemid\").distinct.except(positiveTrain.select(\"itemid\").distinct)\nnewUsers.count\nnewItems.count",
+      "authenticationInfo": {},
+      "dateUpdated": "Feb 26, 2017 11:42:18 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1488144083892_-161794498",
+      "id": "20170226-222123_1033248086",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "positiveTrain: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, rating: int, timestamp: int]\npositiveTest: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, rating: int, timestamp: int]\nres61: Long \u003d 942\nres62: Long \u003d 934\nnewUsers: org.apache.spark.sql.DataFrame \u003d [userid: int]\nnewItems: org.apache.spark.sql.DataFrame \u003d [itemid: int]\nres63: Long \u003d 0\nres64: Long \u003d 12\n"
+      },
+      "dateCreated": "Feb 26, 2017 10:21:23 PM",
+      "dateStarted": "Feb 26, 2017 11:42:18 PM",
+      "dateFinished": "Feb 26, 2017 11:43:11 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1488144687236_453505481",
+      "id": "20170226-223127_1089920027",
+      "dateCreated": "Feb 26, 2017 10:31:27 PM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "embColdStart: analyzeml100k",
+  "id": "2C9YYGNQZ",
+  "angularObjects": {
+    "2BGHSKCA7": [],
+    "2BFMBPKAB": [],
+    "2BHKKP27G": [],
+    "2BJHJDBK6": [],
+    "2BJAQG5W4": [],
+    "2BJGSXM37": [],
+    "2BFXEV5XZ": [],
+    "2BG77RV7M": [],
+    "2BF969NNB": [],
+    "2BG8QQJNC": [],
+    "2BGVG5JP4": [],
+    "2BJ5FCP57": [],
+    "2BFEDXCTE": [],
+    "2BJ8AEWCT": [],
+    "2BH9AVVKH": [],
+    "2BJ7KKX85": [],
+    "2BHKAE8WK": [],
+    "2BJ6HN5AY": []
+  },
+  "config": {},
+  "info": {}
+}

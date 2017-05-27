@@ -1,0 +1,207 @@
+{
+  "paragraphs": [
+    {
+      "text": "    import java.nio.file.{ Files, Paths }\n    import scala.collection.mutable.ListBuffer\n    import java.io.FileWriter\n    //\"at\",\"be\",\"br\",\"ch\",\"cz\",\"de\",\"dk\",\"es\",\"fi\",\"ie\",\"nb\",\"nl\",\"no\",\"pl\",\"pt\",\"ru\",\"se\",\"uk\",\"it\",\n    val countryCodes \u003d Array(\"fr\")\n    for (code \u003c- countryCodes){\n                val train \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \"\\t\")\n    .load(\"/data/sidana/recsysBaselines/calypsodata/files/anonymized/implicitfeedback/main/fr/train_\"+code+\".csv.anon\")\n    \n                    val test \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \"\\t\")\n    .load(\"/data/sidana/recsysBaselines/calypsodata/files/anonymized/implicitfeedback/main/fr/test_\"+code+\".csv.anon\")\n    \n    val num_users_train \u003d train.select(\"userid\").distinct.count\n    val num_offers_train \u003d train.select(\"offerid\").distinct.count\n    val num_categories_train \u003d train.select(\"category\").distinct.count\n    val num_merchants_train \u003d train.select(\"merchant\").distinct.count\n    \n    val num_users_test \u003d test.select(\"userid\").distinct.count\n    val num_offers_test \u003d test.select(\"offerid\").distinct.count\n    val num_categories_test \u003d test.select(\"category\").distinct.count\n    val num_merchants_test \u003d test.select(\"merchant\").distinct.count\n    \n    val fw \u003d new FileWriter(\"/data/sidana/recsysBaselines/calypsodata/files/anonymized/implicitfeedback/readme/\"+code+\".txt\", true)\n    \n    fw.write(\"num_users_train:\"+ num_users_train+\"\\n\")\n    fw.write(\"num_offers_train:\" + num_offers_train+\"\\n\")\n    fw.write(\"num_categories_train:\"+ num_categories_train+\"\\n\")\n    fw.write(\"num_merchants_train\"+num_merchants_train+\"\\n\")\n    \n    \n    fw.write(\"num_users_test:\"+ num_users_test+\"\\n\")\n    fw.write(\"num_offers_test:\" + num_offers_test+\"\\n\")\n    fw.write(\"num_categories_test:\"+ num_categories_test+\"\\n\")\n    fw.write(\"num_merchants_test\"+num_merchants_test+\"\\n\")\n    \n    fw.close()\n    }\n    ",
+      "authenticationInfo": {},
+      "dateUpdated": "May 3, 2017 5:58:47 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1493821794928_-730116611",
+      "id": "20170503-162954_696531146",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "import java.nio.file.{Files, Paths}\nimport scala.collection.mutable.ListBuffer\nimport java.io.FileWriter\ncountryCodes: Array[String] \u003d Array(fr)\n"
+      },
+      "dateCreated": "May 3, 2017 4:29:54 PM",
+      "dateStarted": "May 3, 2017 5:58:47 PM",
+      "dateFinished": "May 3, 2017 6:21:48 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": " val train \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \"\\t\")\n    .load(\"/data/sidana/recsysBaselines/calypsodata/files/anonymized/implicitfeedback/main/de/train_de.csv.anon\")",
+      "dateUpdated": "May 5, 2017 1:05:20 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1493822956767_250833788",
+      "id": "20170503-164916_1082309437",
+      "dateCreated": "May 3, 2017 4:49:16 PM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": " val train \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \"\\t\")\n    .load(\"/data/sidana/recsysBaselines/calypsodata/files/anonymized/implicitfeedback/main/de/train_de.csv.anon\")\n    \nval maxTimeTrain \u003d train.agg(max(\"utcDate\"))\nval maxtimeStamp \u003d maxTimeTrain.collect()(0).getTimestamp(0)\nval minTimeTrain \u003d train.agg(min(\"utcDate\"))\nval mintimeStamp \u003d minTimeTrain.collect()(0).getTimestamp(0)\n",
+      "authenticationInfo": {},
+      "dateUpdated": "May 5, 2017 1:22:04 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1493982371399_-1898481786",
+      "id": "20170505-130611_5379765",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "train: org.apache.spark.sql.DataFrame \u003d [userid: string, offerid: string, countrycode: string, category: int, merchant: string, utcdate: timestamp, rating: int]\nmaxTimeTrain: org.apache.spark.sql.DataFrame \u003d [max(utcDate): timestamp]\nmaxtimeStamp: java.sql.Timestamp \u003d 2016-06-14 23:52:51.0\nminTimeTrain: org.apache.spark.sql.DataFrame \u003d [min(utcDate): timestamp]\nmintimeStamp: java.sql.Timestamp \u003d 2016-06-01 02:00:17.0\n"
+      },
+      "dateCreated": "May 5, 2017 1:06:11 PM",
+      "dateStarted": "May 5, 2017 1:22:04 PM",
+      "dateFinished": "May 5, 2017 1:22:32 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": " val test \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \"\\t\")\n    .load(\"/data/sidana/recsysBaselines/calypsodata/files/anonymized/implicitfeedback/main/de/test_de.csv.anon\")\n    \nval maxTimeTrain \u003d test.agg(max(\"utcDate\"))\nval maxtimeStamp \u003d maxTimeTrain.collect()(0).getTimestamp(0)\nval minTimeTrain \u003d test.agg(min(\"utcDate\"))\nval mintimeStamp \u003d minTimeTrain.collect()(0).getTimestamp(0)",
+      "authenticationInfo": {},
+      "dateUpdated": "May 16, 2017 1:56:38 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1493982398879_754624036",
+      "id": "20170505-130638_1138003215",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "test: org.apache.spark.sql.DataFrame \u003d [userid: string, offerid: string, countrycode: string, category: int, merchant: string, utcdate: timestamp, rating: int]\nmaxTimeTrain: org.apache.spark.sql.DataFrame \u003d [max(utcDate): timestamp]\nmaxtimeStamp: java.sql.Timestamp \u003d 2016-07-01 01:59:36.0\nminTimeTrain: org.apache.spark.sql.DataFrame \u003d [min(utcDate): timestamp]\nmintimeStamp: java.sql.Timestamp \u003d 2016-06-14 23:52:51.0\n"
+      },
+      "dateCreated": "May 5, 2017 1:06:38 PM",
+      "dateStarted": "May 16, 2017 1:56:39 PM",
+      "dateFinished": "May 16, 2017 1:57:45 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val data \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \"\\t\")\n    .load(\"/data/sidana/recsysBaselines/calypsodata/files/anonymized/implicitfeedback/main/de/de.csv.anon\")\nval num_users_train \u003d data.select(\"userid\").distinct.count\nval num_offers_train \u003d data.select(\"offerid\").distinct.count\nval num_categories_train \u003d data.select(\"category\").distinct.count\nval num_merchants_train \u003d data.select(\"merchant\").distinct.count\n\n",
+      "authenticationInfo": {},
+      "dateUpdated": "May 10, 2017 10:24:04 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1493983547928_633095934",
+      "id": "20170505-132547_1032370986",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "data: org.apache.spark.sql.DataFrame \u003d [userid: string, offerid: string, countrycode: string, category: int, merchant: string, utcdate: timestamp, rating: int]\nnum_users_train: Long \u003d 521685\nnum_offers_train: Long \u003d 2299713\nnum_categories_train: Long \u003d 272\nnum_merchants_train: Long \u003d 801\n"
+      },
+      "dateCreated": "May 5, 2017 1:25:47 PM",
+      "dateStarted": "May 10, 2017 10:24:04 PM",
+      "dateFinished": "May 10, 2017 10:26:33 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1494447844445_-1659462731",
+      "id": "20170510-222404_916624215",
+      "dateCreated": "May 10, 2017 10:24:04 PM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "kelkooBaselines: datareleaseDocument",
+  "id": "2CGJSUSP2",
+  "angularObjects": {
+    "2BGHSKCA7": [],
+    "2BFMBPKAB": [],
+    "2BHKKP27G": [],
+    "2BJHJDBK6": [],
+    "2BJAQG5W4": [],
+    "2BJGSXM37": [],
+    "2BFXEV5XZ": [],
+    "2BG77RV7M": [],
+    "2BF969NNB": [],
+    "2BG8QQJNC": [],
+    "2BGVG5JP4": [],
+    "2BJ5FCP57": [],
+    "2BFEDXCTE": [],
+    "2BJ8AEWCT": [],
+    "2BH9AVVKH": [],
+    "2BJ7KKX85": [],
+    "2BHKAE8WK": [],
+    "2BJ6HN5AY": []
+  },
+  "config": {},
+  "info": {}
+}

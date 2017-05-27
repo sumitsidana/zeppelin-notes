@@ -1,0 +1,322 @@
+{
+  "paragraphs": [
+    {
+      "text": "//write distinct users\n\nval test \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \"\\t\")\n    .load(\"/data/sidana/embColdStart/ml_1m/cold_start_users/input_data/inputdata.headers\")\n\nval users \u003d test.select(\"userid\").distinct\n\nusers.rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/embColdStart/cold_start_users/dat.ml_1m.users\")",
+      "authenticationInfo": {},
+      "dateUpdated": "Mar 17, 2017 8:44:22 PM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1489274678597_2023082984",
+      "id": "20170312-002438_628620282",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "test: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, rating: int, timestamp: int]\nusers: org.apache.spark.sql.DataFrame \u003d [userid: int]\n"
+      },
+      "dateCreated": "Mar 12, 2017 12:24:38 AM",
+      "dateStarted": "Mar 12, 2017 4:42:43 PM",
+      "dateFinished": "Mar 12, 2017 4:42:50 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val test \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \"\\t\")\n    .load(\"/data/sidana/embColdStart/ml_1m/input_data/inputdata.headers\")\n\nval users \u003d test.select(\"itemid\").distinct\n\nusers.rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/embColdStart/dat.ml_1m.items.temp\")",
+      "authenticationInfo": {},
+      "dateUpdated": "Mar 17, 2017 8:43:47 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1489343441822_1059437705",
+      "id": "20170312-193041_1443183112",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "test: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, rating: int, timestamp: int]\nusers: org.apache.spark.sql.DataFrame \u003d [itemid: int]\n"
+      },
+      "dateCreated": "Mar 12, 2017 7:30:41 PM",
+      "dateStarted": "Mar 12, 2017 7:51:01 PM",
+      "dateFinished": "Mar 12, 2017 7:51:07 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val test \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \"\\t\")\n    .load(\"/data/sidana/embColdStart/ml_1m/input_data/inputdata.headers\")\n    \nval sample \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \"\\t\")\n    .load(\"/data/sidana/embColdStart/ml_1m/dat.ml_1m.users.old\")\n    \nval newusers \u003d test.select(\"userid\").except(sample.select(\"userid\")).distinct\n\nnewusers.rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/embColdStart/ml_1m/dat.ml_1m.users.new.temp\")\n",
+      "authenticationInfo": {},
+      "dateUpdated": "Mar 12, 2017 8:07:00 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1489345251013_-1026881557",
+      "id": "20170312-200051_1205976062",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "test: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, rating: int, timestamp: int]\nsample: org.apache.spark.sql.DataFrame \u003d [userid: int]\nnewusers: org.apache.spark.sql.DataFrame \u003d [userid: int]\n"
+      },
+      "dateCreated": "Mar 12, 2017 8:00:51 PM",
+      "dateStarted": "Mar 12, 2017 8:07:00 PM",
+      "dateFinished": "Mar 12, 2017 8:07:07 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val test \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \"\\t\")\n    .load(\"/data/sidana/embColdStart/ml_1m/input_data/inputdata.headers\")\n\nval sample \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \"\\t\")\n    .load(\"/data/sidana/embColdStart/ml_1m/dat.ml_1m.items.old\")\n\nval newitems \u003d test.select(\"itemid\").except(sample.select(\"itemid\")).distinct\n\nnewitems.rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/embColdStart/ml_1m/dat.ml_1m.items.new.temp\")\n\n",
+      "authenticationInfo": {},
+      "dateUpdated": "Mar 12, 2017 8:13:00 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1489345879674_1148008741",
+      "id": "20170312-201119_920297416",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "test: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, rating: int, timestamp: int]\nsample: org.apache.spark.sql.DataFrame \u003d [itemid: int]\nnewitems: org.apache.spark.sql.DataFrame \u003d [itemid: int]\n"
+      },
+      "dateCreated": "Mar 12, 2017 8:11:19 PM",
+      "dateStarted": "Mar 12, 2017 8:13:00 PM",
+      "dateFinished": "Mar 12, 2017 8:13:08 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "//old users old items\nval test \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \"\\t\")\n    .load(\"/data/sidana/embColdStart/ml_1m/input_data/inputdata.headers\")\n\nval oldUsers \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \"\\t\")\n    .load(\"/data/sidana/embColdStart/ml_1m/dat.ml_1m.users.old\")\n\nval oldItems \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \"\\t\")\n    .load(\"/data/sidana/embColdStart/ml_1m/dat.ml_1m.items.old\")\n\n\n\n    \nval trainUsers \u003d test.join(oldUsers,test(\"userid\")\u003d\u003d\u003doldUsers(\"userid\")).drop(oldUsers(\"userid\"))\nval trainUsersItems \u003d trainUsers.join(oldItems,trainUsers(\"itemid\")\u003d\u003d\u003doldItems(\"itemId\")).drop(oldItems(\"itemid\"))\ntrainUsersItems.rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/embColdStart/ml_1m/dat.ml_1m.oldusersolditems\")",
+      "authenticationInfo": {},
+      "dateUpdated": "Mar 12, 2017 11:14:23 PM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1489274678597_2023082984",
+      "id": "20170312-002438_1022660531",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "test: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, rating: int, timestamp: int]\noldUsers: org.apache.spark.sql.DataFrame \u003d [userid: int]\noldItems: org.apache.spark.sql.DataFrame \u003d [itemid: int]\ntrainUsers: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, rating: int, timestamp: int]\ntrainUsersItems: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, rating: int, timestamp: int]\n"
+      },
+      "dateCreated": "Mar 12, 2017 12:24:38 AM",
+      "dateStarted": "Mar 12, 2017 11:08:18 PM",
+      "dateFinished": "Mar 12, 2017 11:08:48 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "//new users old items\n\nval test \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \"\\t\")\n    .load(\"/data/sidana/embColdStart/ml_1m/input_data/inputdata.headers\")\n\nval newUsers \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \"\\t\")\n    .load(\"/data/sidana/embColdStart/ml_1m/dat.ml_1m.users.new\")\n\nval oldItems \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \"\\t\")\n    .load(\"/data/sidana/embColdStart/ml_1m/dat.ml_1m.items.old\")\n\n\n\n    \nval trainUsers \u003d test.join(newUsers,test(\"userid\")\u003d\u003d\u003dnewUsers(\"userid\")).drop(newUsers(\"userid\"))\n\nval trainUsersItems \u003d trainUsers.join(oldItems,trainUsers(\"itemid\")\u003d\u003d\u003doldItems(\"itemId\")).drop(oldItems(\"itemid\"))\n\ntrainUsersItems.rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/embColdStart/ml_1m/dat.ml_1m.newusersolditems\")",
+      "authenticationInfo": {},
+      "dateUpdated": "Mar 12, 2017 11:14:25 PM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1489274678598_2024237231",
+      "id": "20170312-002438_1543917576",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "test: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, rating: int, timestamp: int]\nnewUsers: org.apache.spark.sql.DataFrame \u003d [userid: int]\noldItems: org.apache.spark.sql.DataFrame \u003d [itemid: int]\ntrainUsers: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, rating: int, timestamp: int]\ntrainUsersItems: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, rating: int, timestamp: int]\n"
+      },
+      "dateCreated": "Mar 12, 2017 12:24:38 AM",
+      "dateStarted": "Mar 12, 2017 11:14:25 PM",
+      "dateFinished": "Mar 12, 2017 11:15:30 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "//old users new items\n\nval test \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \"\\t\")\n    .load(\"/data/sidana/embColdStart/ml_1m/input_data/inputdata.headers\")\n\nval oldUsers \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \"\\t\")\n    .load(\"/data/sidana/embColdStart/ml_1m/dat.ml_1m.users.old\")\n\nval newItems \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \"\\t\")\n    .load(\"/data/sidana/embColdStart/ml_1m/dat.ml_1m.items.new\")\n\n\n\n    \nval trainUsers \u003d test.join(oldUsers,test(\"userid\")\u003d\u003d\u003doldUsers(\"userid\")).drop(oldUsers(\"userid\"))\n\nval trainUsersItems \u003d trainUsers.join(newItems,trainUsers(\"itemid\")\u003d\u003d\u003dnewItems(\"itemId\")).drop(newItems(\"itemid\")) \n\ntrainUsersItems.rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/embColdStart/ml_1m/dat.ml_1m.oldusersnewitems\")\n",
+      "authenticationInfo": {},
+      "dateUpdated": "Mar 12, 2017 11:19:33 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1489354752642_1499646966",
+      "id": "20170312-223912_1529485969",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "test: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, rating: int, timestamp: int]\noldUsers: org.apache.spark.sql.DataFrame \u003d [userid: int]\nnewItems: org.apache.spark.sql.DataFrame \u003d [itemid: int]\ntrainUsers: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, rating: int, timestamp: int]\ntrainUsersItems: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, rating: int, timestamp: int]\n"
+      },
+      "dateCreated": "Mar 12, 2017 10:39:12 PM",
+      "dateStarted": "Mar 12, 2017 11:19:33 PM",
+      "dateFinished": "Mar 12, 2017 11:20:40 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "//new users new items\n\nval test \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \"\\t\")\n    .load(\"/data/sidana/embColdStart/ml_1m/input_data/inputdata.headers\")\n\nval newUsers \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \"\\t\")\n    .load(\"/data/sidana/embColdStart/ml_1m/dat.ml_1m.users.new\")\n\nval newItems \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \"\\t\")\n    .load(\"/data/sidana/embColdStart/ml_1m/dat.ml_1m.items.new\")\n\n\n\n    \nval trainUsers \u003d test.join(newUsers,test(\"userid\")\u003d\u003d\u003dnewUsers(\"userid\")).drop(newUsers(\"userid\"))\nval trainUsersItems \u003d trainUsers.join(newItems,trainUsers(\"itemid\")\u003d\u003d\u003dnewItems(\"itemId\")).drop(newItems(\"itemid\"))\ntrainUsersItems.rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/embColdStart/ml_1m/dat.ml_1m.newusersnewitems\")",
+      "authenticationInfo": {},
+      "dateUpdated": "Mar 12, 2017 11:22:42 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1489355004153_773746740",
+      "id": "20170312-224324_1385197849",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "test: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, rating: int, timestamp: int]\nnewUsers: org.apache.spark.sql.DataFrame \u003d [userid: int]\nnewItems: org.apache.spark.sql.DataFrame \u003d [itemid: int]\ntrainUsers: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, rating: int, timestamp: int]\ntrainUsersItems: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, rating: int, timestamp: int]\n"
+      },
+      "dateCreated": "Mar 12, 2017 10:43:24 PM",
+      "dateStarted": "Mar 12, 2017 11:22:42 PM",
+      "dateFinished": "Mar 12, 2017 11:23:16 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "dateUpdated": "Mar 12, 2017 12:24:38 AM",
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1489274678598_2024237231",
+      "id": "20170312-002438_48100983",
+      "dateCreated": "Mar 12, 2017 12:24:38 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "embColdStart: ml-1mSubsetCreation",
+  "id": "2CCUEHSBQ",
+  "angularObjects": {
+    "2BGHSKCA7": [],
+    "2BFMBPKAB": [],
+    "2BHKKP27G": [],
+    "2BJHJDBK6": [],
+    "2BJAQG5W4": [],
+    "2BJGSXM37": [],
+    "2BFXEV5XZ": [],
+    "2BG77RV7M": [],
+    "2BF969NNB": [],
+    "2BG8QQJNC": [],
+    "2BGVG5JP4": [],
+    "2BJ5FCP57": [],
+    "2BFEDXCTE": [],
+    "2BJ8AEWCT": [],
+    "2BH9AVVKH": [],
+    "2BJ7KKX85": [],
+    "2BHKAE8WK": [],
+    "2BJ6HN5AY": []
+  },
+  "config": {},
+  "info": {}
+}

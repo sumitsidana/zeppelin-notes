@@ -1,0 +1,305 @@
+{
+  "paragraphs": [
+    {
+      "text": "val data \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/data/sidana/purch/experiments/atleast_one/cold_start_setting/input\")\n\nval items \u003d data.select(\"itemid\").distinct\n\nitems.rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/purch/experiments/atleast_one/cold_start_setting/purch_items.temp\")",
+      "authenticationInfo": {},
+      "dateUpdated": "May 15, 2017 11:01:27 AM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1494836799769_-1552537522",
+      "id": "20170515-102639_1677637815",
+      "dateCreated": "May 15, 2017 10:26:39 AM",
+      "dateStarted": "May 15, 2017 10:52:59 AM",
+      "dateFinished": "May 15, 2017 10:53:23 AM",
+      "status": "FINISHED",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "//purch_users already there.",
+      "dateUpdated": "May 15, 2017 11:45:36 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1494841464354_1527810836",
+      "id": "20170515-114424_2034121414",
+      "dateCreated": "May 15, 2017 11:44:24 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "//write purch_new_users\n\nval data \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/data/sidana/purch/experiments/atleast_one/cold_start_setting/input\")\n    \nval oldusers \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/data/sidana/purch/experiments/atleast_one/cold_start_setting/purch_old_users.headers\")\n    \nval newusers \u003d data.select(\"userid\").except(oldusers.select(\"userid\")).distinct\n\nnewusers.rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/purch/experiments/atleast_one/cold_start_setting/purch_new_users.temp\")\n",
+      "authenticationInfo": {},
+      "dateUpdated": "May 15, 2017 11:45:37 AM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1494836799769_-1552537522",
+      "id": "20170515-102639_1745955242",
+      "dateCreated": "May 15, 2017 10:26:39 AM",
+      "dateStarted": "May 15, 2017 11:11:19 AM",
+      "dateFinished": "May 15, 2017 11:11:46 AM",
+      "status": "FINISHED",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "// write purch_new_items\n\nval data \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/data/sidana/purch/experiments/atleast_one/cold_start_setting/input\")\n\nval sample \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \"\\t\")\n    .load(\"/data/sidana/purch/experiments/atleast_one/cold_start_setting/purch_old_items.headers\")\n\nval newitems \u003d data.select(\"itemid\").except(sample.select(\"itemid\")).distinct\n\nnewitems.rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/purch/experiments/atleast_one/cold_start_setting/purch_new_items.temp\")\n\n",
+      "authenticationInfo": {},
+      "dateUpdated": "May 15, 2017 11:45:59 AM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1494836799770_-1551383276",
+      "id": "20170515-102639_1053199686",
+      "dateCreated": "May 15, 2017 10:26:39 AM",
+      "dateStarted": "May 15, 2017 11:15:04 AM",
+      "dateFinished": "May 15, 2017 11:15:59 AM",
+      "status": "FINISHED",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "//old users old items\n\nval data \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/data/sidana/purch/experiments/atleast_one/cold_start_setting/input\")\n\nval oldUsers \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \"\\t\")\n    .load(\"/data/sidana/purch/experiments/atleast_one/cold_start_setting/purch_old_users.headers\")\n\nval oldItems \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \"\\t\")\n    .load(\"/data/sidana/purch/experiments/atleast_one/cold_start_setting/purch_old_items.headers\")\n\n\n    \nval trainUsers \u003d data.join(oldUsers,data(\"userid\")\u003d\u003d\u003doldUsers(\"userid\")).drop(oldUsers(\"userid\"))\nval trainUsersItems \u003d trainUsers.join(oldItems,trainUsers(\"itemid\")\u003d\u003d\u003doldItems(\"itemId\")).drop(oldItems(\"itemid\"))\ntrainUsersItems.select($\"userid\",$\"itemid\",$\"rating\",unix_timestamp($\"timestamp\")).rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/purch/experiments/atleast_one/cold_start_setting/purch_old_users_items.temp\")",
+      "authenticationInfo": {},
+      "dateUpdated": "May 15, 2017 12:14:42 PM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1494836799770_-1551383276",
+      "id": "20170515-102639_1566904028",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "data: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, timestamp: timestamp, rating: int]\noldUsers: org.apache.spark.sql.DataFrame \u003d [userid: int]\noldItems: org.apache.spark.sql.DataFrame \u003d [itemid: int]\ntrainUsers: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, timestamp: timestamp, rating: int]\ntrainUsersItems: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, timestamp: timestamp, rating: int]\n"
+      },
+      "dateCreated": "May 15, 2017 10:26:39 AM",
+      "dateStarted": "May 15, 2017 12:14:42 PM",
+      "dateFinished": "May 15, 2017 12:15:36 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "//new users old items\n\nval data \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/data/sidana/purch/experiments/atleast_one/cold_start_setting/input\")\n\nval newUsers \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \"\\t\")\n    .load(\"/data/sidana/purch/experiments/atleast_one/cold_start_setting/purch_new_users.headers\")\n\nval oldItems \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \"\\t\")\n    .load(\"/data/sidana/purch/experiments/atleast_one/cold_start_setting/purch_old_items.headers\")\n\n\n\n    \nval trainUsers \u003ddata.join(newUsers,data(\"userid\")\u003d\u003d\u003dnewUsers(\"userid\")).drop(newUsers(\"userid\"))\n\nval trainUsersItems \u003d trainUsers.join(oldItems,trainUsers(\"itemid\")\u003d\u003d\u003doldItems(\"itemId\")).drop(oldItems(\"itemid\"))\n\ntrainUsersItems.select($\"userid\",$\"itemid\",$\"rating\",unix_timestamp($\"timestamp\")).rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/purch/experiments/atleast_one/cold_start_setting/usercoldstart/purch_new_users_old_items.temp\")",
+      "authenticationInfo": {},
+      "dateUpdated": "May 15, 2017 12:14:44 PM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1494836799770_-1551383276",
+      "id": "20170515-102639_364035435",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "data: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, timestamp: timestamp, rating: int]\nnewUsers: org.apache.spark.sql.DataFrame \u003d [userid: int]\noldItems: org.apache.spark.sql.DataFrame \u003d [itemid: int]\ntrainUsers: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, timestamp: timestamp, rating: int]\ntrainUsersItems: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, timestamp: timestamp, rating: int]\n"
+      },
+      "dateCreated": "May 15, 2017 10:26:39 AM",
+      "dateStarted": "May 15, 2017 12:14:44 PM",
+      "dateFinished": "May 15, 2017 12:16:27 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "//old users new items\n\nval data \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/data/sidana/purch/experiments/atleast_one/cold_start_setting/input\")\n\nval oldUsers \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \"\\t\")\n    .load(\"/data/sidana/purch/experiments/atleast_one/cold_start_setting/purch_old_users.headers\")\n\nval newItems \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \"\\t\")\n    .load(\"/data/sidana/purch/experiments/atleast_one/cold_start_setting/purch_new_items.headers\")\n\n\n\n    \nval trainUsers \u003d data.join(oldUsers,data(\"userid\")\u003d\u003d\u003doldUsers(\"userid\")).drop(oldUsers(\"userid\"))\n\nval trainUsersItems \u003d trainUsers.join(newItems,trainUsers(\"itemid\")\u003d\u003d\u003dnewItems(\"itemId\")).drop(newItems(\"itemid\")) \n\ntrainUsersItems.select($\"userid\",$\"itemid\",$\"rating\",unix_timestamp($\"timestamp\")).rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/purch/experiments/atleast_one/cold_start_setting/itemcoldstart/purch_old_users_new_items.headers\")\n",
+      "authenticationInfo": {},
+      "dateUpdated": "May 15, 2017 12:14:46 PM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1494836799771_-1551768024",
+      "id": "20170515-102639_162645742",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "data: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, timestamp: timestamp, rating: int]\noldUsers: org.apache.spark.sql.DataFrame \u003d [userid: int]\nnewItems: org.apache.spark.sql.DataFrame \u003d [itemid: int]\ntrainUsers: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, timestamp: timestamp, rating: int]\ntrainUsersItems: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, timestamp: timestamp, rating: int]\n"
+      },
+      "dateCreated": "May 15, 2017 10:26:39 AM",
+      "dateStarted": "May 15, 2017 12:15:37 PM",
+      "dateFinished": "May 15, 2017 12:17:15 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "//new users new items\n\nval data \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/data/sidana/purch/experiments/atleast_one/cold_start_setting/input\")\n\nval newUsers \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \"\\t\")\n    .load(\"/data/sidana/purch/experiments/atleast_one/cold_start_setting/purch_new_users.headers\")\n\nval newItems \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \"\\t\")\n    .load(\"/data/sidana/purch/experiments/atleast_one/cold_start_setting/purch_new_items.headers\")\n\nval trainUsers \u003d data.join(newUsers,data(\"userid\")\u003d\u003d\u003dnewUsers(\"userid\")).drop(newUsers(\"userid\"))\n\nval trainUsersItems \u003d trainUsers.join(newItems,trainUsers(\"itemid\")\u003d\u003d\u003dnewItems(\"itemId\")).drop(newItems(\"itemid\"))\n\ntrainUsersItems.select($\"userid\",$\"itemid\",$\"rating\",unix_timestamp($\"timestamp\")).rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/purch/experiments/atleast_one/cold_start_setting/useritemcoldstart/purch_new_users_new_items.temp\")",
+      "authenticationInfo": {},
+      "dateUpdated": "May 15, 2017 12:14:48 PM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1494836799771_-1551768024",
+      "id": "20170515-102639_1987786810",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "data: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, timestamp: timestamp, rating: int]\nnewUsers: org.apache.spark.sql.DataFrame \u003d [userid: int]\nnewItems: org.apache.spark.sql.DataFrame \u003d [itemid: int]\ntrainUsers: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, timestamp: timestamp, rating: int]\ntrainUsersItems: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, timestamp: timestamp, rating: int]\n"
+      },
+      "dateCreated": "May 15, 2017 10:26:39 AM",
+      "dateStarted": "May 15, 2017 12:16:27 PM",
+      "dateFinished": "May 15, 2017 12:18:08 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "dateUpdated": "May 15, 2017 10:26:39 AM",
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1494836799772_-1553691769",
+      "id": "20170515-102639_329819291",
+      "dateCreated": "May 15, 2017 10:26:39 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "purchBaselines: coldStartDataCreation",
+  "id": "2CGQX1EUY",
+  "angularObjects": {
+    "2BGHSKCA7": [],
+    "2BFMBPKAB": [],
+    "2BHKKP27G": [],
+    "2BJHJDBK6": [],
+    "2BJAQG5W4": [],
+    "2BJGSXM37": [],
+    "2BFXEV5XZ": [],
+    "2BG77RV7M": [],
+    "2BF969NNB": [],
+    "2BG8QQJNC": [],
+    "2BGVG5JP4": [],
+    "2BJ5FCP57": [],
+    "2BFEDXCTE": [],
+    "2BJ8AEWCT": [],
+    "2BH9AVVKH": [],
+    "2BJ7KKX85": [],
+    "2BHKAE8WK": [],
+    "2BJ6HN5AY": []
+  },
+  "config": {
+    "looknfeel": "default"
+  },
+  "info": {}
+}

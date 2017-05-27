@@ -1,0 +1,227 @@
+{
+  "paragraphs": [
+    {
+      "text": "val train \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types    \n    .option(\"delimiter\", \"\\t\")\n    .load(\"/data/sidana/embColdStart/ml_1m/input_data/train.headers\")\n    \n\nval test \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \"\\t\")\n    .load(\"/data/sidana/embColdStart/ml_1m/input_data/test.headers\")\n    \n",
+      "authenticationInfo": {},
+      "dateUpdated": "Mar 13, 2017 10:29:07 PM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1489094619763_-622356586",
+      "id": "20170309-222339_750769741",
+      "dateCreated": "Mar 9, 2017 10:23:39 PM",
+      "dateStarted": "Mar 9, 2017 10:37:33 PM",
+      "dateFinished": "Mar 9, 2017 10:37:39 PM",
+      "status": "FINISHED",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "train.select(\"userid\").distinct.count\ntest.select(\"userid\").distinct.count\ntrain.select(\"itemid\").distinct.count\ntest.select(\"itemid\").distinct.count\n\nval newUsers \u003d test.select(\"userid\").distinct.except(train.select(\"userid\").distinct)\nval newItems \u003d test.select(\"itemid\").distinct.except(train.select(\"itemid\").distinct)\nnewUsers.count\nnewItems.count",
+      "authenticationInfo": {},
+      "dateUpdated": "Mar 9, 2017 10:37:49 PM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1489094619764_-624280330",
+      "id": "20170309-222339_1720610862",
+      "dateCreated": "Mar 9, 2017 10:23:39 PM",
+      "dateStarted": "Mar 9, 2017 10:37:49 PM",
+      "dateFinished": "Mar 9, 2017 10:39:04 PM",
+      "status": "FINISHED",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val newUsers \u003d positiveTest.select(\"userid\").distinct.except(positiveTrain.select(\"userid\").distinct)\nnewUsers.count",
+      "dateUpdated": "Mar 9, 2017 11:48:26 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1489099695436_-229155548",
+      "id": "20170309-234815_833775128",
+      "dateCreated": "Mar 9, 2017 11:48:15 PM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val positiveTrain \u003d train.filter(train(\"rating\")\u003e\u003d4)\nval positiveTest \u003d test.filter(test(\"rating\")\u003e\u003d4)\npositiveTrain.select(\"userid\").distinct.count\npositiveTest.select(\"userid\").distinct.count",
+      "dateUpdated": "Mar 9, 2017 11:48:15 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1489097851980_171917559",
+      "id": "20170309-231731_1353157104",
+      "dateCreated": "Mar 9, 2017 11:17:31 PM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val newItems\u003dtest.select(\"itemid\").distinct.except(positiveTrain.select(\"itemid\").distinct)\nnewItems.count",
+      "authenticationInfo": {},
+      "dateUpdated": "Mar 9, 2017 11:49:18 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1489094619764_-624280330",
+      "id": "20170309-222339_91454129",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "newItems: org.apache.spark.sql.DataFrame \u003d [itemid: int]\nres22: Long \u003d 32\n"
+      },
+      "dateCreated": "Mar 9, 2017 10:23:39 PM",
+      "dateStarted": "Mar 9, 2017 11:49:18 PM",
+      "dateFinished": "Mar 9, 2017 11:49:46 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val train \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types    \n    .option(\"delimiter\", \",\")\n    .load(\"/data/sidana/embColdStart/ml_1m/itemcoldstart/train.headers\")\n\nval useritem \u003d train.select(\"userid\",\"itemid\").distinct.count",
+      "authenticationInfo": {},
+      "dateUpdated": "Mar 19, 2017 1:00:14 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1489099710068_-1315686442",
+      "id": "20170309-234830_337543908",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "train: org.apache.spark.sql.DataFrame \u003d [userid: int, itemid: int, rating: int, timestamp: int]\nuseritem: Long \u003d 246719\n"
+      },
+      "dateCreated": "Mar 9, 2017 11:48:30 PM",
+      "dateStarted": "Mar 19, 2017 1:00:14 AM",
+      "dateFinished": "Mar 19, 2017 1:00:18 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1489881604134_-1713988228",
+      "id": "20170319-010004_1684187130",
+      "dateCreated": "Mar 19, 2017 1:00:04 AM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "embColdStart: analyze ml-1m",
+  "id": "2CBFGW3KK",
+  "angularObjects": {
+    "2BGHSKCA7": [],
+    "2BFMBPKAB": [],
+    "2BHKKP27G": [],
+    "2BJHJDBK6": [],
+    "2BJAQG5W4": [],
+    "2BJGSXM37": [],
+    "2BFXEV5XZ": [],
+    "2BG77RV7M": [],
+    "2BF969NNB": [],
+    "2BG8QQJNC": [],
+    "2BGVG5JP4": [],
+    "2BJ5FCP57": [],
+    "2BFEDXCTE": [],
+    "2BJ8AEWCT": [],
+    "2BH9AVVKH": [],
+    "2BJ7KKX85": [],
+    "2BHKAE8WK": [],
+    "2BJ6HN5AY": []
+  },
+  "config": {},
+  "info": {}
+}

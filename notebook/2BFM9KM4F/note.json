@@ -63,7 +63,7 @@
       "progressUpdateIntervalMs": 500
     }
   ],
-  "name": "deliver_2016_03_18",
+  "name": "kelkooBaselines: deliver_2016_03_18",
   "id": "2BFM9KM4F",
   "angularObjects": {
     "2BGHSKCA7": [],
@@ -85,6 +85,8 @@
     "2BHKAE8WK": [],
     "2BJ6HN5AY": []
   },
-  "config": {},
+  "config": {
+    "looknfeel": "default"
+  },
   "info": {}
 }

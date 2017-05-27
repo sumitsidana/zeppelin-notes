@@ -307,8 +307,9 @@
       "progressUpdateIntervalMs": 500
     },
     {
-      "text": "//service types\nval parquetFileOfferDay \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypso_data_feb_march/calypso_data_feb_march/offerView/fr/2016/201602/20160204\")\nval distinctDates \u003d parquetFileOfferDay.select(to_date($\"utcDate\")).distinct()\nval dates \u003d distinctDates.select(\"todate(utcDate)\").rdd.map(r \u003d\u003e r(0)).collect()\n //z.show(parquetFileOfferDay)",
-      "dateUpdated": "Oct 4, 2016 11:37:31 AM",
+      "text": "//service types\nval parquetFileOfferDay \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypso_data_feb_march/calypso_data_feb_march/offerView/fr/2016/201602/20160204\")\nval distinctDates \u003d parquetFileOfferDay.select(to_date($\"utcDate\")).distinct()\nval dates \u003d distinctDates.select(\"todate(utcDate)\").rdd.map(r \u003d\u003e r(0)).collect()\nz.show(parquetFileOfferDay)\n ",
+      "authenticationInfo": {},
+      "dateUpdated": "Feb 28, 2017 2:23:32 PM",
       "config": {
         "colWidth": 12.0,
         "graph": {
@@ -330,12 +331,31 @@
       },
       "jobName": "paragraph_1474900957514_-1949838035",
       "id": "20160926-164237_835651582",
+      "result": {
+        "code": "ERROR",
+        "type": "TEXT",
+        "msg": "java.lang.AssertionError: assertion failed: No predefined schema found, and no Parquet data files or summary files found under file:/home/ama/sidana/calypso_data_feb_march/calypso_data_feb_march/Search/fr/2016/201602/20160204.\n\tat scala.Predef$.assert(Predef.scala:179)\n\tat org.apache.spark.sql.execution.datasources.parquet.ParquetRelation$MetadataCache.org$apache$spark$sql$execution$datasources$parquet$ParquetRelation$MetadataCache$$readSchema(ParquetRelation.scala:512)\n\tat org.apache.spark.sql.execution.datasources.parquet.ParquetRelation$MetadataCache$$anonfun$12.apply(ParquetRelation.scala:421)\n\tat org.apache.spark.sql.execution.datasources.parquet.ParquetRelation$MetadataCache$$anonfun$12.apply(ParquetRelation.scala:421)\n\tat scala.Option.orElse(Option.scala:257)\n\tat org.apache.spark.sql.execution.datasources.parquet.ParquetRelation$MetadataCache.refresh(ParquetRelation.scala:421)\n\tat org.apache.spark.sql.execution.datasources.parquet.ParquetRelation.org$apache$spark$sql$execution$datasources$parquet$ParquetRelation$$metadataCache$lzycompute(ParquetRelation.scala:145)\n\tat org.apache.spark.sql.execution.datasources.parquet.ParquetRelation.org$apache$spark$sql$execution$datasources$parquet$ParquetRelation$$metadataCache(ParquetRelation.scala:143)\n\tat org.apache.spark.sql.execution.datasources.parquet.ParquetRelation$$anonfun$6.apply(ParquetRelation.scala:202)\n\tat org.apache.spark.sql.execution.datasources.parquet.ParquetRelation$$anonfun$6.apply(ParquetRelation.scala:202)\n\tat scala.Option.getOrElse(Option.scala:120)\n\tat org.apache.spark.sql.execution.datasources.parquet.ParquetRelation.dataSchema(ParquetRelation.scala:202)\n\tat org.apache.spark.sql.sources.HadoopFsRelation.schema$lzycompute(interfaces.scala:636)\n\tat org.apache.spark.sql.sources.HadoopFsRelation.schema(interfaces.scala:635)\n\tat org.apache.spark.sql.execution.datasources.LogicalRelation.\u003cinit\u003e(LogicalRelation.scala:37)\n\tat org.apache.spark.sql.SQLContext.baseRelationToDataFrame(SQLContext.scala:442)\n\tat org.apache.spark.sql.DataFrameReader.parquet(DataFrameReader.scala:316)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:33)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:38)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:40)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:42)\n\tat $iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:44)\n\tat $iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:46)\n\tat $iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:48)\n\tat $iwC.\u003cinit\u003e(\u003cconsole\u003e:50)\n\tat \u003cinit\u003e(\u003cconsole\u003e:52)\n\tat .\u003cinit\u003e(\u003cconsole\u003e:56)\n\tat .\u003cclinit\u003e(\u003cconsole\u003e)\n\tat .\u003cinit\u003e(\u003cconsole\u003e:7)\n\tat .\u003cclinit\u003e(\u003cconsole\u003e)\n\tat $print(\u003cconsole\u003e)\n\tat sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)\n\tat sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)\n\tat sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\n\tat java.lang.reflect.Method.invoke(Method.java:606)\n\tat org.apache.spark.repl.SparkIMain$ReadEvalPrint.call(SparkIMain.scala:1065)\n\tat org.apache.spark.repl.SparkIMain$Request.loadAndRun(SparkIMain.scala:1346)\n\tat org.apache.spark.repl.SparkIMain.loadAndRunReq$1(SparkIMain.scala:840)\n\tat org.apache.spark.repl.SparkIMain.interpret(SparkIMain.scala:871)\n\tat org.apache.spark.repl.SparkIMain.interpret(SparkIMain.scala:819)\n\tat org.apache.zeppelin.spark.SparkInterpreter.interpretInput(SparkInterpreter.java:812)\n\tat org.apache.zeppelin.spark.SparkInterpreter.interpret(SparkInterpreter.java:755)\n\tat org.apache.zeppelin.spark.SparkInterpreter.interpret(SparkInterpreter.java:748)\n\tat org.apache.zeppelin.interpreter.ClassloaderInterpreter.interpret(ClassloaderInterpreter.java:57)\n\tat org.apache.zeppelin.interpreter.LazyOpenInterpreter.interpret(LazyOpenInterpreter.java:93)\n\tat org.apache.zeppelin.interpreter.remote.RemoteInterpreterServer$InterpretJob.jobRun(RemoteInterpreterServer.java:331)\n\tat org.apache.zeppelin.scheduler.Job.run(Job.java:171)\n\tat org.apache.zeppelin.scheduler.FIFOScheduler$1.run(FIFOScheduler.java:139)\n\tat java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:471)\n\tat java.util.concurrent.FutureTask.run(FutureTask.java:262)\n\tat java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:178)\n\tat java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:292)\n\tat java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)\n\tat java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:615)\n\tat java.lang.Thread.run(Thread.java:745)\n\n"
+      },
       "dateCreated": "Sep 26, 2016 4:42:37 PM",
+      "dateStarted": "Feb 28, 2017 2:23:04 PM",
+      "dateFinished": "Feb 28, 2017 2:23:05 PM",
+      "status": "ERROR",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1488288184622_-279622271",
+      "id": "20170228-142304_1207494143",
+      "dateCreated": "Feb 28, 2017 2:23:04 PM",
       "status": "READY",
       "progressUpdateIntervalMs": 500
     }
   ],
-  "name": "kelkooDataAnalysis(June)",
+  "name": "kelkooBaselines: kelkooDataAnalysis(June)",
   "id": "2BX3JDP6E",
   "angularObjects": {
     "2BGHSKCA7": [],
@@ -357,6 +377,8 @@
     "2BHKAE8WK": [],
     "2BJ6HN5AY": []
   },
-  "config": {},
+  "config": {
+    "looknfeel": "default"
+  },
   "info": {}
 }

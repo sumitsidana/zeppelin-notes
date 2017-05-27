@@ -104,19 +104,66 @@
       "progressUpdateIntervalMs": 500
     },
     {
-      "config": {},
+      "text": "val search \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypso_kk_june_data/search/*/2016/*/*/*.parquet\")\nsearch.show\n//val query \u003d parquetFileClick.select(parquetFileClick(\"queryString\"))",
+      "authenticationInfo": {},
+      "dateUpdated": "Feb 28, 2017 2:28:46 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
       "settings": {
         "params": {},
         "forms": {}
       },
       "jobName": "paragraph_1480976896641_-643686974",
       "id": "20161205-232816_2121284504",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "search: org.apache.spark.sql.DataFrame \u003d [userId: string, ip: string, userAgent: struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e, geolocation: string, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, queryString: string, filters: map\u003cstring,string\u003e, source: string, searchId: string, isPrompt: boolean, acquisitionCost: decimal(38,18), bidPrice: decimal(38,18)]\n+--------------------+---------------+--------------------+-----------+----------+----------+--------------------+--------------------+-------+----------+--------------------+--------+---------------+--------+\n|              userId|             ip|           userAgent|geolocation|siteDomain|dataCenter|             utcDate|         queryString|filters|    source|            searchId|isPrompt|acquisitionCost|bidPrice|\n+--------------------+---------------+--------------------+-----------+----------+----------+--------------------+--------------------+-------+----------+--------------------+--------+---------------+--------+\n|a4c62e4-155096c11...| 80.110.106.127|[null,null,null,M...|       null| [at,null]|      null|2016-06-01 02:46:...|          diy car dc|  Map()|96947214:5|10769812128479_14...|   false|           null|    null|\n|a4c6350-15509795d...|    81.91.4.210|  [null,null,null,-]|       null| [at,null]|      null|2016-06-01 02:59:...|                    |  Map()|96950176:5|10769812128479_14...|   false|           null|    null|\n|a4c62e4-1550a1dee...|  80.121.134.24|[null,null,null,M...|       null| [at,null]|      null|2016-06-01 06:05:...|Christmas Vintage...|  Map()|96948726:5|10769812128479_14...|   false|           null|    null|\n|a4c62a6-14df87385...| 84.112.149.156|[null,null,null,M...|       null| [at,null]|      null|2016-06-01 06:10:...| damen bademode alle|  Map()|96947214:5|10769812128479_14...|   false|           null|    null|\n|a4c62e4-1550ae596...|   80.123.82.14|[null,null,null,M...|       null| [at,null]|      null|2016-06-01 09:37:...|Damen Tanktop Buy...|  Map()|96948726:5|10769812130160_14...|   false|           null|    null|\n|a4c6350-1550af9eb...|   54.146.4.168|[null,null,null,M...|       null| [at,null]|      null|2016-06-01 09:59:...|     wäscheaufhängen|  Map()|96947214:5|10769812130160_14...|   false|           null|    null|\n|a4c6350-1550b02d6...| 88.117.121.110|[null,null,null,M...|       null| [at,null]|      null|2016-06-01 10:10:...| 12v luft kompressor|  Map()|96947214:5|10769812130160_14...|   false|           null|    null|\n|a4c6350-1550b0922...|178.190.138.190|[null,null,null,M...|       null| [at,null]|      null|2016-06-01 10:16:...|  men\u0027s+cargo+shorts|  Map()|96948998:5|10769812130160_14...|   false|           null|    null|\n|a4c62e4-1550b1c76...|   54.146.4.168|[null,null,null,M...|       null| [at,null]|      null|2016-06-01 10:37:...|       mavic race sl|  Map()|96947214:5|10769812130160_14...|   false|           null|    null|\n|a4c6350-1550b2290...|   54.146.4.168|[null,null,null,M...|       null| [at,null]|      null|2016-06-01 10:44:...|nuolux wasser perlen|  Map()|96947214:5|10769812130160_14...|   false|           null|    null|\n|a4c62e4-154fb863b...|178.165.130.189|[null,null,null,M...|       null| [at,null]|      null|2016-06-01 11:14:...|layenberger fit f...|  Map()|96947214:5|10769812130160_14...|   false|           null|    null|\n|a4c6350-1550a60fb...|   85.127.130.0|[null,null,null,M...|       null| [at,null]|      null|2016-06-01 11:32:...|brandit bw packta...|  Map()|96947214:5|10769812130160_14...|   false|           null|    null|\n|a4c62e4-1550b70d8...| 212.186.23.161|[null,null,null,M...|       null| [at,null]|      null|2016-06-01 12:22:...|                lego|  Map()|96947214:5|10769812130160_14...|   false|           null|    null|\n|a4c62e4-1550ba1b7...|178.115.129.253|[null,null,null,M...|       null| [at,null]|      null|2016-06-01 13:03:...|    Baldrian+Dragees|  Map()|96947114:5|10769812130160_14...|   false|           null|    null|\n|a4c6350-1550bb63f...|   194.96.154.5|[null,null,null,M...|       null| [at,null]|      null|2016-06-01 13:25:...| dv 1210n dustbuster|  Map()|96947214:5|10769812130160_14...|   false|           null|    null|\n|a4c6350-1550bb63c...|   194.96.154.5|[null,null,null,M...|       null| [at,null]|      null|2016-06-01 13:25:...| dv 1210n dustbuster|  Map()|96947214:5|10769812130160_14...|   false|           null|    null|\n|a4c6350-1550bb63f...|   194.96.154.5|[null,null,null,M...|       null| [at,null]|      null|2016-06-01 13:25:...| dv 1210n dustbuster|  Map()|96947214:5|10769812130160_14...|   false|           null|    null|\n|a4c62e4-1550bb63f...|   194.96.154.5|[null,null,null,M...|       null| [at,null]|      null|2016-06-01 13:25:...| dv 1210n dustbuster|  Map()|96947214:5|10769812130160_14...|   false|           null|    null|\n|a4c6350-1550bb63f...|   194.96.154.5|[null,null,null,M...|       null| [at,null]|      null|2016-06-01 13:25:...| dv 1210n dustbuster|  Map()|96947214:5|10769812130160_14...|   false|           null|    null|\n|a4c6350-1550bc093...|    93.82.11.77|[null,null,null,M...|       null| [at,null]|      null|2016-06-01 13:36:...|children\u0027s+where+...|  Map()|96948998:5|10769812130160_14...|   false|           null|    null|\n+--------------------+---------------+--------------------+-----------+----------+----------+--------------------+--------------------+-------+----------+--------------------+--------+---------------+--------+\nonly showing top 20 rows\n\n"
+      },
       "dateCreated": "Dec 5, 2016 11:28:16 PM",
+      "dateStarted": "Feb 28, 2017 2:28:46 PM",
+      "dateFinished": "Feb 28, 2017 2:28:54 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1488288475110_-709742538",
+      "id": "20170228-142755_903115227",
+      "dateCreated": "Feb 28, 2017 2:27:55 PM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1488288422140_-1557821059",
+      "id": "20170228-142702_484234329",
+      "dateCreated": "Feb 28, 2017 2:27:02 PM",
       "status": "READY",
       "progressUpdateIntervalMs": 500
     }
   ],
-  "name": "analyzeKeywordsinClicks",
+  "name": "kelkooBaselines: analyzeKeywordsinClicks",
   "id": "2C5YR548P",
   "angularObjects": {
     "2BGHSKCA7": [],

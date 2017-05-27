@@ -223,7 +223,7 @@
       "progressUpdateIntervalMs": 500
     }
   ],
-  "name": "badUser?",
+  "name": "kelkooBaselines: badUser?",
   "id": "2C24JCZ46",
   "angularObjects": {
     "2BGHSKCA7": [],
@@ -245,6 +245,8 @@
     "2BHKAE8WK": [],
     "2BJ6HN5AY": []
   },
-  "config": {},
+  "config": {
+    "looknfeel": "default"
+  },
   "info": {}
 }
