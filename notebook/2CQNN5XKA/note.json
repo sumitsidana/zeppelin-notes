@@ -1,0 +1,204 @@
+{
+  "paragraphs": [
+    {
+      "text": "    import java.nio.file.{ Files, Paths }\n    import scala.collection.mutable.ListBuffer\n    import java.io.FileWriter\n    //\"at\",\"be\",\"br\",\"ch\",\"cz\",\"de\",\"dk\",\"es\",\"fi\",\"ie\",\"nb\",\"nl\",\"no\",\"pl\",\"pt\",\"ru\",\"se\",\"uk\",\"it\",\n    val countryCodes \u003d Array(\"fr\")\n    for (code \u003c- countryCodes){\n                val train \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \"\\t\")\n    .load(\"/data/sidana/recsysBaselines/calypsodata/files/anonymized/implicitfeedback/main/fr/train_\"+code+\".csv.anon\")\n    \n                    val test \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \"\\t\")\n    .load(\"/data/sidana/recsysBaselines/calypsodata/files/anonymized/implicitfeedback/main/fr/test_\"+code+\".csv.anon\")\n    \n    val num_users_train \u003d train.select(\"userid\").distinct.count\n    val num_offers_train \u003d train.select(\"offerid\").distinct.count\n    val num_categories_train \u003d train.select(\"category\").distinct.count\n    val num_merchants_train \u003d train.select(\"merchant\").distinct.count\n    \n    val num_users_test \u003d test.select(\"userid\").distinct.count\n    val num_offers_test \u003d test.select(\"offerid\").distinct.count\n    val num_categories_test \u003d test.select(\"category\").distinct.count\n    val num_merchants_test \u003d test.select(\"merchant\").distinct.count\n    \n    val fw \u003d new FileWriter(\"/data/sidana/recsysBaselines/calypsodata/files/anonymized/implicitfeedback/readme/\"+code+\".txt\", true)\n    \n    fw.write(\"num_users_train:\"+ num_users_train+\"\\n\")\n    fw.write(\"num_offers_train:\" + num_offers_train+\"\\n\")\n    fw.write(\"num_categories_train:\"+ num_categories_train+\"\\n\")\n    fw.write(\"num_merchants_train\"+num_merchants_train+\"\\n\")\n    \n    \n    fw.write(\"num_users_test:\"+ num_users_test+\"\\n\")\n    fw.write(\"num_offers_test:\" + num_offers_test+\"\\n\")\n    fw.write(\"num_categories_test:\"+ num_categories_test+\"\\n\")\n    fw.write(\"num_merchants_test\"+num_merchants_test+\"\\n\")\n    \n    fw.close()\n    }\n    ",
+      "dateUpdated": "Jul 20, 2017 3:56:41 PM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1500559001490_-616991451",
+      "id": "20170720-155641_34948012",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "import java.nio.file.{Files, Paths}\nimport scala.collection.mutable.ListBuffer\nimport java.io.FileWriter\ncountryCodes: Array[String] \u003d Array(fr)\n"
+      },
+      "dateCreated": "Jul 20, 2017 3:56:41 PM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": " val train \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \"\\t\")\n    .load(\"/data/sidana/recsysBaselines/calypsodata/files/anonymized/implicitfeedback/main/de/train_de.csv.anon\")",
+      "dateUpdated": "Jul 20, 2017 3:56:41 PM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1500559001491_-617376200",
+      "id": "20170720-155641_1108202053",
+      "dateCreated": "Jul 20, 2017 3:56:41 PM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": " val train \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \"\\t\")\n    .load(\"/data/sidana/recsysBaselines/calypsodata/files/anonymized/implicitfeedback/main/de/train_de.csv.anon\")\n    \nval maxTimeTrain \u003d train.agg(max(\"utcDate\"))\nval maxtimeStamp \u003d maxTimeTrain.collect()(0).getTimestamp(0)\nval minTimeTrain \u003d train.agg(min(\"utcDate\"))\nval mintimeStamp \u003d minTimeTrain.collect()(0).getTimestamp(0)\n",
+      "dateUpdated": "Jul 20, 2017 3:56:41 PM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1500559001491_-617376200",
+      "id": "20170720-155641_426234340",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "train: org.apache.spark.sql.DataFrame \u003d [userid: string, offerid: string, countrycode: string, category: int, merchant: string, utcdate: timestamp, rating: int]\nmaxTimeTrain: org.apache.spark.sql.DataFrame \u003d [max(utcDate): timestamp]\nmaxtimeStamp: java.sql.Timestamp \u003d 2016-06-14 23:52:51.0\nminTimeTrain: org.apache.spark.sql.DataFrame \u003d [min(utcDate): timestamp]\nmintimeStamp: java.sql.Timestamp \u003d 2016-06-01 02:00:17.0\n"
+      },
+      "dateCreated": "Jul 20, 2017 3:56:41 PM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": " val test \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \"\\t\")\n    .load(\"/data/sidana/recsysBaselines/calypsodata/files/anonymized/implicitfeedback/main/de/test_de.csv.anon\")\n    \nval maxTimeTrain \u003d test.agg(max(\"utcDate\"))\nval maxtimeStamp \u003d maxTimeTrain.collect()(0).getTimestamp(0)\nval minTimeTrain \u003d test.agg(min(\"utcDate\"))\nval mintimeStamp \u003d minTimeTrain.collect()(0).getTimestamp(0)",
+      "dateUpdated": "Jul 20, 2017 3:56:41 PM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1500559001491_-617376200",
+      "id": "20170720-155641_1862589635",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "test: org.apache.spark.sql.DataFrame \u003d [userid: string, offerid: string, countrycode: string, category: int, merchant: string, utcdate: timestamp, rating: int]\nmaxTimeTrain: org.apache.spark.sql.DataFrame \u003d [max(utcDate): timestamp]\nmaxtimeStamp: java.sql.Timestamp \u003d 2016-07-01 01:59:36.0\nminTimeTrain: org.apache.spark.sql.DataFrame \u003d [min(utcDate): timestamp]\nmintimeStamp: java.sql.Timestamp \u003d 2016-06-14 23:52:51.0\n"
+      },
+      "dateCreated": "Jul 20, 2017 3:56:41 PM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val data \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/data/sidana/recnet_draft/netflix/cofactor/ratings.csv\")\nval num_users_train \u003d data.select(\"userid\").distinct.count\nval num_offers_train \u003d data.select(\"movieId\").distinct.count\n\n\n",
+      "authenticationInfo": {},
+      "dateUpdated": "Jul 26, 2017 7:38:49 PM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1500559001492_-619299945",
+      "id": "20170720-155641_674873126",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "data: org.apache.spark.sql.DataFrame \u003d [userId: int, movieId: int, rating: int, timestamp: int]\nnum_users_train: Long \u003d 90137\nnum_offers_train: Long \u003d 3560\n"
+      },
+      "dateCreated": "Jul 20, 2017 3:56:41 PM",
+      "dateStarted": "Jul 26, 2017 7:38:49 PM",
+      "dateFinished": "Jul 26, 2017 7:39:28 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "dateUpdated": "Jul 20, 2017 3:56:41 PM",
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1500559001492_-619299945",
+      "id": "20170720-155641_1731488875",
+      "dateCreated": "Jul 20, 2017 3:56:41 PM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "recnet_draft: stats",
+  "id": "2CQNN5XKA",
+  "angularObjects": {
+    "2BGHSKCA7": [],
+    "2BFMBPKAB": [],
+    "2BHKKP27G": [],
+    "2BJHJDBK6": [],
+    "2BJAQG5W4": [],
+    "2BJGSXM37": [],
+    "2BFXEV5XZ": [],
+    "2BG77RV7M": [],
+    "2BF969NNB": [],
+    "2BG8QQJNC": [],
+    "2BGVG5JP4": [],
+    "2BJ5FCP57": [],
+    "2BFEDXCTE": [],
+    "2BJ8AEWCT": [],
+    "2BH9AVVKH": [],
+    "2BJ7KKX85": [],
+    "2BHKAE8WK": [],
+    "2BJ6HN5AY": []
+  },
+  "config": {},
+  "info": {}
+}

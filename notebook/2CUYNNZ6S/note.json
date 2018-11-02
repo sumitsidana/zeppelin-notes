@@ -1,0 +1,78 @@
+{
+  "paragraphs": [
+    {
+      "text": "\nval eild_per_user \u003d sqlContext.read\n\t.format(\"com.databricks.spark.csv\")\n\t.option(\"header\", \"true\") // Use first line of all files as header\n\t.option(\"inferSchema\", \"true\") // Automatically infer data types\n\t.option(\"delimiter\", \"\\t\")\n\t.load(\"/data/sidana/diversity/user_based_diversity/ml20m/eild_per_user.headers\")\n\t\n// break on the median: 0.7033248468\nval diverse_users \u003d eild_per_user.filter($\"eild\"\u003e\u003d0.7033248468).select($\"userId\".as(\"diverse_user_id\"))\nval not_diverse_users \u003d eild_per_user.filter($\"eild\"\u003c0.7033248468).select($\"userId\".as(\"not_diverse_user_id\"))\n\nval ratings \u003d sqlContext.read\n\t.format(\"com.databricks.spark.csv\")\n\t.option(\"header\", \"true\") // Use first line of all files as header\n\t.option(\"inferSchema\", \"true\") // Automatically infer data types\n\t.option(\"delimiter\", \"\\t\")\n\t.load(\"/data/sidana/diversity/user_based_diversity/ml20m/ratings.headers.csv\")\n\t\nval diverse_ratings_temp \u003d ratings.join(diverse_users,ratings(\"userId\")\u003d\u003d\u003ddiverse_users(\"diverse_user_id\")).drop(diverse_users(\"diverse_user_id\"))\n\nval not_diverse_ratings_temp \u003d ratings.join(not_diverse_users,ratings(\"userId\")\u003d\u003d\u003dnot_diverse_users(\"not_diverse_user_id\")).drop(not_diverse_users(\"not_diverse_user_id\"))\n\nval header \u003d \"userId\\titemId\\trating\"\n\nval diverse_ratings \u003d diverse_ratings_temp.rdd.map(_.mkString(\"\\t\")).mapPartitionsWithIndex((i, iter) \u003d\u003e if (i\u003d\u003d0) (List(header).toIterator ++ iter) else iter)\n\nval not_diverse_ratings \u003d not_diverse_ratings_temp.rdd.map(_.mkString(\"\\t\")).mapPartitionsWithIndex((i, iter) \u003d\u003e if (i\u003d\u003d0) (List(header).toIterator ++ iter) else iter)\n\t\t\t\t\t\t\t\ndiverse_ratings.coalesce(1,false).saveAsTextFile(\"/data/sidana/diversity/user_based_diversity/ml20m/diverse_ratings.csv\")\n\nnot_diverse_ratings.coalesce(1,false).saveAsTextFile(\"/data/sidana/diversity/user_based_diversity/ml20m/not_diverse_ratings.csv\")\n",
+      "authenticationInfo": {},
+      "dateUpdated": "Oct 9, 2017 10:51:07 AM",
+      "config": {
+        "enabled": true,
+        "tableHide": false,
+        "graph": {
+          "mode": "table",
+          "height": 98.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1507207159634_-354616500",
+      "id": "20171005-143919_1656898464",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "eild_per_user: org.apache.spark.sql.DataFrame \u003d [userId: int, eild: double]\ndiverse_users: org.apache.spark.sql.DataFrame \u003d [diverse_user_id: int]\nnot_diverse_users: org.apache.spark.sql.DataFrame \u003d [not_diverse_user_id: int]\nratings: org.apache.spark.sql.DataFrame \u003d [userId: int, itemId: int, rating: double]\ndiverse_ratings_temp: org.apache.spark.sql.DataFrame \u003d [userId: int, itemId: int, rating: double]\nnot_diverse_ratings_temp: org.apache.spark.sql.DataFrame \u003d [userId: int, itemId: int, rating: double]\nheader: String \u003d userId\titemId\trating\ndiverse_ratings: org.apache.spark.rdd.RDD[String] \u003d MapPartitionsRDD[97] at mapPartitionsWithIndex at \u003cconsole\u003e:37\nnot_diverse_ratings: org.apache.spark.rdd.RDD[String] \u003d MapPartitionsRDD[121] at mapPartitionsWithIndex at \u003cconsole\u003e:37\n"
+      },
+      "dateCreated": "Oct 5, 2017 2:39:19 PM",
+      "dateStarted": "Oct 9, 2017 10:51:07 AM",
+      "dateFinished": "Oct 9, 2017 10:52:51 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1507498986485_1827909460",
+      "id": "20171008-234306_1117801529",
+      "dateCreated": "Oct 8, 2017 11:43:06 PM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "diversity: ConditionOnEILD",
+  "id": "2CUYNNZ6S",
+  "angularObjects": {
+    "2BJGSXM37": [],
+    "2BGHSKCA7": [],
+    "2BHKKP27G": [],
+    "2BGVG5JP4": [],
+    "2BFMBPKAB": [],
+    "2BF969NNB": [],
+    "2BJAQG5W4": [],
+    "2BJHJDBK6": [],
+    "2BHKAE8WK": [],
+    "2BG8QQJNC": [],
+    "2BJ7KKX85": [],
+    "2BH9AVVKH": [],
+    "2BJ6HN5AY": [],
+    "2BFEDXCTE": [],
+    "2BJ5FCP57": [],
+    "2BJ8AEWCT": [],
+    "2BFXEV5XZ": [],
+    "2BG77RV7M": []
+  },
+  "config": {
+    "looknfeel": "default"
+  },
+  "info": {}
+}

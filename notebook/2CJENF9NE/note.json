@@ -1,0 +1,125 @@
+{
+  "paragraphs": [
+    {
+      "text": "val candidates \u003d sqlContext.read\n.format(\"com.databricks.spark.csv\") \n.option(\"header\", \"true\") // Use first line of all files as header\n.option(\"inferSchema\", \"true\") // Automatically infer data types\n.option(\"delimiter\", \"\\t\")\n.load(\"/data/sidana/recsysBaselines/experiments/debug_ffm/debug_ffm/debug/ten_iterations/recommendationCandidates/fr.final\")\n//val bestScores \u003d candidates.groupBy(\u0027userId).agg(max(\u0027score)).toDF(\"userId\", \"score\")",
+      "authenticationInfo": {},
+      "dateUpdated": "Jun 11, 2017 11:14:12 AM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1497172295478_-1674318840",
+      "id": "20170611-111135_351618044",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "candidates: org.apache.spark.sql.DataFrame \u003d [score: double, userid: string, offerid: string, countrycode: string, category: string, merchant: string, utcdate: string, userclickcount: string, offerclickcount: string, rating: string]\n"
+      },
+      "dateCreated": "Jun 11, 2017 11:11:35 AM",
+      "dateStarted": "Jun 11, 2017 11:14:12 AM",
+      "dateFinished": "Jun 11, 2017 11:16:14 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val userofferscore \u003d candidates.select(\"userid\",\"offerid\",\"score\").rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/recsysBaselines/experiments/debug_ffm/debug_ffm/debug/ten_iterations/recommendationCandidates/fr.useroffersscores\")",
+      "authenticationInfo": {},
+      "dateUpdated": "Jun 11, 2017 11:18:31 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1497172295480_-1676627334",
+      "id": "20170611-111135_1902352931",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "userofferscore: Unit \u003d ()\n"
+      },
+      "dateCreated": "Jun 11, 2017 11:11:35 AM",
+      "dateStarted": "Jun 11, 2017 11:18:31 AM",
+      "dateFinished": "Jun 11, 2017 11:51:34 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "    ",
+      "dateUpdated": "Jun 11, 2017 11:35:19 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1497172711764_-1429206955",
+      "id": "20170611-111831_627080573",
+      "dateCreated": "Jun 11, 2017 11:18:31 AM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "debug_ffm: userOfferScore",
+  "id": "2CJENF9NE",
+  "angularObjects": {
+    "2BGHSKCA7": [],
+    "2BFMBPKAB": [],
+    "2BHKKP27G": [],
+    "2BJHJDBK6": [],
+    "2BJAQG5W4": [],
+    "2BJGSXM37": [],
+    "2BFXEV5XZ": [],
+    "2BG77RV7M": [],
+    "2BF969NNB": [],
+    "2BG8QQJNC": [],
+    "2BGVG5JP4": [],
+    "2BJ5FCP57": [],
+    "2BFEDXCTE": [],
+    "2BJ8AEWCT": [],
+    "2BH9AVVKH": [],
+    "2BJ7KKX85": [],
+    "2BHKAE8WK": [],
+    "2BJ6HN5AY": []
+  },
+  "config": {},
+  "info": {}
+}

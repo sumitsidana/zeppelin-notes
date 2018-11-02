@@ -161,6 +161,41 @@
       "progressUpdateIntervalMs": 500
     },
     {
+      "text": "val parquetFileOffer \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypso_kk_june_data/offerView/*/2016/*/*/*.parquet\")\nval uniqueOfferCategories \u003d parquetFileOffer.select(\"category\").distinct\nuniqueOfferCategories.count",
+      "authenticationInfo": {},
+      "dateUpdated": "Aug 8, 2018 6:48:00 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1533746858422_1652068542",
+      "id": "20180808-184738_1079840965",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "parquetFileOffer: org.apache.spark.sql.DataFrame \u003d [eventType: string, userId: string, ip: string, userAgent: struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e, geolocation: struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, adType: string, offerRank: int, searchId: string, offerViewId: string, contentPageType: string, adPlacement: string, adViewability: string, adSize: string]\nuniqueOfferCategories: org.apache.spark.sql.DataFrame \u003d [category: array\u003cstring\u003e]\nres4: Long \u003d 680\n"
+      },
+      "dateCreated": "Aug 8, 2018 6:47:38 PM",
+      "dateStarted": "Aug 8, 2018 6:48:00 PM",
+      "dateFinished": "Aug 8, 2018 6:51:55 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
       "text": "//Computes click stats by country\n\nimport java.nio.file.{ Files, Paths }\nimport scala.collection.mutable.ListBuffer\nimport java.io.FileWriter\nval fw \u003d new FileWriter(\"/home/ama/sidana/kelkoo_june_stats/clickStats.txt\", true)\nval countryCodes \u003d Array(\"at\",\"be\",\"br\",\"ch\",\"cz\",\"de\",\"dk\",\"es\",\"fi\",\"ie\",\"nb\",\"nl\",\"no\",\"pl\",\"pt\",\"ru\",\"se\",\"uk\",\"it\",\"fr\")\nfor (code \u003c- countryCodes){\n    val parquetFileClick \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypso_kk_june_data/click/\"+code+\"/2016/*/*/\")\n    val clicksWithoutKFS \u003d parquetFileClick.filter(!($\"source\".contains(\"kfs\")))\n    val uniqueUsers \u003d clicksWithoutKFS.select(\"userId\").distinct.count\n    val uniqueOffers \u003d clicksWithoutKFS.select(\"offerViewId\").distinct.count\n    val observedNumberOfRatings \u003d clicksWithoutKFS.select(\"userId\",\"offerViewId\").distinct.count\n    val uniqueOfferCategories \u003d clicksWithoutKFS.select(\"category\").distinct.count\n    val numClicks \u003d clicksWithoutKFS.count\n    fw.write(code+\",\"+ numClicks +\",\"+uniqueUsers+\",\"+uniqueOffers+\",\"+observedNumberOfRatings+\",\"+uniqueOfferCategories+\"\\n\")\n}\nfw.close()",
       "authenticationInfo": {},
       "dateUpdated": "Oct 25, 2016 9:47:02 PM",
@@ -193,6 +228,80 @@
       "dateStarted": "Oct 26, 2016 12:33:45 AM",
       "dateFinished": "Oct 26, 2016 12:41:17 AM",
       "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1533748004666_-732213291",
+      "id": "20180808-190644_1639401940",
+      "dateCreated": "Aug 8, 2018 7:06:44 PM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "import java.nio.file.{ Files, Paths }\nimport scala.collection.mutable.ListBuffer\nimport java.io.FileWriter\nval fw \u003d new FileWriter(\"/home/ama/sidana/kelkoo_june_stats/country_merchants.txt\", true)\nval countryCodes \u003d Array(\"at\",\"be\",\"br\",\"ch\",\"cz\",\"de\",\"dk\",\"es\",\"fi\",\"ie\",\"nb\",\"nl\",\"no\",\"pl\",\"pt\",\"ru\",\"se\",\"uk\",\"it\",\"fr\")\nfor (code \u003c- countryCodes){\n    val parquetFileClick \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypso_kk_june_data/click/\"+code+\"/2016/*/*/\")\n    val clicksWithoutKFS \u003d parquetFileClick.filter(!($\"source\".contains(\"kfs\")))\n    val uniqueOfferMerchants \u003d clicksWithoutKFS.select(\"merchant\").distinct.count\n    val numClicks \u003d clicksWithoutKFS.count\n    fw.write(code+\",\"+ uniqueOfferMerchants+\"\\n\")\n}\nfw.close()",
+      "authenticationInfo": {},
+      "dateUpdated": "Aug 8, 2018 7:06:50 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1533747881378_1042694159",
+      "id": "20180808-190441_1767953326",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "import java.nio.file.{Files, Paths}\nimport scala.collection.mutable.ListBuffer\nimport java.io.FileWriter\nfw: java.io.FileWriter \u003d java.io.FileWriter@6379f3ef\ncountryCodes: Array[String] \u003d Array(at, be, br, ch, cz, de, dk, es, fi, ie, nb, nl, no, pl, pt, ru, se, uk, it, fr)\n"
+      },
+      "dateCreated": "Aug 8, 2018 7:04:41 PM",
+      "dateStarted": "Aug 8, 2018 7:06:50 PM",
+      "dateFinished": "Aug 8, 2018 9:44:44 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "//compute users by country\n\nimport java.nio.file.{ Files, Paths }\nimport scala.collection.mutable.ListBuffer\nimport java.io.FileWriter\nval fw \u003d new FileWriter(\"/home/ama/sidana/kelkoo_june_stats/userStats.txt\", true)\nval countryCodes \u003d Array(\"at\",\"be\",\"br\",\"ch\",\"cz\",\"de\",\"dk\",\"es\",\"fi\",\"ie\",\"nb\",\"nl\",\"no\",\"pl\",\"pt\",\"ru\",\"se\",\"uk\",\"it\",\"fr\")\nfor (code \u003c- countryCodes){\n    val parquetFileClick \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypso_kk_june_data/offerView/\"+code+\"/2016/*/*/\")\n    val clicksWithoutKFS \u003d parquetFileClick.filter(!($\"source\".contains(\"kfs\")))\n    val uniqueUsers \u003d clicksWithoutKFS.select(\"userId\").distinct.count\n    val uniqueOffers \u003d clicksWithoutKFS.select(\"offerViewId\").distinct.count\n    val observedNumberOfRatings \u003d clicksWithoutKFS.select(\"userId\",\"offerViewId\").distinct.count\n    val uniqueOfferCategories \u003d clicksWithoutKFS.select(\"category\").distinct.count\n    val numClicks \u003d clicksWithoutKFS.count\n    fw.write(code+\",\"+ numClicks +\",\"+uniqueUsers+\",\"+uniqueOffers+\",\"+observedNumberOfRatings+\",\"+uniqueOfferCategories+\"\\n\")\n}\nfw.close()",
+      "dateUpdated": "Jul 25, 2018 9:56:12 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1532505308815_-1117286570",
+      "id": "20180725-095508_2051679965",
+      "dateCreated": "Jul 25, 2018 9:55:08 AM",
+      "status": "READY",
       "progressUpdateIntervalMs": 500
     },
     {
@@ -368,15 +477,38 @@
       "progressUpdateIntervalMs": 500
     },
     {
-      "config": {},
+      "text": "val kasandr \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \"\\t\")\n        .load(\"/data/sidana/recsysBaselines/calypsodata/files/anonymized/kasandr.csv.anon\")\n\nval groupByCategory \u003d kasandr.groupBy(\"category\").count.sort(desc(\"count\"))\n\nz.show(groupByCategory)\n\n\n\n",
+      "authenticationInfo": {},
+      "dateUpdated": "Apr 13, 2018 10:14:06 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
       "settings": {
         "params": {},
         "forms": {}
       },
       "jobName": "paragraph_1479328132932_319933936",
       "id": "20161116-212852_1399066278",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TABLE",
+        "msg": "category\tcount\n100020213\t1199779\n108101\t947482\n108301\t879588\n125801\t879034\n100354123\t848450\n113501\t493571\n100232023\t375041\n100567813\t332858\n100091613\t323887\n142101\t315704\n109401\t308153\n100332323\t306928\n168001\t286563\n100372023\t260560\n138201\t255938\n108501\t254982\n134101\t238372\n143401\t235716\n100334223\t216511\n130401\t216255\n100434023\t213718\n164401\t191857\n100544223\t191383\n100010713\t187036\n107401\t180481\n100564713\t175520\n133301\t154220\n136901\t147603\n138001\t141409\n100389523\t140917\n137001\t140590\n133501\t140002\n109301\t136372\n100342923\t128304\n100332223\t126553\n108701\t122734\n100046613\t122120\n100565013\t119522\n100384023\t118153\n129801\t111621\n108801\t108697\n5101\t102347\n137701\t100706\n154001\t99134\n100565213\t98295\n138301\t96630\n135901\t95452\n100007613\t92182\n141601\t90674\n164901\t82988\n100282123\t82915\n100291623\t82471\n100484623\t82278\n100564913\t79942\n100483023\t76707\n100566313\t76372\n100392423\t71297\n100544023\t71063\n165101\t70692\n6513\t69991\n117001\t69328\n152401\t68776\n100332423\t68065\n100317323\t66721\n134001\t63821\n100323123\t62986\n100302923\t62933\n100322923\t62019\n173801\t61821\n100392523\t60463\n100371523\t59335\n100001\t58775\n137901\t58692\n100201\t56785\n136201\t56592\n108901\t55074\n100566213\t54283\n120901\t54265\n100567613\t53185\n7113\t52350\n100438023\t51817\n138701\t51490\n116901\t50810\n100314123\t49173\n141901\t48838\n100233223\t48701\n100356623\t47813\n100568013\t46837\n122701\t45953\n100567513\t45848\n100441023\t45111\n100346323\t44351\n100014313\t44139\n124901\t43287\n134501\t43197\n170101\t42809\n140001\t42525\n100005613\t42377\n143101\t42113\n100360623\t36684\n100450823\t36523\n100462723\t36404\n143501\t36296\n100311823\t32812\n100477023\t31488\n128601\t31411\n116501\t29235\n100316423\t28275\n111801\t28197\n147101\t27847\n100119813\t26417\n140401\t26356\n100572513\t26236\n114901\t25777\n100376523\t25576\n100512823\t25371\n112101\t25192\n100450223\t24451\n100508823\t24212\n100508923\t23362\n146501\t23353\n100361423\t23261\n146801\t22922\n100565113\t22577\n168301\t22374\n100310723\t22156\n173101\t22060\n122301\t21796\n124501\t21407\n100327723\t20864\n100052213\t20499\n113301\t20077\n100367723\t19090\n114401\t18712\n139401\t18599\n174201\t18159\n111601\t18137\n146401\t17655\n100260023\t17633\n149201\t17545\n128801\t17500\n126001\t16593\n164501\t16461\n100278823\t16181\n100291823\t15904\n150701\t15836\n122801\t15230\n145101\t14944\n100008213\t14928\n123501\t14807\n100250023\t14622\n166501\t14425\n113201\t14308\n146601\t13474\n100440723\t13403\n133901\t13392\n165701\t13335\n110401\t13209\n100239223\t12700\n132601\t12335\n145801\t12267\n100332523\t11959\n146901\t11515\n100472023\t11403\n100014113\t11172\n100358623\t11098\n146001\t10647\n100270423\t10476\n127201\t10324\n100283023\t9433\n100570713\t9331\n100066413\t9148\n115401\t8945\n147701\t8927\n145701\t8779\n146201\t8721\n100282623\t8654\n115701\t8654\n100158013\t8574\n100563013\t8419\n100052013\t8333\n145001\t7980\n100008013\t7922\n100299223\t7859\n163801\t7830\n100146713\t7726\n100216323\t7260\n127701\t7214\n4513\t7212\n146301\t7200\n100270223\t6660\n172201\t6416\n111101\t6386\n100282723\t6258\n100082113\t5599\n110801\t5558\n100293223\t5546\n123201\t5421\n148301\t5342\n100005813\t5137\n100340423\t5135\n100426223\t5133\n114601\t4881\n145401\t4831\n100283323\t4812\n100066813\t4589\n112201\t4511\n147801\t4293\n133201\t4059\n166401\t4017\n100310423\t3966\n100496023\t3766\n100282023\t3742\n100356423\t3507\n100567413\t3387\n100229323\t3309\n100066613\t3218\n126701\t3167\n116001\t3163\n172301\t3064\n100444023\t2995\n113101\t2897\n123601\t2791\n110901\t2788\n100043413\t2710\n111501\t2588\n126901\t2500\n100294523\t2190\n173701\t2143\n110601\t2012\n115901\t1934\n121601\t1923\n121301\t1819\n100014413\t1808\n128401\t1670\n100340223\t1609\n122501\t1604\n100345923\t1603\n147201\t1599\n147901\t1477\n100304323\t1461\n100007713\t1427\n165201\t1356\n125601\t1266\n100239623\t1231\n100331323\t1185\n148001\t1174\n147301\t998\n100014713\t809\n100311523\t513\n116401\t504\n100327223\t483\n100270523\t418\n100232923\t415\n135001\t407\n100295823\t404\n100278923\t380\n100345823\t378\n166201\t356\n100333423\t337\n100485423\t315\n100345723\t286\n133101\t284\n100472123\t267\n100556113\t226\n124401\t199\n121201\t103\n100020813\t91\n100270123\t91\n128101\t20\n109101\t15\n170701\t1\n"
+      },
       "dateCreated": "Nov 16, 2016 9:28:52 PM",
-      "status": "READY",
+      "dateStarted": "Apr 13, 2018 10:14:06 AM",
+      "dateFinished": "Apr 13, 2018 10:14:26 AM",
+      "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
     {
@@ -430,24 +562,24 @@
   "name": "kelkooBaselines: kelkooDataStats_June",
   "id": "2BQPWFCNT",
   "angularObjects": {
-    "2BGHSKCA7": [],
-    "2BFMBPKAB": [],
-    "2BHKKP27G": [],
-    "2BJHJDBK6": [],
-    "2BJAQG5W4": [],
     "2BJGSXM37": [],
-    "2BFXEV5XZ": [],
-    "2BG77RV7M": [],
-    "2BF969NNB": [],
-    "2BG8QQJNC": [],
+    "2BGHSKCA7": [],
+    "2BHKKP27G": [],
     "2BGVG5JP4": [],
-    "2BJ5FCP57": [],
-    "2BFEDXCTE": [],
-    "2BJ8AEWCT": [],
-    "2BH9AVVKH": [],
-    "2BJ7KKX85": [],
+    "2BFMBPKAB": [],
+    "2BF969NNB": [],
+    "2BJAQG5W4": [],
+    "2BJHJDBK6": [],
     "2BHKAE8WK": [],
-    "2BJ6HN5AY": []
+    "2BG8QQJNC": [],
+    "2BJ7KKX85": [],
+    "2BH9AVVKH": [],
+    "2BJ6HN5AY": [],
+    "2BFEDXCTE": [],
+    "2BJ5FCP57": [],
+    "2BJ8AEWCT": [],
+    "2BFXEV5XZ": [],
+    "2BG77RV7M": []
   },
   "config": {
     "looknfeel": "default"

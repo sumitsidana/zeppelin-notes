@@ -1,0 +1,214 @@
+{
+  "paragraphs": [
+    {
+      "text": "val b \u003d Seq((\"a\", \"b\", 1), (\"a\", \"b\", 2)).toDF(\"a\", \"b\", \"c\")\nval a \u003d b.where(\"c \u003d 1\").withColumnRenamed(\"a\", \"filta\").withColumnRenamed(\"b\", \"filtb\")\na.join(b, $\"filta\" \u003c\u003d\u003e $\"a\" and $\"filtb\" \u003c\u003d\u003e $\"b\" and a(\"c\") \u003c\u003d\u003e b(\"c\"), \"left_outer\").show",
+      "authenticationInfo": {},
+      "dateUpdated": "Jun 23, 2017 6:56:30 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1498236775791_-2119132150",
+      "id": "20170623-185255_824681190",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "b: org.apache.spark.sql.DataFrame \u003d [a: string, b: string, c: int]\na: org.apache.spark.sql.DataFrame \u003d [filta: string, filtb: string, c: int]\n+-----+-----+---+---+---+---+\n|filta|filtb|  c|  a|  b|  c|\n+-----+-----+---+---+---+---+\n|    a|    b|  1|  a|  b|  1|\n|    a|    b|  1|  a|  b|  2|\n+-----+-----+---+---+---+---+\n\n"
+      },
+      "dateCreated": "Jun 23, 2017 6:52:55 PM",
+      "dateStarted": "Jun 23, 2017 6:56:30 PM",
+      "dateFinished": "Jun 23, 2017 6:56:32 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "z.show(b)",
+      "authenticationInfo": {},
+      "dateUpdated": "Jun 23, 2017 6:58:01 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1498236990321_-891304297",
+      "id": "20170623-185630_481409560",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TABLE",
+        "msg": "a\tb\tc\na\tb\t1\na\tb\t2\n"
+      },
+      "dateCreated": "Jun 23, 2017 6:56:30 PM",
+      "dateStarted": "Jun 23, 2017 6:58:01 PM",
+      "dateFinished": "Jun 23, 2017 6:58:01 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "z.show(a)",
+      "authenticationInfo": {},
+      "dateUpdated": "Jun 23, 2017 6:58:11 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1498237081233_1576813925",
+      "id": "20170623-185801_1047936098",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TABLE",
+        "msg": "filta\tfiltb\tc\na\tb\t1\n"
+      },
+      "dateCreated": "Jun 23, 2017 6:58:01 PM",
+      "dateStarted": "Jun 23, 2017 6:58:11 PM",
+      "dateFinished": "Jun 23, 2017 6:58:12 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "a.join(b, a(\"c\") \u003c\u003d\u003e b(\"c\"), \"left_outer\").show",
+      "authenticationInfo": {},
+      "dateUpdated": "Jun 23, 2017 7:02:28 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1498237091632_-749762674",
+      "id": "20170623-185811_230984945",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "+-----+-----+---+---+---+---+\n|filta|filtb|  c|  a|  b|  c|\n+-----+-----+---+---+---+---+\n|    a|    b|  1|  a|  b|  1|\n|    a|    b|  1|  a|  b|  2|\n+-----+-----+---+---+---+---+\n\n"
+      },
+      "dateCreated": "Jun 23, 2017 6:58:11 PM",
+      "dateStarted": "Jun 23, 2017 7:02:29 PM",
+      "dateFinished": "Jun 23, 2017 7:02:29 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "a.join(b, $\"filta\" \u003d\u003d\u003d $\"a\" and $\"filtb\" \u003d\u003d\u003d $\"b\" and a(\"c\") \u003d\u003d\u003d b(\"c\"), \"left_outer\").show",
+      "authenticationInfo": {},
+      "dateUpdated": "Jun 23, 2017 7:16:53 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1498237348977_-32607693",
+      "id": "20170623-190228_334851971",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "+-----+-----+---+---+---+---+\n|filta|filtb|  c|  a|  b|  c|\n+-----+-----+---+---+---+---+\n|    a|    b|  1|  a|  b|  1|\n+-----+-----+---+---+---+---+\n\n"
+      },
+      "dateCreated": "Jun 23, 2017 7:02:28 PM",
+      "dateStarted": "Jun 23, 2017 7:16:53 PM",
+      "dateFinished": "Jun 23, 2017 7:16:53 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1498238213052_132823944",
+      "id": "20170623-191653_2093922054",
+      "dateCreated": "Jun 23, 2017 7:16:53 PM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "debug_ffm: outerJoinBug",
+  "id": "2CP1EK3AS",
+  "angularObjects": {
+    "2BGHSKCA7": [],
+    "2BFMBPKAB": [],
+    "2BHKKP27G": [],
+    "2BJHJDBK6": [],
+    "2BJAQG5W4": [],
+    "2BJGSXM37": [],
+    "2BFXEV5XZ": [],
+    "2BG77RV7M": [],
+    "2BF969NNB": [],
+    "2BG8QQJNC": [],
+    "2BGVG5JP4": [],
+    "2BJ5FCP57": [],
+    "2BFEDXCTE": [],
+    "2BJ8AEWCT": [],
+    "2BH9AVVKH": [],
+    "2BJ7KKX85": [],
+    "2BHKAE8WK": [],
+    "2BJ6HN5AY": []
+  },
+  "config": {},
+  "info": {}
+}

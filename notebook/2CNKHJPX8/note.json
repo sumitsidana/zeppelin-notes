@@ -1,0 +1,249 @@
+{
+  "paragraphs": [
+    {
+      "text": "import org.apache.spark.sql.SaveMode\nimport java.nio.file.{ Files, Paths }\nimport scala.collection.mutable.ListBuffer\nimport java.io.FileWriter\n\n\n    val clicksTemp \u003d sqlContext.read.parquet(\"/data/sidana/recsysBaselines/experiments/debug_ffm/click/fr/2017/*/*/\")\n    val userClicks \u003d clicksTemp.select(clicksTemp(\"userInfo\").getItem(\"userId\").as(\"userIdClicks\"),substring_index(clicksTemp(\"offerViewId\"),\"-\",1).as(\"offerIdClicks\"),$\"merchant\".as(\"merchantClicks\"),$\"category\"(0).as(\"categoryClicks\")).distinct\n    \n    \n    val parquetFileOffers \u003d sqlContext.read.parquet(\"/data/sidana/recsysBaselines/experiments/debug_ffm/offerView/fr/2017/*/*/\")\n    val userOffers \u003d parquetFileOffers.select($\"userInfo\".getItem(\"userId\").as(\"userIdOfferView\"),substring_index($\"offerViewId\",\"-\",1).as(\"offerIdOfferView\"),$\"merchant\".as(\"merchantOfferView\"),$\"category\"(0).as(\"categoryOfferView\")).distinct\n    \n    //inner join\n    val userOfferCommon \u003d userClicks.join(userOffers,userClicks(\"userIdClicks\")\u003c\u003d\u003euserOffers(\"userIdOfferView\")).drop(userClicks(\"userIdClicks\")).drop(userClicks(\"offerIdClicks\")).drop(userClicks(\"merchantClicks\")).drop(userClicks(\"categoryClicks\")).distinct\n    \n    \n    //outerjoin\n    val cOOuterJoinTempTemp \u003d userClicks.join(userOfferCommon,userClicks(\"userIdClicks\")\u003c\u003d\u003euserOfferCommon(\"userIdOfferView\") \u0026\u0026 userClicks(\"offerIdClicks\")\u003c\u003d\u003euserOfferCommon(\"offerIdOfferView\")\u0026\u0026userClicks(\"merchantClicks\")\u003c\u003d\u003euserOfferCommon(\"merchantOfferView\")\u0026\u0026userClicks(\"categoryClicks\")\u003c\u003d\u003euserOfferCommon(\"categoryOfferView\"),\"right_outer\")\n    val header \u003d \"useridclicks,offeridclicks,merchantclicks,categoryclicks,useridoffers,offeridoffers,merchantoffers,categoryoffers\"\n    \n    val cOOuterJoinTemp \u003d cOOuterJoinTempTemp.select(\"userIdClicks\",\"offerIdClicks\",\"merchantClicks\",\"categoryClicks\",\"userIdOfferView\",\"offerIdOfferView\",\"merchantOfferView\",\"categoryOfferView\").distinct\n    \n    val cOOuterJoin\u003dcOOuterJoinTemp.rdd.map(_.mkString(\",\")).mapPartitionsWithIndex((i, iter) \u003d\u003e if (i\u003d\u003d0) (List(header).toIterator ++ iter) else iter)\n\n   cOOuterJoin.coalesce(1,false).saveAsTextFile(\"/data/sidana/recsysBaselines/experiments/ffm_implementation_enriched_feature_set/totalData_fr.csv\")",
+      "authenticationInfo": {},
+      "dateUpdated": "Jun 25, 2017 9:45:35 PM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "editorHide": false,
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1498419042807_1867611161",
+      "id": "20170625-213042_242576165",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "import org.apache.spark.sql.SaveMode\nimport java.nio.file.{Files, Paths}\nimport scala.collection.mutable.ListBuffer\nimport java.io.FileWriter\nclicksTemp: org.apache.spark.sql.DataFrame \u003d [userInfo: struct\u003cuserId:string,ip:string,userAgent:struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e,userGeolocation:struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e,adBlocked:boolean\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, offerViewId: string, clickId: string, earning: decimal(38,18), searchId: string]\nuserClicks: org.apache.spark.sql.DataFrame \u003d [userIdClicks: string, offerIdClicks: string, merchantClicks: string, categoryClicks: string]\nparquetFileOffers: org.apache.spark.sql.DataFrame \u003d [eventType: string, userInfo: struct\u003cuserId:string,ip:string,userAgent:struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e,userGeolocation:struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e,adBlocked:boolean\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, offerRank: int, searchId: string, offerViewId: string, contentPageType: string, adInfo: struct\u003cadType:string,adPlacement:string,adViewability:string,adSize:string\u003e, offerId: string]\nuserOffers: org.apache.spark.sql.DataFrame \u003d [userIdOfferView: string, offerIdOfferView: string, merchantOfferView: string, categoryOfferView: string]\nuserOfferCommon: org.apache.spark.sql.DataFrame \u003d [userIdOfferView: string, offerIdOfferView: string, merchantOfferView: string, categoryOfferView: string]\ncOOuterJoinTempTemp: org.apache.spark.sql.DataFrame \u003d [userIdClicks: string, offerIdClicks: string, merchantClicks: string, categoryClicks: string, userIdOfferView: string, offerIdOfferView: string, merchantOfferView: string, categoryOfferView: string]\nheader: String \u003d useridclicks,offeridclicks,merchantclicks,categoryclicks,useridoffers,offeridoffers,merchantoffers,categoryoffers\ncOOuterJoinTemp: org.apache.spark.sql.DataFrame \u003d [userIdClicks: string, offerIdClicks: string, merchantClicks: string, categoryClicks: string, userIdOfferView: string, offerIdOfferView: string, merchantOfferView: string, categoryOfferView: string]\ncOOuterJoin: org.apache.spark.rdd.RDD[String] \u003d MapPartitionsRDD[241] at mapPartitionsWithIndex at \u003cconsole\u003e:47\n"
+      },
+      "dateCreated": "Jun 25, 2017 9:30:42 PM",
+      "dateStarted": "Jun 25, 2017 9:45:35 PM",
+      "dateFinished": "Jun 25, 2017 9:59:31 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "import java.io.FileWriter\n\nval inputfile \u003d sqlContext.read\n\t\t\t\t\t\t\t.format(\"com.databricks.spark.csv\")\n\t\t\t\t\t\t\t.option(\"header\", \"true\") // Use first line of all files as header\n\t\t\t\t\t\t\t.option(\"inferSchema\", \"true\") // Automatically infer data types\n\t\t\t\t\t\t\t.option(\"delimiter\", \",\")\n\t\t\t\t\t\t\t.load(\"/data/sidana/recsysBaselines/experiments/ffm_implementation_enriched_feature_set/totalData_fr.csv\")\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\tval interactions  \u003d  inputfile.filter(!($\"useridclicks\" \u003d\u003d\u003d \"null\"))\n\t\t\t\t\t\t\tval headeruser \u003d \"userid,count\"\n\t\t\t\t\t\t\tval headeroffer \u003d \"offerid,count\"\n\t\t\t\t\t\t\tval groupbyUserTemp \u003d interactions.groupBy(\"useridclicks\").count.sort(desc(\"count\"))\n\t\t\t\t\t\t\tval groupbyOfferTemp \u003d interactions.groupBy(\"offeridclicks\").count.sort(desc(\"count\"))\n\t\t\t\t\t\t\tval groupbyUser \u003d groupbyUserTemp.rdd.map(_.mkString(\",\")).mapPartitionsWithIndex((i, iter) \u003d\u003e if (i\u003d\u003d0) (List(headeruser).toIterator ++ iter) else iter)\n\t\t\t\t\t\t\tval groupbyOffer \u003d groupbyOfferTemp.rdd.map(_.mkString(\",\")).mapPartitionsWithIndex((i, iter) \u003d\u003e if (i\u003d\u003d0) (List(headeroffer).toIterator ++ iter) else iter)\n\t\t\t\t\t\t\tgroupbyUser.coalesce(1,false).saveAsTextFile(\"/data/sidana/recsysBaselines/experiments/ffm_implementation_enriched_feature_set/userClicks_fr.train\")\n\t\t\t\t\t\t\tgroupbyOffer.coalesce(1,false).saveAsTextFile(\"/data/sidana/recsysBaselines/experiments/ffm_implementation_enriched_feature_set/offerClicks_fr.train\")",
+      "authenticationInfo": {},
+      "dateUpdated": "Jun 25, 2017 10:04:03 PM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1498419042808_1865687416",
+      "id": "20170625-213042_1053643149",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "import java.io.FileWriter\ninputfile: org.apache.spark.sql.DataFrame \u003d [useridclicks: string, offeridclicks: string, merchantclicks: string, categoryclicks: string, useridoffers: string, offeridoffers: string, merchantoffers: int, categoryoffers: int]\ninteractions: org.apache.spark.sql.DataFrame \u003d [useridclicks: string, offeridclicks: string, merchantclicks: string, categoryclicks: string, useridoffers: string, offeridoffers: string, merchantoffers: int, categoryoffers: int]\nheaderuser: String \u003d userid,count\nheaderoffer: String \u003d offerid,count\ngroupbyUserTemp: org.apache.spark.sql.DataFrame \u003d [useridclicks: string, count: bigint]\ngroupbyOfferTemp: org.apache.spark.sql.DataFrame \u003d [offeridclicks: string, count: bigint]\ngroupbyUser: org.apache.spark.rdd.RDD[String] \u003d MapPartitionsRDD[270] at mapPartitionsWithIndex at \u003cconsole\u003e:41\ngroupbyOffer: org.apache.spark.rdd.RDD[String] \u003d MapPartitionsRDD[292] at mapPartitionsWithIndex at \u003cconsole\u003e:41\n"
+      },
+      "dateCreated": "Jun 25, 2017 9:30:42 PM",
+      "dateStarted": "Jun 25, 2017 10:04:03 PM",
+      "dateFinished": "Jun 25, 2017 10:04:28 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "import java.io.FileWriter\n\n\n\n    \t\t\t\t\t    \t\t\t\t\t\t\tval inputfile \u003d sqlContext.read\n\t\t\t\t\t\t\t.format(\"com.databricks.spark.csv\")\n\t\t\t\t\t\t\t.option(\"header\", \"true\") // Use first line of all files as header\n\t\t\t\t\t\t\t.option(\"inferSchema\", \"true\") // Automatically infer data types\n\t\t\t\t\t\t\t.option(\"delimiter\", \",\")\n\t\t\t\t\t\t\t.load(\"/data/sidana/recsysBaselines/experiments/ffm_implementation_enriched_feature_set/totalData_fr.csv\")\n\t\t\t\t\t\t\t\n    \t\t\t\t\t    \t\t\t\t\t\t\tval groupbyUser \u003d sqlContext.read\n\t\t\t\t\t\t\t.format(\"com.databricks.spark.csv\") \n\t\t\t\t\t\t\t.option(\"header\", \"true\") // Use first line of all files as header\n\t\t\t\t\t\t\t.option(\"inferSchema\", \"true\") // Automatically infer data types\n\t\t\t\t\t\t\t.option(\"delimiter\", \",\")\n\t\t\t\t\t\t\t.load(\"/data/sidana/recsysBaselines/experiments/ffm_implementation_enriched_feature_set/userClicks_fr.train\")\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\tval inputusercountTemp \u003d inputfile.join(groupbyUser,inputfile(\"useridoffers\")\u003c\u003d\u003egroupbyUser(\"userid\"),\"left_outer\")\n\t\t\t\t\t\t\tval inputusercount \u003d  inputusercountTemp.na.fill(0,Seq(\"count\"))\n\t\t\t\t\t\t\tval header \u003d \"useridclicks,offeridclicks,merchantclicks,categoryclicks,useridoffers,offeridoffers,merchantoffers,categoryoffers,userid,userclickcount\"\n\t\t\t\t\t\t\tval ordered \u003d inputusercount.select(\"useridclicks\",\"offeridclicks\",\"merchantclicks\",\"categoryclicks\",\"useridoffers\",\"offeridoffers\",\"merchantoffers\",\"categoryoffers\",\"userid\",\"count\").rdd.map(_.mkString(\",\")).mapPartitionsWithIndex((i, iter) \u003d\u003e if (i\u003d\u003d0) (List(header).toIterator ++ iter) else iter)\n\t\t\t\t\t\t\tordered.coalesce(1,false).saveAsTextFile(\"/data/sidana/recsysBaselines/experiments/ffm_implementation_enriched_feature_set/ffminput_fr.temp.csv\")",
+      "authenticationInfo": {},
+      "dateUpdated": "Jun 25, 2017 10:20:28 PM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1498419042808_1865687416",
+      "id": "20170625-213042_430252081",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "import java.io.FileWriter\ninputfile: org.apache.spark.sql.DataFrame \u003d [useridclicks: string, offeridclicks: string, merchantclicks: string, categoryclicks: string, useridoffers: string, offeridoffers: string, merchantoffers: int, categoryoffers: int]\ngroupbyUser: org.apache.spark.sql.DataFrame \u003d [userid: string, count: int]\ninputusercountTemp: org.apache.spark.sql.DataFrame \u003d [useridclicks: string, offeridclicks: string, merchantclicks: string, categoryclicks: string, useridoffers: string, offeridoffers: string, merchantoffers: int, categoryoffers: int, userid: string, count: int]\ninputusercount: org.apache.spark.sql.DataFrame \u003d [useridclicks: string, offeridclicks: string, merchantclicks: string, categoryclicks: string, useridoffers: string, offeridoffers: string, merchantoffers: int, categoryoffers: int, userid: string, count: int]\nheader: String \u003d useridclicks,offeridclicks,merchantclicks,categoryclicks,useridoffers,offeridoffers,merchantoffers,categoryoffers,userid,userclickcount\nordered: org.apache.spark.rdd.RDD[String] \u003d MapPartitionsRDD[398] at mapPartitionsWithIndex at \u003cconsole\u003e:53\n"
+      },
+      "dateCreated": "Jun 25, 2017 9:30:42 PM",
+      "dateStarted": "Jun 25, 2017 10:20:28 PM",
+      "dateFinished": "Jun 25, 2017 10:21:38 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "import java.io.FileWriter\n\n\n    \t\t\t\t\t    \t\t\t\t\t\t\tval inputfile \u003d sqlContext.read\n\t\t\t\t\t\t\t.format(\"com.databricks.spark.csv\")\n\t\t\t\t\t\t\t.option(\"header\", \"true\") // Use first line of all files as header\n\t\t\t\t\t\t\t.option(\"inferSchema\", \"true\") // Automatically infer data types\n\t\t\t\t\t\t\t.option(\"delimiter\", \",\")\n\t\t\t\t\t\t\t.load(\"/data/sidana/recsysBaselines/experiments/ffm_implementation_enriched_feature_set/ffminput_fr.temp.csv\")\n\t\t\t\t\t\t\t\n    \t\t\t\t\t    \t\t\t\t\t\t\tval groupbyOffer \u003d sqlContext.read\n\t\t\t\t\t\t\t.format(\"com.databricks.spark.csv\")\n\t\t\t\t\t\t\t.option(\"header\", \"true\") // Use first line of all files as header\n\t\t\t\t\t\t\t.option(\"inferSchema\", \"true\") // Automatically infer data types\n\t\t\t\t\t\t\t.option(\"delimiter\", \",\")\n\t\t\t\t\t\t\t.load(\"/data/sidana/recsysBaselines/experiments/ffm_implementation_enriched_feature_set/offerClicks_fr.train\")\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\tval inputuseroffercountTemp \u003d inputfile.join(groupbyOffer,inputfile(\"offeridoffers\")\u003c\u003d\u003egroupbyOffer(\"offerid\"),\"left_outer\")\n\t\t\t\t\t\t\tval inputuseroffercount \u003d inputuseroffercountTemp.na.fill(0,Seq(\"count\"))\n\t\t\t\t\t\t\tval header \u003d \"useridclicks,offeridclicks,merchantclicks,categoryclicks,useridoffers,offeridoffers,merchantoffers,categoryoffers,userid,userclickcount,offerid,offerclickcount\"\n\t\t\t\t\t\t\tval ordered \u003d inputuseroffercount.select(\"useridclicks\",\"offeridclicks\",\"merchantclicks\",\"categoryclicks\",\"useridoffers\",\"offeridoffers\",\"merchantoffers\",\"categoryoffers\",\"userid\",\"userclickcount\",\"offerid\",\"count\").rdd.map(_.mkString(\",\")).mapPartitionsWithIndex((i, iter) \u003d\u003e if (i\u003d\u003d0) (List(header).toIterator ++ iter) else iter)\n\t\t\t\t\t\t\tordered.coalesce(1,false).saveAsTextFile(\"/data/sidana/recsysBaselines/experiments/ffm_implementation_enriched_feature_set/ffminput_fr.csv\")",
+      "authenticationInfo": {},
+      "dateUpdated": "Jun 25, 2017 10:44:51 PM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1498419042808_1865687416",
+      "id": "20170625-213042_669285918",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "import java.io.FileWriter\ninputfile: org.apache.spark.sql.DataFrame \u003d [useridclicks: string, offeridclicks: string, merchantclicks: string, categoryclicks: string, useridoffers: string, offeridoffers: string, merchantoffers: int, categoryoffers: int, userid: string, userclickcount: int]\ngroupbyOffer: org.apache.spark.sql.DataFrame \u003d [offerid: string, count: int]\ninputuseroffercountTemp: org.apache.spark.sql.DataFrame \u003d [useridclicks: string, offeridclicks: string, merchantclicks: string, categoryclicks: string, useridoffers: string, offeridoffers: string, merchantoffers: int, categoryoffers: int, userid: string, userclickcount: int, offerid: string, count: int]\ninputuseroffercount: org.apache.spark.sql.DataFrame \u003d [useridclicks: string, offeridclicks: string, merchantclicks: string, categoryclicks: string, useridoffers: string, offeridoffers: string, merchantoffers: int, categoryoffers: int, userid: string, userclickcount: int, offerid: string, count: int]\nheader: String \u003d useridclicks,offeridclicks,merchantclicks,categoryclicks,useridoffers,offeridoffers,merchantoffers,categoryoffers,userid,userclickcount,offerid,offerclickcount\nordered: org.apache.spark.rdd.RDD[String] \u003d MapPartitionsRDD[472] at mapPartitionsWithIndex at \u003cconsole\u003e:57\n"
+      },
+      "dateCreated": "Jun 25, 2017 9:30:42 PM",
+      "dateStarted": "Jun 25, 2017 10:44:51 PM",
+      "dateFinished": "Jun 25, 2017 10:46:03 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val train \u003d sqlContext.read\n.format(\"com.databricks.spark.csv\")\n.option(\"header\", \"true\") // Use first line of all files as header\n.option(\"inferSchema\", \"true\") // Automatically infer data types\n.option(\"delimiter\", \"\\t\")\n.load(\"/data/sidana/recsysBaselines/experiments/ffm_implementation_enriched_feature_set/version2/train_fr.temp.csv\")\n\nval positiveTrain \u003d train.filter($\"rating\"\u003d\u003d\u003d\"1\")\nval userPositiveOffers \u003d positiveTrain.select(\"userid\",\"offerid\").distinct\nval userPositiveClickCount \u003d userPositiveOffers.groupBy(\"userid\").count\nval goodusers \u003d userPositiveClickCount.filter($\"count\"\u003e\u003d10)\n\nval goodData \u003d train.join(goodusers,train(\"userid\")\u003d\u003d\u003dgoodusers(\"userid\")).drop(goodusers(\"count\")).drop(goodusers(\"userid\"))\n\nval header \u003d \"userid\\tofferid\\tmerchant\\tcategory\\tuserclickcount\\tofferclickcount\\tctr\\trating\"\n\nval preservefieldorder \u003d goodData.select(\"userid\",\"offerid\",\"merchant\",\"category\",\"userclickcount\",\"offerclickcount\",\"ctr\",\"rating\")\nval trainGoodData \u003d preservefieldorder.rdd.map(_.mkString(\"\\t\")).mapPartitionsWithIndex((i, iter) \u003d\u003e if (i\u003d\u003d0) (List(header).toIterator ++ iter) else iter)\n\ntrainGoodData.coalesce(1,false).saveAsTextFile(\"/data/sidana/recsysBaselines/experiments/ffm_implementation_enriched_feature_set/version2/train_fr.csv\")\n\n",
+      "authenticationInfo": {},
+      "dateUpdated": "Jun 26, 2017 2:05:30 PM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1498419042809_1865302667",
+      "id": "20170625-213042_169080840",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "train: org.apache.spark.sql.DataFrame \u003d [userid: string, offerid: string, merchant: int, category: int, userclickcount: int, offerclickcount: int, ctr: double, rating: int]\npositiveTrain: org.apache.spark.sql.DataFrame \u003d [userid: string, offerid: string, merchant: int, category: int, userclickcount: int, offerclickcount: int, ctr: double, rating: int]\nuserPositiveOffers: org.apache.spark.sql.DataFrame \u003d [userid: string, offerid: string]\nuserPositiveClickCount: org.apache.spark.sql.DataFrame \u003d [userid: string, count: bigint]\ngoodusers: org.apache.spark.sql.DataFrame \u003d [userid: string, count: bigint]\ngoodData: org.apache.spark.sql.DataFrame \u003d [offerid: string, merchant: int, category: int, userclickcount: int, offerclickcount: int, ctr: double, rating: int, userid: string]\nheader: String \u003d userid\tofferid\tmerchant\tcategory\tuserclickcount\tofferclickcount\tctr\trating\npreservefieldorder: org.apache.spark.sql.DataFrame \u003d [userid: string, offerid: string, merchant: int, category: int, userclickcount: int, offerclickcount: int, ctr: double, rating: int]\ntrainGoodData: org.apache.spark.rdd.RDD[String] \u003d MapPartitionsRDD[647] at mapPartitionsWithIndex at \u003cconsole\u003e:43\n"
+      },
+      "dateCreated": "Jun 25, 2017 9:30:42 PM",
+      "dateStarted": "Jun 26, 2017 2:05:30 PM",
+      "dateFinished": "Jun 26, 2017 2:06:00 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val train \u003d sqlContext.read\n.format(\"com.databricks.spark.csv\")\n.option(\"header\", \"true\") // Use first line of all files as header\n.option(\"inferSchema\", \"true\") // Automatically infer data types\n.option(\"delimiter\", \"\\t\")\n.load(\"/data/sidana/recsysBaselines/experiments/ffm_implementation_enriched_feature_set/train_fr.temp.temp.csv\")\n\nval ctr \u003d sqlContext.read\n.format(\"com.databricks.spark.csv\")\n.option(\"header\", \"true\") // Use first line of all files as header\n.option(\"inferSchema\", \"true\") // Automatically infer data types\n.option(\"delimiter\", \",\")\n.load(\"/data/sidana/recsysBaselines/experiments/ffm_implementation_enriched_feature_set/ctr/ctr\")\n\nval leftouterjoin \u003d train.join(ctr,train(\"offerid\")\u003d\u003d\u003dctr(\"alloffer\"),\"left_outer\").select(\"userid\",\"offerid\",\"merchant\",\"category\",\"userclickcount\",\"offerclickcount\",\"ctr\",\"rating\")\n//val preservefieldorder \u003d leftouterjoin.select(\"userid\",\"offerid\",\"merchant\",\"category\",\"userclickcount\",\"offerclickcount\",\"ctr\",\"rating\")\nval header \u003d \"userid\\tofferid\\tmerchant\\tcategory\\tuserclickcount\\tofferclickcount\\tctr\\trating\"\nval trainGoodData \u003d leftouterjoin.rdd.map(_.mkString(\"\\t\")).mapPartitionsWithIndex((i, iter) \u003d\u003e if (i\u003d\u003d0) (List(header).toIterator ++ iter) else iter)\n\ntrainGoodData.coalesce(1,false).saveAsTextFile(\"/data/sidana/recsysBaselines/experiments/ffm_implementation_enriched_feature_set/train_fr.csv\")\n",
+      "authenticationInfo": {},
+      "dateUpdated": "Jun 25, 2017 11:31:31 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1498419042809_1865302667",
+      "id": "20170625-213042_620812899",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "train: org.apache.spark.sql.DataFrame \u003d [userid: string, offerid: string, merchant: int, category: int, userclickcount: int, offerclickcount: int, rating: int]\nctr: org.apache.spark.sql.DataFrame \u003d [positiveoffer: string, positiveoffercount: int, alloffer: string, alloffercount: int, ctr: double]\nleftouterjoin: org.apache.spark.sql.DataFrame \u003d [userid: string, offerid: string, merchant: int, category: int, userclickcount: int, offerclickcount: int, ctr: double, rating: int]\nheader: String \u003d userid\tofferid\tmerchant\tcategory\tuserclickcount\tofferclickcount\tctr\trating\ntrainGoodData: org.apache.spark.rdd.RDD[String] \u003d MapPartitionsRDD[679] at mapPartitionsWithIndex at \u003cconsole\u003e:55\n"
+      },
+      "dateCreated": "Jun 25, 2017 9:30:42 PM",
+      "dateStarted": "Jun 25, 2017 11:31:31 PM",
+      "dateFinished": "Jun 25, 2017 11:31:59 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1498426158950_801923158",
+      "id": "20170625-232918_1465672024",
+      "dateCreated": "Jun 25, 2017 11:29:18 PM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "ffm_implementation_enriched_feature_set: writeInputFile",
+  "id": "2CNKHJPX8",
+  "angularObjects": {
+    "2BGHSKCA7": [],
+    "2BFMBPKAB": [],
+    "2BHKKP27G": [],
+    "2BJHJDBK6": [],
+    "2BJAQG5W4": [],
+    "2BJGSXM37": [],
+    "2BFXEV5XZ": [],
+    "2BG77RV7M": [],
+    "2BF969NNB": [],
+    "2BG8QQJNC": [],
+    "2BGVG5JP4": [],
+    "2BJ5FCP57": [],
+    "2BFEDXCTE": [],
+    "2BJ8AEWCT": [],
+    "2BH9AVVKH": [],
+    "2BJ7KKX85": [],
+    "2BHKAE8WK": [],
+    "2BJ6HN5AY": []
+  },
+  "config": {},
+  "info": {}
+}

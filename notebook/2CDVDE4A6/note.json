@@ -1,8 +1,8 @@
 {
   "paragraphs": [
     {
-      "text": "//compute popularity on the train set\nval csvFileClick \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/home/ama/sidana/recsysBaselines/data/output/clicksTrainPartial\") \n\nval groupedByUsersandOffers \u003d csvFileClick.select(csvFileClick(\"userId\"),csvFileClick(\"offerId\")).distinct\nval groupedByOffers \u003d groupedByUsersandOffers.groupBy(\"offerId\").count.sort(desc(\"count\"))\nval topItems \u003d groupedByOffers.select(\"offerId\").rdd.map(r \u003d\u003e r(0)).take(30)\n//groupedByOffers.rdd.coalesce(1, false).saveAsTextFile(\"/tmp/sidana/popularOfferCountsTrain.csv\")\nimport java.nio.file.{ Files, Paths }\nimport scala.collection.mutable.ListBuffer\nimport java.io.FileWriter\nvar items \u003d new ListBuffer[String]()\nval fw \u003d new FileWriter(\"/home/ama/sidana/recsysBaselines/data/output/popularity/mostpopularitems.txt\", true)\nfor( a \u003c- 1 to 30){\nval firstval \u003d topItems(a-1)\nitems +\u003d firstval.toString.toString\nfw.write(firstval.toString.toString+\" \" )\n//items +\u003d \",\"\n}\n fw.close()",
-      "dateUpdated": "Apr 26, 2017 1:29:06 PM",
+      "text": "//compute popularity on the train set\n    .format(\"com.databricks.spark.csv\")\nval csvFileClick \u003d sqlContext.read\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/home/ama/sidana/recsysBaselines/data/output/clicksTrainPartial\")\n\nval groupedByUsersandOffers \u003d csvFileClick.select(csvFileClick(\"userId\"),csvFileClick(\"offerId\")).distinct\nval groupedByOffers \u003d groupedByUsersandOffers.groupBy(\"offerId\").count.sort(desc(\"count\"))\nval topItems \u003d groupedByOffers.select(\"offerId\").rdd.map(r \u003d\u003e r(0)).take(30)\n//groupedByOffers.rdd.coalesce(1, false).saveAsTextFile(\"/tmp/sidana/popularOfferCountsTrain.csv\")\nimport java.nio.file.{ Files, Paths }\nimport scala.collection.mutable.ListBuffer\nimport java.io.FileWriter\nvar items \u003d new ListBuffer[String]()\nval fw \u003d new FileWriter(\"/home/ama/sidana/recsysBaselines/data/output/popularity/mostpopularitems.txt\", true)\nfor( a \u003c- 1 to 30){\nval firstval \u003d topItems(a-1)\nitems +\u003d firstval.toString.toString\nfw.write(firstval.toString.toString+\" \" )\n//items +\u003d \",\"\n}\n fw.close()",
+      "dateUpdated": "Nov 28, 2017 1:38:21 PM",
       "config": {
         "enabled": true,
         "graph": {
@@ -23,19 +23,15 @@
       },
       "jobName": "paragraph_1493206146878_257055981",
       "id": "20170426-132906_1409501229",
-      "result": {
-        "code": "SUCCESS",
-        "type": "TEXT",
-        "msg": "csvFileClick: org.apache.spark.sql.DataFrame \u003d [userId: string, offerId: string]\ngroupedByUsersandOffers: org.apache.spark.sql.DataFrame \u003d [userId: string, offerId: string]\ngroupedByOffers: org.apache.spark.sql.DataFrame \u003d [offerId: string, count: bigint]\ntopItems: Array[Any] \u003d Array(eb8c819b95b51fe605254470b00e7ce4, bb1fa63129b229d35138cb4689667709, 1f9e355358aa7cb04abaa4f48722fe78, 8077e01b53706514895e8c77503f9f54, 65c84b271860a1f50e09796904e5a55c, 0f2fcf95319f5c1e5745371351f521e5, 54073457233b5daf6d09c23786cb78cb, 810e269c0a079854e8e33a5388cbc271, 0d239182c0bcd05b3f99c9e6438e2bc1, b0a07d9bc505a480ad0558618eafd96a, ce811e1c31591e0b697881f738d22c09, f2ba8ad25a691c13b07e5ee0632dc737, a65dd670c23f0f212a11a93ada96a690, bdafd0a93bedc4616d122f8f5bf6671c, 78abf556b995bf8087d2e851d2aa9118, 8d2e7f4c7678a3287547a3dafe65cf55, eb0389774fca117ee06c5c02a6ba76af, 39ca99a2010017585794f67594bdca95, 918a282a40e34d4d951a44b01eb92097, 7bad0b351362e61d1802e6df764412e9, 7068af6ea9f14b368ed99a54e122a6c5, 9d0f73cccfb5bffd304bf2b030021441, ebb77a97cfdfd01c8b2f...import java.nio.file.{Files, Paths}\nimport scala.collection.mutable.ListBuffer\nimport java.io.FileWriter\nitems: scala.collection.mutable.ListBuffer[String] \u003d ListBuffer()\nfw: java.io.FileWriter \u003d java.io.FileWriter@4d102bdc\n"
-      },
       "dateCreated": "Apr 26, 2017 1:29:06 PM",
       "status": "READY",
       "errorMessage": "",
       "progressUpdateIntervalMs": 500
     },
     {
-      "text": "    import java.nio.file.{ Files, Paths }\n    import scala.collection.mutable.ListBuffer\n    import java.io.FileWriter\n    \n    \n\n\n\n        val t1 \u003d System.currentTimeMillis\n        val csvFileClick \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \"\\t\")\n    .load(\"/data/sidana/recsysBaselines/experiments/tabseparatedinput/default/train_\"+code+\".csv\") \n    \n    val clickTemp \u003d csvFileClick.filter(csvFileClick(\"rating\") \u003d\u003d\u003d\"1\")\n\nval groupedByUsersandOffers \u003d clickTemp.select(clickTemp(\"userid\"),clickTemp(\"offerid\")).distinct\nval groupedByOffers \u003d groupedByUsersandOffers.groupBy(\"offerid\").count.sort(desc(\"count\"))\nval topItems \u003d groupedByOffers.select(\"offerid\").rdd.map(r \u003d\u003e r(0)).take(100)\n//groupedByOffers.rdd.coalesce(1, false).saveAsTextFile(\"/tmp/sidana/popularOfferCountsTrain.csv\")\nimport java.nio.file.{ Files, Paths }\nimport scala.collection.mutable.ListBuffer\nimport java.io.FileWriter\nvar items \u003d new ListBuffer[String]()\nval fw \u003d new FileWriter(\"/data/sidana/recsysBaselines/experiments/popcountryfiles/input/mostpopularitems_\"+code+\".txt\", true)\nfor( a \u003c- 1 to 100){\nval firstval \u003d topItems(a-1)\nitems +\u003d firstval.toString.toString\nfw.write(firstval.toString.toString+\" \")\n//items +\u003d \",\"\n}\n    val t2 \u003d System.currentTimeMillis\n    println((t2 - t1) + \" msecs\")\n\n",
-      "dateUpdated": "Apr 26, 2017 1:32:13 PM",
+      "text": "    import java.nio.file.{ Files, Paths }\n    import scala.collection.mutable.ListBuffer\n    import java.io.FileWriter\n    \n    val t1 \u003d System.currentTimeMillis\n    val csvFileClick \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \"\\t\")\n    .load(\"/data/sidana/purch/diversity/baselines/train.csv\")\n    \n        val clickTemp \u003d csvFileClick.filter(csvFileClick(\"rating\") \u003d\u003d\u003d\"1\")\n\n        val groupedByUsersandOffers \u003d clickTemp.select(clickTemp(\"userid\"),clickTemp(\"offerid\")).distinct\n        \n        val groupedByOffers \u003d groupedByUsersandOffers.groupBy(\"offerid\").count.sort(desc(\"count\"))\n        \n        val topItems \u003d groupedByOffers.select(\"offerid\").rdd.map(r \u003d\u003e r(0)).take(100)\n        import java.nio.file.{ Files, Paths }\n        import scala.collection.mutable.ListBuffer\n        import java.io.FileWriter\n        var items \u003d new ListBuffer[String]()\n        val fw \u003d new FileWriter(\"/data/sidana/purch/diversity/baselines/pop/mostpopularitems.txt\", true)\n        for( a \u003c- 1 to 100){\n        val firstval \u003d topItems(a-1)\n        items +\u003d firstval.toString.toString\n        fw.write(firstval.toString.toString+\" \")\n}\n        val t2 \u003d System.currentTimeMillis\n        println((t2 - t1) + \" msecs\")\n        fw.close()",
+      "authenticationInfo": {},
+      "dateUpdated": "Nov 14, 2017 2:18:37 PM",
       "config": {
         "enabled": true,
         "graph": {
@@ -56,19 +52,31 @@
       },
       "jobName": "paragraph_1493206146879_256671232",
       "id": "20170426-132906_595045746",
-      "result": {
-        "code": "SUCCESS",
-        "type": "TEXT",
-        "msg": "import java.nio.file.{Files, Paths}\nimport scala.collection.mutable.ListBuffer\nimport java.io.FileWriter\ncountryCodes: Array[String] \u003d Array(at, be, br, ch, cz, de, dk, es, fi, ie, nb, nl, no, pl, pt, ru, se, uk, it, fr)\nfwTime: java.io.FileWriter \u003d java.io.FileWriter@5403820f\n36716 msecs\n20997 msecs\n32460 msecs\n21716 msecs\n22933 msecs\n38177 msecs\n25052 msecs\n24526 msecs\n39763 msecs\n35285 msecs\n21015 msecs\n20122 msecs\n31603 msecs\n26799 msecs\n21559 msecs\n36912 msecs\n26363 msecs\n20599 msecs\n40502 msecs\n87013 msecs\n"
-      },
       "dateCreated": "Apr 26, 2017 1:29:06 PM",
-      "status": "READY",
+      "dateStarted": "Nov 14, 2017 2:18:37 PM",
+      "dateFinished": "Nov 14, 2017 2:19:05 PM",
+      "status": "FINISHED",
       "errorMessage": "",
       "progressUpdateIntervalMs": 500
     },
     {
-      "dateUpdated": "Apr 26, 2017 1:29:06 PM",
-      "config": {},
+      "text": "   //offers from only test\n   \n    import java.nio.file.{ Files, Paths }\n    import scala.collection.mutable.ListBuffer\n    import java.io.FileWriter\n    \n    val t1 \u003d System.currentTimeMillis\n    \n    val csvFileClick \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \"\\t\")\n    .load(\"/data/sidana/purch/diversity/baselines/train.csv\")\n    \n        val testOffers \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \"\\t\")\n    .load(\"/data/sidana/purch/diversity/baselines/test.csv\").select(\"offerid\").distinct\n    \n    \n    \n        val clickTemp \u003d csvFileClick.filter(csvFileClick(\"rating\") \u003d\u003d\u003d\"1\")\n\n        val groupedByUsersandOffersTemp \u003d clickTemp.select(clickTemp(\"userid\"),clickTemp(\"offerid\")).distinct\n        \n        val groupedByUsersandOffers \u003d groupedByUsersandOffersTemp.join(testOffers,groupedByUsersandOffersTemp(\"offerid\")\u003d\u003d\u003dtestOffers(\"offerid\")).drop(testOffers(\"offerid\"))\n        \n        val groupedByOffers \u003d groupedByUsersandOffers.groupBy(\"offerid\").count.sort(desc(\"count\"))\n        \n        val topItems \u003d groupedByOffers.select(\"offerid\").rdd.map(r \u003d\u003e r(0)).take(100)\n        import java.nio.file.{ Files, Paths }\n        import scala.collection.mutable.ListBuffer\n        import java.io.FileWriter\n        var items \u003d new ListBuffer[String]()\n        val fw \u003d new FileWriter(\"/data/sidana/purch/diversity/baselines/test/pop/mostpopularitems.txt\", true)\n        for( a \u003c- 1 to 100){\n        val firstval \u003d topItems(a-1)\n        items +\u003d firstval.toString.toString\n        fw.write(firstval.toString.toString+\" \")\n}\n        val t2 \u003d System.currentTimeMillis\n        println((t2 - t1) + \" msecs\")\n        fw.close()",
+      "authenticationInfo": {},
+      "dateUpdated": "Nov 15, 2017 11:41:14 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
       "settings": {
         "params": {},
         "forms": {}
@@ -76,33 +84,150 @@
       "jobName": "paragraph_1493206146879_256671232",
       "id": "20170426-132906_102508943",
       "dateCreated": "Apr 26, 2017 1:29:06 PM",
-      "status": "READY",
+      "dateStarted": "Nov 15, 2017 11:41:14 AM",
+      "dateFinished": "Nov 15, 2017 11:42:15 AM",
+      "status": "FINISHED",
       "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "    //Read Train File\n    \n    val csvFileClick \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \"\\t\")\n    .load(\"/data/sidana/purch/diversity/baselines/train.csv\")\n    \n    val clickTemp \u003d csvFileClick.filter(csvFileClick(\"rating\") \u003d\u003d\u003d\"1\")\n\n    val groupedByUsersandOffers \u003d clickTemp.select(clickTemp(\"userid\"),clickTemp(\"offerid\")).distinct\n        \n    val groupedByOffers \u003d groupedByUsersandOffers.groupBy(\"offerid\").count\n    \n    //.sort(desc(\"count\"))\n\n    //select distinct test offers\n    \n    val testData \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \"\\t\")\n    .load(\"/data/sidana/purch/diversity/baselines/test.csv\")\n    \n    \n    val testUsersOffers \u003d testData.select(\"userid\",\"offerid\").distinct\n    \n    // join between offer popularity scores and test users offers\n    \n    val InteractedOffersCountTempTemp \u003d testUsersOffers.join(groupedByOffers,testUsersOffers(\"offerid\")\u003d\u003d\u003dgroupedByOffers(\"offerid\")).drop(groupedByOffers(\"offerid\")).sort(desc(\"count\"))\n    \n    \n    //write files\n    \n    val InteractedOffersCountTemp \u003d InteractedOffersCountTempTemp.select(\"userid\",\"offerid\",\"count\")\n    \n    val InteractedOffersTemp \u003d InteractedOffersCountTempTemp.select(\"userid\",\"offerid\")\n    \n    val header1 \u003d \"userid,offerid,count\"\n    \n    val header2 \u003d \"userid,offerid\"\n    \n    val InteractedOffersCount \u003d InteractedOffersCountTemp.rdd.map(_.mkString(\",\")).mapPartitionsWithIndex((i, iter) \u003d\u003e if (i\u003d\u003d0) (List(header1).toIterator ++ iter) else iter)\n    val InteractedOffers \u003d InteractedOffersTemp.rdd.map(_.mkString(\",\")).mapPartitionsWithIndex((i, iter) \u003d\u003e if (i\u003d\u003d0) (List(header2).toIterator ++ iter) else iter)\n    \n    \n    InteractedOffersCount.coalesce(1,false).saveAsTextFile(\"/data/sidana/purch/diversity/baselines/interacted/pop/InteractedOffersCount\")\n    \n    InteractedOffers.coalesce(1,false).saveAsTextFile(\"/data/sidana/purch/diversity/baselines/interacted/pop/InteractedOffers\")",
+      "authenticationInfo": {},
+      "dateUpdated": "Dec 15, 2017 2:31:43 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1510742282525_506425807",
+      "id": "20171115-113802_996363486",
+      "dateCreated": "Nov 15, 2017 11:38:02 AM",
+      "dateStarted": "Dec 15, 2017 2:31:43 PM",
+      "dateFinished": "Dec 15, 2017 2:34:19 PM",
+      "status": "FINISHED",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "    //popularity with scores\n    \n    import java.nio.file.{ Files, Paths }\n    import scala.collection.mutable.ListBuffer\n    import java.io.FileWriter\n    import org.apache.spark.sql.expressions._\n    import org.apache.spark.sql.functions._\n    \n    val t1 \u003d System.currentTimeMillis\n    \n    val csvFileClick \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/data/sidana/purch/diversity/baselines/all/pop/scores/train.csv\")\n    \n    val clickTemp \u003d csvFileClick.filter(csvFileClick(\"rating\") \u003d\u003d\u003d\"4\")\n\n    val groupedByUsersandOffers \u003d clickTemp.select(clickTemp(\"userid\"),clickTemp(\"offerid\")).distinct\n        \n    val  groupedByOffersCount \u003d groupedByUsersandOffers.groupBy(\"offerid\").count\n    \n    \n \n  val total \u003d groupedByOffersCount.agg(sum(\"count\").cast(\"long\")).first.getLong(0)\n  \n  val groupedByOffers \u003d groupedByOffersCount.groupBy(\"offerid\").agg(sum($\"count\")/total).select($\"offerid\",$\"((sum(count),mode\u003dComplete,isDistinct\u003dfalse) / 159564)\".as(\"fraction\")).orderBy(desc(\"fraction\"))\n  \n    val topItems \u003d groupedByOffers.select(\"offerid\",\"fraction\").rdd.map(x \u003d\u003e ((x(0), x(1))) ).take(100)\n    \n    import java.nio.file.{ Files, Paths }\n    import scala.collection.mutable.ListBuffer\n    import java.io.FileWriter\n    var items \u003d new ListBuffer[String]()\n    val fw \u003d new FileWriter(\"/data/sidana/purch/diversity/baselines/all/pop/scores/mostpopularitems_fraction.txt\", true)\n    \n    for( a \u003c- 1 to 100){\n        val firstval \u003d topItems(a-1)\n        items +\u003d firstval.toString.toString\n        fw.write(firstval.toString.toString+\" \")\n    }\n    val t2 \u003d System.currentTimeMillis\n    println((t2 - t1) + \" msecs\")\n    fw.close()",
+      "authenticationInfo": {},
+      "dateUpdated": "Jan 2, 2018 11:55:01 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1513186671566_-1187609606",
+      "id": "20171213-183751_1626664857",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "import java.nio.file.{Files, Paths}\nimport scala.collection.mutable.ListBuffer\nimport java.io.FileWriter\nimport org.apache.spark.sql.expressions._\nimport org.apache.spark.sql.functions._\nt1: Long \u003d 1514933737886\ncsvFileClick: org.apache.spark.sql.DataFrame \u003d [userid: int, offerid: int, rating: int, timestamp: int]\nclickTemp: org.apache.spark.sql.DataFrame \u003d [userid: int, offerid: int, rating: int, timestamp: int]\ngroupedByUsersandOffers: org.apache.spark.sql.DataFrame \u003d [userid: int, offerid: int]\ngroupedByOffersCount: org.apache.spark.sql.DataFrame \u003d [offerid: int, count: bigint]\ntotal: Long \u003d 159564\ngroupedByOffers: org.apache.spark.sql.DataFrame \u003d [offerid: int, fraction: double]\ntopItems: Array[(Any, Any)] \u003d Array((3,0.01616906069038129), (34,0.013022987641322604), (149,0.01036574665964754), (389,0.010146398937103607), (60,0.009469554536110902), (343,0.009350480058158481), (257,0.008297610989947607), (179,0.007959188789451255), (170,0.0077649093780552), (221,0.0075956982778070245), (409,0.007150735754932191), (57,0.007019127121405831), (398,0.006962723421323105), (488,0.006893785565666441), (355,0.0068060464766488684), (444,0.006743375698779174), (88,0.0065177608984482716), (563,0.0062796119425434305), (696,0.006129202075656163), (56,0.0061229349978691935), (95,0.00604773006442556), (65,0.006016394675490712), (132,0.005985059286555865), (311,0.005771978641798902), (243,0.005703040786142238), (214,0.005590233385976787), (204,0.0055714321526158786), (49,0.0055400...import java.nio.file.{Files, Paths}\nimport scala.collection.mutable.ListBuffer\nimport java.io.FileWriter\nitems: scala.collection.mutable.ListBuffer[String] \u003d ListBuffer()\nfw: java.io.FileWriter \u003d java.io.FileWriter@2cc92ee9\nt2: Long \u003d 1514933821747\n83861 msecs\n"
+      },
+      "dateCreated": "Dec 13, 2017 6:37:51 PM",
+      "dateStarted": "Jan 2, 2018 11:55:01 PM",
+      "dateFinished": "Jan 2, 2018 11:57:01 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "    //popularity with scores\n    //interacted\n    \n    import java.nio.file.{ Files, Paths }\n    import scala.collection.mutable.ListBuffer\n    import java.io.FileWriter\n    import org.apache.spark.sql.expressions._\n    import org.apache.spark.sql.functions._\n    \n    val t1 \u003d System.currentTimeMillis\n    \n    val csvFileClick \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/data/sidana/purch/diversity/baselines/interacted/pop/scores/train.csv\")\n    \n    val clickTemp \u003d csvFileClick.filter(csvFileClick(\"rating\") \u003d\u003d\u003d\"4\")\n\n    val groupedByUsersandOffers \u003d clickTemp.select(clickTemp(\"userid\"),clickTemp(\"offerid\")).distinct\n        \n    val  groupedByOffersCount \u003d groupedByUsersandOffers.groupBy(\"offerid\").count\n    \n    \n \n    val total \u003d groupedByOffersCount.agg(sum(\"count\").cast(\"long\")).first.getLong(0)\n  \n    val groupedByOffers \u003d groupedByOffersCount.groupBy(\"offerid\").agg(sum($\"count\")/total).select($\"offerid\",$\"((sum(count),mode\u003dComplete,isDistinct\u003dfalse) / 159564)\".as(\"fraction\")).orderBy(desc(\"fraction\"))\n  \n    val topItems \u003d groupedByOffers.select(\"offerid\",\"fraction\").rdd.map(x \u003d\u003e ((x(0), x(1))) ).take(100)\n    \n    import java.nio.file.{ Files, Paths }\n    import scala.collection.mutable.ListBuffer\n    import java.io.FileWriter\n    var items \u003d new ListBuffer[String]()\n    val fw \u003d new FileWriter(\"/data/sidana/purch/diversity/baselines/interacted/pop/scores/mostpopularitems_fraction.txt\", true)\n    \n    for( a \u003c- 1 to 100){\n        val firstval \u003d topItems(a-1)\n        items +\u003d firstval.toString.toString\n        fw.write(firstval.toString.toString+\" \")\n    }\n    val t2 \u003d System.currentTimeMillis\n    println((t2 - t1) + \" msecs\")\n    fw.close()",
+      "authenticationInfo": {},
+      "dateUpdated": "Feb 8, 2018 12:25:18 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1514898602030_1495286652",
+      "id": "20180102-141002_580472528",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "import java.nio.file.{Files, Paths}\nimport scala.collection.mutable.ListBuffer\nimport java.io.FileWriter\nimport org.apache.spark.sql.expressions._\nimport org.apache.spark.sql.functions._\nt1: Long \u003d 1518089119634\ncsvFileClick: org.apache.spark.sql.DataFrame \u003d [userid: int, offerid: int, rating: int, timestamp: int]\nclickTemp: org.apache.spark.sql.DataFrame \u003d [userid: int, offerid: int, rating: int, timestamp: int]\ngroupedByUsersandOffers: org.apache.spark.sql.DataFrame \u003d [userid: int, offerid: int]\ngroupedByOffersCount: org.apache.spark.sql.DataFrame \u003d [offerid: int, count: bigint]\ntotal: Long \u003d 159564\ngroupedByOffers: org.apache.spark.sql.DataFrame \u003d [offerid: int, fraction: double]\ntopItems: Array[(Any, Any)] \u003d Array((3,0.01616906069038129), (34,0.013022987641322604), (149,0.01036574665964754), (389,0.010146398937103607), (60,0.009469554536110902), (343,0.009350480058158481), (257,0.008297610989947607), (179,0.007959188789451255), (170,0.0077649093780552), (221,0.0075956982778070245), (409,0.007150735754932191), (57,0.007019127121405831), (398,0.006962723421323105), (488,0.006893785565666441), (355,0.0068060464766488684), (444,0.006743375698779174), (88,0.0065177608984482716), (563,0.0062796119425434305), (696,0.006129202075656163), (56,0.0061229349978691935), (95,0.00604773006442556), (65,0.006016394675490712), (132,0.005985059286555865), (311,0.005771978641798902), (243,0.005703040786142238), (214,0.005590233385976787), (204,0.0055714321526158786), (49,0.0055400...import java.nio.file.{Files, Paths}\nimport scala.collection.mutable.ListBuffer\nimport java.io.FileWriter\nitems: scala.collection.mutable.ListBuffer[String] \u003d ListBuffer()\nfw: java.io.FileWriter \u003d java.io.FileWriter@40ec7bcf\nt2: Long \u003d 1518089209977\n90343 msecs\n"
+      },
+      "dateCreated": "Jan 2, 2018 2:10:02 PM",
+      "dateStarted": "Feb 8, 2018 12:25:18 PM",
+      "dateFinished": "Feb 8, 2018 12:26:50 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1518088855330_2108522137",
+      "id": "20180208-122055_1525359516",
+      "dateCreated": "Feb 8, 2018 12:20:55 PM",
+      "status": "READY",
       "progressUpdateIntervalMs": 500
     }
   ],
-  "name": "purchBaselines: Popularity",
+  "name": "purchBaselinesVer2: Popularity",
   "id": "2CDVDE4A6",
   "angularObjects": {
-    "2BGHSKCA7": [],
-    "2BFMBPKAB": [],
-    "2BHKKP27G": [],
-    "2BJHJDBK6": [],
-    "2BJAQG5W4": [],
     "2BJGSXM37": [],
-    "2BFXEV5XZ": [],
-    "2BG77RV7M": [],
-    "2BF969NNB": [],
-    "2BG8QQJNC": [],
+    "2BGHSKCA7": [],
+    "2BHKKP27G": [],
     "2BGVG5JP4": [],
-    "2BJ5FCP57": [],
-    "2BFEDXCTE": [],
-    "2BJ8AEWCT": [],
-    "2BH9AVVKH": [],
-    "2BJ7KKX85": [],
+    "2BFMBPKAB": [],
+    "2BF969NNB": [],
+    "2BJAQG5W4": [],
+    "2BJHJDBK6": [],
     "2BHKAE8WK": [],
-    "2BJ6HN5AY": []
+    "2BG8QQJNC": [],
+    "2BJ7KKX85": [],
+    "2BH9AVVKH": [],
+    "2BJ6HN5AY": [],
+    "2BFEDXCTE": [],
+    "2BJ5FCP57": [],
+    "2BJ8AEWCT": [],
+    "2BFXEV5XZ": [],
+    "2BG77RV7M": []
   },
-  "config": {},
+  "config": {
+    "looknfeel": "default"
+  },
   "info": {}
 }

@@ -1,0 +1,176 @@
+{
+  "paragraphs": [
+    {
+      "text": "val csvFileClick \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/home/ama/sidana/recsysBaselines/data/output/clicksTrainPartial\")\n \n \n",
+      "dateUpdated": "May 31, 2017 6:00:21 PM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1496246421100_1025235685",
+      "id": "20170531-180021_1337300477",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "csvFileClick: org.apache.spark.sql.DataFrame \u003d [userId: string, offerId: string]\n"
+      },
+      "dateCreated": "May 31, 2017 6:00:21 PM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "   val groupedInteractions \u003d csvFileClick.groupBy(\"userId\",\"offerId\").count().sort(desc(\"count\"))\n   groupedInteractions.rdd.coalesce(1, false).saveAsTextFile(\"/data/sidana/user_past_preference.csv\")",
+      "dateUpdated": "May 31, 2017 6:00:21 PM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1496246421100_1025235685",
+      "id": "20170531-180021_445267437",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "groupedInteractions: org.apache.spark.sql.DataFrame \u003d [userId: string, offerId: string, count: bigint]\n"
+      },
+      "dateCreated": "May 31, 2017 6:00:21 PM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": " val countryCodes \u003d Array(\"at\",\"be\",\"br\",\"ch\",\"cz\",\"de\",\"dk\",\"es\",\"fi\",\"ie\",\"nb\",\"nl\",\"no\",\"pl\",\"pt\",\"ru\",\"se\",\"uk\",\"it\",\"fr\")\n    for (code \u003c- countryCodes){\n        val csvFileClick \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/home/ama/sidana/recsysBaselines/data/output/countryfiles/clicksTrainPartial_\"+code) \n       val groupedInteractions \u003d csvFileClick.groupBy(\"userId\",\"offerId\").count().sort(desc(\"count\"))\n   groupedInteractions.rdd.coalesce(1, false).saveAsTextFile(\"/data/sidana/recsysBaselines/pastpreferences/user_past_preference_\"+code+\".csv\")\n    }",
+      "dateUpdated": "May 31, 2017 6:00:21 PM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1496246421100_1025235685",
+      "id": "20170531-180021_1776787511",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "countryCodes: Array[String] \u003d Array(at, be, br, ch, cz, de, dk, es, fi, ie, nb, nl, no, pl, pt, ru, se, uk, it, fr)\n"
+      },
+      "dateCreated": "May 31, 2017 6:00:21 PM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "    import java.nio.file.{ Files, Paths }\n    import scala.collection.mutable.ListBuffer\n    import java.io.FileWriter\n    import org.apache.spark.sql.functions.{lit, to_date}\n    import sqlContext.implicits._\n    import org.apache.spark.sql.types._\n    import org.apache.spark.sql._\n\n    val time1 \u003d java.lang.System.currentTimeMillis()\n    val csvFileClick \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/data/sidana/recnet_draft/ml100k/pi/train_all_raw.csv\")\n    \n    val clickTemp \u003d csvFileClick.filter(csvFileClick(\"rating\") \u003d\u003d\u003d\"4\")\n    \n    val groupedInteractions \u003d clickTemp.groupBy(\"userId\",\"movieId\").count().sort(desc(\"count\"))\n    groupedInteractions.rdd.coalesce(1, false).saveAsTextFile(\"/data/sidana/recnet_draft/ml100k/pi/user_past_preference.csv\")\n    val time2 \u003d java.lang.System.currentTimeMillis()\n    val time \u003d time2 - time1",
+      "authenticationInfo": {},
+      "dateUpdated": "May 31, 2017 11:21:15 PM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1496246421101_1024850936",
+      "id": "20170531-180021_1707585842",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "import java.nio.file.{Files, Paths}\nimport scala.collection.mutable.ListBuffer\nimport java.io.FileWriter\nimport org.apache.spark.sql.functions.{lit, to_date}\nimport sqlContext.implicits._\nimport org.apache.spark.sql.types._\nimport org.apache.spark.sql._\ntime1: Long \u003d 1496265698959\ncsvFileClick: org.apache.spark.sql.DataFrame \u003d [userId: int, movieId: int, rating: int, timestamp: int]\nclickTemp: org.apache.spark.sql.DataFrame \u003d [userId: int, movieId: int, rating: int, timestamp: int]\ngroupedInteractions: org.apache.spark.sql.DataFrame \u003d [userId: int, movieId: int, count: bigint]\ntime2: Long \u003d 1496265714550\ntime: Long \u003d 15591\n"
+      },
+      "dateCreated": "May 31, 2017 6:00:21 PM",
+      "dateStarted": "May 31, 2017 11:21:15 PM",
+      "dateFinished": "May 31, 2017 11:21:54 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "dateUpdated": "May 31, 2017 6:00:21 PM",
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1496246421101_1024850936",
+      "id": "20170531-180021_423787986",
+      "dateCreated": "May 31, 2017 6:00:21 PM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "recnet_draft: user_past_preferences",
+  "id": "2CJFT6DYH",
+  "angularObjects": {
+    "2BGHSKCA7": [],
+    "2BFMBPKAB": [],
+    "2BHKKP27G": [],
+    "2BJHJDBK6": [],
+    "2BJAQG5W4": [],
+    "2BJGSXM37": [],
+    "2BFXEV5XZ": [],
+    "2BG77RV7M": [],
+    "2BF969NNB": [],
+    "2BG8QQJNC": [],
+    "2BGVG5JP4": [],
+    "2BJ5FCP57": [],
+    "2BFEDXCTE": [],
+    "2BJ8AEWCT": [],
+    "2BH9AVVKH": [],
+    "2BJ7KKX85": [],
+    "2BHKAE8WK": [],
+    "2BJ6HN5AY": []
+  },
+  "config": {},
+  "info": {}
+}

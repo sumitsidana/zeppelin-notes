@@ -1,0 +1,93 @@
+{
+  "paragraphs": [
+    {
+      "text": "\n    \t\t\t\t\t    \t\t\t\t\t\t\tval ratings \u003d sqlContext.read\n\t\t\t\t\t\t\t.format(\"com.databricks.spark.csv\")\n\t\t\t\t\t\t\t.option(\"header\", \"true\") // Use first line of all files as header\n\t\t\t\t\t\t\t.option(\"inferSchema\", \"true\") // Automatically infer data types\n\t\t\t\t\t\t\t.option(\"delimiter\", \",\")\n\t\t\t\t\t\t\t.load(\"/data/sidana/diversity/ml20m/ratings.csv\")\n\t\t\t\t\t\t\t\n    \t\t\t\t\t    \t\t\t\t\t\t\tval tags \u003d sqlContext.read\n\t\t\t\t\t\t\t.format(\"com.databricks.spark.csv\")\n\t\t\t\t\t\t\t.option(\"header\", \"true\") // Use first line of all files as header\n\t\t\t\t\t\t\t.option(\"inferSchema\", \"true\") // Automatically infer data types\n\t\t\t\t\t\t\t.option(\"delimiter\", \",\")\n\t\t\t\t\t\t\t.load(\"/data/sidana/diversity/ml20m/movies_genre.csv\").select(\"movieId\").distinct\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\tval ratings_tags_temp_temp \u003d ratings.join(tags,ratings(\"movieId\")\u003d\u003d\u003dtags(\"movieId\")).drop(tags(\"movieId\"))\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\tval ratings_tags_temp \u003d ratings_tags_temp_temp.select(\"userId\",\"movieId\",\"rating\",\"timestamp\")\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\tval header \u003d \"userId,movieId,rating,timestamp\"\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\tval ratings_tags \u003d ratings_tags_temp.rdd.map(_.mkString(\",\")).mapPartitionsWithIndex((i, iter) \u003d\u003e if (i\u003d\u003d0) (List(header).toIterator ++ iter) else iter)\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\tratings_tags.coalesce(1,false).saveAsTextFile(\"/data/sidana/diversity/ml20m/ratings_genre.csv\")",
+      "authenticationInfo": {},
+      "dateUpdated": "Sep 20, 2017 8:08:41 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 98.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala",
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1505899970350_820644169",
+      "id": "20170920-113250_797739523",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "ratings: org.apache.spark.sql.DataFrame \u003d [userId: int, movieId: int, rating: double, timestamp: int]\ntags: org.apache.spark.sql.DataFrame \u003d [movieId: int]\nratings_tags_temp_temp: org.apache.spark.sql.DataFrame \u003d [userId: int, movieId: int, rating: double, timestamp: int]\nratings_tags_temp: org.apache.spark.sql.DataFrame \u003d [userId: int, movieId: int, rating: double, timestamp: int]\nheader: String \u003d userId,movieId,rating,timestamp\nratings_tags: org.apache.spark.rdd.RDD[String] \u003d MapPartitionsRDD[123] at mapPartitionsWithIndex at \u003cconsole\u003e:37\n"
+      },
+      "dateCreated": "Sep 20, 2017 11:32:50 AM",
+      "dateStarted": "Sep 20, 2017 4:15:01 PM",
+      "dateFinished": "Sep 20, 2017 4:16:52 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "dateUpdated": "Sep 20, 2017 2:51:27 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1505910922195_-56834867",
+      "id": "20170920-143522_29587743",
+      "dateCreated": "Sep 20, 2017 2:35:22 PM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "diversity: getItemsWithGenre",
+  "id": "2CTNYS8TE",
+  "angularObjects": {
+    "2BGHSKCA7": [],
+    "2BFMBPKAB": [],
+    "2BHKKP27G": [],
+    "2BJHJDBK6": [],
+    "2BJAQG5W4": [],
+    "2BJGSXM37": [],
+    "2BFXEV5XZ": [],
+    "2BG77RV7M": [],
+    "2BF969NNB": [],
+    "2BG8QQJNC": [],
+    "2BGVG5JP4": [],
+    "2BJ5FCP57": [],
+    "2BFEDXCTE": [],
+    "2BJ8AEWCT": [],
+    "2BH9AVVKH": [],
+    "2BJ7KKX85": [],
+    "2BHKAE8WK": [],
+    "2BJ6HN5AY": []
+  },
+  "config": {
+    "looknfeel": "default"
+  },
+  "info": {}
+}

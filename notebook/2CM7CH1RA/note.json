@@ -1,0 +1,109 @@
+{
+  "paragraphs": [
+    {
+      "text": "val train \u003d sqlContext.read\n.format(\"com.databricks.spark.csv\")\n.option(\"header\", \"true\") // Use first line of all files as header\n.option(\"inferSchema\", \"true\") // Automatically infer data types\n.option(\"delimiter\", \"\\t\")\n.load(\"/data/sidana/recsysBaselines/experiments/debug_ffm/debug_ffm/debug/atleast_two/train_fr.csv\")\n\nval usertrain \u003d train.select(\"userid\").distinct\n\nusertrain.count\n\nval positiveTrain \u003d train.filter($\"rating\"\u003d\u003d\u003d\"1\")\nval userPositiveOffers \u003d positiveTrain.select(\"userid\",\"offerid\").distinct\nval userPositiveClickCount \u003d userPositiveOffers.groupBy(\"userid\").count\nval positiveusers \u003d userPositiveClickCount.filter($\"count\"\u003e\u003d2)\npositiveusers.count\n\n\nval negativeTrain \u003d train.filter($\"rating\"\u003d\u003d\u003d0)\nval userNegativeOffers \u003d negativeTrain.select(\"userid\",\"offerid\").distinct\nval userNegativeClickCount \u003d userNegativeOffers.groupBy(\"userid\").count\nval negativeusers \u003d userNegativeClickCount.filter($\"count\"\u003e\u003d10)\nnegativeusers.count\n\nval positive_data \u003d usertrain.join(positiveusers,usertrain(\"userid\")\u003d\u003d\u003dpositiveusers(\"userid\")).drop(positiveusers(\"userid\")).drop(positiveusers(\"count\"))\n\nval negative_positive_data \u003d positive_data.join(negativeusers,positive_data(\"userid\")\u003d\u003d\u003dnegativeusers(\"userid\")).drop(negativeusers(\"userid\")).drop(negativeusers(\"count\"))\n\nval header \u003d \"userid\"\n\n val users\u003dnegative_positive_data.rdd.map(_.mkString(\",\")).mapPartitionsWithIndex((i, iter) \u003d\u003e if (i\u003d\u003d0) (List(header).toIterator ++ iter) else iter)\n \n users.coalesce(1,false).saveAsTextFile(\"/data/sidana/recsysBaselines/experiments/debug_ffm/debug_ffm/debug/atleast_two/users\")",
+      "authenticationInfo": {},
+      "dateUpdated": "Jun 12, 2017 12:25:33 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1497217813293_-1458174352",
+      "id": "20170611-235013_1201705473",
+      "result": {
+        "code": "ERROR",
+        "type": "TEXT",
+        "msg": "train: org.apache.spark.sql.DataFrame \u003d [userid: string, offerid: string, countrycode: string, category: int, merchant: int, utcdate: timestamp, userclickcount: int, offerclickcount: int, rating: int]\nusertrain: org.apache.spark.sql.DataFrame \u003d [userid: string]\nres3: Long \u003d 29481\npositiveTrain: org.apache.spark.sql.DataFrame \u003d [userid: string, offerid: string, countrycode: string, category: int, merchant: int, utcdate: timestamp, userclickcount: int, offerclickcount: int, rating: int]\nuserPositiveOffers: org.apache.spark.sql.DataFrame \u003d [userid: string, offerid: string]\nuserPositiveClickCount: org.apache.spark.sql.DataFrame \u003d [userid: string, count: bigint]\npositiveusers: org.apache.spark.sql.DataFrame \u003d [userid: string, count: bigint]\nres4: Long \u003d 29481\nnegativeTrain: org.apache.spark.sql.DataFrame \u003d [userid: string, offerid: string, countrycode: string, category: int, merchant: int, utcdate: timestamp, userclickcount: int, offerclickcount: int, rating: int]\nuserNegativeOffers: org.apache.spark.sql.DataFrame \u003d [userid: string, offerid: string]\nuserNegativeClickCount: org.apache.spark.sql.DataFrame \u003d [userid: string, count: bigint]\nnegativeusers: org.apache.spark.sql.DataFrame \u003d [userid: string, count: bigint]\nres5: Long \u003d 24468\npositive_data: org.apache.spark.sql.DataFrame \u003d [userid: string]\nnegative_positive_data: org.apache.spark.sql.DataFrame \u003d [userid: string]\nheader: String \u003d userid\nusers: org.apache.spark.rdd.RDD[String] \u003d MapPartitionsRDD[181] at mapPartitionsWithIndex at \u003cconsole\u003e:53\norg.apache.hadoop.mapred.FileAlreadyExistsException: Output directory file:/data/sidana/recsysBaselines/experiments/debug_ffm/debug_ffm/debug/atleast_two/users already exists\n\tat org.apache.hadoop.mapred.FileOutputFormat.checkOutputSpecs(FileOutputFormat.java:132)\n\tat org.apache.spark.rdd.PairRDDFunctions$$anonfun$saveAsHadoopDataset$1.apply$mcV$sp(PairRDDFunctions.scala:1179)\n\tat org.apache.spark.rdd.PairRDDFunctions$$anonfun$saveAsHadoopDataset$1.apply(PairRDDFunctions.scala:1156)\n\tat org.apache.spark.rdd.PairRDDFunctions$$anonfun$saveAsHadoopDataset$1.apply(PairRDDFunctions.scala:1156)\n\tat org.apache.spark.rdd.RDDOperationScope$.withScope(RDDOperationScope.scala:150)\n\tat org.apache.spark.rdd.RDDOperationScope$.withScope(RDDOperationScope.scala:111)\n\tat org.apache.spark.rdd.RDD.withScope(RDD.scala:316)\n\tat org.apache.spark.rdd.PairRDDFunctions.saveAsHadoopDataset(PairRDDFunctions.scala:1156)\n\tat org.apache.spark.rdd.PairRDDFunctions$$anonfun$saveAsHadoopFile$4.apply$mcV$sp(PairRDDFunctions.scala:1060)\n\tat org.apache.spark.rdd.PairRDDFunctions$$anonfun$saveAsHadoopFile$4.apply(PairRDDFunctions.scala:1026)\n\tat org.apache.spark.rdd.PairRDDFunctions$$anonfun$saveAsHadoopFile$4.apply(PairRDDFunctions.scala:1026)\n\tat org.apache.spark.rdd.RDDOperationScope$.withScope(RDDOperationScope.scala:150)\n\tat org.apache.spark.rdd.RDDOperationScope$.withScope(RDDOperationScope.scala:111)\n\tat org.apache.spark.rdd.RDD.withScope(RDD.scala:316)\n\tat org.apache.spark.rdd.PairRDDFunctions.saveAsHadoopFile(PairRDDFunctions.scala:1026)\n\tat org.apache.spark.rdd.PairRDDFunctions$$anonfun$saveAsHadoopFile$1.apply$mcV$sp(PairRDDFunctions.scala:952)\n\tat org.apache.spark.rdd.PairRDDFunctions$$anonfun$saveAsHadoopFile$1.apply(PairRDDFunctions.scala:952)\n\tat org.apache.spark.rdd.PairRDDFunctions$$anonfun$saveAsHadoopFile$1.apply(PairRDDFunctions.scala:952)\n\tat org.apache.spark.rdd.RDDOperationScope$.withScope(RDDOperationScope.scala:150)\n\tat org.apache.spark.rdd.RDDOperationScope$.withScope(RDDOperationScope.scala:111)\n\tat org.apache.spark.rdd.RDD.withScope(RDD.scala:316)\n\tat org.apache.spark.rdd.PairRDDFunctions.saveAsHadoopFile(PairRDDFunctions.scala:951)\n\tat org.apache.spark.rdd.RDD$$anonfun$saveAsTextFile$1.apply$mcV$sp(RDD.scala:1457)\n\tat org.apache.spark.rdd.RDD$$anonfun$saveAsTextFile$1.apply(RDD.scala:1436)\n\tat org.apache.spark.rdd.RDD$$anonfun$saveAsTextFile$1.apply(RDD.scala:1436)\n\tat org.apache.spark.rdd.RDDOperationScope$.withScope(RDDOperationScope.scala:150)\n\tat org.apache.spark.rdd.RDDOperationScope$.withScope(RDDOperationScope.scala:111)\n\tat org.apache.spark.rdd.RDD.withScope(RDD.scala:316)\n\tat org.apache.spark.rdd.RDD.saveAsTextFile(RDD.scala:1436)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:56)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:61)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:63)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:65)\n\tat $iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:67)\n\tat $iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:69)\n\tat $iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:71)\n\tat $iwC.\u003cinit\u003e(\u003cconsole\u003e:73)\n\tat \u003cinit\u003e(\u003cconsole\u003e:75)\n\tat .\u003cinit\u003e(\u003cconsole\u003e:79)\n\tat .\u003cclinit\u003e(\u003cconsole\u003e)\n\tat .\u003cinit\u003e(\u003cconsole\u003e:7)\n\tat .\u003cclinit\u003e(\u003cconsole\u003e)\n\tat $print(\u003cconsole\u003e)\n\tat sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)\n\tat sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)\n\tat sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\n\tat java.lang.reflect.Method.invoke(Method.java:606)\n\tat org.apache.spark.repl.SparkIMain$ReadEvalPrint.call(SparkIMain.scala:1065)\n\tat org.apache.spark.repl.SparkIMain$Request.loadAndRun(SparkIMain.scala:1346)\n\tat org.apache.spark.repl.SparkIMain.loadAndRunReq$1(SparkIMain.scala:840)\n\tat org.apache.spark.repl.SparkIMain.interpret(SparkIMain.scala:871)\n\tat org.apache.spark.repl.SparkIMain.interpret(SparkIMain.scala:819)\n\tat org.apache.zeppelin.spark.SparkInterpreter.interpretInput(SparkInterpreter.java:812)\n\tat org.apache.zeppelin.spark.SparkInterpreter.interpret(SparkInterpreter.java:755)\n\tat org.apache.zeppelin.spark.SparkInterpreter.interpret(SparkInterpreter.java:748)\n\tat org.apache.zeppelin.interpreter.ClassloaderInterpreter.interpret(ClassloaderInterpreter.java:57)\n\tat org.apache.zeppelin.interpreter.LazyOpenInterpreter.interpret(LazyOpenInterpreter.java:93)\n\tat org.apache.zeppelin.interpreter.remote.RemoteInterpreterServer$InterpretJob.jobRun(RemoteInterpreterServer.java:331)\n\tat org.apache.zeppelin.scheduler.Job.run(Job.java:171)\n\tat org.apache.zeppelin.scheduler.FIFOScheduler$1.run(FIFOScheduler.java:139)\n\tat java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:471)\n\tat java.util.concurrent.FutureTask.run(FutureTask.java:262)\n\tat java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:178)\n\tat java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:292)\n\tat java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)\n\tat java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:615)\n\tat java.lang.Thread.run(Thread.java:745)\n\n"
+      },
+      "dateCreated": "Jun 11, 2017 11:50:13 PM",
+      "dateStarted": "Jun 12, 2017 12:25:33 AM",
+      "dateFinished": "Jun 12, 2017 12:26:19 AM",
+      "status": "ERROR",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": " users.coalesce(1,false).saveAsTextFile(\"/data/sidana/recsysBaselines/experiments/debug_ffm/debug_ffm/debug/atleast_two/users\")",
+      "authenticationInfo": {},
+      "dateUpdated": "Jun 12, 2017 12:26:41 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1497219734052_-854208355",
+      "id": "20170612-002214_1453476997",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": ""
+      },
+      "dateCreated": "Jun 12, 2017 12:22:14 AM",
+      "dateStarted": "Jun 12, 2017 12:26:41 AM",
+      "dateFinished": "Jun 12, 2017 12:27:20 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1497220001512_561665952",
+      "id": "20170612-002641_1964260726",
+      "dateCreated": "Jun 12, 2017 12:26:41 AM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "debug_ffm: createPredictionFile",
+  "id": "2CM7CH1RA",
+  "angularObjects": {
+    "2BGHSKCA7": [],
+    "2BFMBPKAB": [],
+    "2BHKKP27G": [],
+    "2BJHJDBK6": [],
+    "2BJAQG5W4": [],
+    "2BJGSXM37": [],
+    "2BFXEV5XZ": [],
+    "2BG77RV7M": [],
+    "2BF969NNB": [],
+    "2BG8QQJNC": [],
+    "2BGVG5JP4": [],
+    "2BJ5FCP57": [],
+    "2BFEDXCTE": [],
+    "2BJ8AEWCT": [],
+    "2BH9AVVKH": [],
+    "2BJ7KKX85": [],
+    "2BHKAE8WK": [],
+    "2BJ6HN5AY": []
+  },
+  "config": {},
+  "info": {}
+}

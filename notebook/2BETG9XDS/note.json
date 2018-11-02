@@ -37,8 +37,9 @@
       "progressUpdateIntervalMs": 500
     },
     {
-      "text": "",
-      "dateUpdated": "Oct 13, 2016 9:09:59 PM",
+      "text": "val parquetFileClick \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypso_kk_june_data/click/*/2016/*/*/*.parquet\")\nval clicksTemp \u003d parquetFileClick.select(\"category\").distinct.count\n\n",
+      "authenticationInfo": {},
+      "dateUpdated": "Apr 13, 2018 11:13:48 AM",
       "config": {
         "colWidth": 12.0,
         "graph": {
@@ -59,7 +60,26 @@
       },
       "jobName": "paragraph_1459870609750_-450305631",
       "id": "20160405-173649_1305822474",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "parquetFileClick: org.apache.spark.sql.DataFrame \u003d [userId: string, ip: string, userAgent: struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e, geolocation: struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, offerViewId: string, clickId: string, earning: decimal(38,18)]\nclicksTemp: Long \u003d 744\n"
+      },
       "dateCreated": "Apr 5, 2016 5:36:49 PM",
+      "dateStarted": "Apr 13, 2018 11:13:48 AM",
+      "dateFinished": "Apr 13, 2018 11:14:17 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1523610737560_1850847234",
+      "id": "20180413-111217_1566111051",
+      "dateCreated": "Apr 13, 2018 11:12:17 AM",
       "status": "READY",
       "progressUpdateIntervalMs": 500
     }
@@ -67,24 +87,24 @@
   "name": "kelkooBaselines: deliver_2016_04_05",
   "id": "2BETG9XDS",
   "angularObjects": {
-    "2BGHSKCA7": [],
-    "2BFMBPKAB": [],
-    "2BHKKP27G": [],
-    "2BJHJDBK6": [],
-    "2BJAQG5W4": [],
     "2BJGSXM37": [],
-    "2BFXEV5XZ": [],
-    "2BG77RV7M": [],
-    "2BF969NNB": [],
-    "2BG8QQJNC": [],
+    "2BGHSKCA7": [],
+    "2BHKKP27G": [],
     "2BGVG5JP4": [],
-    "2BJ5FCP57": [],
-    "2BFEDXCTE": [],
-    "2BJ8AEWCT": [],
-    "2BH9AVVKH": [],
-    "2BJ7KKX85": [],
+    "2BFMBPKAB": [],
+    "2BF969NNB": [],
+    "2BJAQG5W4": [],
+    "2BJHJDBK6": [],
     "2BHKAE8WK": [],
-    "2BJ6HN5AY": []
+    "2BG8QQJNC": [],
+    "2BJ7KKX85": [],
+    "2BH9AVVKH": [],
+    "2BJ6HN5AY": [],
+    "2BFEDXCTE": [],
+    "2BJ5FCP57": [],
+    "2BJ8AEWCT": [],
+    "2BFXEV5XZ": [],
+    "2BG77RV7M": []
   },
   "config": {
     "looknfeel": "default"

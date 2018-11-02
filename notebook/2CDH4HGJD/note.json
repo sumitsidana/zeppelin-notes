@@ -280,14 +280,49 @@
       "progressUpdateIntervalMs": 500
     },
     {
-      "config": {},
+      "text": "val parquetFileOffer \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypso_purch_feb_march_data/*.parquet\")\nval groupedClicks \u003d parquetFileOffer.filter($\"wasClicked\").groupBy(\"userId\").count.sort(desc(\"count\")).drop($\"userId\")\ngroupedClicks.rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/purch/experiments/stats/clicksbyuser\")",
+      "authenticationInfo": {},
+      "dateUpdated": "Jul 25, 2017 8:33:19 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
       "settings": {
         "params": {},
         "forms": {}
       },
       "jobName": "paragraph_1492085834019_1186881777",
       "id": "20170413-141714_1406672152",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "parquetFileOffer: org.apache.spark.sql.DataFrame \u003d [utcDate: timestamp, userId: string, offerViewId: string, offerId: string, wasClicked: boolean]\ngroupedClicks: org.apache.spark.sql.DataFrame \u003d [count: bigint]\n"
+      },
       "dateCreated": "Apr 13, 2017 2:17:14 PM",
+      "dateStarted": "Jul 25, 2017 8:33:19 PM",
+      "dateFinished": "Jul 25, 2017 8:33:47 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1501007599129_594723429",
+      "id": "20170725-203319_1706806541",
+      "dateCreated": "Jul 25, 2017 8:33:19 PM",
       "status": "READY",
       "progressUpdateIntervalMs": 500
     }

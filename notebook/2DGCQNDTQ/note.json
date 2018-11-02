@@ -1,0 +1,181 @@
+{
+  "paragraphs": [
+    {
+      "text": "val inputfile \u003d sqlContext.read\n\t\t\t\t\t\t\t.format(\"com.databricks.spark.csv\")\n\t\t\t\t\t\t\t.option(\"header\", \"true\") // Use first line of all files as header\n\t\t\t\t\t\t\t.option(\"inferSchema\", \"true\") // Automatically infer data types\n\t\t\t\t\t\t\t.option(\"delimiter\", \"\\t\")\n\t\t\t\t\t\t\t.load(\"/data/sidana/purch/diversity/data\").withColumn(\"utcdate\",unix_timestamp($\"utcdate\",\"yyyy-MM-dd HH:mm:ss\").cast(\"timestamp\")).withColumnRenamed(\"cast(unixtimestamp(utcdate,yyyy-MM-dd HH:mm:ss) as timestamp)\",\"utcdate\")\n\nval clicks \u003d inputfile.filter(\"wasClicked\")\nval distinctUserWeek \u003d clicks.select($\"userId\",weekofyear($\"utcDate\")).distinct\nval minWeek \u003d distinctUserWeek.select(min(distinctUserWeek(\"weekofyear(utcdate)\"))).head().getInt(0)\nval maxWeek \u003d distinctUserWeek.select(max(distinctUserWeek(\"weekofyear(utcdate)\"))).head().getInt(0)\nval start \u003d minWeek+1\nimport org.apache.spark.sql._\n      for(a\u003c-start to maxWeek){\n          val previous \u003d a-1\n          val dfPrevious \u003d distinctUserWeek.filter(distinctUserWeek(\"weekofyear(utcdate)\")\u003d\u003d\u003dprevious)\n          val dfpresent \u003d distinctUserWeek.filter(distinctUserWeek(\"weekofyear(utcdate)\")\u003d\u003d\u003da)\n          val previousUsers \u003d dfPrevious.select(\"userId\")\n          val presentUsers \u003d dfpresent.select(\"userId\")\n          val innerJoin \u003d previousUsers.join(presentUsers,previousUsers(\"userId\")\u003d\u003d\u003dpresentUsers(\"userId\"))\n          println(innerJoin.count)\n      }",
+      "dateUpdated": "Jun 7, 2018 11:42:46 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1528364548016_-468212431",
+      "id": "20180607-114228_1434062330",
+      "dateCreated": "Jun 7, 2018 11:42:28 AM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val parquetFileOfferTemp \u003d sqlContext.read.parquet(\"/data/sidana/purch_april_2018/*.parquet\")\nval inputFile \u003d parquetFileOfferTemp.filter(to_date($\"utcDate\")\u003e\u003d\"2018-04-01\"\u0026\u0026to_date($\"utcDate\")\u003c\u003d\"2018-04-07\")\ninputFile.count\nval goodUsers \u003d inputFile.filter($\"wasClicked\").select($\"userId\".as(\"goodUserId\")).distinct\nval data \u003d inputFile.join(goodUsers,inputFile(\"userId\")\u003d\u003d\u003dgoodUsers(\"goodUserId\")).drop(goodUsers(\"goodUserId\"))\n",
+      "authenticationInfo": {},
+      "dateUpdated": "Jun 10, 2018 10:10:02 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1528660128442_-1874410346",
+      "id": "20180610-214848_1598964742",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "parquetFileOfferTemp: org.apache.spark.sql.DataFrame \u003d [source: string, offerId: string, pageViewId: string, offerViewId: string, utcDate: timestamp, keywords: array\u003cstring\u003e, wasClicked: boolean, offerViewCountPerPageView: bigint, clickCountPerPageView: bigint, userId: double, productLemmas: array\u003cstring\u003e, productFeatures: vector, url: string, pageLemmas: array\u003cstring\u003e, pageFeatures: vector]\ninputFile: org.apache.spark.sql.DataFrame \u003d [source: string, offerId: string, pageViewId: string, offerViewId: string, utcDate: timestamp, keywords: array\u003cstring\u003e, wasClicked: boolean, offerViewCountPerPageView: bigint, clickCountPerPageView: bigint, userId: double, productLemmas: array\u003cstring\u003e, productFeatures: vector, url: string, pageLemmas: array\u003cstring\u003e, pageFeatures: vector]\nres0: Long \u003d 10838248\ngoodUsers: org.apache.spark.sql.DataFrame \u003d [goodUserId: double]\ndata: org.apache.spark.sql.DataFrame \u003d [source: string, offerId: string, pageViewId: string, offerViewId: string, utcDate: timestamp, keywords: array\u003cstring\u003e, wasClicked: boolean, offerViewCountPerPageView: bigint, clickCountPerPageView: bigint, userId: double, productLemmas: array\u003cstring\u003e, productFeatures: vector, url: string, pageLemmas: array\u003cstring\u003e, pageFeatures: vector]\n"
+      },
+      "dateCreated": "Jun 10, 2018 9:48:48 PM",
+      "dateStarted": "Jun 10, 2018 10:10:02 PM",
+      "dateFinished": "Jun 10, 2018 10:34:35 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "/*\nRead data\n*/\nval parquetFileOfferTemp \u003d sqlContext.read.parquet(\"/data/sidana/purch_april_2018/*.parquet\").select(\"userId\",\"utcDate\",\"wasClicked\")\n/*\nGet data for 1st week\n*/\nval inputFile \u003d parquetFileOfferTemp.filter(to_date($\"utcDate\")\u003e\u003d\"2018-04-01\"\u0026\u0026to_date($\"utcDate\")\u003c\u003d\"2018-04-07\")\n/*\nRemove all users with no click\n*/\n//val goodUsers \u003d inputFile.filter($\"wasClicked\").select($\"userId\".as(\"goodUserId\")).distinct\n//val data \u003d inputFile.join(goodUsers,Seq(\"userId\"))\n/*\nGet min/max day\n*/\nval clicks \u003d inputFile.filter(\"wasClicked\")\n//val clicks \u003d data.filter(\"wasClicked\")\nval distinctUserDay \u003d clicks.select($\"userId\",dayofyear($\"utcDate\").as(\"day\")).distinct.repartition($\"userId\")\nval (minDay, maxDay) \u003d {\n    val row \u003d distinctUserDay\n        .select(\n            min(distinctUserDay(\"dayofyear(utcdate)\"))\n            max(distinctUserDay(\"dayofyear(utcdate)\"))\n        ).head()\n    (row.getInt(0), row.getInt(1))\n}\nval start \u003d minDay+1\n/*\nInitialize with first day\n*/\nvar dfPrevious \u003d distinctUserDay.filter(distinctUserDay(\"day\")\u003d\u003d\u003dminDay)\nimport org.apache.spark.sql._\nfor(a\u003c-start to maxDay){\nval dfpresent \u003d distinctUserDay.filter(distinctUserDay(\"day\")\u003d\u003d\u003da)\nval previousUsers \u003d dfPrevious.select(\"userId\")\nval presentUsers \u003d dfpresent.select(\"userId\")\n/*\nChange previous users to common users of previous and present\n*/\ndfPrevious \u003d previousUsers.join(presentUsers,previousUsers(\"userId\")\u003d\u003d\u003dpresentUsers(\"userId\")).drop(presentUsers(\"userId\"))\nprintln(dfPrevious.count)\n}",
+      "authenticationInfo": {},
+      "dateUpdated": "Jun 11, 2018 2:56:45 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1528662885157_-1931244867",
+      "id": "20180610-223445_561615744",
+      "result": {
+        "code": "ERROR",
+        "type": "TEXT",
+        "msg": "parquetFileOfferTemp: org.apache.spark.sql.DataFrame \u003d [source: string, offerId: string, pageViewId: string, offerViewId: string, utcDate: timestamp, keywords: array\u003cstring\u003e, wasClicked: boolean, offerViewCountPerPageView: bigint, clickCountPerPageView: bigint, userId: double, productLemmas: array\u003cstring\u003e, productFeatures: vector, url: string, pageLemmas: array\u003cstring\u003e, pageFeatures: vector]\ninputFile: org.apache.spark.sql.DataFrame \u003d [source: string, offerId: string, pageViewId: string, offerViewId: string, utcDate: timestamp, keywords: array\u003cstring\u003e, wasClicked: boolean, offerViewCountPerPageView: bigint, clickCountPerPageView: bigint, userId: double, productLemmas: array\u003cstring\u003e, productFeatures: vector, url: string, pageLemmas: array\u003cstring\u003e, pageFeatures: vector]\nres0: Long \u003d 10838248\ngoodUsers: org.apache.spark.sql.DataFrame \u003d [goodUserId: double]\ndata: org.apache.spark.sql.DataFrame \u003d [source: string, offerId: string, pageViewId: string, offerViewId: string, utcDate: timestamp, keywords: array\u003cstring\u003e, wasClicked: boolean, offerViewCountPerPageView: bigint, clickCountPerPageView: bigint, userId: double, productLemmas: array\u003cstring\u003e, productFeatures: vector, url: string, pageLemmas: array\u003cstring\u003e, pageFeatures: vector]\nclicks: org.apache.spark.sql.DataFrame \u003d [source: string, offerId: string, pageViewId: string, offerViewId: string, utcDate: timestamp, keywords: array\u003cstring\u003e, wasClicked: boolean, offerViewCountPerPageView: bigint, clickCountPerPageView: bigint, userId: double, productLemmas: array\u003cstring\u003e, productFeatures: vector, url: string, pageLemmas: array\u003cstring\u003e, pageFeatures: vector]\ndistinctUserWeek: org.apache.spark.sql.DataFrame \u003d [userId: double, dayofyear(utcDate): int]\norg.apache.spark.SparkException: Job 3 cancelled part of cancelled job group zeppelin-20180610-223445_561615744\n\tat org.apache.spark.scheduler.DAGScheduler.org$apache$spark$scheduler$DAGScheduler$$failJobAndIndependentStages(DAGScheduler.scala:1431)\n\tat org.apache.spark.scheduler.DAGScheduler.handleJobCancellation(DAGScheduler.scala:1370)\n\tat org.apache.spark.scheduler.DAGScheduler$$anonfun$handleJobGroupCancelled$1.apply$mcVI$sp(DAGScheduler.scala:783)\n\tat org.apache.spark.scheduler.DAGScheduler$$anonfun$handleJobGroupCancelled$1.apply(DAGScheduler.scala:783)\n\tat org.apache.spark.scheduler.DAGScheduler$$anonfun$handleJobGroupCancelled$1.apply(DAGScheduler.scala:783)\n\tat scala.collection.mutable.HashSet.foreach(HashSet.scala:79)\n\tat org.apache.spark.scheduler.DAGScheduler.handleJobGroupCancelled(DAGScheduler.scala:783)\n\tat org.apache.spark.scheduler.DAGSchedulerEventProcessLoop.doOnReceive(DAGScheduler.scala:1619)\n\tat org.apache.spark.scheduler.DAGSchedulerEventProcessLoop.onReceive(DAGScheduler.scala:1599)\n\tat org.apache.spark.scheduler.DAGSchedulerEventProcessLoop.onReceive(DAGScheduler.scala:1588)\n\tat org.apache.spark.util.EventLoop$$anon$1.run(EventLoop.scala:48)\n\tat org.apache.spark.scheduler.DAGScheduler.runJob(DAGScheduler.scala:620)\n\tat org.apache.spark.SparkContext.runJob(SparkContext.scala:1832)\n\tat org.apache.spark.SparkContext.runJob(SparkContext.scala:1845)\n\tat org.apache.spark.SparkContext.runJob(SparkContext.scala:1858)\n\tat org.apache.spark.sql.execution.SparkPlan.executeTake(SparkPlan.scala:212)\n\tat org.apache.spark.sql.execution.Limit.executeCollect(basicOperators.scala:165)\n\tat org.apache.spark.sql.execution.SparkPlan.executeCollectPublic(SparkPlan.scala:174)\n\tat org.apache.spark.sql.DataFrame$$anonfun$org$apache$spark$sql$DataFrame$$execute$1$1.apply(DataFrame.scala:1499)\n\tat org.apache.spark.sql.DataFrame$$anonfun$org$apache$spark$sql$DataFrame$$execute$1$1.apply(DataFrame.scala:1499)\n\tat org.apache.spark.sql.execution.SQLExecution$.withNewExecutionId(SQLExecution.scala:56)\n\tat org.apache.spark.sql.DataFrame.withNewExecutionId(DataFrame.scala:2086)\n\tat org.apache.spark.sql.DataFrame.org$apache$spark$sql$DataFrame$$execute$1(DataFrame.scala:1498)\n\tat org.apache.spark.sql.DataFrame.org$apache$spark$sql$DataFrame$$collect(DataFrame.scala:1505)\n\tat org.apache.spark.sql.DataFrame$$anonfun$head$1.apply(DataFrame.scala:1375)\n\tat org.apache.spark.sql.DataFrame$$anonfun$head$1.apply(DataFrame.scala:1374)\n\tat org.apache.spark.sql.DataFrame.withCallback(DataFrame.scala:2099)\n\tat org.apache.spark.sql.DataFrame.head(DataFrame.scala:1374)\n\tat org.apache.spark.sql.DataFrame.head(DataFrame.scala:1383)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:39)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:44)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:46)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:48)\n\tat $iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:50)\n\tat $iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:52)\n\tat $iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:54)\n\tat $iwC.\u003cinit\u003e(\u003cconsole\u003e:56)\n\tat \u003cinit\u003e(\u003cconsole\u003e:58)\n\tat .\u003cinit\u003e(\u003cconsole\u003e:62)\n\tat .\u003cclinit\u003e(\u003cconsole\u003e)\n\tat .\u003cinit\u003e(\u003cconsole\u003e:7)\n\tat .\u003cclinit\u003e(\u003cconsole\u003e)\n\tat $print(\u003cconsole\u003e)\n\tat sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)\n\tat sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)\n\tat sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\n\tat java.lang.reflect.Method.invoke(Method.java:498)\n\tat org.apache.spark.repl.SparkIMain$ReadEvalPrint.call(SparkIMain.scala:1065)\n\tat org.apache.spark.repl.SparkIMain$Request.loadAndRun(SparkIMain.scala:1346)\n\tat org.apache.spark.repl.SparkIMain.loadAndRunReq$1(SparkIMain.scala:840)\n\tat org.apache.spark.repl.SparkIMain.interpret(SparkIMain.scala:871)\n\tat org.apache.spark.repl.SparkIMain.interpret(SparkIMain.scala:819)\n\tat org.apache.zeppelin.spark.SparkInterpreter.interpretInput(SparkInterpreter.java:812)\n\tat org.apache.zeppelin.spark.SparkInterpreter.interpret(SparkInterpreter.java:755)\n\tat org.apache.zeppelin.spark.SparkInterpreter.interpret(SparkInterpreter.java:748)\n\tat org.apache.zeppelin.interpreter.ClassloaderInterpreter.interpret(ClassloaderInterpreter.java:57)\n\tat org.apache.zeppelin.interpreter.LazyOpenInterpreter.interpret(LazyOpenInterpreter.java:93)\n\tat org.apache.zeppelin.interpreter.remote.RemoteInterpreterServer$InterpretJob.jobRun(RemoteInterpreterServer.java:331)\n\tat org.apache.zeppelin.scheduler.Job.run(Job.java:171)\n\tat org.apache.zeppelin.scheduler.FIFOScheduler$1.run(FIFOScheduler.java:139)\n\tat java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)\n\tat java.util.concurrent.FutureTask.run(FutureTask.java:266)\n\tat java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)\n\tat java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)\n\tat java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)\n\tat java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)\n\tat java.lang.Thread.run(Thread.java:748)\n\n"
+      },
+      "dateCreated": "Jun 10, 2018 10:34:45 PM",
+      "dateStarted": "Jun 10, 2018 11:07:14 PM",
+      "dateFinished": "Jun 11, 2018 12:27:39 AM",
+      "status": "ERROR",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "\nval parquetFileOfferTemp \u003d sqlContext.read.parquet(\"/data/sidana/purch_april_2018/*.parquet\").select(\"userId\",\"utcDate\",\"wasClicked\")\nval inputFile \u003d parquetFileOfferTemp.filter(to_date($\"utcDate\")\u003e\u003d\"2018-04-01\"\u0026\u0026to_date($\"utcDate\")\u003c\u003d\"2018-04-07\")\nval clicks \u003d inputFile.filter(\"wasClicked\")\nval distinctUserDay \u003d clicks.select($\"userId\",dayofyear($\"utcDate\").as(\"day\")).distinct.repartition($\"userId\")\nval minDay \u003d distinctUserDay.select(min(distinctUserDay(\"day\"))).head().getInt(0)\nval maxDay \u003d distinctUserDay.select(max(distinctUserDay(\"day\"))).head().getInt(0)\nval start \u003d minDay+1\nvar dfPrevious \u003d distinctUserDay.filter(distinctUserDay(\"day\")\u003d\u003d\u003dminDay)\nimport org.apache.spark.sql._\nfor(a\u003c-start to maxDay){\nval dfpresent \u003d distinctUserDay.filter(distinctUserDay(\"day\")\u003d\u003d\u003da)\nval previousUsers \u003d dfPrevious.select(\"userId\")\nval presentUsers \u003d dfpresent.select(\"userId\")\ndfPrevious \u003d previousUsers.join(presentUsers,Seq(\"userId\"))\nprintln(dfPrevious.count)\n}",
+      "dateUpdated": "Jun 11, 2018 4:06:53 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1528364906811_2012970284",
+      "id": "20180607-114826_1456761211",
+      "dateCreated": "Jun 7, 2018 11:48:26 AM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val parquetFileOfferTemp \u003d sqlContext.read.parquet(\"/data/sidana/purch_april_2018/*.parquet\").select(\"userId\",\"utcDate\",\"wasClicked\")\nval inputFile \u003d parquetFileOfferTemp.filter(to_date($\"utcDate\")\u003e\u003d\"2018-04-01\"\u0026\u0026to_date($\"utcDate\")\u003c\u003d\"2018-04-30\")\nval clicks \u003d inputFile.filter(\"wasClicked\")\nval distinctUserWeek \u003d clicks.select($\"userId\",weekofyear($\"utcDate\").as(\"week\")).distinct.repartition($\"userId\")\nval minWeek \u003d distinctUserWeek.select(min(distinctUserWeek(\"week\"))).head().getInt(0)\nval maxWeek \u003d distinctUserWeek.select(max(distinctUserWeek(\"week\"))).head().getInt(0)\nval start \u003d minWeek+1\nvar dfPrevious \u003d distinctUserWeek.filter(distinctUserWeek(\"week\")\u003d\u003d\u003dminWeek)\nimport org.apache.spark.sql._\nfor(a\u003c-start to maxWeek){\nval dfpresent \u003d distinctUserWeek.filter(distinctUserWeek(\"week\")\u003d\u003d\u003da)\nval previousUsers \u003d dfPrevious.select(\"userId\")\nval presentUsers \u003d dfpresent.select(\"userId\")\ndfPrevious \u003d previousUsers.join(presentUsers,Seq(\"userId\"))\nprintln(dfPrevious.count)\n}",
+      "dateUpdated": "Jun 12, 2018 10:56:49 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1528364906364_607482552",
+      "id": "20180607-114826_821834771",
+      "dateCreated": "Jun 7, 2018 11:48:26 AM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "purchBaselinesVer3: returningUsers",
+  "id": "2DGCQNDTQ",
+  "angularObjects": {
+    "2BJGSXM37": [],
+    "2BGHSKCA7": [],
+    "2BHKKP27G": [],
+    "2BGVG5JP4": [],
+    "2BFMBPKAB": [],
+    "2BF969NNB": [],
+    "2BJAQG5W4": [],
+    "2BJHJDBK6": [],
+    "2BHKAE8WK": [],
+    "2BG8QQJNC": [],
+    "2BJ7KKX85": [],
+    "2BH9AVVKH": [],
+    "2BJ6HN5AY": [],
+    "2BFEDXCTE": [],
+    "2BJ5FCP57": [],
+    "2BJ8AEWCT": [],
+    "2BFXEV5XZ": [],
+    "2BG77RV7M": []
+  },
+  "config": {
+    "looknfeel": "default"
+  },
+  "info": {}
+}

@@ -1,0 +1,293 @@
+{
+  "paragraphs": [
+    {
+      "text": "implicit def bool2int(b:Boolean) \u003d if (b) 1 else 0\n\nval bool2int_udf \u003d udf(bool2int _)\n\nval inputfile \u003d sqlContext.read\n\t\t\t\t\t\t\t.format(\"com.databricks.spark.csv\")\n\t\t\t\t\t\t\t.option(\"header\", \"true\") // Use first line of all files as header\n\t\t\t\t\t\t\t.option(\"inferSchema\", \"true\") // Automatically infer data types\n\t\t\t\t\t\t\t.option(\"delimiter\", \"\\t\")\n\t\t\t\t\t\t\t.load(\"/data/sidana/purch/diversity/data\").withColumn(\"utcdate\",unix_timestamp($\"utcdate\",\"yyyy-MM-dd HH:mm:ss\").cast(\"timestamp\")).withColumnRenamed(\"cast(unixtimestamp(utcdate,yyyy-MM-dd HH:mm:ss) as timestamp)\",\"utcdate\")\n\t\t\t\t\t\t\t\ninputfile.count\n\t\t\t\t\t\t\t\nval goodUsers \u003d inputfile.filter($\"wasClicked\").select($\"userId\".as(\"goodUserId\")).distinct\n\nval data \u003d inputfile.join(goodUsers,inputfile(\"userId\")\u003d\u003d\u003dgoodUsers(\"goodUserId\")).drop(goodUsers(\"goodUserId\"))\n\ndata.count\n\nval orderedData \u003d data.orderBy(\"utcdate\")\n\nval totalItems \u003d orderedData.count\n\nval cnt \u003d totalItems * 0.7\n\nval trainDF \u003d sqlContext.createDataFrame(orderedData.rdd.zipWithIndex.filter {\n  case (_, i) \u003d\u003e i \u003c\u003d cnt \n}.map(_._1), orderedData.schema)\n\nval testDF \u003d sqlContext.createDataFrame(orderedData.rdd.zipWithIndex.filter {\n  case (_, i) \u003d\u003e i \u003e cnt \n}.map(_._1), orderedData.schema)\n\n\n\n//need to make a join here.\n\nval seq \u003d Seq(\"userId\",\"offerId\",\"wasClicked\")\n\nval orderedTrainTemp \u003d trainDF.orderBy(\"utcdate\")\n\nval orderedTrainRating \u003d orderedTrainTemp.select($\"userId\",$\"offerId\",$\"wasClicked\").withColumn(\"wasClicked\",bool2int_udf($\"wasClicked\")).dropDuplicates(seq).groupBy(\"userId\",\"offerId\").max(\"wasClicked\").withColumnRenamed(\"max(wasClicked)\",\"rating\")\n\nval orderedTrainTime \u003d orderedTrainTemp.select($\"userId\",$\"offerId\",unix_timestamp($\"utcDate\").as(\"timestamp\")).groupBy(\"userId\",\"offerId\").agg(first(\"timestamp\").alias(\"timestamp\"))\n\nval orderedTestTemp \u003d testDF.orderBy(\"utcdate\")\n\nval orderedTestRating \u003d orderedTestTemp.select($\"userId\",$\"offerId\",$\"wasClicked\").withColumn(\"wasClicked\", bool2int_udf($\"wasClicked\")).dropDuplicates(seq).groupBy(\"userId\",\"offerId\").max(\"wasClicked\").withColumnRenamed(\"max(wasClicked)\",\"rating\")\n\nval orderedTestTime \u003d orderedTestTemp.select($\"userId\",$\"offerId\",unix_timestamp($\"utcDate\").as(\"timestamp\")).groupBy(\"userId\",\"offerId\").agg(first(\"timestamp\").alias(\"timestamp\"))\n\nval orderedTrain \u003d orderedTrainTime.join(orderedTrainRating,orderedTrainTime(\"userId\")\u003d\u003d\u003dorderedTrainRating(\"userId\")\u0026\u0026orderedTrainTime(\"offerId\")\u003d\u003d\u003dorderedTrainRating(\"offerId\")).drop(orderedTrainTime(\"userId\")).drop(orderedTrainTime(\"offerId\"))\n\nval orderedTest_temp_temp \u003d orderedTestTime.join(orderedTestRating,orderedTestTime(\"userId\")\u003d\u003d\u003dorderedTestRating(\"userId\")\u0026\u0026orderedTestTime(\"offerId\")\u003d\u003d\u003dorderedTestRating(\"offerId\")).drop(orderedTestTime(\"userId\")).drop(orderedTestTime(\"offerId\"))\n\n// need to ensure same users and items in test as in train\nval users_train \u003d orderedTrain.select(\"userId\").distinct\nval offers_train \u003d orderedTrain.select(\"offerId\").distinct\n\nval orderedTest_temp \u003d orderedTest_temp_temp.join(users_train,orderedTest_temp_temp(\"userId\")\u003d\u003d\u003dusers_train(\"userId\")).drop(users_train(\"userId\"))\n\nval orderedTest \u003d orderedTest_temp.join(offers_train,orderedTest_temp(\"offerId\")\u003d\u003d\u003doffers_train(\"offerId\")).drop(offers_train(\"offerId\"))\n\n\n// until here\n\nval header \u003d \"userid\\tofferid\\trating\\ttimestamp\"\n\nval trainWrite \u003d orderedTrain.select(\"userId\",\"offerId\",\"rating\",\"timestamp\").rdd.map(_.mkString(\"\\t\")).mapPartitionsWithIndex((i, iter) \u003d\u003e if (i\u003d\u003d0) (List(header).toIterator ++ iter) else iter)\n\nval testWrite \u003d orderedTest.select(\"userId\",\"offerId\",\"rating\",\"timestamp\").rdd.map(_.mkString(\"\\t\")).mapPartitionsWithIndex((i, iter) \u003d\u003e if (i\u003d\u003d0) (List(header).toIterator ++ iter) else iter)\n\ntrainWrite.coalesce(1,false).saveAsTextFile(\"/data/sidana/purch/diversity/baselines/train.csv\")\n\ntestWrite.coalesce(1,false).saveAsTextFile(\"/data/sidana/purch/diversity/baselines/test.csv\")",
+      "authenticationInfo": {},
+      "dateUpdated": "Jan 30, 2018 5:53:36 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1508420873552_1271754428",
+      "id": "20171019-154753_842174735",
+      "dateCreated": "Oct 19, 2017 3:47:53 PM",
+      "dateStarted": "Jan 30, 2018 5:52:39 PM",
+      "dateFinished": "Jan 30, 2018 5:52:59 PM",
+      "status": "ERROR",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val userofferpairts \u003d orderedTestTemp.select(\"userId\",\"offerId\",\"wasClicked\").distinct\nz.show(userofferpairts.groupBy(\"userId\",\"offerId\").count.sort(asc(\"count\")))",
+      "authenticationInfo": {},
+      "dateUpdated": "Nov 2, 2017 11:52:30 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [
+            {
+              "name": "userId",
+              "index": 0.0,
+              "aggr": "sum"
+            }
+          ],
+          "values": [
+            {
+              "name": "offerId",
+              "index": 1.0,
+              "aggr": "sum"
+            }
+          ],
+          "groups": [],
+          "scatter": {
+            "xAxis": {
+              "name": "userId",
+              "index": 0.0,
+              "aggr": "sum"
+            },
+            "yAxis": {
+              "name": "offerId",
+              "index": 1.0,
+              "aggr": "sum"
+            }
+          }
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1509473142152_-790644399",
+      "id": "20171031-190542_867238125",
+      "dateCreated": "Oct 31, 2017 7:05:42 PM",
+      "dateStarted": "Nov 2, 2017 11:52:30 PM",
+      "dateFinished": "Nov 2, 2017 11:53:13 PM",
+      "status": "FINISHED",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "z.show(orderedTest.filter($\"userId\"\u003d\u003d\u003d\"DB794A95C08B4838BAD3CB1E7308CAFC\" \u0026\u0026 $\"offerId\"\u003d\u003d\u003d\"813567021599\"))",
+      "authenticationInfo": {},
+      "dateUpdated": "Nov 2, 2017 11:53:58 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1509657653296_444255779",
+      "id": "20171102-222053_1187477263",
+      "dateCreated": "Nov 2, 2017 10:20:53 PM",
+      "dateStarted": "Nov 2, 2017 11:53:58 PM",
+      "dateFinished": "Nov 2, 2017 11:54:30 PM",
+      "status": "FINISHED",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val orderedTrainTime \u003d orderedTrainTemp.select($\"userId\",$\"offerId\",unix_timestamp($\"utcDate\").as(\"timestamp\")).groupBy(\"userId\",\"offerId\").agg(first(\"timestamp\"))",
+      "authenticationInfo": {},
+      "dateUpdated": "Nov 2, 2017 11:38:48 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1509662295279_-224616840",
+      "id": "20171102-233815_878121752",
+      "dateCreated": "Nov 2, 2017 11:38:15 PM",
+      "dateStarted": "Nov 2, 2017 11:38:48 PM",
+      "dateFinished": "Nov 2, 2017 11:38:49 PM",
+      "status": "FINISHED",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "//for recnet\n\nval trainFile \u003d sqlContext.read\n\t\t\t    .format(\"com.databricks.spark.csv\")\n\t\t\t\t\t.option(\"header\", \"true\") // Use first line of all files as header\n\t\t\t\t\t.option(\"inferSchema\", \"true\") // Automatically infer data types\n\t\t\t\t\t.option(\"delimiter\", \",\")\n\t\t\t\t\t.load(\"/data/sidana/diversity/kldivergence/param_tune/all_offers_setting/regularization/purch/train_all_raw.csv\")\n// below line does not work\t\t\t\t\t\n//.withColumn(\"timestamp\", $\"timestamp\".cast(\"unix_timestamp\"))\n\nval positiveData \u003d trainFile.filter($\"rating\" \u003e\u003d 4)\nval usersPositiveOffers \u003d positiveData.select(\"userid\",\"offerid\").distinct\nval userPositiveClickCount \u003d usersPositiveOffers.groupBy(\"userid\").count\nval goodUsers \u003d userPositiveClickCount.filter($\"count\" \u003e\u003d 2)\n\nval negativeData \u003d trainFile.filter($\"rating\" \u003c\u003d 1)\nval usersNegativeOffers \u003d negativeData.select(\"userid\",\"offerid\").distinct\nval userNegativeClickCount \u003d usersNegativeOffers.groupBy(\"userid\").count\nval badUsers \u003d userNegativeClickCount.filter($\"count\" \u003e\u003d 5)\n\nval goodDataTemp \u003d trainFile.join(goodUsers,trainFile(\"userid\")\u003d\u003d\u003dgoodUsers(\"userid\")).drop(goodUsers(\"count\")).drop(goodUsers(\"userid\"))\nval orderedTrain \u003d goodDataTemp.join(badUsers,goodDataTemp(\"userId\")\u003d\u003d\u003dbadUsers(\"userid\")).drop(badUsers(\"count\")).drop(badUsers(\"userid\"))\n\n//val orderedTrain \u003d trainFile.select(\"userid\",\"offerid\",\"rating\",\"timestamp\").orderBy(\"timestamp\")\n\nval users_train \u003d orderedTrain.select(\"userid\").distinct\nval offers_train \u003d orderedTrain.select(\"offerid\").distinct\n\nval orderedTest_temp_temp \u003d sqlContext.read\n\t\t\t    .format(\"com.databricks.spark.csv\")\n\t\t\t\t\t.option(\"header\", \"true\") // Use first line of all files as header\n\t\t\t\t\t.option(\"inferSchema\", \"true\") // Automatically infer data types\n\t\t\t\t\t.option(\"delimiter\", \",\")\n\t\t\t\t\t.load(\"/data/sidana/diversity/kldivergence/param_tune/all_offers_setting/regularization/purch/test_all_raw.csv\")\n\t\t\t\t\t\n//.withColumn(\"timestamp\", $\"timestamp\".cast(\"timestamp\"))\n\nval orderedTest_temp \u003d orderedTest_temp_temp.join(users_train,orderedTest_temp_temp(\"userid\")\u003d\u003d\u003dusers_train(\"userid\")).drop(users_train(\"userid\"))\n\nval orderedTest \u003d orderedTest_temp.join(offers_train,orderedTest_temp(\"offerid\")\u003d\u003d\u003doffers_train(\"offerid\")).drop(offers_train(\"offerid\"))\n\nval header \u003d \"userid,offerid,rating,timestamp\"\n\nval trainWrite \u003d orderedTrain.select(\"userid\",\"offerid\",\"rating\",\"timestamp\").orderBy(\"timestamp\").rdd.map(_.mkString(\",\")).mapPartitionsWithIndex((i, iter) \u003d\u003e if (i\u003d\u003d0) (List(header).toIterator ++ iter) else iter)\n\nval testWrite \u003d orderedTest.select(\"userid\",\"offerid\",\"rating\",\"timestamp\").orderBy(\"timestamp\").rdd.map(_.mkString(\",\")).mapPartitionsWithIndex((i, iter) \u003d\u003e if (i\u003d\u003d0) (List(header).toIterator ++ iter) else iter)\n\ntrainWrite.coalesce(1,false).saveAsTextFile(\"/data/sidana/diversity/kldivergence/param_tune/all_offers_setting/regularization/purch/train.csv\")\n\ntestWrite.coalesce(1,false).saveAsTextFile(\"/data/sidana/diversity/kldivergence/param_tune/all_offers_setting/regularization/purch/test.csv\")\n\t\t\t\t\t\n\n\n\t\t\t\t\t\t\t\n\n\n",
+      "authenticationInfo": {},
+      "dateUpdated": "Jul 8, 2018 3:39:23 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1509657791291_-267362765",
+      "id": "20171102-222311_1497784142",
+      "result": {
+        "code": "ERROR",
+        "type": "TEXT",
+        "msg": "java.lang.IllegalArgumentException: The header contains a duplicate entry: \u00270\u0027 in [0, 0, 1, 1496707211]\n\tat org.apache.commons.csv.CSVFormat.validate(CSVFormat.java:770)\n\tat org.apache.commons.csv.CSVFormat.\u003cinit\u003e(CSVFormat.java:364)\n\tat org.apache.commons.csv.CSVFormat.withHeader(CSVFormat.java:882)\n\tat com.databricks.spark.csv.CsvRelation.tokenRdd(CsvRelation.scala:85)\n\tat com.databricks.spark.csv.CsvRelation.inferSchema(CsvRelation.scala:249)\n\tat com.databricks.spark.csv.CsvRelation.\u003cinit\u003e(CsvRelation.scala:73)\n\tat com.databricks.spark.csv.DefaultSource.createRelation(DefaultSource.scala:162)\n\tat com.databricks.spark.csv.DefaultSource.createRelation(DefaultSource.scala:44)\n\tat org.apache.spark.sql.execution.datasources.ResolvedDataSource$.apply(ResolvedDataSource.scala:158)\n\tat org.apache.spark.sql.DataFrameReader.load(DataFrameReader.scala:119)\n\tat org.apache.spark.sql.DataFrameReader.load(DataFrameReader.scala:109)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:34)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:41)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:43)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:45)\n\tat $iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:47)\n\tat $iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:49)\n\tat $iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:51)\n\tat $iwC.\u003cinit\u003e(\u003cconsole\u003e:53)\n\tat \u003cinit\u003e(\u003cconsole\u003e:55)\n\tat .\u003cinit\u003e(\u003cconsole\u003e:59)\n\tat .\u003cclinit\u003e(\u003cconsole\u003e)\n\tat .\u003cinit\u003e(\u003cconsole\u003e:7)\n\tat .\u003cclinit\u003e(\u003cconsole\u003e)\n\tat $print(\u003cconsole\u003e)\n\tat sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)\n\tat sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)\n\tat sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\n\tat java.lang.reflect.Method.invoke(Method.java:498)\n\tat org.apache.spark.repl.SparkIMain$ReadEvalPrint.call(SparkIMain.scala:1065)\n\tat org.apache.spark.repl.SparkIMain$Request.loadAndRun(SparkIMain.scala:1346)\n\tat org.apache.spark.repl.SparkIMain.loadAndRunReq$1(SparkIMain.scala:840)\n\tat org.apache.spark.repl.SparkIMain.interpret(SparkIMain.scala:871)\n\tat org.apache.spark.repl.SparkIMain.interpret(SparkIMain.scala:819)\n\tat org.apache.zeppelin.spark.SparkInterpreter.interpretInput(SparkInterpreter.java:812)\n\tat org.apache.zeppelin.spark.SparkInterpreter.interpret(SparkInterpreter.java:755)\n\tat org.apache.zeppelin.spark.SparkInterpreter.interpret(SparkInterpreter.java:748)\n\tat org.apache.zeppelin.interpreter.ClassloaderInterpreter.interpret(ClassloaderInterpreter.java:57)\n\tat org.apache.zeppelin.interpreter.LazyOpenInterpreter.interpret(LazyOpenInterpreter.java:93)\n\tat org.apache.zeppelin.interpreter.remote.RemoteInterpreterServer$InterpretJob.jobRun(RemoteInterpreterServer.java:331)\n\tat org.apache.zeppelin.scheduler.Job.run(Job.java:171)\n\tat org.apache.zeppelin.scheduler.FIFOScheduler$1.run(FIFOScheduler.java:139)\n\tat java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)\n\tat java.util.concurrent.FutureTask.run(FutureTask.java:266)\n\tat java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)\n\tat java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)\n\tat java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)\n\tat java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)\n\tat java.lang.Thread.run(Thread.java:748)\n\n"
+      },
+      "dateCreated": "Nov 2, 2017 10:23:11 PM",
+      "dateStarted": "Jul 8, 2018 3:39:23 PM",
+      "dateFinished": "Jul 8, 2018 3:39:26 PM",
+      "status": "ERROR",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "// verify 2 opposite ratings\nval goodData \u003d sqlContext.read\n\t\t\t    .format(\"com.databricks.spark.csv\")\n\t\t\t\t\t.option(\"header\", \"true\") // Use first line of all files as header\n\t\t\t\t\t.option(\"inferSchema\", \"true\") // Automatically infer data types\n\t\t\t\t\t.option(\"delimiter\", \",\")\n\t\t\t\t\t.load(\"/data/sidana/diversity/kldivergence/param_tune/all_offers_setting/regularization/purch/train_all_raw_original.csv\")\n\nval usersRatingDefault \u003d goodData.select(\"userid\",\"rating\").distinct\nval users \u003d usersRatingDefault.groupBy(\"userid\").count.sort(asc(\"count\"))\nz.show(users)",
+      "authenticationInfo": {},
+      "dateUpdated": "Jan 30, 2018 6:12:37 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1517327704441_-1877331628",
+      "id": "20180130-165504_1165535407",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TABLE",
+        "msg": "userid\tcount\n33635\t2\n13435\t2\n23235\t2\n39435\t2\n2835\t2\n26635\t2\n17835\t2\n26235\t2\n635\t2\n34035\t2\n35\t2\n49835\t2\n25035\t2\n3035\t2\n15235\t2\n44235\t2\n19035\t2\n45635\t2\n25835\t2\n19435\t2\n3435\t2\n40035\t2\n35635\t2\n39635\t2\n31835\t2\n56035\t2\n11435\t2\n37435\t2\n7035\t2\n85235\t2\n31035\t2\n37235\t2\n74035\t2\n20835\t2\n93235\t2\n68235\t2\n14635\t2\n10435\t2\n30235\t2\n6035\t2\n70835\t2\n77235\t2\n39235\t2\n28035\t2\n1235\t2\n45835\t2\n5835\t2\n24635\t2\n42835\t2\n15835\t2\n235\t2\n70035\t2\n6835\t2\n4635\t2\n18635\t2\n29635\t2\n4035\t2\n1835\t2\n28435\t2\n1435\t2\n46435\t2\n31435\t2\n8040\t2\n16040\t2\n46440\t2\n66240\t2\n48840\t2\n56640\t2\n8840\t2\n5440\t2\n23840\t2\n4640\t2\n3240\t2\n2240\t2\n9040\t2\n27040\t2\n13840\t2\n31240\t2\n20440\t2\n67240\t2\n52240\t2\n49440\t2\n25440\t2\n22440\t2\n1640\t2\n14040\t2\n26640\t2\n4840\t2\n69640\t2\n33440\t2\n34440\t2\n10840\t2\n87240\t2\n52440\t2\n45240\t2\n9440\t2\n14240\t2\n50440\t2\n60840\t2\n8240\t2\n18040\t2\n24440\t2\n2840\t2\n53040\t2\n3440\t2\n33040\t2\n37240\t2\n72440\t2\n17840\t2\n21640\t2\n18440\t2\n13040\t2\n2440\t2\n28040\t2\n28840\t2\n24640\t2\n55840\t2\n47440\t2\n91040\t2\n62840\t2\n30240\t2\n74840\t2\n52840\t2\n83440\t2\n59640\t2\n9840\t2\n7240\t2\n1040\t2\n9640\t2\n15440\t2\n23440\t2\n29440\t2\n12240\t2\n58840\t2\n6440\t2\n78240\t2\n34240\t2\n21240\t2\n14440\t2\n24034\t2\n5634\t2\n22034\t2\n28034\t2\n25034\t2\n31234\t2\n13434\t2\n15434\t2\n52234\t2\n16434\t2\n834\t2\n104834\t2\n89234\t2\n434\t2\n109034\t2\n45634\t2\n2434\t2\n21834\t2\n2634\t2\n4034\t2\n7034\t2\n17834\t2\n50034\t2\n58234\t2\n634\t2\n25834\t2\n100434\t2\n2234\t2\n20834\t2\n11434\t2\n7434\t2\n20634\t2\n92034\t2\n93834\t2\n46634\t2\n92234\t2\n42234\t2\n3434\t2\n34634\t2\n36234\t2\n37234\t2\n27234\t2\n93434\t2\n40234\t2\n2034\t2\n24434\t2\n9834\t2\n84034\t2\n47434\t2\n6634\t2\n27034\t2\n75034\t2\n23434\t2\n93634\t2\n57634\t2\n16834\t2\n10434\t2\n8034\t2\n91434\t2\n35434\t2\n33834\t2\n20434\t2\n27834\t2\n56234\t2\n6434\t2\n10634\t2\n4834\t2\n10034\t2\n66634\t2\n3834\t2\n41834\t2\n91834\t2\n5834\t2\n6233\t2\n29033\t2\n37033\t2\n51233\t2\n8633\t2\n46233\t2\n14633\t2\n47233\t2\n3633\t2\n10033\t2\n3433\t2\n4433\t2\n72633\t2\n19633\t2\n27233\t2\n29833\t2\n26833\t2\n36433\t2\n45033\t2\n9233\t2\n20833\t2\n41433\t2\n41233\t2\n2633\t2\n31433\t2\n6833\t2\n17833\t2\n12633\t2\n88233\t2\n39633\t2\n13833\t2\n4233\t2\n39433\t2\n11633\t2\n27633\t2\n3833\t2\n17233\t2\n8433\t2\n109433\t2\n83433\t2\n18433\t2\n5633\t2\n9033\t2\n65033\t2\n72233\t2\n38033\t2\n86833\t2\n36033\t2\n82033\t2\n8833\t2\n27433\t2\n112833\t2\n54633\t2\n11233\t2\n24833\t2\n33633\t2\n30633\t2\n19833\t2\n41633\t2\n833\t2\n64233\t2\n24633\t2\n92233\t2\n27833\t2\n8233\t2\n15833\t2\n28033\t2\n49833\t2\n87233\t2\n56433\t2\n12433\t2\n17633\t2\n1633\t2\n633\t2\n46033\t2\n32033\t2\n34633\t2\n11433\t2\n69433\t2\n41033\t2\n94633\t2\n55433\t2\n30433\t2\n21233\t2\n16633\t2\n22633\t2\n73233\t2\n18233\t2\n21833\t2\n91033\t2\n45833\t2\n68838\t2\n4238\t2\n1438\t2\n25038\t2\n15638\t2\n41438\t2\n87638\t2\n74438\t2\n69038\t2\n2238\t2\n24038\t2\n18638\t2\n87838\t2\n76038\t2\n12638\t2\n21438\t2\n22438\t2\n91638\t2\n19238\t2\n42238\t2\n52238\t2\n67638\t2\n1838\t2\n26038\t2\n23638\t2\n28038\t2\n42038\t2\n49038\t2\n8038\t2\n32638\t2\n35238\t2\n56238\t2\n13438\t2\n40038\t2\n22038\t2\n14038\t2\n14438\t2\n58638\t2\n86838\t2\n31838\t2\n17638\t2\n38838\t2\n63038\t2\n2038\t2\n838\t2\n13638\t2\n67238\t2\n55038\t2\n45438\t2\n7038\t2\n12238\t2\n93638\t2\n70438\t2\n49438\t2\n61038\t2\n46838\t2\n66238\t2\n1238\t2\n32238\t2\n52438\t2\n26638\t2\n16638\t2\n23838\t2\n15038\t2\n3638\t2\n8838\t2\n22238\t2\n20438\t2\n27838\t2\n5838\t2\n7638\t2\n16438\t2\n17838\t2\n4638\t2\n101038\t2\n48638\t2\n18838\t2\n70238\t2\n85438\t2\n15438\t2\n51038\t2\n25838\t2\n9438\t2\n20838\t2\n3238\t2\n93838\t2\n51438\t2\n11838\t2\n6038\t2\n21638\t2\n45238\t2\n32838\t2\n6638\t2\n10038\t2\n62638\t2\n88638\t2\n24638\t2\n100638\t2\n5038\t2\n56038\t2\n43238\t2\n100438\t2\n67838\t2\n28238\t2\n20038\t2\n89846\t2\n21446\t2\n40246\t2\n93446\t2\n99846\t2\n1246\t2\n56646\t2\n63446\t2\n76646\t2\n37846\t2\n47446\t2\n78446\t2\n95046\t2\n646\t2\n18046\t2\n70846\t2\n34046\t2\n82846\t2\n5646\t2\n16446\t2\n20446\t2\n46\t2\n12446\t2\n34246\t2\n8646\t2\n21046\t2\n48046\t2\n15846\t2\n10846\t2\n28446\t2\n24646\t2\n3446\t2\n6246\t2\n87446\t2\n9446\t2\n17646\t2\n15646\t2\n41646\t2\n77246\t2\n86046\t2\n43046\t2\n33246\t2\n61446\t2\n79046\t2\n13046\t2\n7246\t2\n15446\t2\n6846\t2\n30646\t2\n46046\t2\n30046\t2\n39046\t2\n51246\t2\n57646\t2\n3246\t2\n21846\t2\n19246\t2\n8046\t2\n37246\t2\n35446\t2\n40846\t2\n62646\t2\n7046\t2\n72846\t2\n29446\t2\n16046\t2\n2646\t2\n63046\t2\n1646\t2\n18246\t2\n22846\t2\n5246\t2\n6446\t2\n19046\t2\n4846\t2\n48646\t2\n31046\t2\n67446\t2\n10646\t2\n14646\t2\n37646\t2\n4246\t2\n35846\t2\n36446\t2\n49846\t2\n36046\t2\n15239\t2\n17639\t2\n1439\t2\n5839\t2\n29639\t2\n44239\t2\n99039\t2\n69839\t2\n7439\t2\n6039\t2\n63839\t2\n10439\t2\n57039\t2\n54839\t2\n38039\t2\n9439\t2\n16039\t2\n13439\t2\n64039\t2\n18039\t2\n29839\t2\n22039\t2\n73239\t2\n23839\t2\n8839\t2\n55639\t2\n10039\t2\n1839\t2\n28039\t2\n639\t2\n66639\t2\n3639\t2\n19239\t2\n34839\t2\n10639\t2\n71239\t2\n76639\t2\n45639\t2\n2839\t2\n4239\t2\n58039\t2\n58839\t2\n30239\t2\n14239\t2\n8639\t2\n25639\t2\n18439\t2\n88239\t2\n2439\t2\n71839\t2\n45439\t2\n4839\t2\n33639\t2\n82639\t2\n3239\t2\n38639\t2\n28839\t2\n42239\t2\n41839\t2\n84239\t2\n21239\t2\n7839\t2\n29439\t2\n12439\t2\n27439\t2\n25439\t2\n63039\t2\n108839\t2\n12239\t2\n78039\t2\n2039\t2\n32439\t2\n108239\t2\n68239\t2\n75639\t2\n1639\t2\n51439\t2\n37439\t2\n44439\t2\n77639\t2\n66039\t2\n13639\t2\n86839\t2\n9839\t2\n239\t2\n48839\t2\n19639\t2\n22839\t2\n59054\t2\n49254\t2\n25854\t2\n27054\t2\n78654\t2\n68654\t2\n30454\t2\n73054\t2\n24854\t2\n9254\t2\n47854\t2\n50054\t2\n18454\t2\n17854\t2\n4254\t2\n31454\t2\n82254\t2\n66054\t2\n24254\t2\n22854\t2\n32654\t2\n12654\t2\n65054\t2\n17054\t2\n15654\t2\n24054\t2\n25654\t2\n2854\t2\n23654\t2\n11654\t2\n22054\t2\n47654\t2\n19854\t2\n41254\t2\n33454\t2\n16454\t2\n15454\t2\n2654\t2\n31854\t2\n6254\t2\n36254\t2\n19654\t2\n18854\t2\n31054\t2\n40654\t2\n34854\t2\n18054\t2\n5854\t2\n81654\t2\n18254\t2\n72454\t2\n32854\t2\n8054\t2\n90654\t2\n62654\t2\n4054\t2\n57854\t2\n31254\t2\n54\t2\n47254\t2\n7254\t2\n94054\t2\n5454\t2\n11254\t2\n56254\t2\n69054\t2\n23254\t2\n84654\t2\n1054\t2\n87054\t2\n79254\t2\n8454\t2\n2454\t2\n82854\t2\n37854\t2\n74654\t2\n15854\t2\n35654\t2\n71054\t2\n86654\t2\n109254\t2\n96854\t2\n7454\t2\n454\t2\n17654\t2\n61654\t2\n9854\t2\n8854\t2\n36054\t2\n9654\t2\n64054\t2\n34054\t2\n56654\t2\n7854\t2\n13454\t2\n58843\t2\n23243\t2\n12043\t2\n55643\t2\n56243\t2\n62843\t2\n37243\t2\n65643\t2\n51843\t2\n36443\t2\n52643\t2\n69043\t2\n13643\t2\n9043\t2\n13043\t2\n72043\t2\n33443\t2\n69243\t2\n24843\t2\n71843\t2\n22443\t2\n14643\t2\n52443\t2\n4243\t2\n8643\t2\n71643\t2\n48443\t2\n35443\t2\n29243\t2\n14843\t2\n6243\t2\n24443\t2\n59243\t2\n73043\t2\n43\t2\n18443\t2\n45643\t2\n4843\t2\n2243\t2\n24243\t2\n6843\t2\n26243\t2\n68043\t2\n23443\t2\n5243\t2\n19643\t2\n67043\t2\n36643\t2\n12643\t2\n68643\t2\n5643\t2\n36243\t2\n4643\t2\n94043\t2\n16043\t2\n35043\t2\n29643\t2\n44043\t2\n20043\t2\n26043\t2\n19043\t2\n17843\t2\n64043\t2\n1443\t2\n1643\t2\n3443\t2\n34643\t2\n75443\t2\n16443\t2\n1243\t2\n46643\t2\n3843\t2\n28843\t2\n28243\t2\n107043\t2\n10043\t2\n27843\t2\n66643\t2\n43058\t2\n12658\t2\n7658\t2\n64658\t2\n16258\t2\n13858\t2\n31658\t2\n12858\t2\n17858\t2\n52858\t2\n44058\t2\n91858\t2\n28658\t2\n21658\t2\n46858\t2\n45258\t2\n11258\t2\n63658\t2\n49858\t2\n27458\t2\n658\t2\n24258\t2\n15058\t2\n38458\t2\n11058\t2\n60058\t2\n4858\t2\n17458\t2\n36458\t2\n85458\t2\n43258\t2\n26858\t2\n1458\t2\n14458\t2\n39658\t2\n79858\t2\n9258\t2\n3658\t2\n48258\t2\n11658\t2\n50058\t2\n75058\t2\n22858\t2\n5658\t2\n63058\t2\n83258\t2\n31458\t2\n96258\t2\n6858\t2\n24458\t2\n18858\t2\n20258\t2\n44458\t2\n3458\t2\n9458\t2\n56258\t2\n61458\t2\n67258\t2\n458\t2\n58258\t2\n21058\t2\n4058\t2\n62258\t2\n49258\t2\n5058\t2\n84858\t2\n25258\t2\n14058\t2\n258\t2\n19858\t2\n2658\t2\n77058\t2\n2258\t2\n16058\t2\n84258\t2\n20658\t2\n42458\t2\n2058\t2\n60458\t2\n105858\t2\n101858\t2\n47258\t2\n3058\t2\n58\t2\n23858\t2\n16658\t2\n22458\t2\n33858\t2\n40058\t2\n18658\t2\n7058\t2\n68658\t2\n48458\t2\n22058\t2\n31673\t2\n57073\t2\n24273\t2\n76873\t2\n22073\t2\n100073\t2\n16073\t2\n33073\t2\n5073\t2\n26273\t2\n3673\t2\n6873\t2\n35073\t2\n11473\t2\n55673\t2\n40273\t2\n81673\t2\n12473\t2\n65473\t2\n21073\t2\n77273\t2\n42273\t2\n37673\t2\n15473\t2\n32673\t2\n24473\t2\n42073\t2\n2273\t2\n35473\t2\n673\t2\n92473\t2\n77073\t2\n19873\t2\n73473\t2\n51673\t2\n25273\t2\n59673\t2\n1673\t2\n17473\t2\n8273\t2\n28273\t2\n51473\t2\n14273\t2\n18273\t2\n14073\t2\n63273\t2\n38273\t2\n78273\t2\n42473\t2\n64073\t2\n50873\t2\n28873\t2\n67673\t2\n873\t2\n39073\t2\n32873\t2\n74473\t2\n17873\t2\n59873\t2\n53673\t2\n4473\t2\n2073\t2\n74073\t2\n22673\t2\n25473\t2\n47473\t2\n6073\t2\n88273\t2\n72473\t2\n63673\t2\n11273\t2\n52073\t2\n62073\t2\n87273\t2\n12073\t2\n27473\t2\n73\t2\n70073\t2\n62473\t2\n42673\t2\n43873\t2\n7073\t2\n74873\t2\n56273\t2\n102673\t2\n23473\t2\n62873\t2\n56473\t2\n29473\t2\n19473\t2\n17273\t2\n23673\t2\n27673\t2\n473\t2\n24073\t2\n96873\t2\n40682\t2\n24882\t2\n66482\t2\n13882\t2\n75482\t2\n102082\t2\n77682\t2\n10282\t2\n44682\t2\n47082\t2\n62682\t2\n2482\t2\n84482\t2\n51282\t2\n50482\t2\n63282\t2\n10682\t2\n56682\t2\n61882\t2\n59682\t2\n21082\t2\n43482\t2\n22882\t2\n33682\t2\n17882\t2\n9082\t2\n15882\t2\n57682\t2\n28082\t2\n46482\t2\n7482\t2\n23682\t2\n40882\t2\n23882\t2\n58082\t2\n20482\t2\n27882\t2\n15082\t2\n38682\t2\n45682\t2\n4882\t2\n82482\t2\n1282\t2\n26882\t2\n20682\t2\n62282\t2\n36282\t2\n682\t2\n67882\t2\n35882\t2\n13482\t2\n72882\t2\n34882\t2\n7082\t2\n12882\t2\n\n\u003cfont color\u003dred\u003eResults are limited by 1000.\u003c/font\u003e"
+      },
+      "dateCreated": "Jan 30, 2018 4:55:04 PM",
+      "dateStarted": "Jan 30, 2018 6:11:04 PM",
+      "dateFinished": "Jan 30, 2018 6:11:58 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val users \u003d usersRatingDefault.groupBy(\"userid\").count.sort(asc(\"count\"))\nz.show(users)",
+      "authenticationInfo": {},
+      "dateUpdated": "Jan 30, 2018 6:12:28 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1517332264728_-1268901134",
+      "id": "20180130-181104_1105879552",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TABLE",
+        "msg": "userid\tcount\n36036\t2\n32236\t2\n42836\t2\n16436\t2\n83036\t2\n15036\t2\n31036\t2\n16636\t2\n28836\t2\n86036\t2\n14236\t2\n18036\t2\n21236\t2\n54436\t2\n6436\t2\n34036\t2\n4436\t2\n33436\t2\n83236\t2\n8436\t2\n36436\t2\n85436\t2\n30436\t2\n46436\t2\n54036\t2\n83636\t2\n38436\t2\n9236\t2\n12636\t2\n61836\t2\n39036\t2\n91236\t2\n3436\t2\n75436\t2\n48636\t2\n29436\t2\n62836\t2\n79836\t2\n17436\t2\n8036\t2\n15636\t2\n20036\t2\n5036\t2\n35436\t2\n47636\t2\n61636\t2\n14836\t2\n37236\t2\n17036\t2\n25236\t2\n62436\t2\n44236\t2\n95436\t2\n53236\t2\n25636\t2\n236\t2\n1636\t2\n70036\t2\n67236\t2\n103236\t2\n9836\t2\n23836\t2\n3636\t2\n68636\t2\n11636\t2\n5836\t2\n37836\t2\n42036\t2\n43036\t2\n12836\t2\n23436\t2\n33636\t2\n40636\t2\n113636\t2\n90036\t2\n49436\t2\n10636\t2\n4036\t2\n46636\t2\n54636\t2\n8636\t2\n10036\t2\n88836\t2\n29636\t2\n53036\t2\n836\t2\n89436\t2\n63436\t2\n29236\t2\n9436\t2\n32036\t2\n58436\t2\n29836\t2\n47436\t2\n9636\t2\n30836\t2\n77436\t2\n18436\t2\n2642\t2\n50442\t2\n85842\t2\n9442\t2\n4642\t2\n36642\t2\n71842\t2\n68842\t2\n32642\t2\n6442\t2\n25242\t2\n56442\t2\n12842\t2\n8842\t2\n15842\t2\n442\t2\n19242\t2\n20242\t2\n58242\t2\n60842\t2\n58842\t2\n17842\t2\n57042\t2\n39642\t2\n71242\t2\n3842\t2\n102042\t2\n25642\t2\n46242\t2\n2042\t2\n32442\t2\n92642\t2\n30842\t2\n4842\t2\n1442\t2\n67042\t2\n36242\t2\n1642\t2\n1042\t2\n58442\t2\n49242\t2\n11842\t2\n79242\t2\n16842\t2\n2842\t2\n10642\t2\n53442\t2\n842\t2\n33842\t2\n106242\t2\n82442\t2\n4042\t2\n13242\t2\n35242\t2\n38042\t2\n3642\t2\n74442\t2\n48642\t2\n99042\t2\n66642\t2\n9842\t2\n101642\t2\n29442\t2\n12242\t2\n31442\t2\n1842\t2\n61642\t2\n2442\t2\n26042\t2\n76042\t2\n50842\t2\n65242\t2\n65642\t2\n109442\t2\n45642\t2\n22642\t2\n20042\t2\n57242\t2\n16642\t2\n16042\t2\n7842\t2\n46442\t2\n5442\t2\n242\t2\n82242\t2\n13442\t2\n9253\t2\n26253\t2\n30253\t2\n77453\t2\n6053\t2\n30453\t2\n93253\t2\n88853\t2\n31253\t2\n108853\t2\n7853\t2\n94453\t2\n8253\t2\n35853\t2\n22053\t2\n1253\t2\n52253\t2\n36853\t2\n80253\t2\n30653\t2\n44853\t2\n9653\t2\n41253\t2\n12053\t2\n43653\t2\n14053\t2\n72053\t2\n59453\t2\n11453\t2\n853\t2\n61053\t2\n22653\t2\n11653\t2\n12253\t2\n13453\t2\n19653\t2\n58453\t2\n17453\t2\n50253\t2\n44453\t2\n33853\t2\n105453\t2\n15453\t2\n25253\t2\n56853\t2\n4653\t2\n6653\t2\n32053\t2\n12853\t2\n68453\t2\n59253\t2\n7453\t2\n8453\t2\n42653\t2\n77053\t2\n31053\t2\n43853\t2\n15853\t2\n73453\t2\n35453\t2\n4053\t2\n78453\t2\n35053\t2\n28053\t2\n16453\t2\n46053\t2\n41653\t2\n37453\t2\n55053\t2\n14253\t2\n17053\t2\n18653\t2\n653\t2\n10479\t2\n20479\t2\n38679\t2\n1479\t2\n61879\t2\n6079\t2\n32079\t2\n9879\t2\n66879\t2\n72079\t2\n52879\t2\n4079\t2\n26679\t2\n4279\t2\n14879\t2\n20879\t2\n18479\t2\n54679\t2\n32879\t2\n37279\t2\n26479\t2\n13879\t2\n26279\t2\n35079\t2\n62479\t2\n9679\t2\n62079\t2\n33479\t2\n78279\t2\n11679\t2\n66079\t2\n108879\t2\n34279\t2\n11879\t2\n49479\t2\n55279\t2\n23479\t2\n2879\t2\n16079\t2\n29679\t2\n27679\t2\n59679\t2\n95479\t2\n22079\t2\n33279\t2\n50479\t2\n23879\t2\n28079\t2\n279\t2\n25279\t2\n3279\t2\n53879\t2\n30679\t2\n14279\t2\n57079\t2\n23079\t2\n38879\t2\n29079\t2\n48679\t2\n7679\t2\n25879\t2\n1879\t2\n28679\t2\n35479\t2\n8679\t2\n69879\t2\n47279\t2\n44879\t2\n86879\t2\n24279\t2\n12479\t2\n42279\t2\n24879\t2\n36479\t2\n87079\t2\n105679\t2\n4679\t2\n2679\t2\n9479\t2\n14880\t2\n9080\t2\n11480\t2\n74880\t2\n24280\t2\n1680\t2\n8480\t2\n7880\t2\n3480\t2\n18480\t2\n69280\t2\n10080\t2\n10280\t2\n13880\t2\n29480\t2\n56280\t2\n31680\t2\n52280\t2\n83880\t2\n27880\t2\n58280\t2\n4080\t2\n96480\t2\n61880\t2\n53080\t2\n47680\t2\n92680\t2\n57280\t2\n9880\t2\n89080\t2\n42880\t2\n107280\t2\n54680\t2\n57480\t2\n24880\t2\n23080\t2\n27080\t2\n77080\t2\n50680\t2\n3280\t2\n86480\t2\n17680\t2\n33280\t2\n44280\t2\n40680\t2\n25880\t2\n280\t2\n53880\t2\n15880\t2\n66280\t2\n9480\t2\n58480\t2\n47280\t2\n4280\t2\n24480\t2\n59480\t2\n83080\t2\n6680\t2\n40480\t2\n23280\t2\n38680\t2\n5680\t2\n45080\t2\n67680\t2\n18280\t2\n21880\t2\n20680\t2\n34480\t2\n72280\t2\n27680\t2\n22480\t2\n97480\t2\n61680\t2\n29080\t2\n10680\t2\n15080\t2\n1880\t2\n24080\t2\n86080\t2\n38280\t2\n48480\t2\n49080\t2\n55480\t2\n19680\t2\n42680\t2\n39480\t2\n19080\t2\n6480\t2\n15480\t2\n57680\t2\n78080\t2\n14680\t2\n62480\t2\n64073\t2\n50873\t2\n28873\t2\n67673\t2\n39073\t2\n32873\t2\n74473\t2\n17873\t2\n59873\t2\n4473\t2\n74073\t2\n2073\t2\n15473\t2\n25473\t2\n47473\t2\n6073\t2\n88273\t2\n72473\t2\n40273\t2\n873\t2\n63673\t2\n11273\t2\n53673\t2\n52073\t2\n14073\t2\n62073\t2\n87273\t2\n12073\t2\n27473\t2\n73\t2\n70073\t2\n26273\t2\n62473\t2\n5073\t2\n22673\t2\n42673\t2\n43873\t2\n7073\t2\n74873\t2\n56273\t2\n102673\t2\n23473\t2\n62873\t2\n56473\t2\n29473\t2\n19473\t2\n11473\t2\n17273\t2\n2273\t2\n23673\t2\n27673\t2\n473\t2\n24073\t2\n21073\t2\n96873\t2\n57073\t2\n24273\t2\n31673\t2\n76873\t2\n22073\t2\n100073\t2\n16073\t2\n33073\t2\n3673\t2\n6873\t2\n35073\t2\n55673\t2\n81673\t2\n12473\t2\n65473\t2\n77273\t2\n42273\t2\n37673\t2\n32673\t2\n24473\t2\n42073\t2\n35473\t2\n673\t2\n92473\t2\n77073\t2\n19873\t2\n73473\t2\n51673\t2\n25273\t2\n59673\t2\n1673\t2\n17473\t2\n8273\t2\n51473\t2\n28273\t2\n14273\t2\n18273\t2\n63273\t2\n38273\t2\n78273\t2\n42473\t2\n82651\t2\n25851\t2\n24851\t2\n51\t2\n58451\t2\n3051\t2\n95451\t2\n63851\t2\n55651\t2\n21851\t2\n92451\t2\n32651\t2\n20851\t2\n17451\t2\n25251\t2\n22651\t2\n42851\t2\n9451\t2\n1451\t2\n10851\t2\n28851\t2\n5251\t2\n66451\t2\n35251\t2\n45451\t2\n64051\t2\n69851\t2\n1051\t2\n30651\t2\n40051\t2\n104251\t2\n26251\t2\n11851\t2\n52251\t2\n26451\t2\n34251\t2\n24051\t2\n8451\t2\n49651\t2\n32451\t2\n1251\t2\n25651\t2\n69451\t2\n15851\t2\n3451\t2\n34851\t2\n23251\t2\n74051\t2\n9051\t2\n17051\t2\n21251\t2\n45251\t2\n7851\t2\n18051\t2\n83651\t2\n83251\t2\n7251\t2\n13251\t2\n19851\t2\n33251\t2\n6051\t2\n45851\t2\n15651\t2\n16451\t2\n31851\t2\n61451\t2\n39051\t2\n7451\t2\n8651\t2\n45651\t2\n70251\t2\n29851\t2\n31251\t2\n57651\t2\n29051\t2\n14051\t2\n85851\t2\n64451\t2\n74851\t2\n55\t2\n32255\t2\n58855\t2\n72655\t2\n23255\t2\n78255\t2\n28855\t2\n50655\t2\n11655\t2\n28255\t2\n33255\t2\n60455\t2\n8255\t2\n6455\t2\n77855\t2\n21055\t2\n37455\t2\n20455\t2\n46455\t2\n17055\t2\n39855\t2\n68455\t2\n23055\t2\n22255\t2\n5655\t2\n3455\t2\n46055\t2\n73855\t2\n88255\t2\n52655\t2\n77655\t2\n80855\t2\n84455\t2\n93255\t2\n11055\t2\n17655\t2\n19855\t2\n45855\t2\n99455\t2\n111455\t2\n101655\t2\n46855\t2\n34655\t2\n2655\t2\n45455\t2\n23655\t2\n21255\t2\n76855\t2\n13255\t2\n15255\t2\n66855\t2\n87655\t2\n64855\t2\n56455\t2\n69655\t2\n1455\t2\n28655\t2\n4255\t2\n11255\t2\n70455\t2\n32655\t2\n38055\t2\n8655\t2\n25255\t2\n67655\t2\n5855\t2\n3655\t2\n8855\t2\n5255\t2\n31455\t2\n55455\t2\n2855\t2\n47255\t2\n2255\t2\n68655\t2\n20855\t2\n14655\t2\n4055\t2\n49255\t2\n36255\t2\n255\t2\n48255\t2\n42055\t2\n7655\t2\n24255\t2\n38455\t2\n56655\t2\n26655\t2\n6055\t2\n1055\t2\n36855\t2\n35055\t2\n34255\t2\n55855\t2\n54055\t2\n33440\t2\n8240\t2\n2240\t2\n18040\t2\n9040\t2\n24440\t2\n2840\t2\n13840\t2\n53040\t2\n52240\t2\n3440\t2\n33040\t2\n37240\t2\n72440\t2\n17840\t2\n14240\t2\n21640\t2\n18440\t2\n13040\t2\n2440\t2\n28040\t2\n28840\t2\n24640\t2\n55840\t2\n47440\t2\n91040\t2\n62840\t2\n46440\t2\n30240\t2\n22440\t2\n74840\t2\n52840\t2\n83440\t2\n59640\t2\n4640\t2\n9840\t2\n7240\t2\n1040\t2\n8840\t2\n9640\t2\n15440\t2\n23440\t2\n29440\t2\n12240\t2\n58840\t2\n6440\t2\n78240\t2\n34240\t2\n14040\t2\n21240\t2\n14440\t2\n8040\t2\n16040\t2\n66240\t2\n48840\t2\n56640\t2\n5440\t2\n23840\t2\n3240\t2\n27040\t2\n31240\t2\n20440\t2\n67240\t2\n49440\t2\n25440\t2\n1640\t2\n26640\t2\n4840\t2\n69640\t2\n34440\t2\n10840\t2\n87240\t2\n52440\t2\n45240\t2\n9440\t2\n50440\t2\n60840\t2\n33450\t2\n87450\t2\n66850\t2\n6650\t2\n43450\t2\n54250\t2\n76650\t2\n1250\t2\n2650\t2\n15050\t2\n31450\t2\n15650\t2\n36250\t2\n8850\t2\n7250\t2\n12250\t2\n48650\t2\n4450\t2\n3850\t2\n49650\t2\n69450\t2\n82450\t2\n3650\t2\n11250\t2\n20850\t2\n10250\t2\n23650\t2\n84050\t2\n67850\t2\n7650\t2\n20450\t2\n4050\t2\n70850\t2\n15250\t2\n17050\t2\n17450\t2\n13450\t2\n73850\t2\n31050\t2\n16250\t2\n101050\t2\n57050\t2\n41450\t2\n34650\t2\n13850\t2\n56050\t2\n38050\t2\n90450\t2\n6850\t2\n74450\t2\n27650\t2\n18450\t2\n14250\t2\n4850\t2\n22250\t2\n31250\t2\n62250\t2\n58450\t2\n32450\t2\n68050\t2\n5850\t2\n82650\t2\n14450\t2\n5050\t2\n2250\t2\n35050\t2\n56650\t2\n3050\t2\n48250\t2\n32650\t2\n34250\t2\n29250\t2\n78450\t2\n56850\t2\n40450\t2\n24450\t2\n108450\t2\n113050\t2\n39650\t2\n21850\t2\n50850\t2\n101850\t2\n16450\t2\n64650\t2\n69850\t2\n5650\t2\n14050\t2\n2050\t2\n102250\t2\n4250\t2\n45050\t2\n79250\t2\n10850\t2\n14650\t2\n36234\t2\n37234\t2\n27234\t2\n834\t2\n24034\t2\n2634\t2\n93434\t2\n40234\t2\n2034\t2\n24434\t2\n9834\t2\n84034\t2\n47434\t2\n6634\t2\n434\t2\n27034\t2\n20634\t2\n75034\t2\n31234\t2\n23434\t2\n3434\t2\n93634\t2\n57634\t2\n21834\t2\n16834\t2\n10434\t2\n8034\t2\n11434\t2\n91434\t2\n35434\t2\n33834\t2\n20434\t2\n27834\t2\n56234\t2\n6434\t2\n10634\t2\n25834\t2\n4834\t2\n10034\t2\n66634\t2\n3834\t2\n41834\t2\n91834\t2\n5834\t2\n22034\t2\n5634\t2\n28034\t2\n25034\t2\n13434\t2\n15434\t2\n52234\t2\n16434\t2\n104834\t2\n89234\t2\n109034\t2\n45634\t2\n2434\t2\n4034\t2\n7034\t2\n17834\t2\n50034\t2\n58234\t2\n634\t2\n100434\t2\n2234\t2\n20834\t2\n7434\t2\n92034\t2\n93834\t2\n46634\t2\n92234\t2\n42234\t2\n34634\t2\n71839\t2\n45439\t2\n4839\t2\n33639\t2\n29639\t2\n82639\t2\n3239\t2\n38639\t2\n28839\t2\n42239\t2\n41839\t2\n84239\t2\n21239\t2\n7839\t2\n12439\t2\n27439\t2\n25439\t2\n63039\t2\n108839\t2\n78039\t2\n12239\t2\n2039\t2\n32439\t2\n108239\t2\n68239\t2\n73239\t2\n29439\t2\n8639\t2\n75639\t2\n1639\t2\n51439\t2\n37439\t2\n44439\t2\n77639\t2\n66039\t2\n28039\t2\n13639\t2\n86839\t2\n1839\t2\n9839\t2\n239\t2\n48839\t2\n19639\t2\n22839\t2\n15239\t2\n1439\t2\n5839\t2\n44239\t2\n99039\t2\n69839\t2\n6039\t2\n63839\t2\n10439\t2\n57039\t2\n7439\t2\n17639\t2\n38039\t2\n\n\u003cfont color\u003dred\u003eResults are limited by 1000.\u003c/font\u003e"
+      },
+      "dateCreated": "Jan 30, 2018 6:11:04 PM",
+      "dateStarted": "Jan 30, 2018 6:12:28 PM",
+      "dateFinished": "Jan 30, 2018 6:12:53 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1517332348649_47849164",
+      "id": "20180130-181228_1257651624",
+      "dateCreated": "Jan 30, 2018 6:12:28 PM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "purchBaselinesVer2: WriteTrainTestFiles",
+  "id": "2CY7MH2QK",
+  "angularObjects": {
+    "2BJGSXM37": [],
+    "2BGHSKCA7": [],
+    "2BHKKP27G": [],
+    "2BGVG5JP4": [],
+    "2BFMBPKAB": [],
+    "2BF969NNB": [],
+    "2BJAQG5W4": [],
+    "2BJHJDBK6": [],
+    "2BHKAE8WK": [],
+    "2BG8QQJNC": [],
+    "2BJ7KKX85": [],
+    "2BH9AVVKH": [],
+    "2BJ6HN5AY": [],
+    "2BFEDXCTE": [],
+    "2BJ5FCP57": [],
+    "2BJ8AEWCT": [],
+    "2BFXEV5XZ": [],
+    "2BG77RV7M": []
+  },
+  "config": {
+    "looknfeel": "default"
+  },
+  "info": {}
+}

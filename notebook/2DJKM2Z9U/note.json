@@ -1,0 +1,386 @@
+{
+  "paragraphs": [
+    {
+      "text": "implicit def bool2int(b:Boolean) \u003d if (b) 1 else 0\n\nval bool2int_udf \u003d udf(bool2int _)\n\nval parquetFileOfferTemp \u003d sqlContext.read.parquet(\"/data/sidana/purch_april_2018/*.parquet\").select(\"userId\",\"offerId\",\"wasClicked\",\"utcDate\")\n\nval inputFile \u003d parquetFileOfferTemp.filter(to_date($\"utcDate\")\u003e\u003d\"2018-04-01\" \u0026\u0026 to_date($\"utcDate\")\u003c\u003d\"2018-04-30\")\nval goodUsers \u003d inputFile.filter($\"wasClicked\").select($\"userId\".as(\"goodUserId\")).distinct\nval data \u003d inputFile.join(goodUsers,inputFile(\"userId\")\u003d\u003d\u003dgoodUsers(\"goodUserId\")).drop(goodUsers(\"goodUserId\"))\n\nval orderedData \u003d data.orderBy(\"utcdate\")\n\nval totalItems \u003d orderedData.count\n\nval cnt \u003d totalItems * 0.7\n\nval trainDF \u003d sqlContext.createDataFrame(orderedData.rdd.zipWithIndex.filter {\n  case (_, i) \u003d\u003e i \u003c\u003d cnt \n}.map(_._1), orderedData.schema)\n\nval testDF \u003d sqlContext.createDataFrame(orderedData.rdd.zipWithIndex.filter {\n  case (_, i) \u003d\u003e i \u003e cnt \n}.map(_._1), orderedData.schema)\n\n\n\n//need to make a join here.\n\nval seq \u003d Seq(\"userId\",\"offerId\",\"wasClicked\")\n\nval orderedTrainTemp \u003d trainDF.orderBy(\"utcdate\")\n\nval orderedTrainRating \u003d orderedTrainTemp.select($\"userId\",$\"offerId\",$\"wasClicked\").withColumn(\"wasClicked\",bool2int_udf($\"wasClicked\")).dropDuplicates(seq).groupBy(\"userId\",\"offerId\").max(\"wasClicked\").withColumnRenamed(\"max(wasClicked)\",\"rating\")\n\nval orderedTrainTime \u003d orderedTrainTemp.select($\"userId\",$\"offerId\",unix_timestamp($\"utcDate\").as(\"timestamp\")).groupBy(\"userId\",\"offerId\").agg(first(\"timestamp\").alias(\"timestamp\"))\n\nval orderedTestTemp \u003d testDF.orderBy(\"utcdate\")\n\nval orderedTestRating \u003d orderedTestTemp.select($\"userId\",$\"offerId\",$\"wasClicked\").withColumn(\"wasClicked\", bool2int_udf($\"wasClicked\")).dropDuplicates(seq).groupBy(\"userId\",\"offerId\").max(\"wasClicked\").withColumnRenamed(\"max(wasClicked)\",\"rating\")\n\nval orderedTestTime \u003d orderedTestTemp.select($\"userId\",$\"offerId\",unix_timestamp($\"utcDate\").as(\"timestamp\")).groupBy(\"userId\",\"offerId\").agg(first(\"timestamp\").alias(\"timestamp\"))\n\nval orderedTrain \u003d orderedTrainTime.join(orderedTrainRating,orderedTrainTime(\"userId\")\u003d\u003d\u003dorderedTrainRating(\"userId\")\u0026\u0026orderedTrainTime(\"offerId\")\u003d\u003d\u003dorderedTrainRating(\"offerId\")).drop(orderedTrainTime(\"userId\")).drop(orderedTrainTime(\"offerId\"))\n\nval orderedTest_temp_temp \u003d orderedTestTime.join(orderedTestRating,orderedTestTime(\"userId\")\u003d\u003d\u003dorderedTestRating(\"userId\")\u0026\u0026orderedTestTime(\"offerId\")\u003d\u003d\u003dorderedTestRating(\"offerId\")).drop(orderedTestTime(\"userId\")).drop(orderedTestTime(\"offerId\"))\n\n// need to ensure same users and items in test as in train\nval users_train \u003d orderedTrain.select(\"userId\").distinct\nval offers_train \u003d orderedTrain.select(\"offerId\").distinct\n\nval orderedTest_temp \u003d orderedTest_temp_temp.join(users_train,orderedTest_temp_temp(\"userId\")\u003d\u003d\u003dusers_train(\"userId\")).drop(users_train(\"userId\"))\n\nval orderedTest \u003d orderedTest_temp.join(offers_train,orderedTest_temp(\"offerId\")\u003d\u003d\u003doffers_train(\"offerId\")).drop(offers_train(\"offerId\"))\n\n\n// until here\n\nval header \u003d \"userid\\tofferid\\trating\\ttimestamp\"\n\nval trainWrite \u003d orderedTrain.select(\"userId\",\"offerId\",\"rating\",\"timestamp\").rdd.map(_.mkString(\"\\t\")).mapPartitionsWithIndex((i, iter) \u003d\u003e if (i\u003d\u003d0) (List(header).toIterator ++ iter) else iter)\n\nval testWrite \u003d orderedTest.select(\"userId\",\"offerId\",\"rating\",\"timestamp\").rdd.map(_.mkString(\"\\t\")).mapPartitionsWithIndex((i, iter) \u003d\u003e if (i\u003d\u003d0) (List(header).toIterator ++ iter) else iter)\n\ntrainWrite.coalesce(1,false).saveAsTextFile(\"/data/sidana/purch/diversity/baselines/train.csv\")\n\ntestWrite.coalesce(1,false).saveAsTextFile(\"/data/sidana/purch/diversity/baselines/test.csv\")",
+      "authenticationInfo": {},
+      "dateUpdated": "Jun 25, 2018 3:13:17 PM",
+      "config": {
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1529930907217_-365648912",
+      "id": "20180625-144827_1651187888",
+      "result": {
+        "code": "ERROR",
+        "type": "TEXT",
+        "msg": "warning: there were 1 feature warning(s); re-run with -feature for details\nbool2int: (b: Boolean)Int\nbool2int_udf: org.apache.spark.sql.UserDefinedFunction \u003d UserDefinedFunction(\u003cfunction1\u003e,IntegerType,List(BooleanType))\nparquetFileOfferTemp: org.apache.spark.sql.DataFrame \u003d [userId: double, offerId: string, wasClicked: boolean, utcDate: timestamp]\ninputFile: org.apache.spark.sql.DataFrame \u003d [userId: double, offerId: string, wasClicked: boolean, utcDate: timestamp]\ngoodUsers: org.apache.spark.sql.DataFrame \u003d [goodUserId: double]\ndata: org.apache.spark.sql.DataFrame \u003d [userId: double, offerId: string, wasClicked: boolean, utcDate: timestamp]\norderedData: org.apache.spark.sql.DataFrame \u003d [userId: double, offerId: string, wasClicked: boolean, utcDate: timestamp]\ntotalItems: Long \u003d 4544848\ncnt: Double \u003d 3181393.5999999996\ntrainDF: org.apache.spark.sql.DataFrame \u003d [userId: double, offerId: string, wasClicked: boolean, utcDate: timestamp]\ntestDF: org.apache.spark.sql.DataFrame \u003d [userId: double, offerId: string, wasClicked: boolean, utcDate: timestamp]\nseq: Seq[String] \u003d List(userId, offerId, wasClicked)\norderedTrainTemp: org.apache.spark.sql.DataFrame \u003d [userId: double, offerId: string, wasClicked: boolean, utcDate: timestamp]\norderedTrainRating: org.apache.spark.sql.DataFrame \u003d [userId: double, offerId: string, rating: int]\norderedTrainTime: org.apache.spark.sql.DataFrame \u003d [userId: double, offerId: string, timestamp: bigint]\norderedTestTemp: org.apache.spark.sql.DataFrame \u003d [userId: double, offerId: string, wasClicked: boolean, utcDate: timestamp]\norderedTestRating: org.apache.spark.sql.DataFrame \u003d [userId: double, offerId: string, rating: int]\norderedTestTime: org.apache.spark.sql.DataFrame \u003d [userId: double, offerId: string, timestamp: bigint]\norderedTrain: org.apache.spark.sql.DataFrame \u003d [timestamp: bigint, userId: double, offerId: string, rating: int]\norderedTest_temp_temp: org.apache.spark.sql.DataFrame \u003d [timestamp: bigint, userId: double, offerId: string, rating: int]\nusers_train: org.apache.spark.sql.DataFrame \u003d [userId: double]\noffers_train: org.apache.spark.sql.DataFrame \u003d [offerId: string]\norderedTest_temp: org.apache.spark.sql.DataFrame \u003d [timestamp: bigint, userId: double, offerId: string, rating: int]\norderedTest: org.apache.spark.sql.DataFrame \u003d [timestamp: bigint, userId: double, offerId: string, rating: int]\nheader: String \u003d userid\tofferid\trating\ttimestamp\ntrainWrite: org.apache.spark.rdd.RDD[String] \u003d MapPartitionsRDD[103] at mapPartitionsWithIndex at \u003cconsole\u003e:59\ntestWrite: org.apache.spark.rdd.RDD[String] \u003d MapPartitionsRDD[236] at mapPartitionsWithIndex at \u003cconsole\u003e:77\norg.apache.hadoop.mapred.FileAlreadyExistsException: Output directory file:/data/sidana/purch/diversity/baselines/train.csv already exists\n\tat org.apache.hadoop.mapred.FileOutputFormat.checkOutputSpecs(FileOutputFormat.java:132)\n\tat org.apache.spark.rdd.PairRDDFunctions$$anonfun$saveAsHadoopDataset$1.apply$mcV$sp(PairRDDFunctions.scala:1179)\n\tat org.apache.spark.rdd.PairRDDFunctions$$anonfun$saveAsHadoopDataset$1.apply(PairRDDFunctions.scala:1156)\n\tat org.apache.spark.rdd.PairRDDFunctions$$anonfun$saveAsHadoopDataset$1.apply(PairRDDFunctions.scala:1156)\n\tat org.apache.spark.rdd.RDDOperationScope$.withScope(RDDOperationScope.scala:150)\n\tat org.apache.spark.rdd.RDDOperationScope$.withScope(RDDOperationScope.scala:111)\n\tat org.apache.spark.rdd.RDD.withScope(RDD.scala:316)\n\tat org.apache.spark.rdd.PairRDDFunctions.saveAsHadoopDataset(PairRDDFunctions.scala:1156)\n\tat org.apache.spark.rdd.PairRDDFunctions$$anonfun$saveAsHadoopFile$4.apply$mcV$sp(PairRDDFunctions.scala:1060)\n\tat org.apache.spark.rdd.PairRDDFunctions$$anonfun$saveAsHadoopFile$4.apply(PairRDDFunctions.scala:1026)\n\tat org.apache.spark.rdd.PairRDDFunctions$$anonfun$saveAsHadoopFile$4.apply(PairRDDFunctions.scala:1026)\n\tat org.apache.spark.rdd.RDDOperationScope$.withScope(RDDOperationScope.scala:150)\n\tat org.apache.spark.rdd.RDDOperationScope$.withScope(RDDOperationScope.scala:111)\n\tat org.apache.spark.rdd.RDD.withScope(RDD.scala:316)\n\tat org.apache.spark.rdd.PairRDDFunctions.saveAsHadoopFile(PairRDDFunctions.scala:1026)\n\tat org.apache.spark.rdd.PairRDDFunctions$$anonfun$saveAsHadoopFile$1.apply$mcV$sp(PairRDDFunctions.scala:952)\n\tat org.apache.spark.rdd.PairRDDFunctions$$anonfun$saveAsHadoopFile$1.apply(PairRDDFunctions.scala:952)\n\tat org.apache.spark.rdd.PairRDDFunctions$$anonfun$saveAsHadoopFile$1.apply(PairRDDFunctions.scala:952)\n\tat org.apache.spark.rdd.RDDOperationScope$.withScope(RDDOperationScope.scala:150)\n\tat org.apache.spark.rdd.RDDOperationScope$.withScope(RDDOperationScope.scala:111)\n\tat org.apache.spark.rdd.RDD.withScope(RDD.scala:316)\n\tat org.apache.spark.rdd.PairRDDFunctions.saveAsHadoopFile(PairRDDFunctions.scala:951)\n\tat org.apache.spark.rdd.RDD$$anonfun$saveAsTextFile$1.apply$mcV$sp(RDD.scala:1457)\n\tat org.apache.spark.rdd.RDD$$anonfun$saveAsTextFile$1.apply(RDD.scala:1436)\n\tat org.apache.spark.rdd.RDD$$anonfun$saveAsTextFile$1.apply(RDD.scala:1436)\n\tat org.apache.spark.rdd.RDDOperationScope$.withScope(RDDOperationScope.scala:150)\n\tat org.apache.spark.rdd.RDDOperationScope$.withScope(RDDOperationScope.scala:111)\n\tat org.apache.spark.rdd.RDD.withScope(RDD.scala:316)\n\tat org.apache.spark.rdd.RDD.saveAsTextFile(RDD.scala:1436)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:62)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:67)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:69)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:71)\n\tat $iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:73)\n\tat $iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:75)\n\tat $iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:77)\n\tat $iwC.\u003cinit\u003e(\u003cconsole\u003e:79)\n\tat \u003cinit\u003e(\u003cconsole\u003e:81)\n\tat .\u003cinit\u003e(\u003cconsole\u003e:85)\n\tat .\u003cclinit\u003e(\u003cconsole\u003e)\n\tat .\u003cinit\u003e(\u003cconsole\u003e:7)\n\tat .\u003cclinit\u003e(\u003cconsole\u003e)\n\tat $print(\u003cconsole\u003e)\n\tat sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)\n\tat sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)\n\tat sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\n\tat java.lang.reflect.Method.invoke(Method.java:498)\n\tat org.apache.spark.repl.SparkIMain$ReadEvalPrint.call(SparkIMain.scala:1065)\n\tat org.apache.spark.repl.SparkIMain$Request.loadAndRun(SparkIMain.scala:1346)\n\tat org.apache.spark.repl.SparkIMain.loadAndRunReq$1(SparkIMain.scala:840)\n\tat org.apache.spark.repl.SparkIMain.interpret(SparkIMain.scala:871)\n\tat org.apache.spark.repl.SparkIMain.interpret(SparkIMain.scala:819)\n\tat org.apache.zeppelin.spark.SparkInterpreter.interpretInput(SparkInterpreter.java:812)\n\tat org.apache.zeppelin.spark.SparkInterpreter.interpret(SparkInterpreter.java:755)\n\tat org.apache.zeppelin.spark.SparkInterpreter.interpret(SparkInterpreter.java:748)\n\tat org.apache.zeppelin.interpreter.ClassloaderInterpreter.interpret(ClassloaderInterpreter.java:57)\n\tat org.apache.zeppelin.interpreter.LazyOpenInterpreter.interpret(LazyOpenInterpreter.java:93)\n\tat org.apache.zeppelin.interpreter.remote.RemoteInterpreterServer$InterpretJob.jobRun(RemoteInterpreterServer.java:331)\n\tat org.apache.zeppelin.scheduler.Job.run(Job.java:171)\n\tat org.apache.zeppelin.scheduler.FIFOScheduler$1.run(FIFOScheduler.java:139)\n\tat java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)\n\tat java.util.concurrent.FutureTask.run(FutureTask.java:266)\n\tat java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)\n\tat java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)\n\tat java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)\n\tat java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)\n\tat java.lang.Thread.run(Thread.java:748)\n\n"
+      },
+      "dateCreated": "Jun 25, 2018 2:48:27 PM",
+      "dateStarted": "Jun 25, 2018 3:13:17 PM",
+      "dateFinished": "Jun 25, 2018 10:59:12 PM",
+      "status": "ERROR",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "trainWrite.saveAsTextFile(\"/data/sidana/april_2018_pandor/train.csv\")\n\ntestWrite.saveAsTextFile(\"/data/sidana/april_2018_pandor/test.csv\")",
+      "authenticationInfo": {},
+      "dateUpdated": "Jun 26, 2018 12:23:26 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1529965259084_-1440299684",
+      "id": "20180626-002059_1049400167",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": ""
+      },
+      "dateCreated": "Jun 26, 2018 12:20:59 AM",
+      "dateStarted": "Jun 26, 2018 12:23:27 AM",
+      "dateFinished": "Jun 26, 2018 9:42:21 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1529965257291_1773138454",
+      "id": "20180626-002057_1617587938",
+      "dateCreated": "Jun 26, 2018 12:20:57 AM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val userofferpairts \u003d orderedTestTemp.select(\"userId\",\"offerId\",\"wasClicked\").distinct\nz.show(userofferpairts.groupBy(\"userId\",\"offerId\").count.sort(asc(\"count\")))",
+      "dateUpdated": "Jun 25, 2018 2:48:27 PM",
+      "config": {
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [
+            {
+              "name": "userId",
+              "index": 0.0,
+              "aggr": "sum"
+            }
+          ],
+          "values": [
+            {
+              "name": "offerId",
+              "index": 1.0,
+              "aggr": "sum"
+            }
+          ],
+          "groups": [],
+          "scatter": {
+            "xAxis": {
+              "name": "userId",
+              "index": 0.0,
+              "aggr": "sum"
+            },
+            "yAxis": {
+              "name": "offerId",
+              "index": 1.0,
+              "aggr": "sum"
+            }
+          }
+        },
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1529930907217_-365648912",
+      "id": "20180625-144827_891272497",
+      "dateCreated": "Jun 25, 2018 2:48:27 PM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "z.show(orderedTest.filter($\"userId\"\u003d\u003d\u003d\"DB794A95C08B4838BAD3CB1E7308CAFC\" \u0026\u0026 $\"offerId\"\u003d\u003d\u003d\"813567021599\"))",
+      "dateUpdated": "Jun 25, 2018 2:48:27 PM",
+      "config": {
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1529930907217_-365648912",
+      "id": "20180625-144827_1477386775",
+      "dateCreated": "Jun 25, 2018 2:48:27 PM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val orderedTrainTime \u003d orderedTrainTemp.select($\"userId\",$\"offerId\",unix_timestamp($\"utcDate\").as(\"timestamp\")).groupBy(\"userId\",\"offerId\").agg(first(\"timestamp\"))",
+      "dateUpdated": "Jun 25, 2018 2:48:27 PM",
+      "config": {
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1529930907217_-365648912",
+      "id": "20180625-144827_1111158521",
+      "dateCreated": "Jun 25, 2018 2:48:27 PM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "//for recnet\n\nval trainFile \u003d sqlContext.read\n\t\t\t    .format(\"com.databricks.spark.csv\")\n\t\t\t\t\t.option(\"header\", \"true\") // Use first line of all files as header\n\t\t\t\t\t.option(\"inferSchema\", \"true\") // Automatically infer data types\n\t\t\t\t\t.option(\"delimiter\", \",\")\n\t\t\t\t\t.load(\"/data/sidana/april_2018_pandor/interacted/recnet/purch/train_all_raw.csv\")\n// below line does not work\t\t\t\t\t\n//.withColumn(\"timestamp\", $\"timestamp\".cast(\"unix_timestamp\"))\n\nval positiveData \u003d trainFile.filter($\"rating\" \u003e\u003d 4)\nval usersPositiveOffers \u003d positiveData.select(\"userid\",\"offerid\").distinct\nval userPositiveClickCount \u003d usersPositiveOffers.groupBy(\"userid\").count\nval goodUsers \u003d userPositiveClickCount.filter($\"count\" \u003e\u003d 2)\n\nval negativeData \u003d trainFile.filter($\"rating\" \u003c\u003d 1)\nval usersNegativeOffers \u003d negativeData.select(\"userid\",\"offerid\").distinct\nval userNegativeClickCount \u003d usersNegativeOffers.groupBy(\"userid\").count\nval badUsers \u003d userNegativeClickCount.filter($\"count\" \u003e\u003d 5)\n\nval goodDataTemp \u003d trainFile.join(goodUsers,trainFile(\"userid\")\u003d\u003d\u003dgoodUsers(\"userid\")).drop(goodUsers(\"count\")).drop(goodUsers(\"userid\"))\nval orderedTrain \u003d goodDataTemp.join(badUsers,goodDataTemp(\"userId\")\u003d\u003d\u003dbadUsers(\"userid\")).drop(badUsers(\"count\")).drop(badUsers(\"userid\"))\n\n//val orderedTrain \u003d trainFile.select(\"userid\",\"offerid\",\"rating\",\"timestamp\").orderBy(\"timestamp\")\n\nval users_train \u003d orderedTrain.select(\"userid\").distinct\nval offers_train \u003d orderedTrain.select(\"offerid\").distinct\n\nval orderedTest_temp_temp \u003d sqlContext.read\n\t\t\t    .format(\"com.databricks.spark.csv\")\n\t\t\t\t\t.option(\"header\", \"true\") // Use first line of all files as header\n\t\t\t\t\t.option(\"inferSchema\", \"true\") // Automatically infer data types\n\t\t\t\t\t.option(\"delimiter\", \",\")\n\t\t\t\t\t.load(\"/data/sidana/april_2018_pandor/interacted/recnet/purch/test_all_raw.csv\")\n\t\t\t\t\t\n//.withColumn(\"timestamp\", $\"timestamp\".cast(\"timestamp\"))\n\nval orderedTest_temp \u003d orderedTest_temp_temp.join(users_train,orderedTest_temp_temp(\"userid\")\u003d\u003d\u003dusers_train(\"userid\")).drop(users_train(\"userid\"))\n\nval orderedTest \u003d orderedTest_temp.join(offers_train,orderedTest_temp(\"offerid\")\u003d\u003d\u003doffers_train(\"offerid\")).drop(offers_train(\"offerid\"))\n\nval header \u003d \"userid,offerid,rating,timestamp\"\n\nval trainWrite \u003d orderedTrain.select(\"userid\",\"offerid\",\"rating\",\"timestamp\").orderBy(\"timestamp\").rdd.map(_.mkString(\",\")).mapPartitionsWithIndex((i, iter) \u003d\u003e if (i\u003d\u003d0) (List(header).toIterator ++ iter) else iter)\n\nval testWrite \u003d orderedTest.select(\"userid\",\"offerid\",\"rating\",\"timestamp\").orderBy(\"timestamp\").rdd.map(_.mkString(\",\")).mapPartitionsWithIndex((i, iter) \u003d\u003e if (i\u003d\u003d0) (List(header).toIterator ++ iter) else iter)\n\ntrainWrite.coalesce(1,false).saveAsTextFile(\"/data/sidana/april_2018_pandor/interacted/recnet/purch/train.csv\")\n\ntestWrite.coalesce(1,false).saveAsTextFile(\"/data/sidana/april_2018_pandor/interacted/recnet/purch/test.csv\")\n\t\t\t\t\t\n\n\n\t\t\t\t\t\t\t\n\n\n",
+      "authenticationInfo": {},
+      "dateUpdated": "Jul 8, 2018 5:35:12 PM",
+      "config": {
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1529930907217_-365648912",
+      "id": "20180625-144827_2037328046",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "trainFile: org.apache.spark.sql.DataFrame \u003d [userid: int, offerid: int, rating: int, timestamp: int]\npositiveData: org.apache.spark.sql.DataFrame \u003d [userid: int, offerid: int, rating: int, timestamp: int]\nusersPositiveOffers: org.apache.spark.sql.DataFrame \u003d [userid: int, offerid: int]\nuserPositiveClickCount: org.apache.spark.sql.DataFrame \u003d [userid: int, count: bigint]\ngoodUsers: org.apache.spark.sql.DataFrame \u003d [userid: int, count: bigint]\nnegativeData: org.apache.spark.sql.DataFrame \u003d [userid: int, offerid: int, rating: int, timestamp: int]\nusersNegativeOffers: org.apache.spark.sql.DataFrame \u003d [userid: int, offerid: int]\nuserNegativeClickCount: org.apache.spark.sql.DataFrame \u003d [userid: int, count: bigint]\nbadUsers: org.apache.spark.sql.DataFrame \u003d [userid: int, count: bigint]\ngoodDataTemp: org.apache.spark.sql.DataFrame \u003d [offerid: int, rating: int, timestamp: int, userid: int]\norderedTrain: org.apache.spark.sql.DataFrame \u003d [offerid: int, rating: int, timestamp: int, userid: int]\nusers_train: org.apache.spark.sql.DataFrame \u003d [userid: int]\noffers_train: org.apache.spark.sql.DataFrame \u003d [offerid: int]\norderedTest_temp_temp: org.apache.spark.sql.DataFrame \u003d [userid: int, offerid: int, rating: int, timestamp: int]\norderedTest_temp: org.apache.spark.sql.DataFrame \u003d [userid: int, offerid: int, rating: int, timestamp: int]\norderedTest: org.apache.spark.sql.DataFrame \u003d [userid: int, offerid: int, rating: int, timestamp: int]\nheader: String \u003d userid,offerid,rating,timestamp\ntrainWrite: org.apache.spark.rdd.RDD[String] \u003d MapPartitionsRDD[396] at mapPartitionsWithIndex at \u003cconsole\u003e:51\ntestWrite: org.apache.spark.rdd.RDD[String] \u003d MapPartitionsRDD[534] at mapPartitionsWithIndex at \u003cconsole\u003e:61\n"
+      },
+      "dateCreated": "Jun 25, 2018 2:48:27 PM",
+      "dateStarted": "Jul 8, 2018 5:35:12 PM",
+      "dateFinished": "Jul 8, 2018 10:02:33 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "// for recnet all offers\n\nval orderedTrain \u003d sqlContext.read\n\t\t\t    .format(\"com.databricks.spark.csv\")\n\t\t\t\t\t.option(\"header\", \"true\") // Use first line of all files as header\n\t\t\t\t\t.option(\"inferSchema\", \"true\") // Automatically infer data types\n\t\t\t\t\t.option(\"delimiter\", \",\")\n\t\t\t\t\t.load(\"/data/sidana/april_2018_pandor/all/recnet/purch/train_all_raw.csv\")\nval header \u003d \"userid,offerid,rating,timestamp\"\nval trainWrite \u003d orderedTrain.select(\"userid\",\"offerid\",\"rating\",\"timestamp\").orderBy(\"timestamp\").rdd.map(_.mkString(\",\")).mapPartitionsWithIndex((i, iter) \u003d\u003e if (i\u003d\u003d0) (List(header).toIterator ++ iter) else iter)\n\nval orderedTest_temp_temp \u003d sqlContext.read\n\t\t\t    .format(\"com.databricks.spark.csv\")\n\t\t\t\t\t.option(\"header\", \"true\") // Use first line of all files as header\n\t\t\t\t\t.option(\"inferSchema\", \"true\") // Automatically infer data types\n\t\t\t\t\t.option(\"delimiter\", \",\")\n\t\t\t\t\t.load(\"/data/sidana/april_2018_pandor/all/recnet/purch/test_all_raw.csv\")\n\nval users_train \u003d orderedTrain.select(\"userid\").distinct\nval offers_train \u003d orderedTrain.select(\"offerid\").distinct\n\n\t\t\t\t\t\n//.withColumn(\"timestamp\", $\"timestamp\".cast(\"timestamp\"))\n\nval orderedTest_temp \u003d orderedTest_temp_temp.join(users_train,orderedTest_temp_temp(\"userid\")\u003d\u003d\u003dusers_train(\"userid\")).drop(users_train(\"userid\"))\n\nval orderedTest \u003d orderedTest_temp.join(offers_train,orderedTest_temp(\"offerid\")\u003d\u003d\u003doffers_train(\"offerid\")).drop(offers_train(\"offerid\"))\n\nval testWrite \u003d orderedTest.select(\"userid\",\"offerid\",\"rating\",\"timestamp\").orderBy(\"timestamp\").rdd.map(_.mkString(\",\")).mapPartitionsWithIndex((i, iter) \u003d\u003e if (i\u003d\u003d0) (List(header).toIterator ++ iter) else iter)\n\ntrainWrite.saveAsTextFile(\"/data/sidana/april_2018_pandor/interacted/recnet/purch/train.csv\")\n\ntestWrite.saveAsTextFile(\"/data/sidana/april_2018_pandor/interacted/recnet/purch/test.csv\")\n\t\t\t\t\t\n",
+      "authenticationInfo": {},
+      "dateUpdated": "Jul 9, 2018 1:41:05 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1531092290763_1706168691",
+      "id": "20180709-012450_1024133866",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "orderedTrain: org.apache.spark.sql.DataFrame \u003d [userid: int, offerid: int, rating: int, timestamp: int]\nheader: String \u003d userid,offerid,rating,timestamp\ntrainWrite: org.apache.spark.rdd.RDD[String] \u003d MapPartitionsRDD[20] at mapPartitionsWithIndex at \u003cconsole\u003e:31\norderedTest_temp_temp: org.apache.spark.sql.DataFrame \u003d [userid: int, offerid: int, rating: int, timestamp: int]\nusers_train: org.apache.spark.sql.DataFrame \u003d [userid: int]\noffers_train: org.apache.spark.sql.DataFrame \u003d [offerid: int]\norderedTest_temp: org.apache.spark.sql.DataFrame \u003d [userid: int, offerid: int, rating: int, timestamp: int]\norderedTest: org.apache.spark.sql.DataFrame \u003d [userid: int, offerid: int, rating: int, timestamp: int]\ntestWrite: org.apache.spark.rdd.RDD[String] \u003d MapPartitionsRDD[73] at mapPartitionsWithIndex at \u003cconsole\u003e:41\n"
+      },
+      "dateCreated": "Jul 9, 2018 1:24:50 AM",
+      "dateStarted": "Jul 9, 2018 1:41:05 AM",
+      "dateFinished": "Jul 9, 2018 2:28:00 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "// verify 2 opposite ratings\nval goodData \u003d sqlContext.read\n\t\t\t    .format(\"com.databricks.spark.csv\")\n\t\t\t\t\t.option(\"header\", \"true\") // Use first line of all files as header\n\t\t\t\t\t.option(\"inferSchema\", \"true\") // Automatically infer data types\n\t\t\t\t\t.option(\"delimiter\", \",\")\n\t\t\t\t\t.load(\"/data/sidana/april_2018_pandor/interacted/recnet/purch/train.csv\")\n\nval usersRatingDefault \u003d goodData.select(\"userid\",\"rating\").distinct\nval users \u003d usersRatingDefault.groupBy(\"userid\").count.sort(asc(\"count\"))\nz.show(users)",
+      "authenticationInfo": {},
+      "dateUpdated": "Jul 9, 2018 12:10:17 AM",
+      "config": {
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [
+            {
+              "name": "userid",
+              "index": 0.0,
+              "aggr": "sum"
+            }
+          ],
+          "values": [
+            {
+              "name": "count",
+              "index": 1.0,
+              "aggr": "sum"
+            }
+          ],
+          "groups": [],
+          "scatter": {
+            "xAxis": {
+              "name": "userid",
+              "index": 0.0,
+              "aggr": "sum"
+            },
+            "yAxis": {
+              "name": "count",
+              "index": 1.0,
+              "aggr": "sum"
+            }
+          }
+        },
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1529930907218_-364494666",
+      "id": "20180625-144827_827450503",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TABLE",
+        "msg": "userid\tcount\n112862\t2\n1262\t2\n143462\t2\n132462\t2\n36062\t2\n99062\t2\n19862\t2\n148462\t2\n40662\t2\n26062\t2\n32662\t2\n61262\t2\n101062\t2\n99662\t2\n1462\t2\n21862\t2\n92262\t2\n40462\t2\n3062\t2\n54062\t2\n87262\t2\n38062\t2\n15462\t2\n16862\t2\n147262\t2\n44662\t2\n50662\t2\n4662\t2\n43462\t2\n81062\t2\n82862\t2\n34062\t2\n36462\t2\n38262\t2\n20862\t2\n62462\t2\n65062\t2\n96662\t2\n21662\t2\n11462\t2\n113662\t2\n30662\t2\n15862\t2\n39462\t2\n74062\t2\n10462\t2\n29262\t2\n27662\t2\n150662\t2\n40062\t2\n126662\t2\n13062\t2\n53662\t2\n124862\t2\n41462\t2\n168662\t2\n81862\t2\n95462\t2\n136262\t2\n70862\t2\n5662\t2\n15262\t2\n87662\t2\n133462\t2\n20462\t2\n28862\t2\n15062\t2\n47862\t2\n117862\t2\n72662\t2\n13262\t2\n103862\t2\n2062\t2\n63662\t2\n97862\t2\n1062\t2\n34262\t2\n114062\t2\n53062\t2\n124462\t2\n114662\t2\n14662\t2\n22062\t2\n101862\t2\n88662\t2\n23062\t2\n92662\t2\n13462\t2\n94462\t2\n12862\t2\n44462\t2\n109862\t2\n43262\t2\n46062\t2\n33862\t2\n52662\t2\n32862\t2\n62\t2\n52062\t2\n67662\t2\n7662\t2\n19262\t2\n130462\t2\n33662\t2\n18662\t2\n165462\t2\n6262\t2\n32262\t2\n74462\t2\n88062\t2\n140231\t2\n23031\t2\n56831\t2\n121831\t2\n1431\t2\n62431\t2\n97831\t2\n4431\t2\n25831\t2\n59631\t2\n1831\t2\n39631\t2\n2431\t2\n4831\t2\n70631\t2\n10231\t2\n16831\t2\n19031\t2\n41031\t2\n44031\t2\n7431\t2\n35031\t2\n49631\t2\n53431\t2\n50231\t2\n135431\t2\n34231\t2\n56031\t2\n63031\t2\n80031\t2\n5031\t2\n94031\t2\n26431\t2\n82431\t2\n30431\t2\n102431\t2\n130631\t2\n7631\t2\n111031\t2\n104631\t2\n120831\t2\n22431\t2\n31\t2\n1031\t2\n27431\t2\n141431\t2\n38031\t2\n78031\t2\n43831\t2\n39831\t2\n84631\t2\n99431\t2\n77031\t2\n3231\t2\n116431\t2\n15231\t2\n11031\t2\n110031\t2\n9231\t2\n118431\t2\n24831\t2\n111231\t2\n15831\t2\n68631\t2\n71431\t2\n89031\t2\n159431\t2\n52431\t2\n64031\t2\n23231\t2\n65831\t2\n25031\t2\n2231\t2\n52231\t2\n68831\t2\n8231\t2\n5431\t2\n75231\t2\n34631\t2\n64431\t2\n40231\t2\n51831\t2\n49231\t2\n12631\t2\n114231\t2\n75431\t2\n10431\t2\n64231\t2\n83831\t2\n148631\t2\n71231\t2\n67431\t2\n122431\t2\n54031\t2\n141231\t2\n1231\t2\n52831\t2\n67231\t2\n62631\t2\n41631\t2\n631\t2\n16031\t2\n18031\t2\n85431\t2\n29031\t2\n91031\t2\n60631\t2\n22631\t2\n49831\t2\n146831\t2\n92031\t2\n5831\t2\n23431\t2\n86831\t2\n7031\t2\n42631\t2\n76658\t2\n21258\t2\n96658\t2\n9058\t2\n53058\t2\n39258\t2\n42458\t2\n13258\t2\n33658\t2\n132458\t2\n29458\t2\n17458\t2\n2858\t2\n4258\t2\n100258\t2\n51058\t2\n19258\t2\n125658\t2\n68658\t2\n73058\t2\n11058\t2\n130658\t2\n26658\t2\n80058\t2\n16858\t2\n58658\t2\n30058\t2\n119258\t2\n78058\t2\n858\t2\n104258\t2\n125058\t2\n52458\t2\n121858\t2\n58058\t2\n32058\t2\n48858\t2\n90058\t2\n94658\t2\n113258\t2\n146258\t2\n145458\t2\n54058\t2\n151258\t2\n71258\t2\n124858\t2\n63458\t2\n49258\t2\n40258\t2\n26258\t2\n91658\t2\n61058\t2\n64458\t2\n6458\t2\n18858\t2\n27458\t2\n62058\t2\n23058\t2\n24658\t2\n60858\t2\n20058\t2\n106658\t2\n16458\t2\n114658\t2\n75058\t2\n48058\t2\n116658\t2\n130858\t2\n93258\t2\n15258\t2\n46258\t2\n93058\t2\n9258\t2\n57458\t2\n74458\t2\n145058\t2\n1858\t2\n47458\t2\n79858\t2\n86858\t2\n15858\t2\n69658\t2\n94458\t2\n113458\t2\n15458\t2\n53858\t2\n2258\t2\n141058\t2\n85058\t2\n56258\t2\n41858\t2\n155058\t2\n92258\t2\n17058\t2\n97058\t2\n58858\t2\n98058\t2\n82258\t2\n65058\t2\n10058\t2\n94858\t2\n84858\t2\n139858\t2\n96858\t2\n144858\t2\n22658\t2\n73258\t2\n140058\t2\n86658\t2\n37058\t2\n144658\t2\n136858\t2\n14258\t2\n24258\t2\n8258\t2\n40658\t2\n74658\t2\n87658\t2\n9658\t2\n47658\t2\n101458\t2\n28058\t2\n89258\t2\n5858\t2\n16058\t2\n8058\t2\n98658\t2\n132258\t2\n129858\t2\n111858\t2\n66055\t2\n24655\t2\n88455\t2\n61655\t2\n40655\t2\n36455\t2\n13055\t2\n141655\t2\n87655\t2\n53255\t2\n80655\t2\n45055\t2\n53655\t2\n53855\t2\n17455\t2\n55455\t2\n72255\t2\n2255\t2\n58655\t2\n100455\t2\n15055\t2\n8655\t2\n76655\t2\n47655\t2\n13855\t2\n39055\t2\n91055\t2\n66655\t2\n4655\t2\n81055\t2\n47455\t2\n2855\t2\n101655\t2\n2655\t2\n146855\t2\n40855\t2\n19255\t2\n2455\t2\n15655\t2\n655\t2\n27055\t2\n109855\t2\n22055\t2\n110455\t2\n41855\t2\n34055\t2\n12455\t2\n28655\t2\n88055\t2\n165055\t2\n22655\t2\n2055\t2\n117055\t2\n126255\t2\n12655\t2\n54455\t2\n42655\t2\n30655\t2\n27855\t2\n17855\t2\n137055\t2\n1455\t2\n136855\t2\n7055\t2\n13255\t2\n42255\t2\n76255\t2\n134655\t2\n93055\t2\n108655\t2\n105455\t2\n64055\t2\n26455\t2\n102055\t2\n11055\t2\n46455\t2\n79655\t2\n113855\t2\n57055\t2\n8455\t2\n66455\t2\n128255\t2\n113055\t2\n135055\t2\n74055\t2\n52455\t2\n52655\t2\n92655\t2\n8855\t2\n10655\t2\n30455\t2\n58255\t2\n85455\t2\n129255\t2\n68455\t2\n92855\t2\n41055\t2\n25055\t2\n100255\t2\n86855\t2\n74455\t2\n5655\t2\n1655\t2\n81255\t2\n40055\t2\n58455\t2\n39855\t2\n67055\t2\n55\t2\n29855\t2\n115255\t2\n38655\t2\n43855\t2\n111455\t2\n146455\t2\n93855\t2\n60648\t2\n47248\t2\n7648\t2\n167648\t2\n39248\t2\n145248\t2\n16448\t2\n88248\t2\n12448\t2\n2448\t2\n110248\t2\n3248\t2\n63848\t2\n9448\t2\n17248\t2\n13248\t2\n2848\t2\n39848\t2\n24048\t2\n94248\t2\n146848\t2\n31248\t2\n79048\t2\n121448\t2\n19448\t2\n1048\t2\n70248\t2\n14848\t2\n23048\t2\n51648\t2\n15248\t2\n5248\t2\n21448\t2\n143648\t2\n121248\t2\n27048\t2\n20648\t2\n21248\t2\n11048\t2\n15448\t2\n86848\t2\n150048\t2\n67648\t2\n48048\t2\n108248\t2\n122248\t2\n92648\t2\n34848\t2\n67848\t2\n110448\t2\n45048\t2\n21048\t2\n109648\t2\n4448\t2\n95048\t2\n158848\t2\n52448\t2\n57848\t2\n111448\t2\n41048\t2\n53848\t2\n42648\t2\n117448\t2\n82448\t2\n47648\t2\n26648\t2\n20448\t2\n97648\t2\n66448\t2\n86048\t2\n99048\t2\n3448\t2\n47448\t2\n11848\t2\n8448\t2\n15648\t2\n57648\t2\n83048\t2\n60248\t2\n133248\t2\n126848\t2\n65448\t2\n44048\t2\n29848\t2\n35048\t2\n59248\t2\n64048\t2\n22448\t2\n112648\t2\n125248\t2\n72048\t2\n6048\t2\n8648\t2\n95648\t2\n89648\t2\n134248\t2\n114248\t2\n75448\t2\n48\t2\n49648\t2\n72248\t2\n19648\t2\n57448\t2\n100248\t2\n6448\t2\n59448\t2\n54048\t2\n122848\t2\n105848\t2\n47048\t2\n18448\t2\n93448\t2\n16248\t2\n31048\t2\n50048\t2\n74448\t2\n76048\t2\n26448\t2\n20048\t2\n14248\t2\n69248\t2\n56648\t2\n110648\t2\n27248\t2\n44844\t2\n37444\t2\n22844\t2\n10044\t2\n121844\t2\n42644\t2\n8444\t2\n86644\t2\n91444\t2\n11644\t2\n68244\t2\n113844\t2\n24044\t2\n111644\t2\n119844\t2\n49644\t2\n53844\t2\n76844\t2\n76244\t2\n61244\t2\n4844\t2\n5044\t2\n19444\t2\n114244\t2\n144244\t2\n52444\t2\n6844\t2\n43844\t2\n1244\t2\n97644\t2\n14244\t2\n4444\t2\n57444\t2\n56244\t2\n55444\t2\n31444\t2\n19044\t2\n91244\t2\n67844\t2\n70444\t2\n18444\t2\n38844\t2\n87044\t2\n2044\t2\n31844\t2\n7044\t2\n83444\t2\n148444\t2\n62044\t2\n51444\t2\n7844\t2\n29644\t2\n28444\t2\n110244\t2\n21444\t2\n49044\t2\n73444\t2\n117244\t2\n644\t2\n14844\t2\n91044\t2\n92244\t2\n44644\t2\n75444\t2\n45244\t2\n51244\t2\n116644\t2\n46844\t2\n53044\t2\n130044\t2\n24644\t2\n48844\t2\n12044\t2\n29244\t2\n15844\t2\n75844\t2\n88444\t2\n50044\t2\n36644\t2\n106244\t2\n60244\t2\n90844\t2\n80844\t2\n3244\t2\n21844\t2\n1044\t2\n112844\t2\n130444\t2\n77244\t2\n126844\t2\n46244\t2\n2444\t2\n36044\t2\n58444\t2\n38244\t2\n43444\t2\n69444\t2\n142244\t2\n74444\t2\n81244\t2\n14044\t2\n1644\t2\n11844\t2\n69844\t2\n18644\t2\n140844\t2\n117844\t2\n148244\t2\n72044\t2\n20844\t2\n112444\t2\n7644\t2\n158444\t2\n9244\t2\n118244\t2\n45644\t2\n124644\t2\n5444\t2\n39844\t2\n13657\t2\n126457\t2\n69657\t2\n9657\t2\n95857\t2\n95657\t2\n145657\t2\n63857\t2\n115657\t2\n70257\t2\n117457\t2\n72457\t2\n159257\t2\n79457\t2\n19457\t2\n26257\t2\n33057\t2\n97257\t2\n67657\t2\n54057\t2\n92857\t2\n21657\t2\n67257\t2\n137657\t2\n132857\t2\n1257\t2\n85657\t2\n52457\t2\n35657\t2\n132657\t2\n37257\t2\n53457\t2\n92257\t2\n48457\t2\n49057\t2\n59057\t2\n857\t2\n3057\t2\n20857\t2\n18457\t2\n17457\t2\n98657\t2\n99657\t2\n119257\t2\n80657\t2\n114057\t2\n19257\t2\n4657\t2\n6057\t2\n42057\t2\n71057\t2\n93257\t2\n41257\t2\n31857\t2\n63057\t2\n49257\t2\n64257\t2\n31057\t2\n77457\t2\n25057\t2\n10257\t2\n23257\t2\n63257\t2\n33457\t2\n28057\t2\n8857\t2\n12457\t2\n89057\t2\n41457\t2\n116857\t2\n30857\t2\n4457\t2\n41657\t2\n79857\t2\n124057\t2\n31657\t2\n80057\t2\n96057\t2\n3257\t2\n39257\t2\n25457\t2\n143257\t2\n83457\t2\n44657\t2\n69457\t2\n29657\t2\n33257\t2\n14057\t2\n89457\t2\n40057\t2\n112457\t2\n66657\t2\n85857\t2\n98257\t2\n43257\t2\n8657\t2\n32257\t2\n88257\t2\n15459\t2\n78059\t2\n9059\t2\n40059\t2\n110659\t2\n148859\t2\n11259\t2\n98659\t2\n55859\t2\n8859\t2\n60059\t2\n87459\t2\n2459\t2\n60259\t2\n70459\t2\n35059\t2\n66459\t2\n47659\t2\n64859\t2\n95659\t2\n81059\t2\n49859\t2\n69859\t2\n89659\t2\n3659\t2\n11859\t2\n45259\t2\n97059\t2\n14059\t2\n1659\t2\n5259\t2\n69459\t2\n56259\t2\n18059\t2\n96059\t2\n39059\t2\n55259\t2\n52859\t2\n13259\t2\n114859\t2\n105659\t2\n85459\t2\n39859\t2\n10459\t2\n136459\t2\n28659\t2\n70059\t2\n17059\t2\n63259\t2\n3859\t2\n131459\t2\n29459\t2\n62859\t2\n16059\t2\n18659\t2\n25659\t2\n36059\t2\n115059\t2\n87059\t2\n77659\t2\n92259\t2\n11459\t2\n34459\t2\n29259\t2\n83259\t2\n2259\t2\n124259\t2\n8459\t2\n25459\t2\n31259\t2\n69259\t2\n30459\t2\n68459\t2\n140659\t2\n89859\t2\n10059\t2\n35259\t2\n12459\t2\n37259\t2\n12859\t2\n59859\t2\n4859\t2\n65859\t2\n6259\t2\n51659\t2\n11059\t2\n67859\t2\n94459\t2\n27859\t2\n64659\t2\n97659\t2\n99459\t2\n22059\t2\n61459\t2\n18859\t2\n83659\t2\n16459\t2\n76859\t2\n129459\t2\n25059\t2\n96859\t2\n12659\t2\n19459\t2\n5459\t2\n24659\t2\n53259\t2\n112459\t2\n45059\t2\n142459\t2\n70659\t2\n97259\t2\n83059\t2\n112259\t2\n26642\t2\n96842\t2\n11242\t2\n20442\t2\n17642\t2\n12242\t2\n15442\t2\n69042\t2\n42042\t2\n45442\t2\n6042\t2\n25842\t2\n115042\t2\n32442\t2\n74442\t2\n25442\t2\n71442\t2\n161442\t2\n116042\t2\n27842\t2\n67642\t2\n28642\t2\n114642\t2\n36642\t2\n72242\t2\n41242\t2\n24642\t2\n35442\t2\n122442\t2\n39642\t2\n25242\t2\n103642\t2\n16642\t2\n60842\t2\n38842\t2\n41442\t2\n60242\t2\n36442\t2\n80642\t2\n158642\t2\n77642\t2\n23042\t2\n98642\t2\n69242\t2\n14242\t2\n28842\t2\n128642\t2\n91042\t2\n73442\t2\n91242\t2\n46642\t2\n62042\t2\n74042\t2\n65642\t2\n107442\t2\n16842\t2\n3442\t2\n8842\t2\n63242\t2\n158842\t2\n8242\t2\n14042\t2\n27242\t2\n38042\t2\n154242\t2\n148642\t2\n102842\t2\n18442\t2\n13242\t2\n100842\t2\n43242\t2\n64042\t2\n88242\t2\n18842\t2\n\n\u003cfont color\u003dred\u003eResults are limited by 1000.\u003c/font\u003e"
+      },
+      "dateCreated": "Jun 25, 2018 2:48:27 PM",
+      "dateStarted": "Jul 9, 2018 12:10:17 AM",
+      "dateFinished": "Jul 9, 2018 12:10:32 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val users \u003d usersRatingDefault.groupBy(\"userid\").count.sort(asc(\"count\"))\nz.show(users)",
+      "dateUpdated": "Jun 25, 2018 2:48:27 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1529930907218_-364494666",
+      "id": "20180625-144827_275740448",
+      "dateCreated": "Jun 25, 2018 2:48:27 PM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "dateUpdated": "Jun 25, 2018 2:48:27 PM",
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1529930907219_-364879414",
+      "id": "20180625-144827_95882994",
+      "dateCreated": "Jun 25, 2018 2:48:27 PM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "purchBaselinesVer3: writeTrainTestFiles",
+  "id": "2DJKM2Z9U",
+  "angularObjects": {
+    "2BJGSXM37": [],
+    "2BGHSKCA7": [],
+    "2BHKKP27G": [],
+    "2BGVG5JP4": [],
+    "2BFMBPKAB": [],
+    "2BF969NNB": [],
+    "2BJAQG5W4": [],
+    "2BJHJDBK6": [],
+    "2BHKAE8WK": [],
+    "2BG8QQJNC": [],
+    "2BJ7KKX85": [],
+    "2BH9AVVKH": [],
+    "2BJ6HN5AY": [],
+    "2BFEDXCTE": [],
+    "2BJ5FCP57": [],
+    "2BJ8AEWCT": [],
+    "2BFXEV5XZ": [],
+    "2BG77RV7M": []
+  },
+  "config": {},
+  "info": {}
+}

@@ -35,6 +35,76 @@
       "progressUpdateIntervalMs": 500
     },
     {
+      "text": "val parquetFileClick \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypso_kk_june_data/click/*/2016/*/*/*.parquet\")\nval keywords \u003d parquetFileClick.select(parquetFileClick(\"keywords\")(0))\nkeywords.distinct.count",
+      "authenticationInfo": {},
+      "dateUpdated": "Aug 8, 2018 6:12:37 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1533744707214_-1420247183",
+      "id": "20180808-181147_1051180811",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "parquetFileClick: org.apache.spark.sql.DataFrame \u003d [userId: string, ip: string, userAgent: struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e, geolocation: struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, offerViewId: string, clickId: string, earning: decimal(38,18)]\nkeywords: org.apache.spark.sql.DataFrame \u003d [keywords[0]: string]\nres0: Long \u003d 461128\n"
+      },
+      "dateCreated": "Aug 8, 2018 6:11:47 PM",
+      "dateStarted": "Aug 8, 2018 6:12:37 PM",
+      "dateFinished": "Aug 8, 2018 6:14:06 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "parquetFileClick.printSchema",
+      "authenticationInfo": {},
+      "dateUpdated": "Aug 8, 2018 6:18:29 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1533745095894_-2137472207",
+      "id": "20180808-181815_97206644",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "root\n |-- userId: string (nullable \u003d true)\n |-- ip: string (nullable \u003d true)\n |-- userAgent: struct (nullable \u003d true)\n |    |-- deviceType: string (nullable \u003d true)\n |    |-- operatingSystem: string (nullable \u003d true)\n |    |-- browser: string (nullable \u003d true)\n |    |-- rawUserAgent: string (nullable \u003d true)\n |-- geolocation: struct (nullable \u003d true)\n |    |-- country: string (nullable \u003d true)\n |    |-- countryCode: string (nullable \u003d true)\n |    |-- state: string (nullable \u003d true)\n |    |-- city: string (nullable \u003d true)\n |    |-- timeZone: string (nullable \u003d true)\n |-- siteDomain: struct (nullable \u003d true)\n |    |-- countryCode: string (nullable \u003d true)\n |    |-- domainName: string (nullable \u003d true)\n |-- dataCenter: string (nullable \u003d true)\n |-- utcDate: timestamp (nullable \u003d true)\n |-- offerTitle: string (nullable \u003d true)\n |-- category: array (nullable \u003d true)\n |    |-- element: string (containsNull \u003d true)\n |-- price: decimal(38,18) (nullable \u003d true)\n |-- merchant: string (nullable \u003d true)\n |-- source: string (nullable \u003d true)\n |-- keywords: array (nullable \u003d true)\n |    |-- element: string (containsNull \u003d true)\n |-- offerViewId: string (nullable \u003d true)\n |-- clickId: string (nullable \u003d true)\n |-- earning: decimal(38,18) (nullable \u003d true)\n\n"
+      },
+      "dateCreated": "Aug 8, 2018 6:18:15 PM",
+      "dateStarted": "Aug 8, 2018 6:18:29 PM",
+      "dateFinished": "Aug 8, 2018 6:18:30 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
       "text": "val keywords \u003d parquetFileClick.select(parquetFileClick(\"keywords\")(0))\nkeywords.show\nkeywords.count\nkeywords.filter(!($\"keywords[0]\".isNull)).count\nkeywords.filter(($\"keywords[0]\".isNull)).count",
       "authenticationInfo": {},
       "dateUpdated": "Dec 5, 2016 11:34:29 PM",
@@ -166,24 +236,24 @@
   "name": "kelkooBaselines: analyzeKeywordsinClicks",
   "id": "2C5YR548P",
   "angularObjects": {
-    "2BGHSKCA7": [],
-    "2BFMBPKAB": [],
-    "2BHKKP27G": [],
-    "2BJHJDBK6": [],
-    "2BJAQG5W4": [],
     "2BJGSXM37": [],
-    "2BFXEV5XZ": [],
-    "2BG77RV7M": [],
-    "2BF969NNB": [],
-    "2BG8QQJNC": [],
+    "2BGHSKCA7": [],
+    "2BHKKP27G": [],
     "2BGVG5JP4": [],
-    "2BJ5FCP57": [],
-    "2BFEDXCTE": [],
-    "2BJ8AEWCT": [],
-    "2BH9AVVKH": [],
-    "2BJ7KKX85": [],
+    "2BFMBPKAB": [],
+    "2BF969NNB": [],
+    "2BJAQG5W4": [],
+    "2BJHJDBK6": [],
     "2BHKAE8WK": [],
-    "2BJ6HN5AY": []
+    "2BG8QQJNC": [],
+    "2BJ7KKX85": [],
+    "2BH9AVVKH": [],
+    "2BJ6HN5AY": [],
+    "2BFEDXCTE": [],
+    "2BJ5FCP57": [],
+    "2BJ8AEWCT": [],
+    "2BFXEV5XZ": [],
+    "2BG77RV7M": []
   },
   "config": {
     "looknfeel": "default"

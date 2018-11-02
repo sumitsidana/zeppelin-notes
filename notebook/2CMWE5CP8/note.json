@@ -1,0 +1,145 @@
+{
+  "paragraphs": [
+    {
+      "text": "val dfEvents \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/home/ama/spark/outbrain/Data/events.csv\")\n    \nval train \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/home/ama/spark/outbrain/Data/clicks_train.csv\")\n\nval train_event_join \u003d dfEvents.join(train,dfEvents(\"display_id\")\u003d\u003d\u003dtrain(\"display_id\")).drop(train(\"display_id\"))\n\nval dataTemp \u003d train_event_join.select(\"uuid\",\"ad_id\",\"clicked\",\"timestamp\")\n\nval positiveData \u003d dataTemp.filter($\"clicked\"\u003d\u003d\u003d\"1\")\nval user_ad_positive_distinct \u003d positiveData.select(\"uuid\",\"ad_id\").distinct\nval userPositiveClickCount \u003d user_ad_positive_distinct.groupBy(\"uuid\").count\nval goodUsers \u003d userPositiveClickCount.filter($\"count\"\u003e\u003d2)\n\nval negativeData \u003d  dataTemp.filter($\"clicked\"\u003d\u003d\u003d\"0\")\nval user_ad_negative_distinct \u003d negativeData.select(\"uuid\",\"ad_id\").distinct\nval userNegativeClickCount \u003d user_ad_negative_distinct.groupBy(\"uuid\").count\nval badUsers \u003d userNegativeClickCount.filter($\"count\"\u003e\u003d10)\n\nval goodDataTemp \u003d dataTemp.join(goodUsers,dataTemp(\"uuid\")\u003d\u003d\u003dgoodUsers(\"uuid\")).drop(goodUsers(\"count\")).drop(goodUsers(\"uuid\"))\nval goodBadDataTemp \u003d goodDataTemp.join(badUsers,goodDataTemp(\"uuid\")\u003d\u003d\u003dbadUsers(\"uuid\")).drop(badUsers(\"count\")).drop(badUsers(\"uuid\"))\n\nval header \u003d \"userId,movieId,rating,timestamp\"\n\nval goodData \u003d goodBadDataTemp.select(\"uuid\",\"ad_id\",\"clicked\",\"timestamp\").rdd.map(_.mkString(\",\")).mapPartitionsWithIndex((i, iter) \u003d\u003e if (i\u003d\u003d0) (List(header).toIterator ++ iter) else iter)\n\ngoodData.coalesce(1,false).saveAsTextFile(\"/data/sidana/recnet_draft/outbrain/dat.outbrainchallenge\")",
+      "authenticationInfo": {},
+      "dateUpdated": "Jun 28, 2017 3:30:04 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1498647039269_-1406958215",
+      "id": "20170628-125039_127583967",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "dfEvents: org.apache.spark.sql.DataFrame \u003d [display_id: int, uuid: string, document_id: int, timestamp: int, platform: string, geo_location: string]\ntrain: org.apache.spark.sql.DataFrame \u003d [display_id: int, ad_id: int, clicked: int]\ntrain_event_join: org.apache.spark.sql.DataFrame \u003d [display_id: int, uuid: string, document_id: int, timestamp: int, platform: string, geo_location: string, ad_id: int, clicked: int]\ndataTemp: org.apache.spark.sql.DataFrame \u003d [uuid: string, ad_id: int, clicked: int, timestamp: int]\npositiveData: org.apache.spark.sql.DataFrame \u003d [uuid: string, ad_id: int, clicked: int, timestamp: int]\nuser_ad_positive_distinct: org.apache.spark.sql.DataFrame \u003d [uuid: string, ad_id: int]\nuserPositiveClickCount: org.apache.spark.sql.DataFrame \u003d [uuid: string, count: bigint]\ngoodUsers: org.apache.spark.sql.DataFrame \u003d [uuid: string, count: bigint]\nnegativeData: org.apache.spark.sql.DataFrame \u003d [uuid: string, ad_id: int, clicked: int, timestamp: int]\nuser_ad_negative_distinct: org.apache.spark.sql.DataFrame \u003d [uuid: string, ad_id: int]\nuserNegativeClickCount: org.apache.spark.sql.DataFrame \u003d [uuid: string, count: bigint]\nbadUsers: org.apache.spark.sql.DataFrame \u003d [uuid: string, count: bigint]\ngoodDataTemp: org.apache.spark.sql.DataFrame \u003d [ad_id: int, clicked: int, timestamp: int, uuid: string]\ngoodBadDataTemp: org.apache.spark.sql.DataFrame \u003d [ad_id: int, clicked: int, timestamp: int, uuid: string]\nheader: String \u003d userId,movieId,rating,timestamp\ngoodData: org.apache.spark.rdd.RDD[String] \u003d MapPartitionsRDD[972] at mapPartitionsWithIndex at \u003cconsole\u003e:57\n"
+      },
+      "dateCreated": "Jun 28, 2017 12:50:39 PM",
+      "dateStarted": "Jun 28, 2017 3:30:04 PM",
+      "dateFinished": "Jun 28, 2017 3:40:11 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val data \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/data/sidana/recnet_draft/kasandr/cofactor/ratings.csv\")\n\nval userRatings \u003d data.select(\"userId\",\"rating\").distinct\n\nval userCount \u003d userRatings.groupBy(\"userId\").count.sort(asc(\"count\"))\n",
+      "authenticationInfo": {},
+      "dateUpdated": "Jun 28, 2017 5:59:59 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1498647354442_546071530",
+      "id": "20170628-125554_1430649422",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "data: org.apache.spark.sql.DataFrame \u003d [userId: int, movieId: int, rating: int, timestamp: int]\nuserRatings: org.apache.spark.sql.DataFrame \u003d [userId: int, rating: int]\nuserCount: org.apache.spark.sql.DataFrame \u003d [userId: int, count: bigint]\n"
+      },
+      "dateCreated": "Jun 28, 2017 12:55:54 PM",
+      "dateStarted": "Jun 28, 2017 5:59:59 PM",
+      "dateFinished": "Jun 28, 2017 6:00:12 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "z.show(userCount)",
+      "authenticationInfo": {},
+      "dateUpdated": "Jun 28, 2017 6:00:18 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1498664928251_-1833644074",
+      "id": "20170628-174848_134239470",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TABLE",
+        "msg": "userId\tcount\n3840\t2\n4040\t2\n4240\t2\n4440\t2\n4640\t2\n4840\t2\n5040\t2\n5240\t2\n5440\t2\n5640\t2\n5840\t2\n6040\t2\n6240\t2\n6440\t2\n6640\t2\n6840\t2\n7040\t2\n7240\t2\n7440\t2\n14640\t2\n14840\t2\n15040\t2\n15240\t2\n15440\t2\n15640\t2\n15840\t2\n16040\t2\n16240\t2\n16440\t2\n16640\t2\n16840\t2\n17040\t2\n17240\t2\n17440\t2\n17640\t2\n17840\t2\n18040\t2\n7640\t2\n7840\t2\n8040\t2\n8240\t2\n8440\t2\n8640\t2\n8840\t2\n9040\t2\n9240\t2\n9440\t2\n9640\t2\n9840\t2\n10040\t2\n10240\t2\n10440\t2\n10640\t2\n10840\t2\n25440\t2\n25640\t2\n25840\t2\n18240\t2\n18440\t2\n18640\t2\n18840\t2\n19040\t2\n19240\t2\n19440\t2\n19640\t2\n19840\t2\n20040\t2\n20240\t2\n20440\t2\n20640\t2\n20840\t2\n21040\t2\n21240\t2\n21440\t2\n21640\t2\n21840\t2\n40\t2\n240\t2\n440\t2\n640\t2\n840\t2\n1040\t2\n1240\t2\n1440\t2\n1640\t2\n1840\t2\n2040\t2\n2240\t2\n2440\t2\n2640\t2\n2840\t2\n3040\t2\n3240\t2\n3440\t2\n3640\t2\n11040\t2\n11240\t2\n11440\t2\n11640\t2\n11840\t2\n12040\t2\n12240\t2\n12440\t2\n12640\t2\n12840\t2\n13040\t2\n13240\t2\n13440\t2\n13640\t2\n13840\t2\n14040\t2\n14240\t2\n14440\t2\n22040\t2\n22240\t2\n22440\t2\n22640\t2\n22840\t2\n23040\t2\n23240\t2\n23440\t2\n23640\t2\n23840\t2\n24040\t2\n24240\t2\n24440\t2\n24640\t2\n24840\t2\n25040\t2\n25240\t2\n3893\t2\n4093\t2\n4293\t2\n4493\t2\n4693\t2\n4893\t2\n5093\t2\n5293\t2\n5493\t2\n5693\t2\n5893\t2\n6093\t2\n6293\t2\n6493\t2\n6693\t2\n6893\t2\n7093\t2\n7293\t2\n7493\t2\n14693\t2\n14893\t2\n15093\t2\n15293\t2\n15493\t2\n15693\t2\n15893\t2\n16093\t2\n16293\t2\n16493\t2\n16693\t2\n16893\t2\n17093\t2\n17293\t2\n17493\t2\n17693\t2\n17893\t2\n18093\t2\n25493\t2\n25693\t2\n7693\t2\n7893\t2\n8093\t2\n8293\t2\n8493\t2\n8693\t2\n8893\t2\n9093\t2\n9293\t2\n9493\t2\n9693\t2\n9893\t2\n10093\t2\n10293\t2\n10493\t2\n10693\t2\n10893\t2\n18293\t2\n18493\t2\n18693\t2\n18893\t2\n19093\t2\n19293\t2\n19493\t2\n19693\t2\n19893\t2\n20093\t2\n20293\t2\n20493\t2\n20693\t2\n20893\t2\n21093\t2\n21293\t2\n21493\t2\n21693\t2\n21893\t2\n93\t2\n293\t2\n493\t2\n693\t2\n893\t2\n1093\t2\n1293\t2\n1493\t2\n1693\t2\n1893\t2\n2093\t2\n2293\t2\n2493\t2\n2693\t2\n2893\t2\n3093\t2\n3293\t2\n3493\t2\n3693\t2\n11093\t2\n11293\t2\n11493\t2\n11693\t2\n11893\t2\n12093\t2\n12293\t2\n12493\t2\n12693\t2\n12893\t2\n13093\t2\n13293\t2\n13493\t2\n13693\t2\n13893\t2\n14093\t2\n14293\t2\n14493\t2\n22093\t2\n22293\t2\n22493\t2\n22693\t2\n22893\t2\n23093\t2\n23293\t2\n23493\t2\n23693\t2\n23893\t2\n24093\t2\n24293\t2\n24493\t2\n24693\t2\n24893\t2\n25093\t2\n25293\t2\n3844\t2\n4044\t2\n4244\t2\n4444\t2\n4644\t2\n4844\t2\n5044\t2\n5244\t2\n5444\t2\n5644\t2\n5844\t2\n6044\t2\n6244\t2\n6444\t2\n6644\t2\n6844\t2\n7044\t2\n7244\t2\n7444\t2\n14644\t2\n14844\t2\n15044\t2\n15244\t2\n15444\t2\n15644\t2\n15844\t2\n16044\t2\n16244\t2\n16444\t2\n16644\t2\n16844\t2\n17044\t2\n17244\t2\n17444\t2\n17644\t2\n17844\t2\n18044\t2\n25444\t2\n25644\t2\n25844\t2\n7644\t2\n7844\t2\n8044\t2\n8244\t2\n8444\t2\n8644\t2\n8844\t2\n9044\t2\n9244\t2\n9444\t2\n9644\t2\n9844\t2\n10044\t2\n10244\t2\n10444\t2\n10644\t2\n10844\t2\n18244\t2\n18444\t2\n18644\t2\n18844\t2\n19044\t2\n19244\t2\n19444\t2\n19644\t2\n19844\t2\n20044\t2\n20244\t2\n20444\t2\n20644\t2\n20844\t2\n21044\t2\n21244\t2\n21444\t2\n21644\t2\n21844\t2\n44\t2\n244\t2\n444\t2\n644\t2\n844\t2\n1044\t2\n1244\t2\n1444\t2\n1644\t2\n1844\t2\n2044\t2\n2244\t2\n2444\t2\n2644\t2\n2844\t2\n3044\t2\n3244\t2\n3444\t2\n3644\t2\n11044\t2\n11244\t2\n11444\t2\n11644\t2\n11844\t2\n12044\t2\n12244\t2\n12444\t2\n12644\t2\n12844\t2\n13044\t2\n13244\t2\n13444\t2\n13644\t2\n13844\t2\n14044\t2\n14244\t2\n14444\t2\n22044\t2\n22244\t2\n22444\t2\n22644\t2\n22844\t2\n23044\t2\n23244\t2\n23444\t2\n23644\t2\n23844\t2\n24044\t2\n24244\t2\n24444\t2\n24644\t2\n24844\t2\n25044\t2\n25244\t2\n3864\t2\n4064\t2\n4264\t2\n4464\t2\n4664\t2\n4864\t2\n5064\t2\n5264\t2\n5464\t2\n5664\t2\n5864\t2\n6064\t2\n6264\t2\n6464\t2\n6664\t2\n6864\t2\n7064\t2\n7264\t2\n7464\t2\n14664\t2\n14864\t2\n15064\t2\n15264\t2\n15464\t2\n15664\t2\n15864\t2\n16064\t2\n16264\t2\n16464\t2\n16664\t2\n16864\t2\n17064\t2\n17264\t2\n17464\t2\n17664\t2\n17864\t2\n18064\t2\n64\t2\n264\t2\n464\t2\n664\t2\n864\t2\n1064\t2\n1264\t2\n1464\t2\n1664\t2\n1864\t2\n2064\t2\n2264\t2\n2464\t2\n2664\t2\n2864\t2\n3064\t2\n3264\t2\n3464\t2\n3664\t2\n11064\t2\n11264\t2\n11464\t2\n11664\t2\n11864\t2\n12064\t2\n12264\t2\n12464\t2\n12664\t2\n12864\t2\n13064\t2\n13264\t2\n13464\t2\n13664\t2\n13864\t2\n14064\t2\n14264\t2\n14464\t2\n22064\t2\n22264\t2\n22464\t2\n22664\t2\n22864\t2\n23064\t2\n23264\t2\n23464\t2\n23664\t2\n23864\t2\n24064\t2\n24264\t2\n24464\t2\n24664\t2\n24864\t2\n25064\t2\n25264\t2\n25464\t2\n25664\t2\n7664\t2\n7864\t2\n8064\t2\n8264\t2\n8464\t2\n8664\t2\n8864\t2\n9064\t2\n9264\t2\n9464\t2\n9664\t2\n9864\t2\n10064\t2\n10264\t2\n10464\t2\n10664\t2\n10864\t2\n18264\t2\n18464\t2\n18664\t2\n18864\t2\n19064\t2\n19264\t2\n19464\t2\n19664\t2\n19864\t2\n20064\t2\n20264\t2\n20464\t2\n20664\t2\n20864\t2\n21064\t2\n21264\t2\n21464\t2\n21664\t2\n21864\t2\n3843\t2\n4043\t2\n4243\t2\n4443\t2\n4643\t2\n4843\t2\n5043\t2\n5243\t2\n5443\t2\n5643\t2\n5843\t2\n6043\t2\n6243\t2\n6443\t2\n6643\t2\n6843\t2\n7043\t2\n7243\t2\n7443\t2\n43\t2\n243\t2\n443\t2\n643\t2\n843\t2\n1043\t2\n1243\t2\n1443\t2\n1643\t2\n1843\t2\n2043\t2\n2243\t2\n2443\t2\n2643\t2\n2843\t2\n3043\t2\n3243\t2\n3443\t2\n3643\t2\n11043\t2\n11243\t2\n11443\t2\n11643\t2\n11843\t2\n12043\t2\n12243\t2\n12443\t2\n12643\t2\n12843\t2\n13043\t2\n13243\t2\n13443\t2\n13643\t2\n13843\t2\n14043\t2\n14243\t2\n14443\t2\n22043\t2\n22243\t2\n22443\t2\n22643\t2\n22843\t2\n23043\t2\n23243\t2\n23443\t2\n23643\t2\n23843\t2\n24043\t2\n24243\t2\n24443\t2\n24643\t2\n24843\t2\n25043\t2\n25243\t2\n14643\t2\n14843\t2\n15043\t2\n15243\t2\n15443\t2\n15643\t2\n15843\t2\n16043\t2\n16243\t2\n16443\t2\n16643\t2\n16843\t2\n17043\t2\n17243\t2\n17443\t2\n17643\t2\n17843\t2\n18043\t2\n25443\t2\n25643\t2\n25843\t2\n7643\t2\n7843\t2\n8043\t2\n8243\t2\n8443\t2\n8643\t2\n8843\t2\n9043\t2\n9243\t2\n9443\t2\n9643\t2\n9843\t2\n10043\t2\n10243\t2\n10443\t2\n10643\t2\n10843\t2\n18243\t2\n18443\t2\n18643\t2\n18843\t2\n19043\t2\n19243\t2\n19443\t2\n19643\t2\n19843\t2\n20043\t2\n20243\t2\n20443\t2\n20643\t2\n20843\t2\n21043\t2\n21243\t2\n21443\t2\n21643\t2\n21843\t2\n3851\t2\n4051\t2\n4251\t2\n4451\t2\n4651\t2\n4851\t2\n5051\t2\n5251\t2\n5451\t2\n5651\t2\n5851\t2\n6051\t2\n6251\t2\n6451\t2\n6651\t2\n6851\t2\n7051\t2\n7251\t2\n7451\t2\n14651\t2\n14851\t2\n15051\t2\n15251\t2\n15451\t2\n15651\t2\n15851\t2\n16051\t2\n16251\t2\n16451\t2\n16651\t2\n16851\t2\n17051\t2\n17251\t2\n17451\t2\n17651\t2\n17851\t2\n18051\t2\n25451\t2\n25651\t2\n7651\t2\n7851\t2\n8051\t2\n8251\t2\n8451\t2\n8651\t2\n8851\t2\n9051\t2\n9251\t2\n9451\t2\n9651\t2\n9851\t2\n10051\t2\n10251\t2\n10451\t2\n10651\t2\n10851\t2\n18251\t2\n18451\t2\n18651\t2\n18851\t2\n19051\t2\n19251\t2\n19451\t2\n19651\t2\n19851\t2\n20051\t2\n20251\t2\n20451\t2\n20651\t2\n20851\t2\n21051\t2\n21251\t2\n21451\t2\n21651\t2\n21851\t2\n51\t2\n251\t2\n451\t2\n651\t2\n851\t2\n1051\t2\n1251\t2\n1451\t2\n1651\t2\n1851\t2\n2051\t2\n2251\t2\n2451\t2\n2651\t2\n2851\t2\n3051\t2\n3251\t2\n3451\t2\n3651\t2\n11051\t2\n11251\t2\n11451\t2\n11651\t2\n11851\t2\n12051\t2\n12251\t2\n12451\t2\n12651\t2\n12851\t2\n13051\t2\n13251\t2\n13451\t2\n13651\t2\n13851\t2\n14051\t2\n14251\t2\n14451\t2\n22051\t2\n22251\t2\n22451\t2\n22651\t2\n22851\t2\n23051\t2\n23251\t2\n23451\t2\n23651\t2\n23851\t2\n24051\t2\n24251\t2\n24451\t2\n24651\t2\n24851\t2\n25051\t2\n25251\t2\n3882\t2\n4082\t2\n4282\t2\n4482\t2\n4682\t2\n4882\t2\n5082\t2\n5282\t2\n5482\t2\n5682\t2\n5882\t2\n6082\t2\n6282\t2\n6482\t2\n6682\t2\n6882\t2\n7082\t2\n7282\t2\n7482\t2\n14682\t2\n14882\t2\n15082\t2\n15282\t2\n15482\t2\n15682\t2\n15882\t2\n16082\t2\n16282\t2\n16482\t2\n16682\t2\n16882\t2\n17082\t2\n17282\t2\n17482\t2\n17682\t2\n17882\t2\n18082\t2\n25482\t2\n25682\t2\n7682\t2\n7882\t2\n8082\t2\n8282\t2\n8482\t2\n8682\t2\n8882\t2\n9082\t2\n9282\t2\n9482\t2\n9682\t2\n9882\t2\n10082\t2\n10282\t2\n10482\t2\n10682\t2\n10882\t2\n18282\t2\n18482\t2\n18682\t2\n18882\t2\n19082\t2\n19282\t2\n19482\t2\n19682\t2\n19882\t2\n20082\t2\n20282\t2\n20482\t2\n20682\t2\n20882\t2\n21082\t2\n21282\t2\n21482\t2\n21682\t2\n21882\t2\n82\t2\n282\t2\n482\t2\n682\t2\n882\t2\n1082\t2\n1282\t2\n1482\t2\n1682\t2\n1882\t2\n2082\t2\n2282\t2\n2482\t2\n2682\t2\n2882\t2\n3082\t2\n3282\t2\n3482\t2\n3682\t2\n11082\t2\n11282\t2\n11482\t2\n11682\t2\n11882\t2\n12082\t2\n12282\t2\n12482\t2\n12682\t2\n12882\t2\n13082\t2\n13282\t2\n13482\t2\n13682\t2\n13882\t2\n14082\t2\n14282\t2\n14482\t2\n22082\t2\n22282\t2\n22482\t2\n22682\t2\n22882\t2\n23082\t2\n23282\t2\n23482\t2\n23682\t2\n23882\t2\n24082\t2\n24282\t2\n24482\t2\n24682\t2\n24882\t2\n25082\t2\n25282\t2\n3855\t2\n4055\t2\n4255\t2\n4455\t2\n4655\t2\n4855\t2\n5055\t2\n5255\t2\n5455\t2\n5655\t2\n5855\t2\n6055\t2\n6255\t2\n6455\t2\n6655\t2\n6855\t2\n7055\t2\n7255\t2\n7455\t2\n14655\t2\n14855\t2\n15055\t2\n15255\t2\n15455\t2\n15655\t2\n15855\t2\n16055\t2\n16255\t2\n16455\t2\n16655\t2\n16855\t2\n17055\t2\n17255\t2\n17455\t2\n17655\t2\n17855\t2\n18055\t2\n25455\t2\n25655\t2\n7655\t2\n7855\t2\n8055\t2\n8255\t2\n8455\t2\n8655\t2\n8855\t2\n9055\t2\n9255\t2\n9455\t2\n9655\t2\n9855\t2\n10055\t2\n10255\t2\n10455\t2\n10655\t2\n10855\t2\n18255\t2\n18455\t2\n18655\t2\n18855\t2\n19055\t2\n19255\t2\n19455\t2\n19655\t2\n19855\t2\n20055\t2\n20255\t2\n20455\t2\n20655\t2\n20855\t2\n21055\t2\n21255\t2\n21455\t2\n21655\t2\n21855\t2\n55\t2\n255\t2\n455\t2\n655\t2\n855\t2\n1055\t2\n1255\t2\n1455\t2\n1655\t2\n1855\t2\n2055\t2\n2255\t2\n2455\t2\n2655\t2\n2855\t2\n3055\t2\n3255\t2\n3455\t2\n3655\t2\n\n\u003cfont color\u003dred\u003eResults are limited by 1000.\u003c/font\u003e"
+      },
+      "dateCreated": "Jun 28, 2017 5:48:48 PM",
+      "dateStarted": "Jun 28, 2017 6:00:18 PM",
+      "dateFinished": "Jun 28, 2017 6:00:49 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1498665061293_-2139318591",
+      "id": "20170628-175101_1710593945",
+      "dateCreated": "Jun 28, 2017 5:51:01 PM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "recnet_draft: outbrainSubsetCreation",
+  "id": "2CMWE5CP8",
+  "angularObjects": {
+    "2BGHSKCA7": [],
+    "2BFMBPKAB": [],
+    "2BHKKP27G": [],
+    "2BJHJDBK6": [],
+    "2BJAQG5W4": [],
+    "2BJGSXM37": [],
+    "2BFXEV5XZ": [],
+    "2BG77RV7M": [],
+    "2BF969NNB": [],
+    "2BG8QQJNC": [],
+    "2BGVG5JP4": [],
+    "2BJ5FCP57": [],
+    "2BFEDXCTE": [],
+    "2BJ8AEWCT": [],
+    "2BH9AVVKH": [],
+    "2BJ7KKX85": [],
+    "2BHKAE8WK": [],
+    "2BJ6HN5AY": []
+  },
+  "config": {},
+  "info": {}
+}

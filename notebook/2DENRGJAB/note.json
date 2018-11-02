@@ -1,0 +1,252 @@
+{
+  "paragraphs": [
+    {
+      "text": "// total number of events and total number of events where user did at least 1 click\n\nval parquetFileOfferTemp \u003d sqlContext.read.parquet(\"/data/sidana/purch_april_2018/*.parquet\")\nval inputFile \u003d parquetFileOfferTemp.filter(to_date($\"utcDate\")\u003e\u003d\"2018-04-01\"\u0026\u0026to_date($\"utcDate\")\u003c\u003d\"2018-04-30\")\ninputFile.count\nval goodUsers \u003d inputFile.filter($\"wasClicked\").select($\"userId\".as(\"goodUserId\")).distinct\nval data \u003d inputFile.join(goodUsers,inputFile(\"userId\")\u003d\u003d\u003dgoodUsers(\"goodUserId\")).drop(goodUsers(\"goodUserId\"))\ndata.count",
+      "authenticationInfo": {},
+      "dateUpdated": "Jun 8, 2018 8:29:00 PM",
+      "config": {
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1528187105037_-1245052181",
+      "id": "20180605-102505_347099253",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "parquetFileOfferTemp: org.apache.spark.sql.DataFrame \u003d [source: string, offerId: string, pageViewId: string, offerViewId: string, utcDate: timestamp, keywords: array\u003cstring\u003e, wasClicked: boolean, offerViewCountPerPageView: bigint, clickCountPerPageView: bigint, userId: double, productLemmas: array\u003cstring\u003e, productFeatures: vector, url: string, pageLemmas: array\u003cstring\u003e, pageFeatures: vector]\ninputFile: org.apache.spark.sql.DataFrame \u003d [source: string, offerId: string, pageViewId: string, offerViewId: string, utcDate: timestamp, keywords: array\u003cstring\u003e, wasClicked: boolean, offerViewCountPerPageView: bigint, clickCountPerPageView: bigint, userId: double, productLemmas: array\u003cstring\u003e, productFeatures: vector, url: string, pageLemmas: array\u003cstring\u003e, pageFeatures: vector]\nres1: Long \u003d 48602664\ngoodUsers: org.apache.spark.sql.DataFrame \u003d [goodUserId: double]\ndata: org.apache.spark.sql.DataFrame \u003d [source: string, offerId: string, pageViewId: string, offerViewId: string, utcDate: timestamp, keywords: array\u003cstring\u003e, wasClicked: boolean, offerViewCountPerPageView: bigint, clickCountPerPageView: bigint, userId: double, productLemmas: array\u003cstring\u003e, productFeatures: vector, url: string, pageLemmas: array\u003cstring\u003e, pageFeatures: vector]\nres2: Long \u003d 4544848\n"
+      },
+      "dateCreated": "Jun 5, 2018 10:25:05 AM",
+      "dateStarted": "Jun 8, 2018 8:29:00 PM",
+      "dateFinished": "Jun 8, 2018 9:28:10 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val parquetFileOfferTemp \u003d sqlContext.read.parquet(\"/data/sidana/purch_april_2018/*.parquet\")\nval inputFile \u003d parquetFileOfferTemp.filter(to_date($\"utcDate\")\u003e\u003d\"2018-04-01\"\u0026\u0026to_date($\"utcDate\")\u003c\u003d\"2018-04-30\").select(\"userId\",\"pageLemmas\",\"wasClicked\")\nval goodUsers \u003d inputFile.filter($\"wasClicked\").select($\"userId\".as(\"goodUserId\")).distinct\nval data \u003d inputFile.join(goodUsers,inputFile(\"userId\")\u003d\u003d\u003dgoodUsers(\"goodUserId\")).drop(goodUsers(\"goodUserId\"))\n//data.count\nval pageText \u003d data.select(\"pageLemmas\")\nimport org.apache.spark.sql.functions._\n\nval distinct_df \u003d pageText.withColumn(\"pageLemmas\", explode(col(\"pageLemmas\"))).\n                     agg(collect_set(\"pageLemmas\").alias(\"distinct_pageLemmas\"))\n\ndistinct_df.select(size($\"distinct_pageLemmas\").as(\"no_of_pageLemmas\")).show //vocab page text\npageText.count // #events sanity check\npageText.filter(!($\"pageLemmas\").isNull).count //#non-null events ",
+      "authenticationInfo": {},
+      "dateUpdated": "Jun 9, 2018 12:30:05 AM",
+      "config": {
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1528187105038_-1243897934",
+      "id": "20180605-102505_1589809592",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "parquetFileOfferTemp: org.apache.spark.sql.DataFrame \u003d [source: string, offerId: string, pageViewId: string, offerViewId: string, utcDate: timestamp, keywords: array\u003cstring\u003e, wasClicked: boolean, offerViewCountPerPageView: bigint, clickCountPerPageView: bigint, userId: double, productLemmas: array\u003cstring\u003e, productFeatures: vector, url: string, pageLemmas: array\u003cstring\u003e, pageFeatures: vector]\ninputFile: org.apache.spark.sql.DataFrame \u003d [userId: double, pageLemmas: array\u003cstring\u003e, wasClicked: boolean]\ngoodUsers: org.apache.spark.sql.DataFrame \u003d [goodUserId: double]\ndata: org.apache.spark.sql.DataFrame \u003d [userId: double, pageLemmas: array\u003cstring\u003e, wasClicked: boolean]\npageText: org.apache.spark.sql.DataFrame \u003d [pageLemmas: array\u003cstring\u003e]\nimport org.apache.spark.sql.functions._\ndistinct_df: org.apache.spark.sql.DataFrame \u003d [distinct_pageLemmas: array\u003cstring\u003e]\n+----------------+\n|no_of_pageLemmas|\n+----------------+\n|            9111|\n+----------------+\n\nres1: Long \u003d 4544848\nres2: Long \u003d 1212170\n"
+      },
+      "dateCreated": "Jun 5, 2018 10:25:05 AM",
+      "dateStarted": "Jun 9, 2018 12:30:05 AM",
+      "dateFinished": "Jun 9, 2018 2:15:04 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val parquetFileOfferTemp \u003d sqlContext.read.parquet(\"/data/sidana/purch_april_2018/*.parquet\")\nval inputFile \u003d parquetFileOfferTemp.filter(to_date($\"utcDate\")\u003e\u003d\"2018-04-01\"\u0026\u0026to_date($\"utcDate\")\u003c\u003d\"2018-04-30\").select(\"userId\",\"keywords\",\"wasClicked\")\nval goodUsers \u003d inputFile.filter($\"wasClicked\").select($\"userId\".as(\"goodUserId\")).distinct\nval data \u003d inputFile.join(goodUsers,inputFile(\"userId\")\u003d\u003d\u003dgoodUsers(\"goodUserId\")).drop(goodUsers(\"goodUserId\"))\nval keywds \u003d data.select(\"keywords\")\n\nimport org.apache.spark.sql.functions._\n\nval distinct_df \u003d keywds.withColumn(\"keywords\", explode(col(\"keywords\"))).\n                     agg(collect_set(\"keywords\").alias(\"distinct_keywords\"))\ndistinct_df.select(size($\"distinct_keywords\").as(\"no_of_keywords\")).show // vocab keywords text\n\nkeywds.count\nkeywds.filter(size($\"keywords\")\u003e0).count",
+      "authenticationInfo": {},
+      "dateUpdated": "Jun 9, 2018 11:13:01 AM",
+      "config": {
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1528187105042_-1233124965",
+      "id": "20180605-102505_1339640808",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "parquetFileOfferTemp: org.apache.spark.sql.DataFrame \u003d [source: string, offerId: string, pageViewId: string, offerViewId: string, utcDate: timestamp, keywords: array\u003cstring\u003e, wasClicked: boolean, offerViewCountPerPageView: bigint, clickCountPerPageView: bigint, userId: double, productLemmas: array\u003cstring\u003e, productFeatures: vector, url: string, pageLemmas: array\u003cstring\u003e, pageFeatures: vector]\ninputFile: org.apache.spark.sql.DataFrame \u003d [userId: double, keywords: array\u003cstring\u003e, wasClicked: boolean]\ngoodUsers: org.apache.spark.sql.DataFrame \u003d [goodUserId: double]\ndata: org.apache.spark.sql.DataFrame \u003d [userId: double, keywords: array\u003cstring\u003e, wasClicked: boolean]\nkeywds: org.apache.spark.sql.DataFrame \u003d [keywords: array\u003cstring\u003e]\nimport org.apache.spark.sql.functions._\ndistinct_df: org.apache.spark.sql.DataFrame \u003d [distinct_keywords: array\u003cstring\u003e]\n+--------------+\n|no_of_keywords|\n+--------------+\n|           543|\n+--------------+\n\nres1: Long \u003d 4544848\nres2: Long \u003d 4492544\n"
+      },
+      "dateCreated": "Jun 5, 2018 10:25:05 AM",
+      "dateStarted": "Jun 9, 2018 11:13:01 AM",
+      "dateFinished": "Jun 9, 2018 12:57:04 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "//vocab of product lemmas\n\nval parquetFileOfferTemp \u003d sqlContext.read.parquet(\"/data/sidana/purch_april_2018/*.parquet\")\nval inputFile \u003d parquetFileOfferTemp.filter(to_date($\"utcDate\")\u003e\u003d\"2018-04-01\"\u0026\u0026to_date($\"utcDate\")\u003c\u003d\"2018-04-30\").select(\"userId\",\"productLemmas\",\"wasClicked\")\nval goodUsers \u003d inputFile.filter($\"wasClicked\").select($\"userId\".as(\"goodUserId\")).distinct\nval data \u003d inputFile.join(goodUsers,inputFile(\"userId\")\u003d\u003d\u003dgoodUsers(\"goodUserId\")).drop(goodUsers(\"goodUserId\"))\n\n//data.count \u003d\u003e sanity check 1,707,321\n\nimport org.apache.spark.sql.functions._\n\nval productText \u003d data.select(\"productLemmas\")\nval distinct_df \u003d productText.withColumn(\"productLemmas\", explode(col(\"productLemmas\"))).\n                     agg(collect_set(\"productLemmas\").alias(\"distinct_productLemmas\"))\n\ndistinct_df.select(size($\"distinct_productLemmas\").as(\"no_of_productLemmas\")).show\n\n// #of product lemmas out of total events non-null\n\n// productText.count // #events sanity check 1,707,321\nproductText.filter(!($\"productLemmas\").isNull).count //#non-null events",
+      "authenticationInfo": {},
+      "dateUpdated": "Jun 9, 2018 3:06:15 PM",
+      "config": {
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1528187105045_-1235818207",
+      "id": "20180605-102505_1350900163",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "parquetFileOfferTemp: org.apache.spark.sql.DataFrame \u003d [source: string, offerId: string, pageViewId: string, offerViewId: string, utcDate: timestamp, keywords: array\u003cstring\u003e, wasClicked: boolean, offerViewCountPerPageView: bigint, clickCountPerPageView: bigint, userId: double, productLemmas: array\u003cstring\u003e, productFeatures: vector, url: string, pageLemmas: array\u003cstring\u003e, pageFeatures: vector]\ninputFile: org.apache.spark.sql.DataFrame \u003d [userId: double, productLemmas: array\u003cstring\u003e, wasClicked: boolean]\ngoodUsers: org.apache.spark.sql.DataFrame \u003d [goodUserId: double]\ndata: org.apache.spark.sql.DataFrame \u003d [userId: double, productLemmas: array\u003cstring\u003e, wasClicked: boolean]\nimport org.apache.spark.sql.functions._\nproductText: org.apache.spark.sql.DataFrame \u003d [productLemmas: array\u003cstring\u003e]\ndistinct_df: org.apache.spark.sql.DataFrame \u003d [distinct_productLemmas: array\u003cstring\u003e]\n+-------------------+\n|no_of_productLemmas|\n+-------------------+\n|               6016|\n+-------------------+\n\nres3: Long \u003d 450050\n"
+      },
+      "dateCreated": "Jun 5, 2018 10:25:05 AM",
+      "dateStarted": "Jun 9, 2018 3:06:15 PM",
+      "dateFinished": "Jun 9, 2018 4:38:30 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val parquetFileOfferTemp \u003d sqlContext.read.parquet(\"/data/sidana/purch_april_2018/*.parquet\")\nval inputFile \u003d parquetFileOfferTemp.filter(to_date($\"utcDate\")\u003e\u003d\"2018-04-01\"\u0026\u0026to_date($\"utcDate\")\u003c\u003d\"2018-04-30\").select(\"userId\",\"pageLemmas\",\"url\",\"wasClicked\")\nval goodUsers \u003d inputFile.filter($\"wasClicked\").select($\"userId\".as(\"goodUserId\")).distinct\nval data \u003d inputFile.join(goodUsers,inputFile(\"userId\")\u003d\u003d\u003dgoodUsers(\"goodUserId\")).drop(goodUsers(\"goodUserId\"))\n\ndata.select(\"url\").distinct.count\ndata.select(\"url\",\"pageLemmas\").distinct.count\nval pageLemmas \u003d data.select(\"url\",\"pageLemmas\")\npageLemmas.filter(!($\"pageLemmas\").isNull).select(\"url\").distinct.count",
+      "authenticationInfo": {},
+      "dateUpdated": "Jun 9, 2018 5:32:38 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1528209505533_1675079253",
+      "id": "20180605-163825_1771697925",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "parquetFileOfferTemp: org.apache.spark.sql.DataFrame \u003d [source: string, offerId: string, pageViewId: string, offerViewId: string, utcDate: timestamp, keywords: array\u003cstring\u003e, wasClicked: boolean, offerViewCountPerPageView: bigint, clickCountPerPageView: bigint, userId: double, productLemmas: array\u003cstring\u003e, productFeatures: vector, url: string, pageLemmas: array\u003cstring\u003e, pageFeatures: vector]\ninputFile: org.apache.spark.sql.DataFrame \u003d [userId: double, pageLemmas: array\u003cstring\u003e, url: string, wasClicked: boolean]\ngoodUsers: org.apache.spark.sql.DataFrame \u003d [goodUserId: double]\ndata: org.apache.spark.sql.DataFrame \u003d [userId: double, pageLemmas: array\u003cstring\u003e, url: string, wasClicked: boolean]\nres1: Long \u003d 7092\nres2: Long \u003d 7092\npageLemmas: org.apache.spark.sql.DataFrame \u003d [url: string, pageLemmas: array\u003cstring\u003e]\nres3: Long \u003d 1990\n"
+      },
+      "dateCreated": "Jun 5, 2018 4:38:25 PM",
+      "dateStarted": "Jun 9, 2018 5:32:38 PM",
+      "dateFinished": "Jun 9, 2018 9:09:06 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val parquetFileOfferTemp \u003d sqlContext.read.parquet(\"/data/sidana/purch_april_2018/*.parquet\")\nval inputFile \u003d parquetFileOfferTemp.filter(to_date($\"utcDate\")\u003e\u003d\"2018-04-01\"\u0026\u0026to_date($\"utcDate\")\u003c\u003d\"2018-04-30\").select(\"userId\",\"productLemmas\",\"offerid\",\"wasClicked\")\nval goodUsers \u003d inputFile.filter($\"wasClicked\").select($\"userId\".as(\"goodUserId\")).distinct\nval data \u003d inputFile.join(goodUsers,inputFile(\"userId\")\u003d\u003d\u003dgoodUsers(\"goodUserId\")).drop(goodUsers(\"goodUserId\"))\n\ndata.select(\"offerId\").distinct.count\ndata.select(\"offerId\",\"productLemmas\").distinct.count\nval productLemmas \u003d data.select(\"offerid\",\"productLemmas\")\nproductLemmas.filter(!($\"productLemmas\").isNull).select(\"offerid\").distinct.count",
+      "authenticationInfo": {},
+      "dateUpdated": "Jun 9, 2018 9:18:02 PM",
+      "config": {
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1528187105047_-1235048710",
+      "id": "20180605-102505_1004545124",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "parquetFileOfferTemp: org.apache.spark.sql.DataFrame \u003d [source: string, offerId: string, pageViewId: string, offerViewId: string, utcDate: timestamp, keywords: array\u003cstring\u003e, wasClicked: boolean, offerViewCountPerPageView: bigint, clickCountPerPageView: bigint, userId: double, productLemmas: array\u003cstring\u003e, productFeatures: vector, url: string, pageLemmas: array\u003cstring\u003e, pageFeatures: vector]\ninputFile: org.apache.spark.sql.DataFrame \u003d [userId: double, productLemmas: array\u003cstring\u003e, offerid: string, wasClicked: boolean]\ngoodUsers: org.apache.spark.sql.DataFrame \u003d [goodUserId: double]\ndata: org.apache.spark.sql.DataFrame \u003d [userId: double, productLemmas: array\u003cstring\u003e, offerid: string, wasClicked: boolean]\nres0: Long \u003d 9847\nres1: Long \u003d 9847\nproductLemmas: org.apache.spark.sql.DataFrame \u003d [offerid: string, productLemmas: array\u003cstring\u003e]\nres2: Long \u003d 2701\n"
+      },
+      "dateCreated": "Jun 5, 2018 10:25:05 AM",
+      "dateStarted": "Jun 9, 2018 9:18:02 PM",
+      "dateFinished": "Jun 10, 2018 1:19:37 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1528482850981_2090891409",
+      "id": "20180608-203410_1570980910",
+      "dateCreated": "Jun 8, 2018 8:34:10 PM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "purchBaselinesVer3: FairTextualDataStats",
+  "id": "2DENRGJAB",
+  "angularObjects": {
+    "2BJGSXM37": [],
+    "2BGHSKCA7": [],
+    "2BHKKP27G": [],
+    "2BGVG5JP4": [],
+    "2BFMBPKAB": [],
+    "2BF969NNB": [],
+    "2BJAQG5W4": [],
+    "2BJHJDBK6": [],
+    "2BHKAE8WK": [],
+    "2BG8QQJNC": [],
+    "2BJ7KKX85": [],
+    "2BH9AVVKH": [],
+    "2BJ6HN5AY": [],
+    "2BFEDXCTE": [],
+    "2BJ5FCP57": [],
+    "2BJ8AEWCT": [],
+    "2BFXEV5XZ": [],
+    "2BG77RV7M": []
+  },
+  "config": {
+    "looknfeel": "default"
+  },
+  "info": {}
+}

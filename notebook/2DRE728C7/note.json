@@ -1,0 +1,110 @@
+{
+  "paragraphs": [
+    {
+      "text": "val parquetFileOfferTemp \u003d sqlContext.read.parquet(\"/data/sidana/purch_april_2018/*.parquet\")\nparquetFileOfferTemp.columns",
+      "authenticationInfo": {},
+      "dateUpdated": "Sep 18, 2018 7:44:58 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1536271394966_-1163425326",
+      "id": "20180907-000314_965630432",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "parquetFileOfferTemp: org.apache.spark.sql.DataFrame \u003d [source: string, offerId: string, pageViewId: string, offerViewId: string, utcDate: timestamp, keywords: array\u003cstring\u003e, wasClicked: boolean, offerViewCountPerPageView: bigint, clickCountPerPageView: bigint, userId: double, productLemmas: array\u003cstring\u003e, productFeatures: vector, url: string, pageLemmas: array\u003cstring\u003e, pageFeatures: vector]\nres0: Array[String] \u003d Array(source, offerId, pageViewId, offerViewId, utcDate, keywords, wasClicked, offerViewCountPerPageView, clickCountPerPageView, userId, productLemmas, productFeatures, url, pageLemmas, pageFeatures)\n"
+      },
+      "dateCreated": "Sep 7, 2018 12:03:14 AM",
+      "dateStarted": "Sep 7, 2018 12:06:12 AM",
+      "dateFinished": "Sep 7, 2018 12:06:49 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val parquetFileOfferTemp \u003d sqlContext.read.parquet(\"/data/sidana/purch_april_2018/*.parquet\")\nparquetFileOfferTemp.columns\nval temp_file \u003d parquetFileOfferTemp.select(\"source\", \"offerId\", \"pageViewId\", \"offerViewId\", \"utcDate\", \"keywords\", \"wasClicked\", \"offerViewCountPerPageView\", \"clickCountPerPageView\", \"userId\", \"productLemmas\", \"productFeatures\", \"url\", \"pageLemmas\", \"pageFeatures\")\n\nval header \u003d \"source;offerId;pageViewId;offerViewId;utcDate;keywords;wasClicked;offerViewCountPerPageView;clickCountPerPageView;userId;productLemmas;productFeatures;url;pageLemmas;pageFeatures\"\nval file_to_be_written \u003d temp_file.rdd.map(_.mkString(\";\")).mapPartitionsWithIndex((i, iter) \u003d\u003e if (i\u003d\u003d0) (List(header).toIterator ++ iter) else iter)\nfile_to_be_written.saveAsTextFile(\"/data/sidana/april_2018_pandor/data/full_data\")",
+      "authenticationInfo": {},
+      "dateUpdated": "Sep 18, 2018 7:56:17 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1536271561382_-1423268751",
+      "id": "20180907-000601_321668877",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "parquetFileOfferTemp: org.apache.spark.sql.DataFrame \u003d [source: string, offerId: string, pageViewId: string, offerViewId: string, utcDate: timestamp, keywords: array\u003cstring\u003e, wasClicked: boolean, offerViewCountPerPageView: bigint, clickCountPerPageView: bigint, userId: double, productLemmas: array\u003cstring\u003e, productFeatures: vector, url: string, pageLemmas: array\u003cstring\u003e, pageFeatures: vector]\nres0: Array[String] \u003d Array(source, offerId, pageViewId, offerViewId, utcDate, keywords, wasClicked, offerViewCountPerPageView, clickCountPerPageView, userId, productLemmas, productFeatures, url, pageLemmas, pageFeatures)\ntemp_file: org.apache.spark.sql.DataFrame \u003d [source: string, offerId: string, pageViewId: string, offerViewId: string, utcDate: timestamp, keywords: array\u003cstring\u003e, wasClicked: boolean, offerViewCountPerPageView: bigint, clickCountPerPageView: bigint, userId: double, productLemmas: array\u003cstring\u003e, productFeatures: vector, url: string, pageLemmas: array\u003cstring\u003e, pageFeatures: vector]\nheader: String \u003d source;offerId;pageViewId;offerViewId;utcDate;keywords;wasClicked;offerViewCountPerPageView;clickCountPerPageView;userId;productLemmas;productFeatures;url;pageLemmas;pageFeatures\nfile_to_be_written: org.apache.spark.rdd.RDD[String] \u003d MapPartitionsRDD[8] at mapPartitionsWithIndex at \u003cconsole\u003e:33\n"
+      },
+      "dateCreated": "Sep 7, 2018 12:06:01 AM",
+      "dateStarted": "Sep 18, 2018 7:56:17 PM",
+      "dateFinished": "Sep 18, 2018 9:04:18 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1536272033992_379550224",
+      "id": "20180907-001353_1682161421",
+      "dateCreated": "Sep 7, 2018 12:13:53 AM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "purchBaselinesVer3: writeFullFilesToDisk",
+  "id": "2DRE728C7",
+  "angularObjects": {
+    "2BJGSXM37": [],
+    "2BGHSKCA7": [],
+    "2BHKKP27G": [],
+    "2BGVG5JP4": [],
+    "2BFMBPKAB": [],
+    "2BF969NNB": [],
+    "2BJAQG5W4": [],
+    "2BJHJDBK6": [],
+    "2BHKAE8WK": [],
+    "2BG8QQJNC": [],
+    "2BJ7KKX85": [],
+    "2BH9AVVKH": [],
+    "2BJ6HN5AY": [],
+    "2BFEDXCTE": [],
+    "2BJ5FCP57": [],
+    "2BJ8AEWCT": [],
+    "2BFXEV5XZ": [],
+    "2BG77RV7M": []
+  },
+  "config": {},
+  "info": {}
+}

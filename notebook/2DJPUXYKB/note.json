@@ -1,0 +1,110 @@
+{
+  "paragraphs": [
+    {
+      "text": "val mergeAsString \u003d udf[String, Seq[String], Seq[String]](\n    (s1, s2) \u003d\u003e (\n        Option(s1).getOrElse(Seq.empty) ++ \n        Option(s2).getOrElse(Seq.empty)\n    ).mkString(\" \")\n)\n\nval parquetFileOfferTemp \u003d sqlContext.read.parquet(\"/data/sidana/purch_april_2018/*.parquet\")\n.select(\"offerId\",\"url\",\"productLemmas\",\"pageLemmas\",\"utcDate\")\n\nval inputFile \u003d parquetFileOfferTemp.filter(to_date($\"utcDate\")\u003e\u003d\"2018-04-01\"\u0026\u0026to_date($\"utcDate\")\u003c\u003d\"2018-04-06\")\nval text \u003d inputFile.select(\n    concat(\n        when($\"url\".isNotNull, $\"url\")\n            .otherwise(\"null\"),\n        when($\"offerId\".isNotNull, $\"offerId\")\n            .otherwise(\"null\")\n    ).as(\"page_offer_id\"),\n    mergeAsString($\"pageLemmas\", $\"productLemmas\").as(\"lemmas\")\n)\nval first_6_days \u003d text.filter(!(text(\"lemmas\")\u003d\u003d\u003d\"\")).withColumn(\"page_offer_id_new\", regexp_replace($\"page_offer_id\",\"\\\\s\", \"\")).select(\"page_offer_id_new\",\"lemmas\").distinct\nval header \u003d \"page_offer_id lemmas\"\nval train_file \u003d first_6_days.rdd.map(_.mkString(\" \")).mapPartitionsWithIndex((i, iter) \u003d\u003e if (i\u003d\u003d0) (List(header).toIterator ++ iter) else iter)\ntrain_file.saveAsTextFile(\"/data/sidana/purch_lda/train.csv\")\n",
+      "authenticationInfo": {},
+      "dateUpdated": "Jun 16, 2018 9:05:21 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1528807997879_-782943472",
+      "id": "20180612-145317_1759406273",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "mergeAsString: org.apache.spark.sql.UserDefinedFunction \u003d UserDefinedFunction(\u003cfunction2\u003e,StringType,List(ArrayType(StringType,true), ArrayType(StringType,true)))\nparquetFileOfferTemp: org.apache.spark.sql.DataFrame \u003d [offerId: string, url: string, productLemmas: array\u003cstring\u003e, pageLemmas: array\u003cstring\u003e, utcDate: timestamp]\ninputFile: org.apache.spark.sql.DataFrame \u003d [offerId: string, url: string, productLemmas: array\u003cstring\u003e, pageLemmas: array\u003cstring\u003e, utcDate: timestamp]\ntext: org.apache.spark.sql.DataFrame \u003d [page_offer_id: string, lemmas: string]\nfirst_6_days: org.apache.spark.sql.DataFrame \u003d [page_offer_id_new: string, lemmas: string]\nheader: String \u003d page_offer_id lemmas\ntrain_file: org.apache.spark.rdd.RDD[String] \u003d MapPartitionsRDD[14] at mapPartitionsWithIndex at \u003cconsole\u003e:39\n"
+      },
+      "dateCreated": "Jun 12, 2018 2:53:17 PM",
+      "dateStarted": "Jun 16, 2018 9:05:22 PM",
+      "dateFinished": "Jun 16, 2018 9:54:29 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val mergeAsString \u003d udf[String, Seq[String], Seq[String]](\n    (s1, s2) \u003d\u003e (\n        Option(s1).getOrElse(Seq.empty) ++ \n        Option(s2).getOrElse(Seq.empty)\n    ).mkString(\" \")\n)\nval seq \u003d Seq(\"page_offer_id_new\",\"lemmas\")\nval parquetFileOfferTemp \u003d sqlContext.read.parquet(\"/data/sidana/purch_april_2018/*.parquet\")\n.select(\"offerId\",\"url\",\"productLemmas\",\"pageLemmas\",\"utcDate\")\n\nval inputFile \u003d parquetFileOfferTemp.filter(to_date($\"utcDate\")\u003e\u003d\"2018-04-01\"\u0026\u0026to_date($\"utcDate\")\u003c\u003d\"2018-04-06\")\nval text \u003d inputFile.select(\n    concat(\n        when($\"url\".isNotNull, $\"url\")\n            .otherwise(\"null\"),\n        when($\"offerId\".isNotNull, $\"offerId\")\n            .otherwise(\"null\")\n    ).as(\"page_offer_id\"),mergeAsString($\"pageLemmas\", $\"productLemmas\").as(\"lemmas\"),\n    dayofyear($\"utcDate\").as(\"day\")\n)\n\nval first_6_days \u003d text.filter(!(text(\"lemmas\")\u003d\u003d\u003d\"\")).withColumn(\"page_offer_id_new\", regexp_replace($\"page_offer_id\",\"\\\\s\", \"\")).select(\"page_offer_id_new\",\"lemmas\",\"day\").dropDuplicates(seq).select(\"page_offer_id_new\",\"day\")\n\nval header \u003d \"page_offer_id day\"\n\nval train_file \u003d first_6_days.rdd.map(_.mkString(\" \")).mapPartitionsWithIndex((i, iter) \u003d\u003e if (i\u003d\u003d0) (List(header).toIterator ++ iter) else iter)\ntrain_file.saveAsTextFile(\"/data/sidana/purch_lda/train_day.csv\")",
+      "authenticationInfo": {},
+      "dateUpdated": "Jun 19, 2018 6:16:45 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1528985052061_1932689790",
+      "id": "20180614-160412_1500593574",
+      "result": {
+        "code": "ERROR",
+        "type": "TEXT",
+        "msg": "mergeAsString: org.apache.spark.sql.UserDefinedFunction \u003d UserDefinedFunction(\u003cfunction2\u003e,StringType,List(ArrayType(StringType,true), ArrayType(StringType,true)))\nseq: Seq[String] \u003d List(page_offer_id_new, lemmas)\norg.apache.spark.SparkException: Job 0 cancelled part of cancelled job group zeppelin-20180614-160412_1500593574\n\tat org.apache.spark.scheduler.DAGScheduler.org$apache$spark$scheduler$DAGScheduler$$failJobAndIndependentStages(DAGScheduler.scala:1431)\n\tat org.apache.spark.scheduler.DAGScheduler.handleJobCancellation(DAGScheduler.scala:1370)\n\tat org.apache.spark.scheduler.DAGScheduler$$anonfun$handleJobGroupCancelled$1.apply$mcVI$sp(DAGScheduler.scala:783)\n\tat org.apache.spark.scheduler.DAGScheduler$$anonfun$handleJobGroupCancelled$1.apply(DAGScheduler.scala:783)\n\tat org.apache.spark.scheduler.DAGScheduler$$anonfun$handleJobGroupCancelled$1.apply(DAGScheduler.scala:783)\n\tat scala.collection.mutable.HashSet.foreach(HashSet.scala:79)\n\tat org.apache.spark.scheduler.DAGScheduler.handleJobGroupCancelled(DAGScheduler.scala:783)\n\tat org.apache.spark.scheduler.DAGSchedulerEventProcessLoop.doOnReceive(DAGScheduler.scala:1619)\n\tat org.apache.spark.scheduler.DAGSchedulerEventProcessLoop.onReceive(DAGScheduler.scala:1599)\n\tat org.apache.spark.scheduler.DAGSchedulerEventProcessLoop.onReceive(DAGScheduler.scala:1588)\n\tat org.apache.spark.util.EventLoop$$anon$1.run(EventLoop.scala:48)\n\tat org.apache.spark.scheduler.DAGScheduler.runJob(DAGScheduler.scala:620)\n\tat org.apache.spark.SparkContext.runJob(SparkContext.scala:1832)\n\tat org.apache.spark.SparkContext.runJob(SparkContext.scala:1845)\n\tat org.apache.spark.SparkContext.runJob(SparkContext.scala:1858)\n\tat org.apache.spark.SparkContext.runJob(SparkContext.scala:1929)\n\tat org.apache.spark.rdd.RDD$$anonfun$collect$1.apply(RDD.scala:927)\n\tat org.apache.spark.rdd.RDDOperationScope$.withScope(RDDOperationScope.scala:150)\n\tat org.apache.spark.rdd.RDDOperationScope$.withScope(RDDOperationScope.scala:111)\n\tat org.apache.spark.rdd.RDD.withScope(RDD.scala:316)\n\tat org.apache.spark.rdd.RDD.collect(RDD.scala:926)\n\tat org.apache.spark.sql.sources.HadoopFsRelation$.listLeafFilesInParallel(interfaces.scala:904)\n\tat org.apache.spark.sql.sources.HadoopFsRelation$FileStatusCache.listLeafFiles(interfaces.scala:445)\n\tat org.apache.spark.sql.sources.HadoopFsRelation$FileStatusCache.refresh(interfaces.scala:477)\n\tat org.apache.spark.sql.sources.HadoopFsRelation.org$apache$spark$sql$sources$HadoopFsRelation$$fileStatusCache$lzycompute(interfaces.scala:489)\n\tat org.apache.spark.sql.sources.HadoopFsRelation.org$apache$spark$sql$sources$HadoopFsRelation$$fileStatusCache(interfaces.scala:487)\n\tat org.apache.spark.sql.sources.HadoopFsRelation.cachedLeafStatuses(interfaces.scala:494)\n\tat org.apache.spark.sql.execution.datasources.parquet.ParquetRelation$MetadataCache.refresh(ParquetRelation.scala:398)\n\tat org.apache.spark.sql.execution.datasources.parquet.ParquetRelation.org$apache$spark$sql$execution$datasources$parquet$ParquetRelation$$metadataCache$lzycompute(ParquetRelation.scala:145)\n\tat org.apache.spark.sql.execution.datasources.parquet.ParquetRelation.org$apache$spark$sql$execution$datasources$parquet$ParquetRelation$$metadataCache(ParquetRelation.scala:143)\n\tat org.apache.spark.sql.execution.datasources.parquet.ParquetRelation$$anonfun$6.apply(ParquetRelation.scala:202)\n\tat org.apache.spark.sql.execution.datasources.parquet.ParquetRelation$$anonfun$6.apply(ParquetRelation.scala:202)\n\tat scala.Option.getOrElse(Option.scala:120)\n\tat org.apache.spark.sql.execution.datasources.parquet.ParquetRelation.dataSchema(ParquetRelation.scala:202)\n\tat org.apache.spark.sql.sources.HadoopFsRelation.schema$lzycompute(interfaces.scala:636)\n\tat org.apache.spark.sql.sources.HadoopFsRelation.schema(interfaces.scala:635)\n\tat org.apache.spark.sql.execution.datasources.LogicalRelation.\u003cinit\u003e(LogicalRelation.scala:37)\n\tat org.apache.spark.sql.SQLContext.baseRelationToDataFrame(SQLContext.scala:442)\n\tat org.apache.spark.sql.DataFrameReader.parquet(DataFrameReader.scala:316)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:27)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:33)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:35)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:37)\n\tat $iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:39)\n\tat $iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:41)\n\tat $iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:43)\n\tat $iwC.\u003cinit\u003e(\u003cconsole\u003e:45)\n\tat \u003cinit\u003e(\u003cconsole\u003e:47)\n\tat .\u003cinit\u003e(\u003cconsole\u003e:51)\n\tat .\u003cclinit\u003e(\u003cconsole\u003e)\n\tat .\u003cinit\u003e(\u003cconsole\u003e:7)\n\tat .\u003cclinit\u003e(\u003cconsole\u003e)\n\tat $print(\u003cconsole\u003e)\n\tat sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)\n\tat sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)\n\tat sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\n\tat java.lang.reflect.Method.invoke(Method.java:498)\n\tat org.apache.spark.repl.SparkIMain$ReadEvalPrint.call(SparkIMain.scala:1065)\n\tat org.apache.spark.repl.SparkIMain$Request.loadAndRun(SparkIMain.scala:1346)\n\tat org.apache.spark.repl.SparkIMain.loadAndRunReq$1(SparkIMain.scala:840)\n\tat org.apache.spark.repl.SparkIMain.interpret(SparkIMain.scala:871)\n\tat org.apache.spark.repl.SparkIMain.interpret(SparkIMain.scala:819)\n\tat org.apache.zeppelin.spark.SparkInterpreter.interpretInput(SparkInterpreter.java:812)\n\tat org.apache.zeppelin.spark.SparkInterpreter.interpret(SparkInterpreter.java:755)\n\tat org.apache.zeppelin.spark.SparkInterpreter.interpret(SparkInterpreter.java:748)\n\tat org.apache.zeppelin.interpreter.ClassloaderInterpreter.interpret(ClassloaderInterpreter.java:57)\n\tat org.apache.zeppelin.interpreter.LazyOpenInterpreter.interpret(LazyOpenInterpreter.java:93)\n\tat org.apache.zeppelin.interpreter.remote.RemoteInterpreterServer$InterpretJob.jobRun(RemoteInterpreterServer.java:331)\n\tat org.apache.zeppelin.scheduler.Job.run(Job.java:171)\n\tat org.apache.zeppelin.scheduler.FIFOScheduler$1.run(FIFOScheduler.java:139)\n\tat java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)\n\tat java.util.concurrent.FutureTask.run(FutureTask.java:266)\n\tat java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)\n\tat java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)\n\tat java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)\n\tat java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)\n\tat java.lang.Thread.run(Thread.java:748)\n\n"
+      },
+      "dateCreated": "Jun 14, 2018 4:04:12 PM",
+      "dateStarted": "Jun 19, 2018 6:16:45 PM",
+      "dateFinished": "Jun 19, 2018 6:17:55 PM",
+      "status": "ERROR",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1529424915879_1723823998",
+      "id": "20180619-181515_2079668790",
+      "dateCreated": "Jun 19, 2018 6:15:15 PM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "purchBaselinesVer3: ldaInput",
+  "id": "2DJPUXYKB",
+  "angularObjects": {
+    "2BJGSXM37": [],
+    "2BGHSKCA7": [],
+    "2BHKKP27G": [],
+    "2BGVG5JP4": [],
+    "2BFMBPKAB": [],
+    "2BF969NNB": [],
+    "2BJAQG5W4": [],
+    "2BJHJDBK6": [],
+    "2BHKAE8WK": [],
+    "2BG8QQJNC": [],
+    "2BJ7KKX85": [],
+    "2BH9AVVKH": [],
+    "2BJ6HN5AY": [],
+    "2BFEDXCTE": [],
+    "2BJ5FCP57": [],
+    "2BJ8AEWCT": [],
+    "2BFXEV5XZ": [],
+    "2BG77RV7M": []
+  },
+  "config": {},
+  "info": {}
+}

@@ -1,0 +1,646 @@
+{
+  "paragraphs": [
+    {
+      "text": "import org.apache.spark.sql.SaveMode\nimport java.nio.file.{ Files, Paths }\nimport scala.collection.mutable.ListBuffer\nimport java.io.FileWriter\n\n\n\n    \n    val t1 \u003d System.currentTimeMillis\n    val clicksTemp \u003d sqlContext.read.parquet(\"/data/sidana/recsysBaselines/experiments/debug_ffm/click/fr/2017/*/*/\")\n    val userClicks \u003d clicksTemp.select(clicksTemp(\"userInfo\").getItem(\"userId\"),substring_index(clicksTemp(\"offerViewId\"),\"-\",1)).withColumnRenamed(\"substring_index(offerViewId,-,1)\",\"offerIdClicks\").withColumnRenamed(\"userInfo[userId]\",\"userIdClicks\")\n    \n    \n    val parquetFileOffers \u003d sqlContext.read.parquet(\"/data/sidana/recsysBaselines/experiments/debug_ffm/offerView/fr/2017/*/*/\")\n    val userOffers \u003d parquetFileOffers.select(parquetFileOffers(\"userInfo\").getItem(\"userId\"),substring_index(parquetFileOffers(\"offerViewId\"),\"-\",1),$\"siteDomain\".getItem(\"countryCode\"),parquetFileOffers(\"category\")(0),parquetFileOffers(\"merchant\")).withColumnRenamed(\"substring_index(offerViewId,-,1)\",\"offerIdOfferView\").withColumnRenamed(\"userInfo[userId]\",\"userIdOfferView\")\n    \n    //inner join\n    val badOfferClicks \u003d userClicks.filter($\"offerIdClicks\"\u003d\u003d\u003d\"39bdbddb28177c3866ab5f519908117a\")\n     val badOfferOfferView \u003d userOffers.filter($\"offerIdOfferView\"\u003d\u003d\u003d\"39bdbddb28177c3866ab5f519908117a\")\n     \n     badOfferClicks.count\n     badOfferOfferView.count\n     \n     ",
+      "authenticationInfo": {},
+      "dateUpdated": "Jun 24, 2017 3:02:38 AM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "editorHide": false,
+        "colWidth": 12.0,
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1498218485165_1803573731",
+      "id": "20170623-134805_371672813",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "import org.apache.spark.sql.SaveMode\nimport java.nio.file.{Files, Paths}\nimport scala.collection.mutable.ListBuffer\nimport java.io.FileWriter\nt1: Long \u003d 1498266158478\nclicksTemp: org.apache.spark.sql.DataFrame \u003d [userInfo: struct\u003cuserId:string,ip:string,userAgent:struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e,userGeolocation:struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e,adBlocked:boolean\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, offerViewId: string, clickId: string, earning: decimal(38,18), searchId: string]\nuserClicks: org.apache.spark.sql.DataFrame \u003d [userIdClicks: string, offerIdClicks: string]\nparquetFileOffers: org.apache.spark.sql.DataFrame \u003d [eventType: string, userInfo: struct\u003cuserId:string,ip:string,userAgent:struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e,userGeolocation:struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e,adBlocked:boolean\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, offerRank: int, searchId: string, offerViewId: string, contentPageType: string, adInfo: struct\u003cadType:string,adPlacement:string,adViewability:string,adSize:string\u003e, offerId: string]\nuserOffers: org.apache.spark.sql.DataFrame \u003d [userIdOfferView: string, offerIdOfferView: string, siteDomain[countryCode]: string, category[0]: string, merchant: string]\nbadOfferClicks: org.apache.spark.sql.DataFrame \u003d [userIdClicks: string, offerIdClicks: string]\nbadOfferOfferView: org.apache.spark.sql.DataFrame \u003d [userIdOfferView: string, offerIdOfferView: string, siteDomain[countryCode]: string, category[0]: string, merchant: string]\nres243: Long \u003d 461\nres244: Long \u003d 43990\n"
+      },
+      "dateCreated": "Jun 23, 2017 1:48:05 PM",
+      "dateStarted": "Jun 24, 2017 3:02:38 AM",
+      "dateFinished": "Jun 24, 2017 3:02:44 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val clicksTemp \u003d sqlContext.read.parquet(\"/data/sidana/recsysBaselines/experiments/debug_ffm/offerView/fr/2017/*/*/\")\nclicksTemp.count\nval nulls  \u003d clicksTemp.filter(clicksTemp(\"userInfo\").getItem(\"userId\").isNull)\nnulls.count",
+      "authenticationInfo": {},
+      "dateUpdated": "Jun 24, 2017 1:58:02 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [
+            {
+              "name": "userInfo",
+              "index": 0.0,
+              "aggr": "sum"
+            }
+          ],
+          "values": [
+            {
+              "name": "siteDomain",
+              "index": 1.0,
+              "aggr": "sum"
+            }
+          ],
+          "groups": [],
+          "scatter": {
+            "xAxis": {
+              "name": "userInfo",
+              "index": 0.0,
+              "aggr": "sum"
+            },
+            "yAxis": {
+              "name": "siteDomain",
+              "index": 1.0,
+              "aggr": "sum"
+            }
+          }
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1498254652770_1954413021",
+      "id": "20170623-235052_1804005167",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "clicksTemp: org.apache.spark.sql.DataFrame \u003d [eventType: string, userInfo: struct\u003cuserId:string,ip:string,userAgent:struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e,userGeolocation:struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e,adBlocked:boolean\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, offerRank: int, searchId: string, offerViewId: string, contentPageType: string, adInfo: struct\u003cadType:string,adPlacement:string,adViewability:string,adSize:string\u003e, offerId: string]\nres165: Long \u003d 94190501\nnulls: org.apache.spark.sql.DataFrame \u003d [eventType: string, userInfo: struct\u003cuserId:string,ip:string,userAgent:struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e,userGeolocation:struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e,adBlocked:boolean\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, offerRank: int, searchId: string, offerViewId: string, contentPageType: string, adInfo: struct\u003cadType:string,adPlacement:string,adViewability:string,adSize:string\u003e, offerId: string]\nres166: Long \u003d 0\n"
+      },
+      "dateCreated": "Jun 23, 2017 11:50:52 PM",
+      "dateStarted": "Jun 24, 2017 1:58:02 AM",
+      "dateFinished": "Jun 24, 2017 1:58:09 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "//debug_ffm: 07/06/2017 from parquet2csv scala\n\n\n\n\n\n\t\t\t\t\tval t1 \u003d System.currentTimeMillis\n\t\t\t\t\t\t\tval clicksTemp \u003d sqlContext.read.parquet(\"/data/sidana/recsysBaselines/experiments/debug_ffm/click/fr/2017/*/*/\")\n\t\t\t\t\t\t\tval userClicks \u003d clicksTemp.select(clicksTemp(\"userInfo\").getItem(\"userId\"),substring_index(clicksTemp(\"offerViewId\"),\"-\",1)).withColumnRenamed(\"substring_index(offerViewId,-,1)\",\"offerIdClicks\").withColumnRenamed(\"userInfo[userId]\",\"userIdClicks\")\n\t\t\t\t\t\t\tuserClicks.filter($\"offerIdClicks\" \u003d\u003d\u003d\"39bdbddb28177c3866ab5f519908117a\").count\n\n\n\t\t\t\t\t\t\tval parquetFileOffers \u003d sqlContext.read.parquet(\"/data/sidana/recsysBaselines/experiments/debug_ffm/offerView/fr/2017/*/*/\")\n\t\t\t\t\t\t\tval userOffers \u003d parquetFileOffers.select(parquetFileOffers(\"userInfo\").getItem(\"userId\"),substring_index(parquetFileOffers(\"offerViewId\"),\"-\",1),$\"siteDomain\".getItem(\"countryCode\"),parquetFileOffers(\"category\")(0),parquetFileOffers(\"merchant\")).withColumnRenamed(\"substring_index(offerViewId,-,1)\",\"offerIdOfferView\").withColumnRenamed(\"userInfo[userId]\",\"userIdOfferView\")\n\n                            userOffers.filter($\"offerIdOfferView\"\u003d\u003d\u003d\"39bdbddb28177c3866ab5f519908117a\").count\n\t\t\t\t\t\t\t//inner join\n\t\t\t\t\t\t\tval userOfferCommon \u003d userClicks.join(userOffers,userClicks(\"userIdClicks\")\u003c\u003d\u003euserOffers(\"userIdOfferView\")).drop(userClicks(\"userIdClicks\")).drop(userClicks(\"offerIdClicks\")).distinct\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\tuserOfferCommon.filter($\"offerIdOfferView\"\u003d\u003d\u003d\"39bdbddb28177c3866ab5f519908117a\").count\n\n\n\t\t\t\t\t\t\t//outerjoin\n\t\t\t\t\t\t\tval cOOuterJoin \u003d userClicks.join(userOfferCommon,userClicks(\"userIdClicks\")\u003c\u003d\u003euserOfferCommon(\"userIdOfferView\") \u0026\u0026 userClicks(\"offerIdClicks\")\u003c\u003d\u003euserOfferCommon(\"offerIdOfferView\"),\"right_outer\").distinct\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t cOOuterJoin.filter($\"offerIdClicks\"\u003d\u003d\u003d\"39bdbddb28177c3866ab5f519908117a\").count\n\t\t\t\t\t\t\t cOOuterJoin.filter($\"offerIdOfferView\"\u003d\u003d\u003d\"39bdbddb28177c3866ab5f519908117a\").count\n\n\t\t\t\t\t\t\t\n\t\t\t",
+      "authenticationInfo": {},
+      "dateUpdated": "Jun 24, 2017 3:03:17 AM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0,
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1498218485166_1804727978",
+      "id": "20170623-134805_1822522615",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "t1: Long \u003d 1498266197595\nclicksTemp: org.apache.spark.sql.DataFrame \u003d [userInfo: struct\u003cuserId:string,ip:string,userAgent:struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e,userGeolocation:struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e,adBlocked:boolean\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, offerViewId: string, clickId: string, earning: decimal(38,18), searchId: string]\nuserClicks: org.apache.spark.sql.DataFrame \u003d [userIdClicks: string, offerIdClicks: string]\nres247: Long \u003d 461\nparquetFileOffers: org.apache.spark.sql.DataFrame \u003d [eventType: string, userInfo: struct\u003cuserId:string,ip:string,userAgent:struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e,userGeolocation:struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e,adBlocked:boolean\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, offerRank: int, searchId: string, offerViewId: string, contentPageType: string, adInfo: struct\u003cadType:string,adPlacement:string,adViewability:string,adSize:string\u003e, offerId: string]\nuserOffers: org.apache.spark.sql.DataFrame \u003d [userIdOfferView: string, offerIdOfferView: string, siteDomain[countryCode]: string, category[0]: string, merchant: string]\nres248: Long \u003d 43990\nuserOfferCommon: org.apache.spark.sql.DataFrame \u003d [userIdOfferView: string, offerIdOfferView: string, siteDomain[countryCode]: string, category[0]: string, merchant: string]\nres249: Long \u003d 2545\ncOOuterJoin: org.apache.spark.sql.DataFrame \u003d [userIdClicks: string, offerIdClicks: string, userIdOfferView: string, offerIdOfferView: string, siteDomain[countryCode]: string, category[0]: string, merchant: string]\nres250: Long \u003d 274\nres251: Long \u003d 2545\n"
+      },
+      "dateCreated": "Jun 23, 2017 1:48:05 PM",
+      "dateStarted": "Jun 24, 2017 3:03:17 AM",
+      "dateFinished": "Jun 24, 2017 3:11:40 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "\t\t\t\t\t\t\tval clicksTemp \u003d sqlContext.read.parquet(\"/data/sidana/recsysBaselines/experiments/debug_ffm/click/fr/2017/*/*/\")\n\t\t\t\t\t\t\tval userClicks \u003d clicksTemp.select(clicksTemp(\"userInfo\").getItem(\"userId\"),substring_index(clicksTemp(\"offerViewId\"),\"-\",1)).withColumnRenamed(\"substring_index(offerViewId,-,1)\",\"offerIdClicks\").withColumnRenamed(\"userInfo[userId]\",\"userIdClicks\")\n\t\t\t\t\t\t\tuserClicks.filter($\"offerIdClicks\" \u003d\u003d\u003d\"39bdbddb28177c3866ab5f519908117a\").count",
+      "authenticationInfo": {},
+      "dateUpdated": "Jun 23, 2017 3:03:48 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1498222972472_-1571567040",
+      "id": "20170623-150252_1156343595",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "clicksTemp: org.apache.spark.sql.DataFrame \u003d [userInfo: struct\u003cuserId:string,ip:string,userAgent:struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e,userGeolocation:struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e,adBlocked:boolean\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, offerViewId: string, clickId: string, earning: decimal(38,18), searchId: string]\nuserClicks: org.apache.spark.sql.DataFrame \u003d [userIdClicks: string, offerIdClicks: string]\nres8: Long \u003d 461\n"
+      },
+      "dateCreated": "Jun 23, 2017 3:02:52 PM",
+      "dateStarted": "Jun 23, 2017 3:03:48 PM",
+      "dateFinished": "Jun 23, 2017 3:03:49 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "\n\t\t\t\t\tval t1 \u003d System.currentTimeMillis\n\t\t\t\t\t\t\tval clicksTemp \u003d sqlContext.read.parquet(\"/data/sidana/recsysBaselines/experiments/debug_ffm/click/fr/2017/*/*/\")\n\t\t\t\t\t\t\tval userClicks \u003d clicksTemp.select(clicksTemp(\"userInfo\").getItem(\"userId\"),substring_index(clicksTemp(\"offerViewId\"),\"-\",1)).withColumnRenamed(\"substring_index(offerViewId,-,1)\",\"offerIdClicks\").withColumnRenamed(\"userInfo[userId]\",\"userIdClicks\")\n\n\n\t\t\t\t\t\t\tval parquetFileOffers \u003d sqlContext.read.parquet(\"/data/sidana/recsysBaselines/experiments/debug_ffm/offerView/fr/2017/*/*/\")\n\t\t\t\t\t\t\tval userOffers \u003d parquetFileOffers.select(parquetFileOffers(\"userInfo\").getItem(\"userId\"),substring_index(parquetFileOffers(\"offerViewId\"),\"-\",1),$\"siteDomain\".getItem(\"countryCode\"),parquetFileOffers(\"category\")(0),parquetFileOffers(\"merchant\"),parquetFileOffers(\"utcDate\")).withColumnRenamed(\"substring_index(offerViewId,-,1)\",\"offerIdOfferView\").withColumnRenamed(\"userInfo[userId]\",\"userIdOfferView\")\n\n\t\t\t\t\t\t\t//inner join\n\t\t\t\t\t\t\tval userOfferCommon \u003d userClicks.join(userOffers,userClicks(\"userIdClicks\")\u003c\u003d\u003euserOffers(\"userIdOfferView\")).drop(userClicks(\"userIdClicks\")).drop(userClicks(\"offerIdClicks\"))\n\n\n\t\t\t\t\t\t\t//outerjoin\n\t\t\t\t\t\t\tval cOOuterJoin \u003d userClicks.join(userOfferCommon,userClicks(\"userIdClicks\")\u003c\u003d\u003euserOfferCommon(\"userIdOfferView\") \u0026\u0026 userClicks(\"offerIdClicks\")\u003c\u003d\u003euserOfferCommon(\"offerIdOfferView\"),\"right_outer\").distinct\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\tval badOfferCount \u003d cOOuterJoin.filter($\"offerIdClicks\"\u003d\u003d\u003d\"39bdbddb28177c3866ab5f519908117a\").count",
+      "authenticationInfo": {},
+      "dateUpdated": "Jun 23, 2017 2:29:31 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1498220962155_1237915106",
+      "id": "20170623-142922_1811937347",
+      "dateCreated": "Jun 23, 2017 2:29:22 PM",
+      "dateStarted": "Jun 23, 2017 2:29:31 PM",
+      "dateFinished": "Jun 23, 2017 2:38:54 PM",
+      "status": "FINISHED",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "    val clicksTemp \u003d sqlContext.read.parquet(\"/data/sidana/recsysBaselines/experiments/debug_ffm/click/fr/2017/*/*/\")\n    val userClicks \u003d clicksTemp.select(substring_index(clicksTemp(\"offerViewId\"),\"-\",1),$\"offerTitle\").withColumnRenamed(\"substring_index(offerViewId,-,1)\",\"offerIdClicks\").withColumnRenamed(\"userInfo[userId]\",\"userIdClicks\")\n    val badOffer \u003d userClicks.filter($\"offerIdClicks\"\u003d\u003d\u003d\"39bdbddb28177c3866ab5f519908117a\")\n    z.show(badOffer)",
+      "authenticationInfo": {},
+      "dateUpdated": "Jun 23, 2017 2:28:34 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala",
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1498219239047_-1261266488",
+      "id": "20170623-140039_923783045",
+      "dateCreated": "Jun 23, 2017 2:00:39 PM",
+      "dateStarted": "Jun 23, 2017 2:01:52 PM",
+      "dateFinished": "Jun 23, 2017 2:01:54 PM",
+      "status": "FINISHED",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "\n\t\t\t\t\tval t1 \u003d System.currentTimeMillis\n\t\t\t\t\t\t\tval clicksTemp \u003d sqlContext.read.parquet(\"/data/sidana/recsysBaselines/experiments/debug_ffm/click/fr/2017/*/*/\")\n\t\t\t\t\t\t\tval userClicks \u003d clicksTemp.select($\"userInfo\".getItem(\"userId\").as(\"userIdClicks\"),substring_index($\"offerViewId\",\"-\",1).as(\"offerIdClicks\"))\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\tuserClicks.filter($\"offerIdClicks\" \u003d\u003d\u003d\"39bdbddb28177c3866ab5f519908117a\").count\n\n\n\t\t\t\t\t\t\tval parquetFileOffers \u003d sqlContext.read.parquet(\"/data/sidana/recsysBaselines/experiments/debug_ffm/offerView/fr/2017/*/*/\")\n\t\t\t\t\t\t\tval userOffers \u003d parquetFileOffers.select($\"userInfo\".getItem(\"userId\").as(\"userIdOfferView\"),substring_index($\"offerViewId\",\"-\",1).as(\"offerIdOfferView\"),$\"siteDomain\".getItem(\"countryCode\"),$\"category\"(0),$\"merchant\",$\"utcDate\")\n\n                            userOffers.filter($\"offerIdOfferView\"\u003d\u003d\u003d\"39bdbddb28177c3866ab5f519908117a\").count\n\t\t\t\t\t\t\t//inner join\n\t\t\t\t\t\t\tval userOfferCommon \u003d userClicks.join(userOffers,userClicks(\"userIdClicks\")\u003c\u003d\u003euserOffers(\"userIdOfferView\")).drop(userClicks(\"userIdClicks\")).drop(userClicks(\"offerIdClicks\")).distinct\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\tuserOfferCommon.filter($\"offerIdOfferView\"\u003d\u003d\u003d\"39bdbddb28177c3866ab5f519908117a\").count\n\n\n\t\t\t\t\t\t\t//outerjoin\n\t\t\t\t\t\t\tval cOOuterJoin \u003d userClicks.join(userOfferCommon,userClicks(\"userIdClicks\")\u003c\u003d\u003euserOfferCommon(\"userIdOfferView\") \u0026\u0026 userClicks(\"offerIdClicks\")\u003c\u003d\u003euserOfferCommon(\"offerIdOfferView\"),\"right_outer\").distinct\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t cOOuterJoin.filter($\"offerIdClicks\"\u003d\u003d\u003d\"39bdbddb28177c3866ab5f519908117a\").count\n\t\t\t\t\t\t\t cOOuterJoin.filter($\"offerIdOfferView\"\u003d\u003d\u003d\"39bdbddb28177c3866ab5f519908117a\").count",
+      "authenticationInfo": {},
+      "dateUpdated": "Jun 23, 2017 4:25:41 PM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0,
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1498218485166_1804727978",
+      "id": "20170623-134805_1578333144",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "t1: Long \u003d 1498227941278\nclicksTemp: org.apache.spark.sql.DataFrame \u003d [userInfo: struct\u003cuserId:string,ip:string,userAgent:struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e,userGeolocation:struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e,adBlocked:boolean\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, offerViewId: string, clickId: string, earning: decimal(38,18), searchId: string]\nuserClicks: org.apache.spark.sql.DataFrame \u003d [userIdClicks: string, offerIdClicks: string]\nres19: Long \u003d 461\nparquetFileOffers: org.apache.spark.sql.DataFrame \u003d [eventType: string, userInfo: struct\u003cuserId:string,ip:string,userAgent:struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e,userGeolocation:struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e,adBlocked:boolean\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, offerRank: int, searchId: string, offerViewId: string, contentPageType: string, adInfo: struct\u003cadType:string,adPlacement:string,adViewability:string,adSize:string\u003e, offerId: string]\nuserOffers: org.apache.spark.sql.DataFrame \u003d [userIdOfferView: string, offerIdOfferView: string, siteDomain[countryCode]: string, category[0]: string, merchant: string, utcDate: timestamp]\nres20: Long \u003d 43990\nuserOfferCommon: org.apache.spark.sql.DataFrame \u003d [userIdOfferView: string, offerIdOfferView: string, siteDomain[countryCode]: string, category[0]: string, merchant: string, utcDate: timestamp]\nres21: Long \u003d 6930\ncOOuterJoin: org.apache.spark.sql.DataFrame \u003d [userIdClicks: string, offerIdClicks: string, userIdOfferView: string, offerIdOfferView: string, siteDomain[countryCode]: string, category[0]: string, merchant: string, utcDate: timestamp]\nres22: Long \u003d 1307\nres23: Long \u003d 6930\n"
+      },
+      "dateCreated": "Jun 23, 2017 1:48:05 PM",
+      "dateStarted": "Jun 23, 2017 4:25:41 PM",
+      "dateFinished": "Jun 23, 2017 4:35:51 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "\n\t\t\t\t\tval t1 \u003d System.currentTimeMillis\n\t\t\t\t\t\t\tval clicksTemp \u003d sqlContext.read.parquet(\"/data/sidana/recsysBaselines/experiments/debug_ffm/click/fr/2017/*/*/\")\n\t\t\t\t\t\t\tval userClicks \u003d clicksTemp.select($\"userInfo\".getItem(\"userId\").as(\"userIdClicks\"),substring_index($\"offerViewId\",\"-\",1).as(\"offerIdClicks\")).distinct\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\tval count1 \u003d userClicks.filter($\"offerIdClicks\" \u003d\u003d\u003d\"39bdbddb28177c3866ab5f519908117a\").count\n\n\n\t\t\t\t\t\t\tval parquetFileOffers \u003d sqlContext.read.parquet(\"/data/sidana/recsysBaselines/experiments/debug_ffm/offerView/fr/2017/*/*/\")\n\t\t\t\t\t\t\tval userOffers \u003d parquetFileOffers.select($\"userInfo\".getItem(\"userId\").as(\"userIdOfferView\"),substring_index($\"offerViewId\",\"-\",1).as(\"offerIdOfferView\"),$\"siteDomain\".getItem(\"countryCode\"),$\"category\"(0),$\"merchant\",$\"utcDate\").distinct\n\n                            val count2 \u003d userOffers.filter($\"offerIdOfferView\"\u003d\u003d\u003d\"39bdbddb28177c3866ab5f519908117a\").count\n\t\t\t\t\t\t\t//inner join\n\t\t\t\t\t\t\tval userOfferCommon \u003d userClicks.join(userOffers,userClicks(\"userIdClicks\")\u003c\u003d\u003euserOffers(\"userIdOfferView\")).drop(userClicks(\"userIdClicks\")).drop(userClicks(\"offerIdClicks\")).distinct\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\tval count3 \u003d userOfferCommon.filter($\"offerIdOfferView\"\u003d\u003d\u003d\"39bdbddb28177c3866ab5f519908117a\").count\n\n\n\t\t\t\t\t\t\t//outerjoin\n\t\t\t\t\t\t\tval cOOuterJoin \u003d userClicks.join(userOfferCommon,userClicks(\"userIdClicks\")\u003c\u003d\u003euserOfferCommon(\"userIdOfferView\") \u0026\u0026 userClicks(\"offerIdClicks\")\u003c\u003d\u003euserOfferCommon(\"offerIdOfferView\"),\"right_outer\").distinct\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t val count4 \u003d cOOuterJoin.filter($\"offerIdClicks\"\u003d\u003d\u003d\"39bdbddb28177c3866ab5f519908117a\").count\n\t\t\t\t\t\t\t val count5 \u003d cOOuterJoin.filter($\"offerIdOfferView\"\u003d\u003d\u003d\"39bdbddb28177c3866ab5f519908117a\").count",
+      "authenticationInfo": {},
+      "dateUpdated": "Jun 23, 2017 5:31:02 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala",
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1498218485166_1804727978",
+      "id": "20170623-134805_1327143464",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "t1: Long \u003d 1498231862640\nclicksTemp: org.apache.spark.sql.DataFrame \u003d [userInfo: struct\u003cuserId:string,ip:string,userAgent:struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e,userGeolocation:struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e,adBlocked:boolean\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, offerViewId: string, clickId: string, earning: decimal(38,18), searchId: string]\nuserClicks: org.apache.spark.sql.DataFrame \u003d [userIdClicks: string, offerIdClicks: string]\ncount1: Long \u003d 417\nparquetFileOffers: org.apache.spark.sql.DataFrame \u003d [eventType: string, userInfo: struct\u003cuserId:string,ip:string,userAgent:struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e,userGeolocation:struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e,adBlocked:boolean\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, offerRank: int, searchId: string, offerViewId: string, contentPageType: string, adInfo: struct\u003cadType:string,adPlacement:string,adViewability:string,adSize:string\u003e, offerId: string]\nuserOffers: org.apache.spark.sql.DataFrame \u003d [userIdOfferView: string, offerIdOfferView: string, siteDomain[countryCode]: string, category[0]: string, merchant: string, utcDate: timestamp]\ncount2: Long \u003d 43926\nuserOfferCommon: org.apache.spark.sql.DataFrame \u003d [userIdOfferView: string, offerIdOfferView: string, siteDomain[countryCode]: string, category[0]: string, merchant: string, utcDate: timestamp]\ncount3: Long \u003d 6930\ncOOuterJoin: org.apache.spark.sql.DataFrame \u003d [userIdClicks: string, offerIdClicks: string, userIdOfferView: string, offerIdOfferView: string, siteDomain[countryCode]: string, category[0]: string, merchant: string, utcDate: timestamp]\ncount4: Long \u003d 1307\ncount5: Long \u003d 6930\n"
+      },
+      "dateCreated": "Jun 23, 2017 1:48:05 PM",
+      "dateStarted": "Jun 23, 2017 5:31:02 PM",
+      "dateFinished": "Jun 23, 2017 5:53:11 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "\t\t\t\t\tval t1 \u003d System.currentTimeMillis\n\t\t\t\t\t\t\tval clicksTemp \u003d sqlContext.read.parquet(\"/data/sidana/recsysBaselines/experiments/debug_ffm/click/fr/2017/*/*/\")\n\t\t\t\t\t\t\tval userClicks \u003d clicksTemp.select(clicksTemp(\"userInfo\").getItem(\"userId\"),substring_index(clicksTemp(\"offerViewId\"),\"-\",1)).withColumnRenamed(\"substring_index(offerViewId,-,1)\",\"offerIdClicks\").withColumnRenamed(\"userInfo[userId]\",\"userIdClicks\")\n\t\t\t\t\t\t\tuserClicks.filter($\"offerIdClicks\" \u003d\u003d\u003d\"39bdbddb28177c3866ab5f519908117a\").count\n\n\n\t\t\t\t\t\t\tval parquetFileOffers \u003d sqlContext.read.parquet(\"/data/sidana/recsysBaselines/experiments/debug_ffm/offerView/fr/2017/*/*/\")\n\t\t\t\t\t\t\tval userOffers \u003d parquetFileOffers.select(parquetFileOffers(\"userInfo\").getItem(\"userId\"),substring_index(parquetFileOffers(\"offerViewId\"),\"-\",1),$\"siteDomain\".getItem(\"countryCode\"),parquetFileOffers(\"category\")(0),parquetFileOffers(\"merchant\"),parquetFileOffers(\"utcDate\")).withColumnRenamed(\"substring_index(offerViewId,-,1)\",\"offerIdOfferView\").withColumnRenamed(\"userInfo[userId]\",\"userIdOfferView\")\n\n                            userOffers.filter($\"offerIdOfferView\"\u003d\u003d\u003d\"39bdbddb28177c3866ab5f519908117a\").count\n\t\t\t\t\t\t\t//inner join\n\t\t\t\t\t\t\tval userOfferCommon \u003d userClicks.join(userOffers,userClicks(\"userIdClicks\")\u003c\u003d\u003euserOffers(\"userIdOfferView\")).drop(userClicks(\"userIdClicks\")).drop(userClicks(\"offerIdClicks\"))\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\tuserOfferCommon.filter($\"offerIdOfferView\"\u003d\u003d\u003d\"39bdbddb28177c3866ab5f519908117a\").count\n\n\n\t\t\t\t\t\t\t//outerjoin\n\t\t\t\t\t\t\tval cOOuterJoin \u003d userClicks.join(userOfferCommon,userClicks(\"userIdClicks\")\u003d\u003d\u003duserOfferCommon(\"userIdOfferView\") \u0026\u0026 userClicks(\"offerIdClicks\")\u003d\u003d\u003duserOfferCommon(\"offerIdOfferView\"),\"right_outer\").distinct\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t cOOuterJoin.filter($\"offerIdClicks\"\u003d\u003d\u003d\"39bdbddb28177c3866ab5f519908117a\").count\n\t\t\t\t\t\t\t cOOuterJoin.filter($\"offerIdOfferView\"\u003d\u003d\u003d\"39bdbddb28177c3866ab5f519908117a\").count",
+      "authenticationInfo": {},
+      "dateUpdated": "Jun 23, 2017 7:17:53 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1498229180835_-980303812",
+      "id": "20170623-164620_653695692",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "t1: Long \u003d 1498238273476\nclicksTemp: org.apache.spark.sql.DataFrame \u003d [userInfo: struct\u003cuserId:string,ip:string,userAgent:struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e,userGeolocation:struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e,adBlocked:boolean\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, offerViewId: string, clickId: string, earning: decimal(38,18), searchId: string]\nuserClicks: org.apache.spark.sql.DataFrame \u003d [userIdClicks: string, offerIdClicks: string]\nres38: Long \u003d 461\nparquetFileOffers: org.apache.spark.sql.DataFrame \u003d [eventType: string, userInfo: struct\u003cuserId:string,ip:string,userAgent:struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e,userGeolocation:struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e,adBlocked:boolean\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, offerRank: int, searchId: string, offerViewId: string, contentPageType: string, adInfo: struct\u003cadType:string,adPlacement:string,adViewability:string,adSize:string\u003e, offerId: string]\nuserOffers: org.apache.spark.sql.DataFrame \u003d [userIdOfferView: string, offerIdOfferView: string, siteDomain[countryCode]: string, category[0]: string, merchant: string, utcDate: timestamp]\nres39: Long \u003d 43990\nuserOfferCommon: org.apache.spark.sql.DataFrame \u003d [userIdOfferView: string, offerIdOfferView: string, siteDomain[countryCode]: string, category[0]: string, merchant: string, utcDate: timestamp]\nres40: Long \u003d 15817\ncOOuterJoin: org.apache.spark.sql.DataFrame \u003d [userIdClicks: string, offerIdClicks: string, userIdOfferView: string, offerIdOfferView: string, siteDomain[countryCode]: string, category[0]: string, merchant: string, utcDate: timestamp]\nres41: Long \u003d 1307\nres42: Long \u003d 6930\n"
+      },
+      "dateCreated": "Jun 23, 2017 4:46:20 PM",
+      "dateStarted": "Jun 23, 2017 7:17:53 PM",
+      "dateFinished": "Jun 23, 2017 7:26:37 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "\t\t\t\t\tval t1 \u003d System.currentTimeMillis\n\t\t\t\t\t\t\tval clicksTemp \u003d sqlContext.read.parquet(\"/data/sidana/recsysBaselines/experiments/debug_ffm/click/fr/2017/*/*/\")\n\t\t\t\t\t\t\tval userClicks \u003d clicksTemp.select(clicksTemp(\"userInfo\").getItem(\"userId\"),substring_index(clicksTemp(\"offerViewId\"),\"-\",1)).withColumnRenamed(\"substring_index(offerViewId,-,1)\",\"offerIdClicks\").withColumnRenamed(\"userInfo[userId]\",\"userIdClicks\")\n\t\t\t\t\t\t\tuserClicks.filter($\"offerIdClicks\" \u003d\u003d\u003d\"39bdbddb28177c3866ab5f519908117a\").count\n\n\n\t\t\t\t\t\t\tval parquetFileOffers \u003d sqlContext.read.parquet(\"/data/sidana/recsysBaselines/experiments/debug_ffm/offerView/fr/2017/*/*/\")\n\t\t\t\t\t\t\tval userOffers \u003d parquetFileOffers.select(parquetFileOffers(\"userInfo\").getItem(\"userId\"),substring_index(parquetFileOffers(\"offerViewId\"),\"-\",1),$\"siteDomain\".getItem(\"countryCode\"),parquetFileOffers(\"category\")(0),parquetFileOffers(\"merchant\"),parquetFileOffers(\"utcDate\")).withColumnRenamed(\"substring_index(offerViewId,-,1)\",\"offerIdOfferView\").withColumnRenamed(\"userInfo[userId]\",\"userIdOfferView\")\n\n                            userOffers.filter($\"offerIdOfferView\"\u003d\u003d\u003d\"39bdbddb28177c3866ab5f519908117a\").count\n\t\t\t\t\t\t\t//inner join\n\t\t\t\t\t\t\tval userOfferCommon \u003d userClicks.join(userOffers,userClicks(\"userIdClicks\")\u003d\u003d\u003duserOffers(\"userIdOfferView\")).drop(userClicks(\"userIdClicks\")).drop(userClicks(\"offerIdClicks\"))\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\tuserOfferCommon.filter($\"offerIdOfferView\"\u003d\u003d\u003d\"39bdbddb28177c3866ab5f519908117a\").count\n\n\n\t\t\t\t\t\t\t//outerjoin\n\t\t\t\t\t\t\tval cOOuterJoin \u003d userClicks.join(userOfferCommon,$\"userIdClicks\"\u003d\u003d\u003d$\"userIdOfferView\" and userClicks(\"offerIdClicks\")\u003d\u003d\u003duserOfferCommon(\"offerIdOfferView\"),\"right_outer\").distinct\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t cOOuterJoin.filter($\"offerIdClicks\"\u003d\u003d\u003d\"39bdbddb28177c3866ab5f519908117a\").count\n\t\t\t\t\t\t\t cOOuterJoin.filter($\"offerIdOfferView\"\u003d\u003d\u003d\"39bdbddb28177c3866ab5f519908117a\").count",
+      "authenticationInfo": {},
+      "dateUpdated": "Jun 23, 2017 11:15:06 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1498238273220_1001125590",
+      "id": "20170623-191753_74834594",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "t1: Long \u003d 1498252532934\nclicksTemp: org.apache.spark.sql.DataFrame \u003d [userInfo: struct\u003cuserId:string,ip:string,userAgent:struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e,userGeolocation:struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e,adBlocked:boolean\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, offerViewId: string, clickId: string, earning: decimal(38,18), searchId: string]\nuserClicks: org.apache.spark.sql.DataFrame \u003d [userIdClicks: string, offerIdClicks: string]\nres0: Long \u003d 461\nparquetFileOffers: org.apache.spark.sql.DataFrame \u003d [eventType: string, userInfo: struct\u003cuserId:string,ip:string,userAgent:struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e,userGeolocation:struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e,adBlocked:boolean\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, offerRank: int, searchId: string, offerViewId: string, contentPageType: string, adInfo: struct\u003cadType:string,adPlacement:string,adViewability:string,adSize:string\u003e, offerId: string]\nuserOffers: org.apache.spark.sql.DataFrame \u003d [userIdOfferView: string, offerIdOfferView: string, siteDomain[countryCode]: string, category[0]: string, merchant: string, utcDate: timestamp]\nres1: Long \u003d 43990\nuserOfferCommon: org.apache.spark.sql.DataFrame \u003d [userIdOfferView: string, offerIdOfferView: string, siteDomain[countryCode]: string, category[0]: string, merchant: string, utcDate: timestamp]\nres2: Long \u003d 15817\ncOOuterJoin: org.apache.spark.sql.DataFrame \u003d [userIdClicks: string, offerIdClicks: string, userIdOfferView: string, offerIdOfferView: string, siteDomain[countryCode]: string, category[0]: string, merchant: string, utcDate: timestamp]\nres3: Long \u003d 1307\nres4: Long \u003d 6930\n"
+      },
+      "dateCreated": "Jun 23, 2017 7:17:53 PM",
+      "dateStarted": "Jun 23, 2017 11:15:06 PM",
+      "dateFinished": "Jun 23, 2017 11:23:59 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val clicksTemp \u003d  Seq((\"2\", \"c\"), (\"2\", null)).toDF(\"userid\",\"offerid\")\nclicksTemp.count\nclicksTemp.filter(!($\"offerid\".isNull)).count\n//z.show(clicksTemp)",
+      "authenticationInfo": {},
+      "dateUpdated": "Jun 24, 2017 12:33:51 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [
+            {
+              "name": "userid",
+              "index": 0.0,
+              "aggr": "sum"
+            }
+          ],
+          "values": [
+            {
+              "name": "offerid",
+              "index": 1.0,
+              "aggr": "sum"
+            }
+          ],
+          "groups": [],
+          "scatter": {
+            "xAxis": {
+              "name": "userid",
+              "index": 0.0,
+              "aggr": "sum"
+            },
+            "yAxis": {
+              "name": "offerid",
+              "index": 1.0,
+              "aggr": "sum"
+            }
+          }
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1498254968352_195749346",
+      "id": "20170623-235608_307764546",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "clicksTemp: org.apache.spark.sql.DataFrame \u003d [userid: string, offerid: string]\nres89: Long \u003d 2\nres90: Long \u003d 1\n"
+      },
+      "dateCreated": "Jun 23, 2017 11:56:08 PM",
+      "dateStarted": "Jun 24, 2017 12:33:51 AM",
+      "dateFinished": "Jun 24, 2017 12:33:52 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "\nval offersTemp \u003d  Seq((\"2\", \"c\",\"n\"),(\"2\", \"c\",\"m\")).toDF(\"userid\",\"offerid\",\"merchant\")\n\nval clicksTemp \u003d  Seq((\"2\",\"c\")).toDF(\"userid\",\"offerid\").distinct\n\nval clicks \u003d clicksTemp.select($\"userid\".as(\"useridclicks\"),$\"offerid\".as(\"offeridclicks\"))\n\nval offers \u003d offersTemp.select($\"userid\".as(\"useridoffers\"),$\"offerid\".as(\"offeridoffers\"),$\"merchant\")\n\n\nval innerjoin \u003d clicks.join(offers,clicks(\"useridclicks\")\u003c\u003d\u003eoffers(\"useridoffers\")).drop(clicks(\"useridclicks\")).drop(clicks(\"offeridclicks\")).distinct\n\nval outerjoin \u003d clicks.join(innerjoin,clicks(\"useridclicks\")\u003c\u003d\u003einnerjoin(\"useridoffers\")\u0026\u0026 clicks(\"offeridclicks\")\u003c\u003d\u003einnerjoin(\"offeridoffers\"),\"right_outer\").distinct\n\nz.show(outerjoin)\n\n",
+      "authenticationInfo": {},
+      "dateUpdated": "Jun 24, 2017 2:23:57 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [
+            {
+              "name": "useridclicks",
+              "index": 0.0,
+              "aggr": "sum"
+            }
+          ],
+          "values": [
+            {
+              "name": "offeridclicks",
+              "index": 1.0,
+              "aggr": "sum"
+            }
+          ],
+          "groups": [],
+          "scatter": {
+            "xAxis": {
+              "name": "useridclicks",
+              "index": 0.0,
+              "aggr": "sum"
+            },
+            "yAxis": {
+              "name": "offeridclicks",
+              "index": 1.0,
+              "aggr": "sum"
+            }
+          }
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1498238939213_-1002110335",
+      "id": "20170623-192859_2108305286",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TABLE",
+        "msg": "useridclicks\tofferidclicks\tuseridoffers\tofferidoffers\tmerchant\n2\tc\t2\tc\tm\n2\tc\t2\tc\tn\n"
+      },
+      "dateCreated": "Jun 23, 2017 7:28:59 PM",
+      "dateStarted": "Jun 24, 2017 2:23:57 AM",
+      "dateFinished": "Jun 24, 2017 2:23:59 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1498263228892_837045549",
+      "id": "20170624-021348_885762574",
+      "dateCreated": "Jun 24, 2017 2:13:48 AM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "z.show(innerjoin)",
+      "authenticationInfo": {},
+      "dateUpdated": "Jun 24, 2017 2:18:22 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [
+            {
+              "name": "useridoffers",
+              "index": 0.0,
+              "aggr": "sum"
+            }
+          ],
+          "values": [
+            {
+              "name": "offeridoffers",
+              "index": 1.0,
+              "aggr": "sum"
+            }
+          ],
+          "groups": [],
+          "scatter": {
+            "xAxis": {
+              "name": "useridoffers",
+              "index": 0.0,
+              "aggr": "sum"
+            },
+            "yAxis": {
+              "name": "offeridoffers",
+              "index": 1.0,
+              "aggr": "sum"
+            }
+          }
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1498251986650_-1994079929",
+      "id": "20170623-230626_1016171166",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TABLE",
+        "msg": "useridoffers\tofferidoffers\n2\ta\n2\tc\n2\ta\n2\tc\n"
+      },
+      "dateCreated": "Jun 23, 2017 11:06:26 PM",
+      "dateStarted": "Jun 24, 2017 2:18:22 AM",
+      "dateFinished": "Jun 24, 2017 2:18:22 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "outerjoin.filter($\"offeridclicks\"\u003d\u003d\u003d\"c\").count",
+      "authenticationInfo": {},
+      "dateUpdated": "Jun 24, 2017 2:12:17 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1498253845900_104206467",
+      "id": "20170623-233725_179806996",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "res195: Long \u003d 4\n"
+      },
+      "dateCreated": "Jun 23, 2017 11:37:25 PM",
+      "dateStarted": "Jun 24, 2017 2:12:17 AM",
+      "dateFinished": "Jun 24, 2017 2:12:18 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "",
+      "dateUpdated": "Jun 24, 2017 12:15:51 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1498262672768_621392408",
+      "id": "20170624-020432_2110716448",
+      "dateCreated": "Jun 24, 2017 2:04:32 AM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "debug_ffm: analyzeParquet",
+  "id": "2CM6WZPN7",
+  "angularObjects": {
+    "2BGHSKCA7": [],
+    "2BFMBPKAB": [],
+    "2BHKKP27G": [],
+    "2BJHJDBK6": [],
+    "2BJAQG5W4": [],
+    "2BJGSXM37": [],
+    "2BFXEV5XZ": [],
+    "2BG77RV7M": [],
+    "2BF969NNB": [],
+    "2BG8QQJNC": [],
+    "2BGVG5JP4": [],
+    "2BJ5FCP57": [],
+    "2BFEDXCTE": [],
+    "2BJ8AEWCT": [],
+    "2BH9AVVKH": [],
+    "2BJ7KKX85": [],
+    "2BHKAE8WK": [],
+    "2BJ6HN5AY": []
+  },
+  "config": {},
+  "info": {}
+}

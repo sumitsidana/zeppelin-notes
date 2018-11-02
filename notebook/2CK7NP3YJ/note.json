@@ -1,0 +1,136 @@
+{
+  "paragraphs": [
+    {
+      "text": "val train \u003d sqlContext.read\n.format(\"com.databricks.spark.csv\")\n.option(\"header\", \"true\") // Use first line of all files as header\n.option(\"inferSchema\", \"true\") // Automatically infer data types\n.option(\"delimiter\", \"\\t\")\n.load(\"/data/sidana/recsysBaselines/experiments/debug_ffm/debug_ffm/debug/ten_iterations/train_fr.csv\")\n\nval positiveTrain \u003d train.filter($\"rating\"\u003d\u003d\u003d\"1\")\n\nval userOfferCount \u003d positiveTrain.groupBy(\"userid\",\"offerid\").count\n\nval header \u003d \"userid,offerid,clicks\"\n\nval userOfferClickCount \u003d userOfferCount.rdd.map(_.mkString(\",\")).mapPartitionsWithIndex((i, iter) \u003d\u003e if (i\u003d\u003d0) (List(header).toIterator ++ iter) else iter)\n\nuserOfferClickCount.coalesce(1,false).saveAsTextFile(\"/data/sidana/recsysBaselines/experiments/debug_ffm/debug_ffm/debug/ten_iterations/userOfferClickCount\")\n",
+      "dateUpdated": "Jun 11, 2017 3:11:36 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1497185907607_-795558710",
+      "id": "20170611-145827_102311475",
+      "dateCreated": "Jun 11, 2017 2:58:27 PM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val userOfferClickCount \u003d sqlContext.read\n.format(\"com.databricks.spark.csv\")\n.option(\"header\", \"true\") // Use first line of all files as header\n.option(\"inferSchema\", \"true\") // Automatically infer data types\n.option(\"delimiter\", \",\")\n.load(\"/data/sidana/recsysBaselines/experiments/debug_ffm/debug_ffm/debug/ten_iterations/userOfferClickCount\")\n\nval goodusers \u003d userOfferClickCount.select(\"userid\").distinct\ngoodusers.count\nval candidates \u003d sqlContext.read\n.format(\"com.databricks.spark.csv\")\n.option(\"header\", \"true\") // Use first line of all files as header\n.option(\"inferSchema\", \"true\") // Automatically infer data types\n.option(\"delimiter\", \",\")\n.load(\"/data/sidana/recsysBaselines/experiments/debug_ffm/debug_ffm/debug/ten_iterations/finalfile\")\n\nval users \u003d candidates.select(\"userid\")\n\nusers.count\n\nval joingoodtestusers \u003d goodusers.join(users,goodusers(\"userid\")\u003d\u003d\u003dusers(\"userid\")).drop(users(\"userid\")).distinct.count\n",
+      "authenticationInfo": {},
+      "dateUpdated": "Jun 11, 2017 3:44:39 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1497187643549_-2066133683",
+      "id": "20170611-152723_325844551",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "userOfferClickCount: org.apache.spark.sql.DataFrame \u003d [userid: string, offerid: string, clicks: int]\ngoodusers: org.apache.spark.sql.DataFrame \u003d [userid: string]\nres4: Long \u003d 157769\ncandidates: org.apache.spark.sql.DataFrame \u003d [userid: string, offertitle: string]\nusers: org.apache.spark.sql.DataFrame \u003d [userid: string]\nres5: Long \u003d 100\njoingoodtestusers: Long \u003d 76\n"
+      },
+      "dateCreated": "Jun 11, 2017 3:27:23 PM",
+      "dateStarted": "Jun 11, 2017 3:44:39 PM",
+      "dateFinished": "Jun 11, 2017 3:44:52 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val train \u003d sqlContext.read\n.format(\"com.databricks.spark.csv\")\n.option(\"header\", \"true\") // Use first line of all files as header\n.option(\"inferSchema\", \"true\") // Automatically infer data types\n.option(\"delimiter\", \"\\t\")\n.load(\"/data/sidana/recsysBaselines/experiments/debug_ffm/debug_ffm/debug/ten_iterations/train_fr.csv\")\n\ntrain.select(\"userid\").distinct.count\n\nval positiveTrain \u003d train.filter($\"rating\"\u003d\u003d\u003d\"1\")\n\npositiveTrain.select(\"userid\").distinct.count\n\nval negativeTrain \u003d train.filter($\"rating\"\u003d\u003d\u003d\"0\")\nnegativeTrain.select(\"userid\").distinct.count\n",
+      "authenticationInfo": {},
+      "dateUpdated": "Jun 11, 2017 3:51:05 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1497187727034_-935417962",
+      "id": "20170611-152847_1924148690",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "train: org.apache.spark.sql.DataFrame \u003d [userid: string, offerid: string, countrycode: string, category: int, merchant: int, utcdate: timestamp, userclickcount: string, offerclickcount: string, rating: int]\nres7: Long \u003d 211354\npositiveTrain: org.apache.spark.sql.DataFrame \u003d [userid: string, offerid: string, countrycode: string, category: int, merchant: int, utcdate: timestamp, userclickcount: string, offerclickcount: string, rating: int]\nres8: Long \u003d 157769\nnegativeTrain: org.apache.spark.sql.DataFrame \u003d [userid: string, offerid: string, countrycode: string, category: int, merchant: int, utcdate: timestamp, userclickcount: string, offerclickcount: string, rating: int]\nres9: Long \u003d 191943\n"
+      },
+      "dateCreated": "Jun 11, 2017 3:28:47 PM",
+      "dateStarted": "Jun 11, 2017 3:51:05 PM",
+      "dateFinished": "Jun 11, 2017 3:51:36 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1497189065782_34803796",
+      "id": "20170611-155105_1231342561",
+      "dateCreated": "Jun 11, 2017 3:51:05 PM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "debug_ffm: positiveDataGroupedByUser",
+  "id": "2CK7NP3YJ",
+  "angularObjects": {
+    "2BGHSKCA7": [],
+    "2BFMBPKAB": [],
+    "2BHKKP27G": [],
+    "2BJHJDBK6": [],
+    "2BJAQG5W4": [],
+    "2BJGSXM37": [],
+    "2BFXEV5XZ": [],
+    "2BG77RV7M": [],
+    "2BF969NNB": [],
+    "2BG8QQJNC": [],
+    "2BGVG5JP4": [],
+    "2BJ5FCP57": [],
+    "2BFEDXCTE": [],
+    "2BJ8AEWCT": [],
+    "2BH9AVVKH": [],
+    "2BJ7KKX85": [],
+    "2BHKAE8WK": [],
+    "2BJ6HN5AY": []
+  },
+  "config": {},
+  "info": {}
+}

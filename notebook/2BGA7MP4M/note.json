@@ -829,7 +829,22 @@
       "progressUpdateIntervalMs": 500
     },
     {
-      "config": {},
+      "text": "val parquetFile \u003d sqlContext.read.parquet(\"/home/ama/sidana/calypso_kk_june_data/*/*/2016/*/*/*.parquet\")\n",
+      "dateUpdated": "Apr 13, 2018 11:08:21 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
       "settings": {
         "params": {},
         "forms": {}
@@ -844,24 +859,24 @@
   "name": "kelkooBaselines: statsTwoMonthsData",
   "id": "2BGA7MP4M",
   "angularObjects": {
-    "2BGHSKCA7": [],
-    "2BFMBPKAB": [],
-    "2BHKKP27G": [],
-    "2BJHJDBK6": [],
-    "2BJAQG5W4": [],
     "2BJGSXM37": [],
-    "2BFXEV5XZ": [],
-    "2BG77RV7M": [],
-    "2BF969NNB": [],
-    "2BG8QQJNC": [],
+    "2BGHSKCA7": [],
+    "2BHKKP27G": [],
     "2BGVG5JP4": [],
-    "2BJ5FCP57": [],
-    "2BFEDXCTE": [],
-    "2BJ8AEWCT": [],
-    "2BH9AVVKH": [],
-    "2BJ7KKX85": [],
+    "2BFMBPKAB": [],
+    "2BF969NNB": [],
+    "2BJAQG5W4": [],
+    "2BJHJDBK6": [],
     "2BHKAE8WK": [],
-    "2BJ6HN5AY": []
+    "2BG8QQJNC": [],
+    "2BJ7KKX85": [],
+    "2BH9AVVKH": [],
+    "2BJ6HN5AY": [],
+    "2BFEDXCTE": [],
+    "2BJ5FCP57": [],
+    "2BJ8AEWCT": [],
+    "2BFXEV5XZ": [],
+    "2BG77RV7M": []
   },
   "config": {
     "looknfeel": "default"

@@ -1,0 +1,76 @@
+{
+  "paragraphs": [
+    {
+      "text": "import org.apache.spark.sql.SaveMode\nimport java.nio.file.{ Files, Paths }\nimport scala.collection.mutable.ListBuffer\nimport java.io.FileWriter\n\n    //read clicks file\n    val clicksTemp \u003d sqlContext.read.parquet(\"/data/sidana/purch/diversity/calypso_purch_november_9_2017/click/2017/*/*/*/\")\n    //take distinct users of clicks\n    val userClicks \u003d clicksTemp.select($\"userInfo\".getItem(\"userId\").as(\"userIdClicks\")).distinct\n    //take distinct combination of user and offers\n    val userOfferClicks \u003d clicksTemp.select($\"userInfo\".getItem(\"userId\").as(\"userIdClicks\"),$\"offerViewId\".as(\"offerViewIdClicks\")).distinct\n    \n    //read offer file    \n    val parquetFileOffers \u003d sqlContext.read.parquet(\"/data/sidana/purch/diversity/calypso_purch_november_9_2017/offerview/2017/*/*/*/\")\n    val userOffers \u003d parquetFileOffers.select($\"userInfo\".getItem(\"userId\").as(\"userIdOfferView\"),$\"offerViewId\".as(\"offerViewIdOfferView\"),$\"offerId\",$\"utcDate\")\n    \n    //inner join to keep users who did at least one click\n    val userOfferCommon \u003d userClicks.join(userOffers,userClicks(\"userIdClicks\")\u003c\u003d\u003euserOffers(\"userIdOfferView\")).drop(userClicks(\"userIdClicks\"))\n    \n    //outerjoin\n    val cOOuterJoinTempTempTempTemp \u003d userOfferClicks.join(userOfferCommon,userOfferClicks(\"userIdClicks\")\u003c\u003d\u003euserOfferCommon(\"userIdOfferView\") \u0026\u0026 userOfferClicks(\"offerViewIdClicks\")\u003c\u003d\u003euserOfferCommon(\"offerViewIdOfferView\"),\"right_outer\")\n    \n    // 0 if null, 1 otherwise not sure if empty string is needed\n    \n    val cOOuterJoinTempTempTemp \u003d cOOuterJoinTempTempTempTemp.withColumn(\"wasClicked\", when($\"offerViewIdClicks\".isNull or $\"offerViewIdClicks\" \u003d\u003d\u003d \"\", 0).otherwise(1)).drop(\"userIdClicks\").drop(\"offerViewIdClicks\").drop(\"offerViewIdOfferView\").withColumnRenamed(\"userIdOfferView\",\"userId\")\n    \n    val seq \u003d Seq(\"userIdRating\",\"offerIdRating\",\"wasClicked\")\n    \n    val cOOuterJoinTempTempRating \u003d  cOOuterJoinTempTempTemp.select($\"userId\".as(\"userIdRating\"),$\"offerId\".as(\"offerIdRating\"),$\"wasClicked\").dropDuplicates(seq).groupBy(\"userIdRating\",\"offerIdRating\").max(\"wasClicked\").withColumnRenamed(\"max(wasClicked)\",\"rating\")\n    \n    val cOOuterJoinTempTempTime \u003d cOOuterJoinTempTempTemp.select($\"userId\".as(\"userIdTime\"),$\"offerId\".as(\"offerIdTime\"),unix_timestamp($\"utcDate\").as(\"timestamp\")).groupBy(\"userIdTime\",\"offerIdTime\").agg(first(\"timestamp\").alias(\"timestamp\"))\n    \n    val cOOuterJoinTempTemp \u003d cOOuterJoinTempTempTime.join(cOOuterJoinTempTempRating,cOOuterJoinTempTempTime(\"userIdTime\")\u003d\u003d\u003dcOOuterJoinTempTempRating(\"userIdRating\")\u0026\u0026cOOuterJoinTempTempTime(\"offerIdTime\")\u003d\u003d\u003dcOOuterJoinTempTempRating(\"offerIdRating\")).drop(cOOuterJoinTempTempTime(\"userIdTime\")).drop(cOOuterJoinTempTempTime(\"offerIdTime\")).withColumnRenamed(\"userIdRating\",\"userId\").withColumnRenamed(\"offerIdRating\",\"offerId\")\n    \n    val orderedData \u003d cOOuterJoinTempTemp.orderBy(\"timestamp\")\n\n    val totalItems \u003d orderedData.count\n\n    val cnt \u003d totalItems * 0.7\n\n    val trainDF \u003d sqlContext.createDataFrame(orderedData.rdd.zipWithIndex.filter {\n  case (_, i) \u003d\u003e i \u003c\u003d cnt \n}.map(_._1), orderedData.schema)\n\n    val testDF \u003d sqlContext.createDataFrame(orderedData.rdd.zipWithIndex.filter {\n  case (_, i) \u003d\u003e i \u003e cnt \n}.map(_._1), orderedData.schema)\n    \n    val orderedTrain \u003d trainDF.orderBy(\"timestamp\")\n    \n    \n    val users_train \u003d orderedTrain.select(\"userId\").distinct\n    val offers_train \u003d orderedTrain.select(\"offerId\").distinct\n    \n    val orderedTest_temp_temp \u003d testDF.orderBy(\"timestamp\")\n    val orderedTest_temp \u003d orderedTest_temp_temp.join(users_train,orderedTest_temp_temp(\"userId\")\u003d\u003d\u003dusers_train(\"userId\")).drop(users_train(\"userId\"))\n    val orderedTest \u003d orderedTest_temp.join(offers_train,orderedTest_temp(\"offerId\")\u003d\u003d\u003doffers_train(\"offerId\")).drop(offers_train(\"offerId\"))\n    \n    val header \u003d \"userid\\tofferid\\trating\\ttimestamp\"\n\n    val trainWrite \u003d orderedTrain.select(\"userId\",\"offerId\",\"rating\",\"timestamp\").rdd.map(_.mkString(\"\\t\")).mapPartitionsWithIndex((i, iter) \u003d\u003e if (i\u003d\u003d0) (List(header).toIterator ++ iter) else iter)\n\n    val testWrite \u003d orderedTest.select(\"userId\",\"offerId\",\"rating\",\"timestamp\").rdd.map(_.mkString(\"\\t\")).mapPartitionsWithIndex((i, iter) \u003d\u003e if (i\u003d\u003d0) (List(header).toIterator ++ iter) else iter)\n\n    trainWrite.coalesce(1,false).saveAsTextFile(\"/data/sidana/purch/diversity/baselines/train.csv\")\n\n    testWrite.coalesce(1,false).saveAsTextFile(\"/data/sidana/purch/diversity/baselines/test.csv\")",
+      "authenticationInfo": {},
+      "dateUpdated": "Nov 11, 2017 11:08:54 PM",
+      "config": {
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0,
+        "editorHide": false,
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        }
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1510332152571_356932229",
+      "id": "20171110-174232_1213549914",
+      "dateCreated": "Nov 10, 2017 5:42:32 PM",
+      "dateStarted": "Nov 11, 2017 11:06:30 PM",
+      "dateFinished": "Nov 11, 2017 11:06:55 PM",
+      "status": "ERROR",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "dateUpdated": "Nov 10, 2017 5:42:32 PM",
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1510332152572_355008484",
+      "id": "20171110-174232_599446077",
+      "dateCreated": "Nov 10, 2017 5:42:32 PM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "purchBaselinesVer2: writeInputFile",
+  "id": "2CYSE9SNN",
+  "angularObjects": {
+    "2BJGSXM37": [],
+    "2BGHSKCA7": [],
+    "2BHKKP27G": [],
+    "2BGVG5JP4": [],
+    "2BFMBPKAB": [],
+    "2BF969NNB": [],
+    "2BJAQG5W4": [],
+    "2BJHJDBK6": [],
+    "2BHKAE8WK": [],
+    "2BG8QQJNC": [],
+    "2BJ7KKX85": [],
+    "2BH9AVVKH": [],
+    "2BJ6HN5AY": [],
+    "2BFEDXCTE": [],
+    "2BJ5FCP57": [],
+    "2BJ8AEWCT": [],
+    "2BFXEV5XZ": [],
+    "2BG77RV7M": []
+  },
+  "config": {
+    "looknfeel": "default"
+  },
+  "info": {}
+}

@@ -1,0 +1,280 @@
+{
+  "paragraphs": [
+    {
+      "text": "val trainData \u003d sqlContext.read\n.format(\"com.databricks.spark.csv\")\n.option(\"header\", \"true\") // Use first line of all files as header\n.option(\"inferSchema\", \"true\") // Automatically infer data types\n.option(\"delimiter\", \"\\t\")\n.load(\"/data/sidana/recsysBaselines/experiments/ffm_implementation_enriched_feature_set/train_fr.csv\")\n\nval positiveData \u003d trainData.filter($\"rating\"\u003d\u003d\u003d1)\n\nval positiveOffers \u003d positiveData.groupBy($\"offerid\").count\nval allOffers \u003d trainData.groupBy($\"offerId\").count\n\npositiveOffers.rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/recsysBaselines/experiments/ffm_implementation_enriched_feature_set/ctr/positiveoffers_temp\")\nallOffers.rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/recsysBaselines/experiments/ffm_implementation_enriched_feature_set/ctr/alloffers_temp\")",
+      "authenticationInfo": {},
+      "dateUpdated": "Jun 25, 2017 11:15:14 PM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [
+            {
+              "name": "count",
+              "index": 1.0,
+              "aggr": "sum"
+            }
+          ],
+          "groups": [],
+          "scatter": {
+            "yAxis": {
+              "name": "count",
+              "index": 1.0,
+              "aggr": "sum"
+            }
+          }
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1498425303699_-2127150484",
+      "id": "20170625-231503_914621713",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "trainData: org.apache.spark.sql.DataFrame \u003d [userid: string, offerid: string, merchant: int, category: int, userclickcount: int, offerclickcount: int, rating: int]\npositiveData: org.apache.spark.sql.DataFrame \u003d [userid: string, offerid: string, merchant: int, category: int, userclickcount: int, offerclickcount: int, rating: int]\npositiveOffers: org.apache.spark.sql.DataFrame \u003d [offerid: string, count: bigint]\nallOffers: org.apache.spark.sql.DataFrame \u003d [offerId: string, count: bigint]\n"
+      },
+      "dateCreated": "Jun 25, 2017 11:15:03 PM",
+      "dateStarted": "Jun 25, 2017 11:15:14 PM",
+      "dateFinished": "Jun 25, 2017 11:15:31 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "groupedClicks.rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/recsysBaselines/experiments/debug_ffm/debug/atleast_two/click_distribution\")",
+      "dateUpdated": "Jun 25, 2017 11:15:03 PM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1498425303700_-2129074228",
+      "id": "20170625-231503_359185165",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": ""
+      },
+      "dateCreated": "Jun 25, 2017 11:15:03 PM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val positiveOffers \u003d sqlContext.read\n.format(\"com.databricks.spark.csv\")\n.option(\"header\", \"true\") // Use first line of all files as header\n.option(\"inferSchema\", \"true\") // Automatically infer data types\n.option(\"delimiter\", \",\")\n.load(\"/data/sidana/recsysBaselines/experiments/ffm_implementation_enriched_feature_set/ctr/positiveoffers\").withColumnRenamed(\"offerid\",\"offerid_positive\").withColumnRenamed(\"count\",\"count_positive\")\n\nval negativeOffers \u003d sqlContext.read\n.format(\"com.databricks.spark.csv\")\n.option(\"header\", \"true\") // Use first line of all files as header\n.option(\"inferSchema\", \"true\") // Automatically infer data types\n.option(\"delimiter\", \",\")\n.load(\"/data/sidana/recsysBaselines/experiments/ffm_implementation_enriched_feature_set/ctr/alloffers\").withColumnRenamed(\"offerid\",\"offerid_all\").withColumnRenamed(\"count\",\"count_all\")\n\n\n\nval posnegoffers \u003d positiveOffers.join(negativeOffers, positiveOffers(\"offerid_positive\")\u003d\u003d\u003dnegativeOffers(\"offerid_all\"),\"outer\").na.fill(0,Seq(\"offerid_positive\")).na.fill(0,Seq(\"offerid_all\")).na.fill(0,Seq(\"count_positive\")).na.fill(0,Seq(\"count_all\"))\n\n\nval ctr \u003d posnegoffers.select($\"offerid_positive\",$\"count_positive\",$\"offerid_all\",$\"count_all\",posnegoffers(\"count_positive\").divide(posnegoffers(\"count_all\"))).withColumnRenamed(\"(count_positive / count_all)\",\"ctr\").na.fill(0.0,Seq(\"ctr\")).sort(desc(\"ctr\"))\n\nctr.rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/recsysBaselines/experiments/ffm_implementation_enriched_feature_set/ctr/ctr_temp\")",
+      "authenticationInfo": {},
+      "dateUpdated": "Jun 25, 2017 11:18:21 PM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [
+            {
+              "name": "offerid_positive",
+              "index": 0.0,
+              "aggr": "sum"
+            }
+          ],
+          "values": [
+            {
+              "name": "count_positive",
+              "index": 1.0,
+              "aggr": "sum"
+            }
+          ],
+          "groups": [],
+          "scatter": {
+            "xAxis": {
+              "name": "offerid_positive",
+              "index": 0.0,
+              "aggr": "sum"
+            },
+            "yAxis": {
+              "name": "count_positive",
+              "index": 1.0,
+              "aggr": "sum"
+            }
+          }
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1498425303700_-2129074228",
+      "id": "20170625-231503_248536438",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "positiveOffers: org.apache.spark.sql.DataFrame \u003d [offerid_positive: string, count_positive: int]\nnegativeOffers: org.apache.spark.sql.DataFrame \u003d [offerid_all: string, count_all: int]\nposnegoffers: org.apache.spark.sql.DataFrame \u003d [offerid_positive: string, count_positive: int, offerid_all: string, count_all: int]\nctr: org.apache.spark.sql.DataFrame \u003d [offerid_positive: string, count_positive: int, offerid_all: string, count_all: int, ctr: double]\n"
+      },
+      "dateCreated": "Jun 25, 2017 11:15:03 PM",
+      "dateStarted": "Jun 25, 2017 11:18:21 PM",
+      "dateFinished": "Jun 25, 2017 11:18:34 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val ctr \u003d posnegoffers.select(posnegoffers(\"count_positive\").divide(posnegoffers(\"count_negative\")))",
+      "dateUpdated": "Jun 25, 2017 11:15:03 PM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1498425303700_-2129074228",
+      "id": "20170625-231503_296220051",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "ctr: org.apache.spark.sql.DataFrame \u003d [(count_positive / count_negative): double]\n"
+      },
+      "dateCreated": "Jun 25, 2017 11:15:03 PM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "ctr.show",
+      "dateUpdated": "Jun 25, 2017 11:15:03 PM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1498425303701_-2129458977",
+      "id": "20170625-231503_703303411",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "+---------------------------------+\n|(count_positive / count_negative)|\n+---------------------------------+\n|                              0.0|\n|                              0.0|\n|             0.004347826086956522|\n|                              0.0|\n|                              0.0|\n|                              0.0|\n|                              0.0|\n|                             null|\n|                              0.0|\n|                              0.0|\n|                              0.0|\n|                              0.0|\n|                              0.0|\n|                              0.0|\n|                              0.0|\n|                              0.5|\n|                              0.0|\n|                              0.5|\n|                              0.0|\n|                              0.0|\n+---------------------------------+\nonly showing top 20 rows\n\n"
+      },
+      "dateCreated": "Jun 25, 2017 11:15:03 PM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val trainData \u003d sqlContext.read\n.format(\"com.databricks.spark.csv\")\n.option(\"header\", \"true\") // Use first line of all files as header\n.option(\"inferSchema\", \"true\") // Automatically infer data types\n.option(\"delimiter\", \",\")\n.load(\"/data/sidana/recsysBaselines/experiments/ffm_implementation/ctr/ctr\")\n\nval maxScore \u003d trainData.agg(max(\"clickcount\")).show\nval minScore \u003d trainData.agg(min(\"clickcount\")).show\nval avgScore \u003d trainData.agg(avg(\"clickcount\")).show\n",
+      "dateUpdated": "Jun 25, 2017 11:15:03 PM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1498425303701_-2129458977",
+      "id": "20170625-231503_670435589",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "trainData: org.apache.spark.sql.DataFrame \u003d [offerclick: string, clickcount: int, offerview: string, viewcount: int, ctr: double]\n+---------------+\n|max(clickcount)|\n+---------------+\n|            107|\n+---------------+\n\nmaxScore: Unit \u003d ()\n+---------------+\n|min(clickcount)|\n+---------------+\n|              0|\n+---------------+\n\nminScore: Unit \u003d ()\n+-------------------+\n|    avg(clickcount)|\n+-------------------+\n|0.12179369092387438|\n+-------------------+\n\navgScore: Unit \u003d ()\n"
+      },
+      "dateCreated": "Jun 25, 2017 11:15:03 PM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "dateUpdated": "Jun 25, 2017 11:15:03 PM",
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1498425303701_-2129458977",
+      "id": "20170625-231503_164248514",
+      "dateCreated": "Jun 25, 2017 11:15:03 PM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "ffm_implementation_enriched_feature_set: click_through_rate",
+  "id": "2CK6BTNWN",
+  "angularObjects": {
+    "2BGHSKCA7": [],
+    "2BFMBPKAB": [],
+    "2BHKKP27G": [],
+    "2BJHJDBK6": [],
+    "2BJAQG5W4": [],
+    "2BJGSXM37": [],
+    "2BFXEV5XZ": [],
+    "2BG77RV7M": [],
+    "2BF969NNB": [],
+    "2BG8QQJNC": [],
+    "2BGVG5JP4": [],
+    "2BJ5FCP57": [],
+    "2BFEDXCTE": [],
+    "2BJ8AEWCT": [],
+    "2BH9AVVKH": [],
+    "2BJ7KKX85": [],
+    "2BHKAE8WK": [],
+    "2BJ6HN5AY": []
+  },
+  "config": {
+    "looknfeel": "default"
+  },
+  "info": {}
+}

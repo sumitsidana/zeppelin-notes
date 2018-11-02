@@ -1,0 +1,93 @@
+{
+  "paragraphs": [
+    {
+      "text": "val offersTemp \u003d  Seq((\"2\", \"c\",\"n\"),(\"2\", \"c\",\"m\")).toDF(\"userid\",\"offerid\",\"merchant\")\n\nval clicksTemp \u003d  Seq((\"2\",\"c\")).toDF(\"userid\",\"offerid\").distinct\n\nval clicks \u003d clicksTemp.select($\"userid\".as(\"useridclicks\"),$\"offerid\".as(\"offeridclicks\"))\n\nval offers \u003d offersTemp.select($\"userid\".as(\"useridoffers\"),$\"offerid\".as(\"offeridoffers\"),$\"merchant\")\n\n\nval innerjoin \u003d clicks.join(offers,clicks(\"useridclicks\")\u003c\u003d\u003eoffers(\"useridoffers\")).drop(clicks(\"useridclicks\")).drop(clicks(\"offeridclicks\")).distinct\n\nval outerjoin \u003d clicks.join(innerjoin,clicks(\"useridclicks\")\u003c\u003d\u003einnerjoin(\"useridoffers\")\u0026\u0026 clicks(\"offeridclicks\")\u003c\u003d\u003einnerjoin(\"offeridoffers\"),\"right_outer\").distinct\n\nz.show(outerjoin)",
+      "authenticationInfo": {},
+      "dateUpdated": "Nov 10, 2017 5:11:18 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1498264783804_-1412187251",
+      "id": "20170624-023943_1855864062",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TABLE",
+        "msg": "useridclicks\tofferidclicks\tuseridoffers\tofferidoffers\tmerchant\n2\tc\t2\tc\tm\n2\tc\t2\tc\tn\n"
+      },
+      "dateCreated": "Jun 24, 2017 2:39:43 AM",
+      "dateStarted": "Nov 10, 2017 5:11:18 PM",
+      "dateFinished": "Nov 10, 2017 5:11:22 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "dateUpdated": "Jun 23, 2017 2:39:35 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala",
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1498219808107_-887111600",
+      "id": "20170623-141008_1510603921",
+      "dateCreated": "Jun 23, 2017 2:10:08 PM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "debug_ffm: analyzeParquetFinal",
+  "id": "2CKYXMB4R",
+  "angularObjects": {
+    "2BJGSXM37": [],
+    "2BGHSKCA7": [],
+    "2BHKKP27G": [],
+    "2BGVG5JP4": [],
+    "2BFMBPKAB": [],
+    "2BF969NNB": [],
+    "2BJAQG5W4": [],
+    "2BJHJDBK6": [],
+    "2BHKAE8WK": [],
+    "2BG8QQJNC": [],
+    "2BJ7KKX85": [],
+    "2BH9AVVKH": [],
+    "2BJ6HN5AY": [],
+    "2BFEDXCTE": [],
+    "2BJ5FCP57": [],
+    "2BJ8AEWCT": [],
+    "2BFXEV5XZ": [],
+    "2BG77RV7M": []
+  },
+  "config": {
+    "looknfeel": "default"
+  },
+  "info": {}
+}

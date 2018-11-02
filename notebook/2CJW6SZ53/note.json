@@ -1,0 +1,214 @@
+{
+  "paragraphs": [
+    {
+      "text": "val train \u003d sqlContext.read\n.format(\"com.databricks.spark.csv\")\n.option(\"header\", \"true\") // Use first line of all files as header\n.option(\"inferSchema\", \"true\") // Automatically infer data types\n.option(\"delimiter\", \"\\t\")\n.load(\"/data/sidana/recsysBaselines/experiments/ffm_implementation/train_fr.csv\")\n\nval usertrain \u003d train.select(\"userid\").distinct\n\nusertrain.count\n\nval positiveTrain \u003d train.filter($\"rating\"\u003d\u003d\u003d\"1\")\nval userPositiveOffers \u003d positiveTrain.select(\"userid\",\"offerid\").distinct\nval userPositiveClickCount \u003d userPositiveOffers.groupBy(\"userid\").count\nval positiveusers \u003d userPositiveClickCount.filter($\"count\"\u003e\u003d2)\npositiveusers.count\n\n\nval negativeTrain \u003d train.filter($\"rating\"\u003d\u003d\u003d0)\nval userNegativeOffers \u003d negativeTrain.select(\"userid\",\"offerid\").distinct\nval userNegativeClickCount \u003d userNegativeOffers.groupBy(\"userid\").count\nval negativeusers \u003d userNegativeClickCount.filter($\"count\"\u003e\u003d10)\nnegativeusers.count\n\nval positive_data \u003d usertrain.join(positiveusers,usertrain(\"userid\")\u003d\u003d\u003dpositiveusers(\"userid\")).drop(positiveusers(\"userid\")).drop(positiveusers(\"count\"))\n\nval negative_positive_data \u003d positive_data.join(negativeusers,positive_data(\"userid\")\u003d\u003d\u003dnegativeusers(\"userid\")).drop(negativeusers(\"userid\")).drop(negativeusers(\"count\"))\n\nval header \u003d \"userid\"\n\n val users\u003dnegative_positive_data.rdd.map(_.mkString(\",\")).mapPartitionsWithIndex((i, iter) \u003d\u003e if (i\u003d\u003d0) (List(header).toIterator ++ iter) else iter)\n \n users.coalesce(1,false).saveAsTextFile(\"/data/sidana/recsysBaselines/experiments/ffm_implementation/users\")",
+      "authenticationInfo": {},
+      "dateUpdated": "Jun 24, 2017 9:09:32 PM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1498331300673_-571195740",
+      "id": "20170624-210820_1732859154",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "train: org.apache.spark.sql.DataFrame \u003d [userid: string, offerid: string, merchant: int, offerclickcount: int, rating: int]\nusertrain: org.apache.spark.sql.DataFrame \u003d [userid: string]\nres28: Long \u003d 29481\npositiveTrain: org.apache.spark.sql.DataFrame \u003d [userid: string, offerid: string, merchant: int, offerclickcount: int, rating: int]\nuserPositiveOffers: org.apache.spark.sql.DataFrame \u003d [userid: string, offerid: string]\nuserPositiveClickCount: org.apache.spark.sql.DataFrame \u003d [userid: string, count: bigint]\npositiveusers: org.apache.spark.sql.DataFrame \u003d [userid: string, count: bigint]\nres29: Long \u003d 29481\nnegativeTrain: org.apache.spark.sql.DataFrame \u003d [userid: string, offerid: string, merchant: int, offerclickcount: int, rating: int]\nuserNegativeOffers: org.apache.spark.sql.DataFrame \u003d [userid: string, offerid: string]\nuserNegativeClickCount: org.apache.spark.sql.DataFrame \u003d [userid: string, count: bigint]\nnegativeusers: org.apache.spark.sql.DataFrame \u003d [userid: string, count: bigint]\nres30: Long \u003d 24468\npositive_data: org.apache.spark.sql.DataFrame \u003d [userid: string]\nnegative_positive_data: org.apache.spark.sql.DataFrame \u003d [userid: string]\nheader: String \u003d userid\nusers: org.apache.spark.rdd.RDD[String] \u003d MapPartitionsRDD[449] at mapPartitionsWithIndex at \u003cconsole\u003e:71\n"
+      },
+      "dateCreated": "Jun 24, 2017 9:08:20 PM",
+      "dateStarted": "Jun 24, 2017 9:09:32 PM",
+      "dateFinished": "Jun 24, 2017 9:11:11 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val seq \u003d Seq(\"offerid\",\"merchant\")\n\nval candidates \u003d sqlContext.read\n.format(\"com.databricks.spark.csv\")\n.option(\"header\", \"true\") // Use first line of all files as header\n.option(\"inferSchema\", \"true\") // Automatically infer data types\n.option(\"delimiter\", \"\\t\")\n.load(\"/data/sidana/recsysBaselines/experiments/ffm_implementation/users.sample\")\n\nval parquetFileOffers \u003d sqlContext.read.parquet(\"/data/sidana/recsysBaselines/experiments/debug_ffm/offerView/fr/2017/*/*/\")\n\nval offerViews \u003d  parquetFileOffers.select(substring_index(parquetFileOffers(\"offerViewId\"),\"-\",1).as(\"offerid\"),parquetFileOffers(\"merchant\")).dropDuplicates(seq)\n\nval offerClicks \u003d sqlContext.read\n.format(\"com.databricks.spark.csv\")\n.option(\"header\", \"true\") // Use first line of all files as header\n.option(\"inferSchema\", \"true\") // Automatically infer data types\n.option(\"delimiter\", \",\")\n.load(\"/data/sidana/recsysBaselines/experiments/ffm_implementation/offerClicks_fr.train\").withColumnRenamed(\"count\",\"offerclickcount\")\n\n\nval userClicks \u003d sqlContext.read\n.format(\"com.databricks.spark.csv\")\n.option(\"header\", \"true\") // Use first line of all files as header\n.option(\"inferSchema\", \"true\") // Automatically infer data types\n.option(\"delimiter\", \",\")\n.load(\"/data/sidana/recsysBaselines/experiments/ffm_implementation/userClicks_fr.train\").withColumnRenamed(\"count\",\"userclickcount\")\n\nval offerViewsClicks \u003d offerViews.join(offerClicks,Seq(\"offerid\"),\"left_outer\")\n\nval userOfferCartesianProduct \u003d offerViewsClicks.join(candidates)\n\nval userOfferCartesianProductClicks \u003d userOfferCartesianProduct.join(userClicks,Seq(\"userid\"),\"left_outer\").na.fill(0,Seq(\"userclickcount\",\"offerclickcount\"))\n\nval file_rating \u003d userOfferCartesianProductClicks.withColumn(\"rating\",lit(\"0\"))\n//val file_country \u003d file_rating.withColumn(\"countrycode\",lit(\"fr\"))\n//val file_utcdate \u003d file_country.withColumn(\"utc_date\",lit(\"x\"))\n\n\n//val tempfile \u003d file_utcdate.orderBy(\"utcdate\")\n\n//tempfile.count\n\nval header \u003d \"userid\\tofferid\\tmerchant\\tofferclickcount\\trating\"\n\nval selectfields \u003d file_rating.select(\"userid\",\"offerid\",\"merchant\",\"offerclickcount\",\"rating\")\n\nval cartesian_product \u003d selectfields.rdd.map(_.mkString(\"\\t\")).mapPartitionsWithIndex((i, iter) \u003d\u003e if (i\u003d\u003d0) (List(header).toIterator ++ iter) else iter)\n\ncartesian_product.saveAsTextFile(\"/data/sidana/recsysBaselines/experiments/ffm_implementation/recommendationCandidates/cartesian_product\")",
+      "authenticationInfo": {},
+      "dateUpdated": "Jun 24, 2017 9:24:26 PM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1498331300674_-570041493",
+      "id": "20170624-210820_2138064311",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "seq: Seq[String] \u003d List(offerid, merchant)\ncandidates: org.apache.spark.sql.DataFrame \u003d [userid: string]\nparquetFileOffers: org.apache.spark.sql.DataFrame \u003d [eventType: string, userInfo: struct\u003cuserId:string,ip:string,userAgent:struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e,userGeolocation:struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e,adBlocked:boolean\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, offerRank: int, searchId: string, offerViewId: string, contentPageType: string, adInfo: struct\u003cadType:string,adPlacement:string,adViewability:string,adSize:string\u003e, offerId: string]\nofferViews: org.apache.spark.sql.DataFrame \u003d [offerid: string, merchant: string]\nofferClicks: org.apache.spark.sql.DataFrame \u003d [offerid: string, offerclickcount: int]\nuserClicks: org.apache.spark.sql.DataFrame \u003d [userid: string, userclickcount: int]\nofferViewsClicks: org.apache.spark.sql.DataFrame \u003d [offerid: string, merchant: string, offerclickcount: int]\nuserOfferCartesianProduct: org.apache.spark.sql.DataFrame \u003d [offerid: string, merchant: string, offerclickcount: int, userid: string]\nuserOfferCartesianProductClicks: org.apache.spark.sql.DataFrame \u003d [userid: string, offerid: string, merchant: string, offerclickcount: int, userclickcount: int]\nfile_rating: org.apache.spark.sql.DataFrame \u003d [userid: string, offerid: string, merchant: string, offerclickcount: int, userclickcount: int, rating: string]\nheader: String \u003d userid\tofferid\tmerchant\tofferclickcount\trating\nselectfields: org.apache.spark.sql.DataFrame \u003d [userid: string, offerid: string, merchant: string, offerclickcount: int, rating: string]\ncartesian_product: org.apache.spark.rdd.RDD[String] \u003d MapPartitionsRDD[519] at mapPartitionsWithIndex at \u003cconsole\u003e:69\n"
+      },
+      "dateCreated": "Jun 24, 2017 9:08:20 PM",
+      "dateStarted": "Jun 24, 2017 9:24:26 PM",
+      "dateFinished": "Jun 24, 2017 9:28:38 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val cartesian_product \u003d sqlContext.read\n.format(\"com.databricks.spark.csv\")\n.option(\"header\", \"true\") // Use first line of all files as header\n.option(\"inferSchema\", \"true\") // Automatically infer data types\n.option(\"delimiter\", \"\\t\")\n.load(\"/data/sidana/recsysBaselines/experiments/ffm_implementation/recommendationCandidates/recommendationCandidates\")\n\ncartesian_product.groupBy(\"userid\").count.describe().show",
+      "authenticationInfo": {},
+      "dateUpdated": "Jun 24, 2017 9:31:32 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1498332671820_51687015",
+      "id": "20170624-213111_2024835730",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "cartesian_product: org.apache.spark.sql.DataFrame \u003d [userid: string, offerid: string, merchant: int, offerclickcount: int, rating: int]\n+-------+---------+\n|summary|    count|\n+-------+---------+\n|  count|       10|\n|   mean|2916697.0|\n| stddev|      0.0|\n|    min|  2916697|\n|    max|  2916697|\n+-------+---------+\n\n"
+      },
+      "dateCreated": "Jun 24, 2017 9:31:11 PM",
+      "dateStarted": "Jun 24, 2017 9:31:32 PM",
+      "dateFinished": "Jun 24, 2017 9:32:04 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val parquetFileOffers \u003d sqlContext.read.parquet(\"/data/sidana/recsysBaselines/experiments/debug_ffm/offerView/fr/2017/*/*/\")\n\nval offerViews \u003d  parquetFileOffers.select(substring_index(parquetFileOffers(\"offerViewId\"),\"-\",1).as(\"offerid\")).distinct.count",
+      "authenticationInfo": {},
+      "dateUpdated": "Jun 24, 2017 9:33:37 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1498331300674_-570041493",
+      "id": "20170624-210820_603009726",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "parquetFileOffers: org.apache.spark.sql.DataFrame \u003d [eventType: string, userInfo: struct\u003cuserId:string,ip:string,userAgent:struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e,userGeolocation:struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e,adBlocked:boolean\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, offerRank: int, searchId: string, offerViewId: string, contentPageType: string, adInfo: struct\u003cadType:string,adPlacement:string,adViewability:string,adSize:string\u003e, offerId: string]\nofferViews: Long \u003d 2916697\n"
+      },
+      "dateCreated": "Jun 24, 2017 9:08:20 PM",
+      "dateStarted": "Jun 24, 2017 9:33:37 PM",
+      "dateFinished": "Jun 24, 2017 9:34:23 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val candidates \u003d sqlContext.read\n.format(\"com.databricks.spark.csv\") \n.option(\"header\", \"true\") // Use first line of all files as header\n.option(\"inferSchema\", \"true\") // Automatically infer data types\n.option(\"delimiter\", \"\\t\")\n.load(\"/data/sidana/recsysBaselines/experiments/ffm_implementation/version2/recommendationCandidates/fr.final\")\n\nval bestScores \u003d candidates.groupBy(\"userid\").agg(max(\"score\")).toDF(\"userid\", \"score\")\n\nval selection \u003d bestScores.join(candidates, Seq(\"score\", \"userid\"))\n      .select(\"userid\", \"offerid\")\n\nval offerViewsTemp \u003d sqlContext.read.parquet(\"/data/sidana/recsysBaselines/experiments/debug_ffm/offerView/fr/2017/*/*/\")\n\nval offerViews \u003d offerViewsTemp.select(substring_index(offerViewsTemp(\"offerViewId\"),\"-\",1).as(\"offerid\") , $\"offerTitle\")\n\nval selectionWithOfferTitles \u003d\nselection.join(offerViews, Seq(\"offerid\"))\n.distinct\n.select(\"userid\", \"offerTitle\")\n\nval header \u003d \"userid,offertitle\"\nval  fileWritten \u003d selectionWithOfferTitles.rdd.map(_.mkString(\",\")).mapPartitionsWithIndex((i, iter) \u003d\u003e if (i\u003d\u003d0) (List(header).toIterator ++ iter) else iter)\nfileWritten.coalesce(1,false).saveAsTextFile(\"/data/sidana/recsysBaselines/experiments/ffm_implementation/version2/finalfile\")",
+      "authenticationInfo": {},
+      "dateUpdated": "Jun 25, 2017 6:52:51 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1498332817006_474323553",
+      "id": "20170624-213337_1849071966",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "candidates: org.apache.spark.sql.DataFrame \u003d [score: double, userid: string, offerid: string, merchant: int, offerclickcount: int, rating: int]\nbestScores: org.apache.spark.sql.DataFrame \u003d [userid: string, score: double]\nselection: org.apache.spark.sql.DataFrame \u003d [userid: string, offerid: string]\nofferViewsTemp: org.apache.spark.sql.DataFrame \u003d [eventType: string, userInfo: struct\u003cuserId:string,ip:string,userAgent:struct\u003cdeviceType:string,operatingSystem:string,browser:string,rawUserAgent:string\u003e,userGeolocation:struct\u003ccountry:string,countryCode:string,state:string,city:string,timeZone:string\u003e,adBlocked:boolean\u003e, siteDomain: struct\u003ccountryCode:string,domainName:string\u003e, dataCenter: string, utcDate: timestamp, offerTitle: string, category: array\u003cstring\u003e, price: decimal(38,18), merchant: string, source: string, keywords: array\u003cstring\u003e, offerRank: int, searchId: string, offerViewId: string, contentPageType: string, adInfo: struct\u003cadType:string,adPlacement:string,adViewability:string,adSize:string\u003e, offerId: string]\nofferViews: org.apache.spark.sql.DataFrame \u003d [offerid: string, offerTitle: string]\nselectionWithOfferTitles: org.apache.spark.sql.DataFrame \u003d [userid: string, offerTitle: string]\nheader: String \u003d userid,offertitle\nfileWritten: org.apache.spark.rdd.RDD[String] \u003d MapPartitionsRDD[148] at mapPartitionsWithIndex at \u003cconsole\u003e:41\n"
+      },
+      "dateCreated": "Jun 24, 2017 9:33:37 PM",
+      "dateStarted": "Jun 25, 2017 6:52:51 PM",
+      "dateFinished": "Jun 25, 2017 7:04:00 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1498333528765_-1139466052",
+      "id": "20170624-214528_1077391938",
+      "dateCreated": "Jun 24, 2017 9:45:28 PM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "ffm_implementation: createPredictionFile",
+  "id": "2CJW6SZ53",
+  "angularObjects": {
+    "2BGHSKCA7": [],
+    "2BFMBPKAB": [],
+    "2BHKKP27G": [],
+    "2BJHJDBK6": [],
+    "2BJAQG5W4": [],
+    "2BJGSXM37": [],
+    "2BFXEV5XZ": [],
+    "2BG77RV7M": [],
+    "2BF969NNB": [],
+    "2BG8QQJNC": [],
+    "2BGVG5JP4": [],
+    "2BJ5FCP57": [],
+    "2BFEDXCTE": [],
+    "2BJ8AEWCT": [],
+    "2BH9AVVKH": [],
+    "2BJ7KKX85": [],
+    "2BHKAE8WK": [],
+    "2BJ6HN5AY": []
+  },
+  "config": {},
+  "info": {}
+}

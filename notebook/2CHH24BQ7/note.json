@@ -1,0 +1,109 @@
+{
+  "paragraphs": [
+    {
+      "text": "    \n    val data \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \"\\t\")\n    .load(\"/data/sidana/recnet_draft/kasandr/de.csv\").withColumn(\"utcdate\",unix_timestamp($\"utcdate\",\"yyyy-MM-dd HH:mm:ss\").cast(\"timestamp\")).withColumnRenamed(\"cast(unixtimestamp(utcdate,yyyy-MM-dd HH:mm:ss) as timestamp)\",\"utcdate\")\n    \n    val cols \u003d data.select($\"userid\",$\"offerid\",$\"rating\",unix_timestamp($\"utcdate\")).rdd.coalesce(1,false).saveAsTextFile(\"/data/sidana/recnet_draft/kasandr/de_temp.csv\")",
+      "authenticationInfo": {},
+      "dateUpdated": "Jun 3, 2017 12:20:26 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1496351632904_-1319299565",
+      "id": "20170601-231352_833249944",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "data: org.apache.spark.sql.DataFrame \u003d [userid: string, offerid: string, countrycode: string, category: int, merchant: string, utcdate: timestamp, rating: int]\ncols: Unit \u003d ()\n"
+      },
+      "dateCreated": "Jun 1, 2017 11:13:52 PM",
+      "dateStarted": "Jun 3, 2017 12:20:26 AM",
+      "dateFinished": "Jun 3, 2017 12:23:41 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "    val data \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .option(\"delimiter\", \",\")\n    .load(\"/data/sidana/recnet_draft/kasandr/cofactor/pro/train_all_raw.csv\")\n    \n    val pos \u003d data.filter($\"rating\"\u003d\u003d\u003d\"4\")\n    val neg \u003d data.filter($\"rating\"\u003d\u003d\u003d\"1\")\n    \n    data.count\n    pos.count\n    neg.count",
+      "authenticationInfo": {},
+      "dateUpdated": "Jun 3, 2017 12:57:09 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1496352220392_1986337102",
+      "id": "20170601-232340_172439205",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "data: org.apache.spark.sql.DataFrame \u003d [userId: string, movieId: string, rating: int, timestamp: int]\npos: org.apache.spark.sql.DataFrame \u003d [userId: string, movieId: string, rating: int, timestamp: int]\nneg: org.apache.spark.sql.DataFrame \u003d [userId: string, movieId: string, rating: int, timestamp: int]\nres12: Long \u003d 2429967\nres13: Long \u003d 580350\nres14: Long \u003d 1849617\n"
+      },
+      "dateCreated": "Jun 1, 2017 11:23:40 PM",
+      "dateStarted": "Jun 3, 2017 12:57:09 AM",
+      "dateFinished": "Jun 3, 2017 12:57:23 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1496444143380_699132797",
+      "id": "20170603-005543_1255039641",
+      "dateCreated": "Jun 3, 2017 12:55:43 AM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "recnet_draft: kasandr_data_creation",
+  "id": "2CHH24BQ7",
+  "angularObjects": {
+    "2BGHSKCA7": [],
+    "2BFMBPKAB": [],
+    "2BHKKP27G": [],
+    "2BJHJDBK6": [],
+    "2BJAQG5W4": [],
+    "2BJGSXM37": [],
+    "2BFXEV5XZ": [],
+    "2BG77RV7M": [],
+    "2BF969NNB": [],
+    "2BG8QQJNC": [],
+    "2BGVG5JP4": [],
+    "2BJ5FCP57": [],
+    "2BFEDXCTE": [],
+    "2BJ8AEWCT": [],
+    "2BH9AVVKH": [],
+    "2BJ7KKX85": [],
+    "2BHKAE8WK": [],
+    "2BJ6HN5AY": []
+  },
+  "config": {},
+  "info": {}
+}
